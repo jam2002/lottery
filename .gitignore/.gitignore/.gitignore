@@ -1,0 +1,11 @@
+*.pdb
+*.suo
+*.user
+bin
+obj
+.svn
+log
+node_modules
+*.pubxml
+.vs
+/source/.vs
