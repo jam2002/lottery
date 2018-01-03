@@ -291,10 +291,15 @@ namespace LotteryApp.Algorithm
             int keyCount = int.Parse(isConnected ? Args.Substring(1) : Args);
 
             int[][] posKeys = null;
-            if (isConnected)
+            int[] numbers = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            Combination combine = new Combination(numbers.Length);
+
+            if (CurrentLottery.Length == 5)
             {
-                int[] numbers = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-                Combination combine = new Combination(numbers.Length);
+                posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select numbers[s]).ToArray()).Select(t => new int[] { int.Parse("1" + string.Join(string.Empty, t)) }).ToArray();
+            }
+            else if (isConnected)
+            {
                 var allPairs = combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select numbers[s]).ToArray()).ToArray();
                 posKeys = allPairs.Select(x =>
                 {
@@ -306,7 +311,7 @@ namespace LotteryApp.Algorithm
             else
             {
                 var query = FactorDic[FactorTypeEnum.DynamicPosition].OrderByDescending(x => x.Value.OccurCount).ThenBy(x => x.Value.LastIntervalCount).ThenBy(x => x.Value.MaxIntervalCount).Take(15).Select(x => new { key = x.Key, count = x.Value.OccurCount }).ToArray();
-                Combination combine = new Combination(query.Length);
+                combine = new Combination(query.Length);
                 posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select query[s].key).ToArray()).ToArray();
             }
 

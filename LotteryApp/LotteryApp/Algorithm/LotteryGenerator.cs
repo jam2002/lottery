@@ -27,7 +27,7 @@ namespace LotteryApp.Algorithm
             {
                 Lottery[] lotteries = new Lottery[]
                 {
-                new Lottery {  Key = "cqssc", DisplayName="重庆时时彩", RegexPattern = @"(?<=\d{11}\s)(\d\s){4}\d", StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = true, HasDynamic = false, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
+                new Lottery {  Key = "cqssc", DisplayName="重庆时时彩", RegexPattern = @"(?<=\d{11}\s)(\d\s){4}\d", StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                 new Lottery {  Key = "cqssc|front", DisplayName="重庆时时彩 前三", RegexPattern = @"(?<=\d{11}\s)(\d\s){4}\d", StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                 new Lottery {  Key = "cqssc|middle", DisplayName="重庆时时彩 中三", RegexPattern = @"(?<=\d{11}\s)(\d\s){4}\d", StartIndex = 1, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = false, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                 new Lottery {  Key = "cqssc|after", DisplayName="重庆时时彩 后三", RegexPattern = @"(?<=\d{11}\s)(\d\s){4}\d", StartIndex = 2, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
@@ -36,6 +36,7 @@ namespace LotteryApp.Algorithm
                 new Lottery {  Key = "xjssc|middle", DisplayName="新疆时时彩 中三", RegexPattern = @"(?<=\d{10}\s)(\d\s){4}\d", StartIndex = 1, Length =3, MaxBetCount =200,  HasPair = true,HasDynamic = false, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" }},
                 new Lottery {  Key = "xjssc|after", DisplayName="新疆时时彩 后三", RegexPattern = @"(?<=\d{10}\s)(\d\s){4}\d", StartIndex = 2, Length =3, MaxBetCount =200,  HasPair = true,HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" }},
 
+                new Lottery {  Key = "tjssc", DisplayName="天津时时彩", RegexPattern = @"(?<=\d{10}\s)(\d\s){4}\d", StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00" } },
                 new Lottery {  Key = "tjssc|front", DisplayName="天津时时彩 前三", RegexPattern = @"(?<=\d{10}\s)(\d\s){4}\d", StartIndex = 0, Length =3,MaxBetCount =200,   HasPair = true,HasDynamic = true, TradingHours = new string[] {"09:00:00-23:00:00" }},
                 new Lottery {  Key = "tjssc|middle", DisplayName="天津时时彩 中三", RegexPattern = @"(?<=\d{10}\s)(\d\s){4}\d", StartIndex = 1, Length =3,MaxBetCount =200,   HasPair = true,HasDynamic = false, TradingHours = new string[] {"09:00:00-23:00:00" }},
                 new Lottery {  Key = "tjssc|after", DisplayName="天津时时彩 后三", RegexPattern = @"(?<=\d{10}\s)(\d\s){4}\d", StartIndex = 2, Length =3,MaxBetCount =200,   HasPair = true,HasDynamic = true, TradingHours = new string[] {"09:00:00-23:00:00" }},
