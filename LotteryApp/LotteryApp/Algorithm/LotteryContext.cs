@@ -286,7 +286,7 @@ namespace LotteryApp.Algorithm
 
         private LotteryResult GetDynamicPosResult()
         {
-            Args = Args ?? "3";
+            Args = Args ?? "2";
             bool isConnected = Args.StartsWith("c");
             int keyCount = int.Parse(isConnected ? Args.Substring(1) : Args);
 
