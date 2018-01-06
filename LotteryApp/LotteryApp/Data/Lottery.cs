@@ -13,6 +13,11 @@
         public int Length { get; set; }
 
         /// <summary>
+        /// 1: API接口；2：抓HTML
+        /// </summary>
+        public int Source { get; set; }
+
+        /// <summary>
         /// 是否可以出对子
         /// </summary>
         public bool HasPair { get; set; }
@@ -31,5 +36,10 @@
         /// 交易时间
         /// </summary>
         public string[] TradingHours { get; set; }
+
+        public Lottery()
+        {
+            Source = 1;
+        }
     }
 }

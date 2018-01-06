@@ -33,6 +33,8 @@ namespace LotteryApp
                 type = "three,dynamic";
             }
 
+            Calculator.ClearCache();
+
             foreach (string name in names)
             {
                 Calculator calclator = new Calculator(name, type, number.Value, algorArgs);
