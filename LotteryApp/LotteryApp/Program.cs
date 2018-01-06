@@ -8,7 +8,6 @@ namespace LotteryApp
     {
         static void Main(string[] args)
         {
-            //Run(30, "all", "three");
             Run(30, "cqssc,cqssc|front,cqssc|after", "dynamic");
 
             string commands = Console.ReadLine();
@@ -30,7 +29,7 @@ namespace LotteryApp
             string[] names = lotterNames != null && lotterNames != "all" ? lotterNames.Split(',') : LotteryGenerator.GetConfig().Lotteries.Select(x => x.Key).ToArray();
             if (type == null)
             {
-                type = "three,dynamic";
+                type = "dynamic";
             }
 
             Calculator.ClearCache();

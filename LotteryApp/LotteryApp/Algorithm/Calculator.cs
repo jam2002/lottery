@@ -1,14 +1,14 @@
-﻿using LotteryApp.Data;
+﻿using HtmlAgilityPack;
+using LotteryApp.Data;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using HtmlAgilityPack;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace LotteryApp.Algorithm
 {
@@ -166,7 +166,7 @@ namespace LotteryApp.Algorithm
 
                     HtmlDocument doc = new HtmlDocument();
                     doc.LoadHtml(srcString);
-                    HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//*[@id=\"wp\"]/div[4]/div[1]/div[2]/table/tr");
+                    HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//div[@id=\"wp\"]/div[4]/div[1]/div[2]/table/tr");
                     lotteries = nodes.Skip(1)
                                                  .Select(x => string.Join(string.Empty, x.Elements("td").Skip(1).Take(5).Select(t => t.FirstChild.InnerText)))
                                                  .Reverse()

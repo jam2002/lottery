@@ -1,10 +1,10 @@
-﻿using LotteryApp.Data;
+﻿using Kw.Combinatorics;
+using LotteryApp.Data;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Kw.Combinatorics;
-using System.Collections.Generic;
 
 namespace LotteryApp.Algorithm
 {
