@@ -74,7 +74,6 @@ namespace LotteryApp.Algorithm
                 BuildFactor(FactorTypeEnum.Unit, n.Unit, i);
                 BuildFactor(FactorTypeEnum.Distinct, n.Distinct, i);
                 BuildFactor(FactorTypeEnum.SequenceKey, n.SequenceKey, i);
-                BuildDynamicPosFactor(n, i);
                 BuildAwardFactor(n, i);
             }
             BuildInterval();
@@ -102,14 +101,6 @@ namespace LotteryApp.Algorithm
             foreach (int key in awards)
             {
                 BuildFactor(FactorTypeEnum.Award, key, pos);
-            }
-        }
-
-        private void BuildDynamicPosFactor(LotteryNumber number, int pos)
-        {
-            foreach (int key in number.BetKeyPairs)
-            {
-                BuildFactor(FactorTypeEnum.DynamicPosition, key, pos);
             }
         }
 
@@ -289,33 +280,15 @@ namespace LotteryApp.Algorithm
             Args = Args ?? "2";
             bool isConnected = Args.StartsWith("c");
             int keyCount = int.Parse(isConnected ? Args.Substring(1) : Args);
+            keyCount = CurrentLottery.Length == 5 ? 2 : keyCount;
 
             int[][] posKeys = null;
-            int[] numbers = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            int[] numbers = CurrentLottery.Length <= 5 ? new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } : new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
             Combination combine = new Combination(numbers.Length);
 
-            if (CurrentLottery.Length == 5)
-            {
-                posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select numbers[s]).ToArray()).Select(t => new int[] { int.Parse("1" + string.Join(string.Empty, t)) }).ToArray();
-            }
-            else if (isConnected)
-            {
-                var allPairs = combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select numbers[s]).ToArray()).ToArray();
-                posKeys = allPairs.Select(x =>
-                {
-                    Combination tempCombine = new Combination(x.Length);
-                    var k = tempCombine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select x[s]).ToArray()).Select(t => int.Parse("1" + string.Join(string.Empty, t))).ToArray();
-                    return k;
-                }).ToArray();
-            }
-            else
-            {
-                var query = FactorDic[FactorTypeEnum.DynamicPosition].OrderByDescending(x => x.Value.OccurCount).ThenBy(x => x.Value.LastIntervalCount).ThenBy(x => x.Value.MaxIntervalCount).Take(15).Select(x => new { key = x.Key, count = x.Value.OccurCount }).ToArray();
-                combine = new Combination(query.Length);
-                posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select query[s].key).ToArray()).ToArray();
-            }
+            posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select numbers[s]).ToArray()).ToArray();
 
-            IEnumerable<LotteryResult> list = posKeys.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, x)).ToArray();
+            IEnumerable<LotteryResult> list = posKeys.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, new int[][] { x })).ToArray();
             LotteryResult ret = InferResult(list, "dynamic");
 
             return ret;
@@ -335,7 +308,7 @@ namespace LotteryApp.Algorithm
             return result;
         }
 
-        private LotteryResult GetFilteredResult(int[] spans, OddEnum[] odds, SizeEnum[] sizes, PrimeEnum[] primes, int[] sums, int[] hundreds, int[] decades, int[] units, int[] maxes, int[] mines, int[] distincts, bool? excludeThree, int[] sequenceKeys = null, int[] dynamicPosKeys = null)
+        private LotteryResult GetFilteredResult(int[] spans, OddEnum[] odds, SizeEnum[] sizes, PrimeEnum[] primes, int[] sums, int[] hundreds, int[] decades, int[] units, int[] maxes, int[] mines, int[] distincts, bool? excludeThree, int[] sequenceKeys = null, int[][] dynamicPosKeys =null)
         {
             IEnumerable<LotteryNumber> query = CurrentLottery.Length == 3 ? Config.Numbers : LotteryNumbers;
 
@@ -386,17 +359,20 @@ namespace LotteryApp.Algorithm
             {
                 query = query.Where(x => distincts.Contains(x.Distinct));
             }
+            if (excludeThree.HasValue && excludeThree.Value)
+            {
+                query = query.Where(x => x.ZeroCount != 3 && x.OneCount != 3 && x.TwoCount != 3);
+            }
             if (sequenceKeys != null)
             {
                 query = query.Where(x => sequenceKeys.Contains(x.SequenceKey));
             }
-            if (dynamicPosKeys != null)
+            if (dynamicPosKeys != null && dynamicPosKeys.Any())
             {
-                query = query.Where(x => x.BetKeyPairs.Intersect(dynamicPosKeys).Any());
-            }
-            if (excludeThree.HasValue && excludeThree.Value)
-            {
-                query = query.Where(x => x.ZeroCount != 3 && x.OneCount != 3 && x.TwoCount != 3);
+                query = query.Where(x => (from p in x.BetKeyPairs
+                                          from q in dynamicPosKeys
+                                          where p.Intersect(q).Count() == q.Length
+                                          select q).Any());
             }
             #endregion
 
@@ -404,7 +380,7 @@ namespace LotteryApp.Algorithm
             ret.BetAmount = ret.Numbers.Length * 2;
             ret.BetCount = ret.Numbers.Length;
 
-            Dictionary<string, LotteryNumber> numberDic = ret.Numbers.ToDictionary(x => x.Key, x => x);
+            Dictionary<string, LotteryNumber> numberDic = ret.Numbers.GroupBy(x => x.Key).ToDictionary(x => x.Key, x => x.First());
             LotteryResult[] hitQuery = LotteryNumbers.Select((x, i) => new LotteryResult { HitCount = numberDic.ContainsKey(x.Key) ? 1 : 0, HitPositions = new[] { i } }).Where(x => x.HitCount > 0).ToArray();
 
             ret.HitCount = hitQuery.Length;
@@ -448,6 +424,9 @@ namespace LotteryApp.Algorithm
                         break;
                     case "质合":
                         filterDisplay = string.Join(",", (PrimeEnum[])x.Value);
+                        break;
+                    case "不定胆":
+                        filterDisplay = string.Join(";", ((int[][])x.Value).Select(t => Format(t)));
                         break;
                     default:
                         filterDisplay = Format((int[])x.Value);

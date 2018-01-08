@@ -43,9 +43,9 @@
         public int SequenceKey { get; set; }
 
         /// <summary>
-        ///三星为 两码组合，比如 125可以为 12，15，25；五星为 四码组合
+        /// 不定胆，胆码组；比如重庆时时彩，就可以前三与后三；11选5即是所有五码
         /// </summary>
-        public int[] BetKeyPairs { get; set; }
+        public int[][] BetKeyPairs { get; set; }
 
         public int Wan { get; set; }
 

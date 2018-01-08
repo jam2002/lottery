@@ -46,7 +46,12 @@ namespace LotteryApp.Algorithm
                     new Lottery {  Key = "hljssc|middle", DisplayName="黑龙江时时彩 中三", Source=2, StartIndex = 1, Length =3,MaxBetCount =200,   HasPair = true,HasDynamic = false, TradingHours = new string[] {"09:00:00-22:50:00" }},
                     new Lottery {  Key = "hljssc|after", DisplayName="黑龙江时时彩 后三",Source=2, StartIndex = 2, Length =3,MaxBetCount =200,   HasPair = true,HasDynamic = true, TradingHours = new string[] {"09:00:00-22:50:00" }},
 
-                    new Lottery {  Key = "pk10",  DisplayName="北京PK10 前三",  RegexPattern = @"(?<=\d{6}\s)(\d\d\s){9}\d\d", StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = false,HasDynamic = false, TradingHours = new string[] { "07:30:00-23:00:00"}}
+                    new Lottery {  Key = "pk10",  DisplayName="北京PK10",  RegexPattern = @"(?<=\d{6}\s)(\d\d\s){9}\d\d", StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = false,HasDynamic = false, TradingHours = new string[] { "07:30:00-23:00:00"}},
+
+                    new Lottery {  Key = "jx115",  DisplayName="江西11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
+                    new Lottery {  Key = "sd115",  DisplayName="山东11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
+                    new Lottery {  Key = "gd115",  DisplayName="广东11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
+                    new Lottery {  Key = "gs115",  DisplayName="甘肃11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}}
                 };
                 config = new LotteryMetaConfig { Lotteries = lotteries, Numbers = GetAllNumbers(3) };
                 string str = JsonConvert.SerializeObject(config);
@@ -98,20 +103,8 @@ namespace LotteryApp.Algorithm
             number.Distinct = number.DistinctNumbers.Length;
             number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));
 
-            int[][] sourceKeys = type == 3 ? new int[][] { array } : new int[][] { new[] { x, y, z }, new[] { z, p, q } };
-            number.BetKeyPairs = sourceKeys.Select(t => t.Distinct().OrderBy(r => r).ToArray()).SelectMany(t => GetPosKeys(t)).Distinct().ToArray();
+            number.BetKeyPairs = type == 3 || type == 10 ? new int[][] { array } : new int[][] { new[] { x, y, z }, new[] { z, p, q } };
             return number;
-        }
-
-        private static int[] GetPosKeys(int[] source)
-        {
-            if (source.Length > 1)
-            {
-                Combination combine = new Combination(source.Length);
-                int[] keypairs = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => string.Join(string.Empty, from s in t select source[s])).Select(t => int.Parse("1" + t)).ToArray();
-                return keypairs;
-            }
-            return new int[] { };
         }
 
         private static LotteryNumber[] GetAllNumbers(int type)
@@ -139,10 +132,12 @@ namespace LotteryApp.Algorithm
 
         public static LotteryNumber[] GetNumbers(string[] numbers)
         {
+            int[] splitIndex = new int[] { 0, 2, 4, 6, 8 };
             int type = numbers[0].Length;
+
             var query = numbers.Select(x =>
             {
-                int[] values = x.Select(t => int.Parse(t.ToString())).ToArray();
+                int[] values = type <= 5 ? x.Select(t => int.Parse(t.ToString())).ToArray() : splitIndex.Select(t => int.Parse(x.Substring(t, 2))).ToArray();
                 return type == 3 ? Build(values[0], values[1], values[2], 0, 0, type) : Build(values[0], values[1], values[2], values[3], values[4], type);
             }).ToArray();
 

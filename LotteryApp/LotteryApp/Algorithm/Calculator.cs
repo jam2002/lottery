@@ -49,7 +49,7 @@ namespace LotteryApp.Algorithm
 
             string[] lotteries = GetLotteries();
             LotteryNumber[] selectedLottery = null;
-            if (lottery.Length == 5)
+            if (lottery.Length >= 5)
             {
                 selectedLottery = LotteryGenerator.GetNumbers(lotteries);
             }
