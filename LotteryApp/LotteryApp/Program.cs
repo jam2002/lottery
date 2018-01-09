@@ -8,7 +8,7 @@ namespace LotteryApp
     {
         static void Main(string[] args)
         {
-            Run(60, "jx115,sd115,gd115,gs115", "dynamic");
+            Run(15, "jx115,sd115,gd115,gs115", "dynamic");
 
             string commands = Console.ReadLine();
             while (commands != "exit")
