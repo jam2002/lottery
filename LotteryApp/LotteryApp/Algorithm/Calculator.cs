@@ -154,7 +154,8 @@ namespace LotteryApp.Algorithm
                     StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
                     string srcString = reader.ReadToEnd();
 
-                    request = WebRequest.Create(string.Concat("https://www.caipiaokong.com/lottery/", mainKey, ".html")) as HttpWebRequest;
+                    string key = mainKey.EndsWith("115") ? (mainKey.Substring(0, mainKey.Length - 3) + "syxw") : mainKey;
+                    request = WebRequest.Create(string.Concat("https://www.caipiaokong.com/lottery/", key, ".html")) as HttpWebRequest;
                     request.Method = "GET";
                     request.KeepAlive = false;
                     request.CookieContainer = cookieContainer;

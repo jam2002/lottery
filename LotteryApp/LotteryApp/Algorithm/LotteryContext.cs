@@ -278,9 +278,9 @@ namespace LotteryApp.Algorithm
         private LotteryResult GetDynamicPosResult()
         {
             Args = Args ?? "2";
-            bool isConnected = Args.StartsWith("c");
-            int keyCount = int.Parse(isConnected ? Args.Substring(1) : Args);
-            keyCount = CurrentLottery.Length == 5 ? 2 : keyCount;
+            int[] number = Args.Select(x => int.Parse(x.ToString())).ToArray();
+            int keyCount = CurrentLottery.Length <= 5 ? 2 : number[0];//码数，任选二或者任选三
+            int betCount = number.Length > 1 ? number[1] : 1;//注数，一注两码还是两注两码
 
             int[][] posKeys = null;
             int[] numbers = CurrentLottery.Length <= 5 ? new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } : new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
