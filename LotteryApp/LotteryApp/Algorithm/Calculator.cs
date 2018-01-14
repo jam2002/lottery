@@ -42,10 +42,10 @@ namespace LotteryApp.Algorithm
 
         public bool Start()
         {
-            if (!CanRun())
-            {
-                return false;
-            }
+            //if (!CanRun())
+            //{
+            //    return false;
+            //}
 
             string[] lotteries = GetLotteries();
             LotteryNumber[] selectedLottery = null;
