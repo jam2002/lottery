@@ -72,7 +72,7 @@ namespace LotteryApp.Algorithm
                 new Tuple<string,string, LotteryResult>("duplicated","直选投注策略",ret.Duplicated),
                 new Tuple<string, string,LotteryResult>("dynamic","不定胆投注策略",ret.DynamicPosition)
             };
-            list = list.Where(x => x.Item3 != null && (x.Item1 == "dynamic" ? lottery.HasDynamic : true));
+            list = list.Where(x => x.Item3 != null && (x.Item1 == "dynamic" ? lottery.HasDynamic : true) && (x.Item1 == "three" ? lottery.HasPair : true));
             if (lottery.Key == "pk10")
             {
                 string[] unaviableCodes = new string[] { "three", "six", "duplicated" };
