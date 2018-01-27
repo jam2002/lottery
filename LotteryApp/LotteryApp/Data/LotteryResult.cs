@@ -23,6 +23,11 @@
         public int HitCount { get; set; }
 
         /// <summary>
+        /// 二码不定胆中奖次数
+        /// </summary>
+        public int PosHitCount { get; set; }
+
+        /// <summary>
         /// 最大间隔次数
         /// </summary>
         public int MaxIntervalCount { get; set; }

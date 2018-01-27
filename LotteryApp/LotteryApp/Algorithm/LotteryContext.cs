@@ -300,11 +300,12 @@ namespace LotteryApp.Algorithm
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "dynamic" ? 8 : 6;
+            int maxIntervalCount = type == "dynamic" ? 5 : 6;
             LotteryResult[] availableList = list.Where(x => x.MaxIntervalCount < maxIntervalCount && (type == "dynamic" ? true : x.BetCount < maxBetCount))
                                                                        .OrderByDescending(x => x.HitCount)
-                                                                       .ThenBy(x => x.LastIntervalCount)
+                                                                       .ThenByDescending(x => x.PosHitCount)
                                                                        .ThenBy(x => x.MaxIntervalCount)
+                                                                       .ThenBy(x => x.LastIntervalCount)
                                                                        .ToArray();
 
             LotteryResult result = availableList.FirstOrDefault();
@@ -370,12 +371,21 @@ namespace LotteryApp.Algorithm
             {
                 query = query.Where(x => sequenceKeys.Contains(x.SequenceKey));
             }
+            Dictionary<string, int> posCounter = new Dictionary<string, int> { };
             if (dynamicPosKeys != null && dynamicPosKeys.Any())
             {
-                query = query.Where(x => (from p in x.BetKeyPairs
-                                          from q in dynamicPosKeys
-                                          where p.Intersect(q).Count() == q.Length
-                                          select q).Any());
+                query = query.Where(x =>
+                {
+                    int count = (from p in x.BetKeyPairs
+                                 from q in dynamicPosKeys
+                                 where p.Intersect(q).Count() == q.Length
+                                 select q).Count();
+                    if (count > 0)
+                    {
+                        posCounter[x.Key] = count;
+                    }
+                    return count > 0;
+                });
             }
             #endregion
 
@@ -388,6 +398,8 @@ namespace LotteryApp.Algorithm
 
             ret.HitCount = hitQuery.Length;
             ret.HitPositions = hitQuery.SelectMany(x => x.HitPositions).ToArray();
+            IEnumerable<string> hitKeys = LotteryNumbers.Where(x => numberDic.ContainsKey(x.Key)).Select(x => x.Key).Distinct().ToArray();
+            ret.PosHitCount = posCounter.Where(x => hitKeys.Contains(x.Key)).Select(x => x.Value).Sum();
 
             if (ret.HitCount > 0)
             {
