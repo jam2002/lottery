@@ -284,6 +284,7 @@ namespace LotteryApp.Algorithm
 
             int[][] posKeys = null;
             int[] numbers = CurrentLottery.Length <= 5 ? new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } : new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+
             Combination combine = new Combination(numbers.Length);
 
             posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == betCount).Select(t => (from s in t select numbers[s]).ToArray()).ToArray();
@@ -299,7 +300,7 @@ namespace LotteryApp.Algorithm
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "dynamic" ? 15 : 6;
+            int maxIntervalCount = type == "dynamic" ? 8 : 6;
             LotteryResult[] availableList = list.Where(x => x.MaxIntervalCount < maxIntervalCount && (type == "dynamic" ? true : x.BetCount < maxBetCount))
                                                                        .OrderByDescending(x => x.HitCount)
                                                                        .ThenBy(x => x.LastIntervalCount)
