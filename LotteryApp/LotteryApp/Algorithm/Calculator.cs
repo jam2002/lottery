@@ -167,7 +167,7 @@ namespace LotteryApp.Algorithm
 
                     HtmlDocument doc = new HtmlDocument();
                     doc.LoadHtml(srcString);
-                    HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//div[@id=\"wp\"]/div[4]/div[1]/div[2]/table/tr");
+                    HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//*[@id=\"wp\"]/div[3]/div[1]/div[2]/table/tbody/tr");
                     lotteries = nodes.Skip(1)
                                                  .Select(x => string.Join(string.Empty, x.Elements("td").Skip(1).Take(5).Select(t => t.FirstChild.InnerText)))
                                                  .Reverse()
