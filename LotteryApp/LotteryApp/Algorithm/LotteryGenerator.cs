@@ -104,7 +104,7 @@ namespace LotteryApp.Algorithm
             number.Distinct = number.DistinctNumbers.Length;
             number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));
 
-            number.BetKeyPairs = type == 3 || type == 10 ? new int[][] { array } : new int[][] { new[] { x, y, z }, new[] { z, p, q } };
+            number.BetKeyPairs = new int[][] { array };
             return number;
         }
 
