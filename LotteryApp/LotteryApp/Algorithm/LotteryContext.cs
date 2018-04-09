@@ -300,7 +300,7 @@ namespace LotteryApp.Algorithm
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "dynamic" ? 9 : 9;
+            int maxIntervalCount = type == "dynamic" ? 7 : 9;
             LotteryResult[] availableList = list.Where(x => x.MaxIntervalCount < maxIntervalCount && (type == "dynamic" ? true : x.BetCount < maxBetCount))
                                                                        .OrderByDescending(x => x.HitCount)
                                                                        .ThenByDescending(x => x.PosHitCount)
