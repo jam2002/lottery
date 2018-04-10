@@ -279,7 +279,7 @@ namespace LotteryApp.Algorithm
         {
             Args = Args ?? "34";
             int[] number = Args.Select(x => int.Parse(x.ToString())).ToArray();
-            int keyCount = CurrentLottery.Length <= 5 ? 2 : number[0];//码数，任选二，任选三，任选四
+            int keyCount = number[0];//码数，任选二，任选三，任选四
             int betCount = number.Length > 1 ? number[1] : keyCount;//投注数，任选二选二码，任选三选三码，四码，任选四选四码，五码
 
             int[][] posKeys = null;
