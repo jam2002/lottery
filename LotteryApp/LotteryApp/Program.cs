@@ -8,6 +8,7 @@ namespace LotteryApp
     {
         static void Main(string[] args)
         {
+            Run(60, "cqssc,xjssc,tjssc", "fivestar", "3456");
             Run(30, "cqssc", "dynamic", "34");
             //Run(60, "cqssc,xjssc,tjssc", "dynamic", "22");
 

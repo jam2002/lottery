@@ -98,6 +98,7 @@
     <Compile Include="Algorithm\LotteryContext.cs" />
     <Compile Include="Data\CompositeLotteryResult.cs" />
     <Compile Include="Data\FactorTypeEnum.cs" />
+    <Compile Include="Data\FiveStarFormEnum.cs" />
     <Compile Include="Data\Lottery.cs" />
     <Compile Include="Algorithm\LotteryGenerator.cs" />
     <Compile Include="Data\LotteryNumber.cs" />

@@ -9,6 +9,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Reflection;
+using System.ComponentModel;
 
 namespace LotteryApp.Algorithm
 {
@@ -42,10 +44,10 @@ namespace LotteryApp.Algorithm
 
         public bool Start()
         {
-            //if (!CanRun())
-            //{
-            //    return false;
-            //}
+            if (!CanRun())
+            {
+                return false;
+            }
 
             string[] lotteries = GetLotteries();
             LotteryNumber[] selectedLottery = null;
@@ -79,11 +81,11 @@ namespace LotteryApp.Algorithm
                 list = list.Where(x => !unaviableCodes.Contains(x.Item1));
             }
             Dictionary<string, LotteryResult> resultDic = list.Where(x => types.Contains(x.Item1)).ToDictionary(x => x.Item2, x => x.Item3);
+            Console.WriteLine(string.Format("{0} 最后一期分析奖号 {1}，分析期数：{2}，分析结果：", lottery.DisplayName, lotteries[lotteries.Length - 1], lotteries.Length));
+            Console.WriteLine();
 
             if (resultDic.Values.Any())
             {
-                Console.WriteLine(string.Format("{0} 最后一期分析奖号 {1}，分析期数：{2}，分析结果：", lottery.DisplayName, lotteries[lotteries.Length - 1], lotteries.Length));
-
                 foreach (var pair in resultDic)
                 {
                     Console.WriteLine(string.Format("{0}：一共 {1} 注，最大中奖次数：{2} ，最大间隔：{3}，最近间隔：{4}", pair.Key, pair.Value.BetCount, pair.Value.HitCount, pair.Value.MaxInterval, pair.Value.LastInterval));
@@ -93,6 +95,22 @@ namespace LotteryApp.Algorithm
                     if (pair.Key == "单式投注策略")
                     {
                         Console.WriteLine(string.Format("投注号码：{0}", string.Join(",", pair.Value.Numbers.Select(x => Format(x)).ToArray())));
+                    }
+                }
+            }
+
+            if (types.Contains("fivestar") && ret.FiveStar.Any())
+            {
+                LotteryResult formRet = null;
+                Dictionary<FiveStarFormEnum, string> forms = GetEnumDescriptions<FiveStarFormEnum>();
+                foreach (var p in forms)
+                {
+                    if (ret.FiveStar.ContainsKey(p.Key))
+                    {
+                        formRet = ret.FiveStar[p.Key];
+                        Console.WriteLine(string.Format("{0}：最大中奖次数：{1} ，最大间隔：{2}，最近间隔：{3}", p.Value, formRet.HitCount, formRet.MaxInterval, formRet.LastInterval));
+                        Console.WriteLine(string.Format("间隔列表：{0}", string.Join(",", formRet.HitIntervals)));
+                        Console.WriteLine();
                     }
                 }
             }
@@ -206,6 +224,17 @@ namespace LotteryApp.Algorithm
         {
             DateTime[][] times = lottery.TradingHours.Select(x => x.Split('-').Select(t => DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " " + t)).ToArray()).ToArray();
             return times.Any(x => DateTime.Now >= x[0] && DateTime.Now <= x[1]);
+        }
+
+        private Dictionary<T, string> GetEnumDescriptions<T>() where T : struct
+        {
+            Type type = typeof(T);
+            var fields = type.GetFields().ToDictionary(x => x.Name, x => x);
+            return Enum.GetNames(type).Select(x => new
+            {
+                key = (T)Enum.Parse(type, x),
+                description = fields[x].GetCustomAttribute<DescriptionAttribute>().Description
+            }).ToDictionary(x => x.key, x => x.description);
         }
     }
 }

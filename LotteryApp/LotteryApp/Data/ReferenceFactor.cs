@@ -23,17 +23,22 @@
         /// <summary>
         /// 最大间隔次数
         /// </summary>
-        public int MaxIntervalCount { get; set; }
+        public int MaxInterval { get; set; }
 
         /// <summary>
         /// 最近间隔次数
         /// </summary>
-        public int LastIntervalCount { get; set; }
+        public int LastInterval { get; set; }
 
         /// <summary>
         /// 出现位置列表
         /// </summary>
         public int[] OccurPositions { get; set; }
+
+        /// <summary>
+        /// 中奖间隔列表
+        /// </summary>
+        public int[] HitIntervals { get; set; }
 
         /// <summary>
         /// 过滤优先级从低到高排序

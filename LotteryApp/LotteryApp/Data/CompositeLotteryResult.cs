@@ -1,4 +1,6 @@
-﻿namespace LotteryApp.Data
+﻿using System.Collections.Generic;
+
+namespace LotteryApp.Data
 {
     public class CompositeLotteryResult
     {
@@ -28,7 +30,7 @@
         public LotteryResult Position { get; set; }
 
         /// <summary>
-        /// 不定胆两码三注
+        /// 不定胆
         /// </summary>
         public LotteryResult DynamicPosition { get; set; }
 
@@ -36,5 +38,10 @@
         /// 直选
         /// </summary>
         public LotteryResult Duplicated { get; set; }
+
+        /// <summary>
+        /// 五星形态
+        /// </summary>
+        public Dictionary<FiveStarFormEnum, LotteryResult> FiveStar { get; set; }
     }
 }
