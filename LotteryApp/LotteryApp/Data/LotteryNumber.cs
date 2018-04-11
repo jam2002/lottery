@@ -47,6 +47,13 @@
         /// </summary>
         public int[][] BetKeyPairs { get; set; }
 
+        //public 
+
+        /// <summary>
+        /// 五星形态，1：组120；2：组60；3：组30；4：组20；5：组10；6：组5；
+        /// </summary>
+        public int FiveStarForm { get; set; }
+
         public int Wan { get; set; }
 
         public int Thousand { get; set; }

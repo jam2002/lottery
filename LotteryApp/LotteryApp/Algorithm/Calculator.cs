@@ -86,7 +86,8 @@ namespace LotteryApp.Algorithm
 
                 foreach (var pair in resultDic)
                 {
-                    Console.WriteLine(string.Format("{0}：一共 {1} 注，最大中奖次数：{2} ，最大间隔：{3}，最近间隔：{4}", pair.Key, pair.Value.BetCount, pair.Value.HitCount, pair.Value.MaxIntervalCount, pair.Value.LastIntervalCount));
+                    Console.WriteLine(string.Format("{0}：一共 {1} 注，最大中奖次数：{2} ，最大间隔：{3}，最近间隔：{4}", pair.Key, pair.Value.BetCount, pair.Value.HitCount, pair.Value.MaxInterval, pair.Value.LastInterval));
+                    Console.WriteLine(string.Format("间隔列表：{0}", string.Join(",", pair.Value.HitIntervals)));
                     Console.WriteLine(pair.Value.Filter);
                     Console.WriteLine(string.Format("中奖号码：{0}", string.Join(",", pair.Value.HitPositions.Select(x => Format(context.LotteryNumbers[x])).ToArray())));
                     if (pair.Key == "单式投注策略")

@@ -29,8 +29,13 @@
         SequenceKey = 13,
 
         /// <summary>
-        /// 不定胆两码组合
+        /// 不定胆两码组合，比如01，02
         /// </summary>
-        DynamicPosition = 14
+        DynamicPosition = 14,
+
+        /// <summary>
+        /// 五星形态，1：组120；2：组60；3：组30；4：组20；5：组10；6：组5；
+        /// </summary>
+        FiveStarForm = 15
     }
 }

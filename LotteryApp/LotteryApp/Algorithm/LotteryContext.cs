@@ -35,7 +35,8 @@ namespace LotteryApp.Algorithm
                 { FactorTypeEnum.Distinct, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.Award, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.SequenceKey, new Dictionary<int, ReferenceFactor> { } },
-                { FactorTypeEnum.DynamicPosition, new Dictionary<int, ReferenceFactor> { } }
+                { FactorTypeEnum.DynamicPosition, new Dictionary<int, ReferenceFactor> { } },
+                { FactorTypeEnum.FiveStarForm, new Dictionary<int, ReferenceFactor> { } }
             };
             MaxSkipDic = new Dictionary<FactorTypeEnum, int>
             {
@@ -75,6 +76,11 @@ namespace LotteryApp.Algorithm
                 BuildFactor(FactorTypeEnum.Distinct, n.Distinct, i);
                 BuildFactor(FactorTypeEnum.SequenceKey, n.SequenceKey, i);
                 BuildAwardFactor(n, i);
+
+                if (CurrentLottery.Length == 5)
+                {
+                    BuildFactor(FactorTypeEnum.FiveStarForm, n.FiveStarForm, i);
+                }
             }
             BuildInterval();
         }
@@ -278,12 +284,13 @@ namespace LotteryApp.Algorithm
         private LotteryResult GetDynamicPosResult()
         {
             Args = Args ?? "34";
-            int[] number = Args.Select(x => int.Parse(x.ToString())).ToArray();
+            string[] arguments = Args.Split(',');
+            int[] number = arguments[0].Select(x => int.Parse(x.ToString())).ToArray();
             int keyCount = number[0];//码数，任选二，任选三，任选四
             int betCount = number.Length > 1 ? number[1] : keyCount;//投注数，任选二选二码，任选三选三码，四码，任选四选四码，五码
 
             int[][] posKeys = null;
-            int[] numbers = CurrentLottery.Length <= 5 ? new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } : new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+            int[] numbers = arguments.Length > 1 ? arguments[1].Select(x => int.Parse(x.ToString())).OrderBy(x => x).ToArray() : (CurrentLottery.Length <= 5 ? new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } : new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
 
             Combination combine = new Combination(numbers.Length);
 
@@ -292,7 +299,7 @@ namespace LotteryApp.Algorithm
             Func<int[], int[][]> getBetPosKeys = p => combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select p[s]).ToArray()).ToArray();
 
             IEnumerable<LotteryResult> list = posKeys.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, getBetPosKeys(x))).ToArray();
-            LotteryResult ret = InferResult(list, "dynamic");
+            LotteryResult ret = arguments.Length > 1 ? list.FirstOrDefault() : InferResult(list, "dynamic");
 
             return ret;
         }
@@ -300,12 +307,12 @@ namespace LotteryApp.Algorithm
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "dynamic" ? 7 : 9;
-            LotteryResult[] availableList = list.Where(x => x.MaxIntervalCount < maxIntervalCount && (type == "dynamic" ? true : x.BetCount < maxBetCount))
+            int maxIntervalCount = type == "dynamic" ? 9 : 9;
+            LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" ? true : x.BetCount < maxBetCount))
                                                                        .OrderByDescending(x => x.HitCount)
                                                                        .ThenByDescending(x => x.PosHitCount)
-                                                                       .ThenBy(x => x.MaxIntervalCount)
-                                                                       .ThenBy(x => x.LastIntervalCount)
+                                                                       .ThenBy(x => x.MaxInterval)
+                                                                       .ThenBy(x => x.LastInterval)
                                                                        .ToArray();
 
             LotteryResult result = availableList.FirstOrDefault();
@@ -404,12 +411,13 @@ namespace LotteryApp.Algorithm
             if (ret.HitCount > 0)
             {
                 int[] intervals = GetIntervals(ret.HitPositions);
-                ret.MaxIntervalCount = intervals.Max();
-                ret.LastIntervalCount = intervals[intervals.Length - 1];
+                ret.MaxInterval = intervals.Max();
+                ret.LastInterval = intervals[intervals.Length - 1];
+                ret.HitIntervals = intervals;
             }
             else
             {
-                ret.MaxIntervalCount = ret.LastIntervalCount = LotteryNumbers.Length;
+                ret.MaxInterval = ret.LastInterval = LotteryNumbers.Length;
             }
 
             Dictionary<string, object> filterDic = new Dictionary<string, object>

@@ -103,8 +103,27 @@ namespace LotteryApp.Algorithm
             number.DistinctNumbers = array.Distinct().OrderBy(t => t).ToArray();
             number.Distinct = number.DistinctNumbers.Length;
             number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));
-
             number.BetKeyPairs = new int[][] { array };
+
+            if (type == 5)
+            {
+                int repeatNumbers = array.GroupBy(t => t).Where(t => t.Count() > 1).Select(t => t.Key).Count();
+                switch (number.Distinct)
+                {
+                    case 5:
+                        number.FiveStarForm = 1;
+                        break;
+                    case 4:
+                        number.FiveStarForm = 2;
+                        break;
+                    case 3:
+                        number.FiveStarForm = repeatNumbers == 2 ? 3 : 4;
+                        break;
+                    case 2:
+                        number.FiveStarForm = repeatNumbers == 2 ? 5 : 6;
+                        break;
+                }
+            }
             return number;
         }
 
