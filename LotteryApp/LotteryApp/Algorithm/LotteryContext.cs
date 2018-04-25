@@ -199,14 +199,6 @@ namespace LotteryApp.Algorithm
                     { 3, FactorTypeEnum.Decade},
                     { 4, FactorTypeEnum.Unit}
                 };
-                Dictionary<int, string> nameMapping = new Dictionary<int, string>
-                {
-                    { 0, "万"},
-                    { 1, "千"},
-                    { 2, "百"},
-                    { 3, "十"},
-                    { 4, "个"}
-                };
 
                 ret.AnyTwo = posKeys.Select(x =>
                 {
@@ -216,10 +208,8 @@ namespace LotteryApp.Algorithm
                                   select new AnyFilter[] { new AnyFilter { Pos = betArray[0].Pos, Values = t }, new AnyFilter { Pos = betArray[1].Pos, Values = s } };
 
                     IEnumerable<LotteryResult> list = filters.Select(t => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, t)).ToArray();
-                    LotteryResult anyRet = InferResult(list, "any");
-                    anyRet.Title = string.Join(string.Empty, x.Select(t => nameMapping[t]));
+                    return new { Key = string.Join(string.Empty, x), Result = InferResult(list, "any") };
 
-                    return new { Key = string.Join(string.Empty, x), Result = anyRet };
                 }).Where(x => x.Result != null).ToDictionary(x => x.Key, x => x.Result);
             }
             return ret;
@@ -549,6 +539,20 @@ namespace LotteryApp.Algorithm
                 }
                 return string.Concat(x.Key, "：", filterDisplay);
             }).ToArray());
+
+            Dictionary<int, string> nameMapping = new Dictionary<int, string>
+            {
+                { 0, "万"},
+                { 1, "千"},
+                { 2, "百"},
+                { 3, "十"},
+                { 4, "个"}
+            };
+            if (anyFilters != null && anyFilters.Any())
+            {
+                ret.Title = string.Join(string.Empty, anyFilters.Select(t => nameMapping[t.Pos]));
+            }
+
             return ret;
         }
 
@@ -582,8 +586,7 @@ namespace LotteryApp.Algorithm
                 { 3, "十"},
                 { 4, "个"}
             };
-            string ret = string.Concat(nameMapping[filter.Pos], " : ", string.Join(string.Empty, filter.Values));
-            return ret;
+            return string.Concat(nameMapping[filter.Pos], " : ", string.Join(string.Empty, filter.Values)); ;
         }
     }
 }
