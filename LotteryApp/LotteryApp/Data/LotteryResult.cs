@@ -38,6 +38,16 @@
         public int LastInterval { get; set; }
 
         /// <summary>
+        /// 最大连中次数
+        /// </summary>
+        public int MaxContinuous { get; set; }
+
+        /// <summary>
+        /// 最近连中次数
+        /// </summary>
+        public int LastContinuous { get; set; }
+
+        /// <summary>
         /// 中奖位置列表
         /// </summary>
         public int[] HitPositions { get; set; }

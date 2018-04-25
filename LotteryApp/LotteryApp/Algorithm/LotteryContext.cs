@@ -127,14 +127,14 @@ namespace LotteryApp.Algorithm
                 factor.OrderKey = (LotteryNumbers.Length - factor.LastInterval).ToString("D2") + factor.OccurCount.ToString("D2");
             }
 
-            FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit, FactorTypeEnum.Award };
+            FactorTypeEnum[] posFactorTypes = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit, FactorTypeEnum.Award };
             int[] awards = Enumerable.Range(0, 10).ToArray();
-            foreach (var factor in posFactors)
+            foreach (FactorTypeEnum factorType in posFactorTypes)
             {
-                var p = FactorDic[factor];
-                foreach (int v in awards.Except(p.Keys))
+                Dictionary<int, ReferenceFactor> referenceDic = FactorDic[factorType];
+                foreach (int v in awards.Except(FactorDic[factorType].Keys))
                 {
-                    p.Add(v, new ReferenceFactor { Key = v, HitIntervals = new int[] { }, LastInterval = LotteryNumbers.Length, MaxInterval = LotteryNumbers.Length, OccurCount = 0, OccurPositions = new int[] { }, Type = factor });
+                    referenceDic.Add(v, new ReferenceFactor { Key = v, HitIntervals = new int[] { }, LastInterval = LotteryNumbers.Length, MaxInterval = LotteryNumbers.Length, OccurCount = 0, OccurPositions = new int[] { }, Type = factorType });
                 }
             }
         }
@@ -492,10 +492,29 @@ namespace LotteryApp.Algorithm
                 ret.MaxInterval = intervals.Max();
                 ret.LastInterval = intervals[intervals.Length - 1];
                 ret.HitIntervals = intervals;
+
+                List<Tuple<int, int>> tuples = new List<Tuple<int, int>> { };
+                for (int i = 0; i < intervals.Length; i++)
+                {
+                    int key = intervals[i];
+                    if (key == 0)
+                    {
+                        int j = i;
+                        while (j >= 0 && intervals[j] == 0)
+                        {
+                            j--;
+                        }
+                        tuples.Add(new Tuple<int, int>(j, i - j + 1));
+                    }
+                }
+                var continuousArray = tuples.GroupBy(x => x.Item1).Select(x => new { Start = x.Key, MaxCount = x.Select(t => t.Item2).Max() }).ToArray();
+                ret.MaxContinuous = continuousArray.Any() ? continuousArray.Max(x => x.MaxCount) : 0;
+                ret.LastContinuous = continuousArray.Any() ? continuousArray.Last().MaxCount : 0;
             }
             else
             {
                 ret.MaxInterval = ret.LastInterval = LotteryNumbers.Length;
+                ret.MaxContinuous = ret.LastContinuous = 0;
             }
 
             Dictionary<string, object> filterDic = new Dictionary<string, object>

@@ -117,9 +117,10 @@ namespace LotteryApp.Algorithm
 
             if (types.Contains("anytwo") && ret.AnyTwo != null && ret.AnyTwo.Any())
             {
-                foreach (var p in ret.AnyTwo.OrderByDescending(t => t.Value.HitCount))
+                string[] specifiedPos = algorithmArgs != null ? algorithmArgs.Split(',') : null;
+                foreach (var p in ret.AnyTwo.Where(t => specifiedPos == null || specifiedPos.Contains(t.Key)).OrderBy(t => t.Value.MaxInterval).ThenByDescending(t => t.Value.LastContinuous).ThenByDescending(t => t.Value.HitCount))
                 {
-                    Console.WriteLine(string.Format("{0}：最大中奖次数：{1} ，最大间隔：{2}，最近间隔：{3}", p.Value.Title, p.Value.HitCount, p.Value.MaxInterval, p.Value.LastInterval));
+                    Console.WriteLine(string.Format("{0}：最大中奖次数：{1} ,最大连中次数：{2} ，最大间隔：{3}，最近间隔：{4}", p.Value.Title, p.Value.HitCount, p.Value.MaxContinuous, p.Value.MaxInterval, p.Value.LastInterval));
                     Console.WriteLine(p.Value.Filter);
                     Console.WriteLine(string.Format("中奖号码：{0}", string.Join(",", p.Value.HitPositions.Select(x => Format(context.LotteryNumbers[x])).ToArray())));
                     Console.WriteLine();
