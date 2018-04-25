@@ -118,9 +118,15 @@ namespace LotteryApp.Algorithm
             if (types.Contains("anytwo") && ret.AnyTwo != null && ret.AnyTwo.Any())
             {
                 string[] specifiedPos = algorithmArgs != null ? algorithmArgs.Split(',') : null;
-                foreach (var p in ret.AnyTwo.Where(t => specifiedPos == null || specifiedPos.Contains(t.Key)).OrderBy(t => t.Value.MaxInterval).ThenByDescending(t => t.Value.LastContinuous).ThenByDescending(t => t.Value.HitCount))
+                var q = ret.AnyTwo.Where(t => specifiedPos == null || specifiedPos.Contains(t.Key))
+                                              .OrderBy(t => t.Value.MaxInterval)
+                                              .ThenByDescending(t => t.Value.LastContinuous)
+                                              .ThenByDescending(t => t.Value.HitCount)
+                                              .ThenBy(t => t.Value.LastInterval)
+                                              .Take(3);
+                foreach (var p in q)
                 {
-                    Console.WriteLine(string.Format("{0}：最大中奖次数：{1} ,最大连中次数：{2} ，最大间隔：{3}，最近间隔：{4}", p.Value.Title, p.Value.HitCount, p.Value.MaxContinuous, p.Value.MaxInterval, p.Value.LastInterval));
+                    Console.WriteLine(string.Format("{0}：中奖：{1}，最大连中：{2}，最近连中：{3}，最大间隔：{4}，最近间隔：{5}", p.Value.Title, p.Value.HitCount, p.Value.MaxContinuous, p.Value.LastContinuous, p.Value.MaxInterval, p.Value.LastInterval));
                     Console.WriteLine(p.Value.Filter);
                     Console.WriteLine(string.Format("中奖号码：{0}", string.Join(",", p.Value.HitPositions.Select(x => Format(context.LotteryNumbers[x])).ToArray())));
                     Console.WriteLine();
