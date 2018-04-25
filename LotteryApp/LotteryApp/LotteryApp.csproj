@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="Algorithm\Calculator.cs" />
     <Compile Include="Algorithm\LotteryContext.cs" />
+    <Compile Include="Data\AnyFilter.cs" />
     <Compile Include="Data\CompositeLotteryResult.cs" />
     <Compile Include="Data\FactorTypeEnum.cs" />
     <Compile Include="Data\FiveStarFormEnum.cs" />

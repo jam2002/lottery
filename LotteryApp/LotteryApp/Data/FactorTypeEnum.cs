@@ -36,6 +36,16 @@
         /// <summary>
         /// 五星形态，1：组120；2：组60；3：组30；4：组20；5：组10；6：组5；
         /// </summary>
-        FiveStarForm = 15
+        FiveStarForm = 15,
+
+        /// <summary>
+        /// 千位
+        /// </summary>
+        Thousand = 16,
+
+        /// <summary>
+        /// 万位
+        /// </summary>
+        Wan = 17
     }
 }

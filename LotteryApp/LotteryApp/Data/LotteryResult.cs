@@ -51,5 +51,10 @@
         /// 筛选条件
         /// </summary>
         public string Filter { get; set; }
+
+        /// <summary>
+        /// 筛选标题
+        /// </summary>
+        public string Title { get; set; }
     }
 }

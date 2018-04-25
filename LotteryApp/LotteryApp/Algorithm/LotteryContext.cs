@@ -29,6 +29,8 @@ namespace LotteryApp.Algorithm
                 { FactorTypeEnum.Sum, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.Max, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.Min, new Dictionary<int, ReferenceFactor> { } },
+                { FactorTypeEnum.Wan, new Dictionary<int, ReferenceFactor> { } },
+                { FactorTypeEnum.Thousand, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.Hundred, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.Decade, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.Unit, new Dictionary<int, ReferenceFactor> { } },
@@ -80,6 +82,8 @@ namespace LotteryApp.Algorithm
                 if (CurrentLottery.Length == 5)
                 {
                     BuildFactor(FactorTypeEnum.FiveStarForm, n.FiveStarForm, i);
+                    BuildFactor(FactorTypeEnum.Thousand, n.Thousand, i);
+                    BuildFactor(FactorTypeEnum.Wan, n.Wan, i);
                 }
             }
             BuildInterval();
@@ -122,6 +126,17 @@ namespace LotteryApp.Algorithm
                 factor.HitIntervals = intervals;
                 factor.OrderKey = (LotteryNumbers.Length - factor.LastInterval).ToString("D2") + factor.OccurCount.ToString("D2");
             }
+
+            FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit, FactorTypeEnum.Award };
+            int[] awards = Enumerable.Range(0, 10).ToArray();
+            foreach (var factor in posFactors)
+            {
+                var p = FactorDic[factor];
+                foreach (int v in awards.Except(p.Keys))
+                {
+                    p.Add(v, new ReferenceFactor { Key = v, HitIntervals = new int[] { }, LastInterval = LotteryNumbers.Length, MaxInterval = LotteryNumbers.Length, OccurCount = 0, OccurPositions = new int[] { }, Type = factor });
+                }
+            }
         }
 
         public CompositeLotteryResult GetCompositeResult()
@@ -158,6 +173,54 @@ namespace LotteryApp.Algorithm
                     HitIntervals = x.Value.HitIntervals,
                     HitCount = x.Value.OccurPositions.Length
                 });
+
+                int[] poses = new int[] { 0, 1, 2, 3, 4 };
+                Combination combine = new Combination(poses.Length);
+                int[][] posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select poses[s]).ToArray()).ToArray(); //获取健位置索引组合，比如万百，万千，万十
+
+                int[][] valuePosKeys = Enumerable.Range(0, 9).Select(x => x + 4 < 9 ? Enumerable.Range(x, 5).ToArray() : Enumerable.Range(x, 9 - x).Concat(Enumerable.Range(0, x - 4)).ToArray()).ToArray(); //获取值位置索引组合，并且是连续的，比如01234,80123,总位置为9位，考虑杀一个冷码
+
+                FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
+                Dictionary<FactorTypeEnum, int[][]> betValueDic = new Dictionary<FactorTypeEnum, int[][]> { };
+                foreach (FactorTypeEnum posFactor in posFactors)
+                {
+                    Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
+                    int[] values = posReference.Values.OrderBy(x => x.OccurCount).ThenByDescending(x => x.LastInterval).Skip(1).Select(x => x.Key).OrderBy(x => x).ToArray(); //获取值组合，此处杀了一个冷码
+
+                    int[][] betValues = valuePosKeys.Select(x => x.Select(t => values[t]).ToArray()).ToArray(); //根据索引取值
+                    betValueDic.Add(posFactor, betValues);
+                }
+
+                Dictionary<int, FactorTypeEnum> posMappings = new Dictionary<int, FactorTypeEnum>
+                {
+                    { 0, FactorTypeEnum.Wan},
+                    { 1, FactorTypeEnum.Thousand},
+                    { 2, FactorTypeEnum.Hundred},
+                    { 3, FactorTypeEnum.Decade},
+                    { 4, FactorTypeEnum.Unit}
+                };
+                Dictionary<int, string> nameMapping = new Dictionary<int, string>
+                {
+                    { 0, "万"},
+                    { 1, "千"},
+                    { 2, "百"},
+                    { 3, "十"},
+                    { 4, "个"}
+                };
+
+                ret.AnyTwo = posKeys.Select(x =>
+                {
+                    var betArray = x.Select(t => new { Pos = t, Values = betValueDic[posMappings[t]] }).ToArray();
+                    var filters = from t in betArray[0].Values
+                                  from s in betArray[1].Values
+                                  select new AnyFilter[] { new AnyFilter { Pos = betArray[0].Pos, Values = t }, new AnyFilter { Pos = betArray[1].Pos, Values = s } };
+
+                    IEnumerable<LotteryResult> list = filters.Select(t => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, t)).ToArray();
+                    LotteryResult anyRet = InferResult(list, "any");
+                    anyRet.Title = string.Join(string.Empty, x.Select(t => nameMapping[t]));
+
+                    return new { Key = string.Join(string.Empty, x), Result = anyRet };
+                }).Where(x => x.Result != null).ToDictionary(x => x.Key, x => x.Result);
             }
             return ret;
         }
@@ -313,7 +376,7 @@ namespace LotteryApp.Algorithm
             Func<int[], int[][]> getBetPosKeys = p => combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select p[s]).ToArray()).ToArray();
 
             IEnumerable<LotteryResult> list = posKeys.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, getBetPosKeys(x))).ToArray();
-            LotteryResult ret = arguments.Length > 1 ? list.FirstOrDefault() : InferResult(list, "dynamic");
+            LotteryResult ret = arguments.Length > 1 ? list.FirstOrDefault() : InferResult(list, "any");
 
             return ret;
         }
@@ -321,19 +384,18 @@ namespace LotteryApp.Algorithm
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "dynamic" ? 9 : 9;
-            LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" ? true : x.BetCount < maxBetCount))
-                                                                       .OrderByDescending(x => x.HitCount)
-                                                                       .ThenByDescending(x => x.PosHitCount)
-                                                                       .ThenBy(x => x.MaxInterval)
-                                                                       .ThenBy(x => x.LastInterval)
-                                                                       .ToArray();
+            int maxIntervalCount = type == "any" ? 5 : (type == "dynamic" ? 9 : 9);
+            LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" || type == "any" ? true : x.BetCount < maxBetCount))
+                                                                 .OrderByDescending(x => x.HitCount)
+                                                                 .ThenBy(x => x.LastInterval)
+                                                                 .ThenBy(x => x.MaxInterval)
+                                                                 .ToArray();
 
             LotteryResult result = availableList.FirstOrDefault();
             return result;
         }
 
-        private LotteryResult GetFilteredResult(int[] spans, OddEnum[] odds, SizeEnum[] sizes, PrimeEnum[] primes, int[] sums, int[] hundreds, int[] decades, int[] units, int[] maxes, int[] mines, int[] distincts, bool? excludeThree, int[] sequenceKeys = null, int[][] dynamicPosKeys = null, int[] fiveStarForms = null)
+        private LotteryResult GetFilteredResult(int[] spans, OddEnum[] odds, SizeEnum[] sizes, PrimeEnum[] primes, int[] sums, int[] hundreds, int[] decades, int[] units, int[] maxes, int[] mines, int[] distincts, bool? excludeThree, int[] sequenceKeys = null, int[][] dynamicPosKeys = null, int[] fiveStarForms = null, AnyFilter[] anyFilters = null)
         {
             IEnumerable<LotteryNumber> query = CurrentLottery.Length == 3 ? Config.Numbers : LotteryNumbers;
 
@@ -412,6 +474,14 @@ namespace LotteryApp.Algorithm
             {
                 query = query.Where(x => fiveStarForms.Contains(x.FiveStarForm));
             }
+            if (anyFilters != null && anyFilters.Any())
+            {
+                query = query.Where(x =>
+                {
+                    int[] values = new int[] { x.Wan, x.Thousand, x.Hundred, x.Decade, x.Unit };
+                    return anyFilters.All(t => t.Values.Contains(values[t.Pos]));
+                });
+            }
             #endregion
 
             LotteryResult ret = new LotteryResult() { Numbers = query.ToArray() };
@@ -450,7 +520,8 @@ namespace LotteryApp.Algorithm
                 { "大小", sizes},
                 { "奇偶", odds},
                 { "质合", primes},
-                { "不定胆", dynamicPosKeys}
+                { "不定胆", dynamicPosKeys},
+                { "任选二", anyFilters}
             };
             ret.Filter = string.Join(Environment.NewLine, filterDic.Where(x => x.Value != null).Select(x =>
             {
@@ -469,13 +540,15 @@ namespace LotteryApp.Algorithm
                     case "不定胆":
                         filterDisplay = string.Join(";", ((int[][])x.Value).Select(t => Format(t)));
                         break;
+                    case "任选二":
+                        filterDisplay = string.Join(";", ((AnyFilter[])x.Value).Select(t => Format(t)));
+                        break;
                     default:
                         filterDisplay = Format((int[])x.Value);
                         break;
                 }
                 return string.Concat(x.Key, "：", filterDisplay);
             }).ToArray());
-
             return ret;
         }
 
@@ -496,6 +569,20 @@ namespace LotteryApp.Algorithm
         private string Format(int[] filter)
         {
             string ret = string.Join(",", filter.OrderBy(x => CurrentLottery.Key == "pk10" && x == 0 ? 10 : x).Select(x => CurrentLottery.Key == "pk10" ? (x == 0 ? 10 : x).ToString("D2") : x.ToString()).ToArray());
+            return ret;
+        }
+
+        private string Format(AnyFilter filter)
+        {
+            Dictionary<int, string> nameMapping = new Dictionary<int, string>
+            {
+                { 0, "万"},
+                { 1, "千"},
+                { 2, "百"},
+                { 3, "十"},
+                { 4, "个"}
+            };
+            string ret = string.Concat(nameMapping[filter.Pos], " : ", string.Join(string.Empty, filter.Values));
             return ret;
         }
     }

@@ -43,5 +43,10 @@ namespace LotteryApp.Data
         /// 五星形态
         /// </summary>
         public Dictionary<FiveStarFormEnum, LotteryResult> FiveStar { get; set; }
+
+        /// <summary>
+        /// 任二直选
+        /// </summary>
+        public Dictionary<string, LotteryResult> AnyTwo { get; set; }
     }
 }
