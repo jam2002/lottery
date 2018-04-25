@@ -376,9 +376,10 @@ namespace LotteryApp.Algorithm
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
             int maxIntervalCount = type == "any" ? 5 : (type == "dynamic" ? 9 : 9);
             LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" || type == "any" ? true : x.BetCount < maxBetCount))
-                                                                 .OrderByDescending(x => x.HitCount)
-                                                                 .ThenBy(x => x.LastInterval)
-                                                                 .ThenBy(x => x.MaxInterval)
+                                                                 .OrderBy(t => t.MaxInterval)
+                                                                 .ThenByDescending(t => t.LastContinuous)
+                                                                 .ThenByDescending(t => t.HitCount)
+                                                                 .ThenBy(t => t.LastInterval)
                                                                  .ToArray();
 
             LotteryResult result = availableList.FirstOrDefault();
