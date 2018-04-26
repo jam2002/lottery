@@ -3,14 +3,14 @@ using LotteryApp.Data;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Reflection;
-using System.ComponentModel;
 
 namespace LotteryApp.Algorithm
 {
