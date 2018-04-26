@@ -120,8 +120,9 @@ namespace LotteryApp.Algorithm
                 string[] specifiedPos = algorithmArgs != null ? algorithmArgs.Split(',') : null;
                 var q = ret.AnyTwo.Where(t => specifiedPos == null || specifiedPos.Contains(t.Key))
                                               .OrderBy(t => t.Value.MaxInterval)
-                                              .ThenByDescending(t => t.Value.LastContinuous)
+                                              .ThenByDescending(t => t.Value.MaxContinuous)
                                               .ThenByDescending(t => t.Value.HitCount)
+                                              .ThenByDescending(t => t.Value.LastContinuous)
                                               .ThenBy(t => t.Value.LastInterval)
                                               .Take(3);
                 foreach (var p in q)
