@@ -114,12 +114,11 @@ namespace LotteryApp.Algorithm
             {
                 string[] specifiedPos = algorithmArgs != null ? algorithmArgs.Split(',') : null;
                 var q = ret.AnyTwo.Where(t => specifiedPos == null || specifiedPos.Contains(t.Key))
-                                              .OrderBy(t => t.Value.MaxInterval)
-                                              .ThenByDescending(t => t.Value.MaxContinuous)
-                                              .ThenByDescending(t => t.Value.HitCount)
-                                              .ThenByDescending(t => t.Value.LastContinuous)
-                                              .ThenBy(t => t.Value.LastInterval)
-                                              .Take(3);
+                                                 .OrderByDescending(t => t.Value.HitCount)
+                                                 .ThenByDescending(t => t.Value.MaxContinuous)
+                                                 .ThenByDescending(t => t.Value.LastContinuous)
+                                                 .ThenBy(t => t.Value.LastInterval)
+                                                 .Take(3);
                 foreach (var p in q)
                 {
                     Console.WriteLine(string.Format("{0}：中奖：{1}，最大连中：{2}，最近连中：{3}，最大间隔：{4}，最近间隔：{5}", p.Value.Title, p.Value.HitCount, p.Value.MaxContinuous, p.Value.LastContinuous, p.Value.MaxInterval, p.Value.LastInterval));

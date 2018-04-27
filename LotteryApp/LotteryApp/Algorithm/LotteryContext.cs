@@ -398,14 +398,13 @@ namespace LotteryApp.Algorithm
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "any" ? 5 : (type == "dynamic" ? 9 : 9);
+            int maxIntervalCount = type == "any" ? 4 : (type == "dynamic" ? 9 : 9);
             LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" || type == "any" ? true : x.BetCount < maxBetCount))
-                                                                 .OrderBy(t => t.MaxInterval)
-                                                                 .ThenByDescending(t => t.MaxContinuous)
-                                                                 .ThenByDescending(t => t.HitCount)
-                                                                 .ThenByDescending(t => t.LastContinuous)
-                                                                 .ThenBy(t => t.LastInterval)
-                                                                 .ToArray();
+                                                                       .OrderByDescending(t => t.HitCount)
+                                                                       .ThenByDescending(t => t.MaxContinuous)
+                                                                       .ThenByDescending(t => t.LastContinuous)
+                                                                       .ThenBy(t => t.LastInterval)
+                                                                        .ToArray();
 
             LotteryResult result = availableList.FirstOrDefault();
             return result;
