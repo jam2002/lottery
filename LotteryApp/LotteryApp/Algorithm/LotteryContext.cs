@@ -178,17 +178,30 @@ namespace LotteryApp.Algorithm
                 Combination combine = new Combination(poses.Length);
                 int[][] posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select poses[s]).ToArray()).ToArray(); //获取健位置索引组合，比如万百，万千，万十
 
-                int[][] valuePosKeys = Enumerable.Range(0, 9).Select(x => x + 4 < 9 ? Enumerable.Range(x, 5).ToArray() : Enumerable.Range(x, 9 - x).Concat(Enumerable.Range(0, x - 4)).ToArray()).ToArray(); //获取值位置索引组合，并且是连续的，比如01234,80123,总位置为9位，考虑杀一个冷码
-
                 FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
                 Dictionary<FactorTypeEnum, int[][]> betValueDic = new Dictionary<FactorTypeEnum, int[][]> { };
                 foreach (FactorTypeEnum posFactor in posFactors)
                 {
                     Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
-                    int[] values = posReference.Values.OrderBy(x => x.OccurCount).ThenByDescending(x => x.LastInterval).Skip(1).Select(x => x.Key).OrderBy(x => x).ToArray(); //获取值组合，此处杀了一个冷码
+                    int[] values = posReference.Values.Where(x => x.OccurCount > 1).Select(x => x.Key).OrderBy(x => x).ToArray(); //获取值组合，此处杀了出现零到一次的号码
+                    int[] includeValues = posReference.Values.Where(x => x.OccurCount >= 5).Select(x => x.Key).ToArray(); //获取出现次数在五次以上的号码，做为胆
 
-                    int[][] betValues = valuePosKeys.Select(x => x.Select(t => values[t]).ToArray()).ToArray(); //根据索引取值
-                    betValueDic.Add(posFactor, betValues);
+                    int[][] valuePosKeys = Enumerable.Range(0, values.Length).Select(x => x + 2 < values.Length ? Enumerable.Range(x, 3).ToArray() : Enumerable.Range(x, values.Length - x).Concat(Enumerable.Range(0, x + 3 - values.Length)).ToArray()).ToArray();  //获取值位置 连续三位的索引组合
+                    combine = new Combination(values.Length - 3);
+                    int[][] remainPosKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select s).ToArray()).ToArray(); //获取去掉三个连续位置后，取两码的索引位置组合
+
+                    IEnumerable<int[]> betValues = valuePosKeys.SelectMany(x =>
+                    {
+                        int[] continued = x.Select(t => values[t]).ToArray();
+                        int[] remained = values.Except(continued).ToArray();
+                        return remainPosKeys.Select(t => t.Select(s => remained[s]).Concat(continued).OrderBy(s => s).ToArray()).ToArray();
+                    });
+                    if (includeValues.Any())
+                    {
+                        betValues = betValues.Where(x => x.Intersect(includeValues).Count() == includeValues.Length);
+                    }
+
+                    betValueDic.Add(posFactor, betValues.ToArray());
                 }
 
                 Dictionary<int, FactorTypeEnum> posMappings = new Dictionary<int, FactorTypeEnum>
