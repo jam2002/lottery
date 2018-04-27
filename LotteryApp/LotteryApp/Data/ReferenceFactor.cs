@@ -44,5 +44,10 @@
         /// 过滤优先级从低到高排序
         /// </summary>
         public string OrderKey { get; set; }
+
+        /// <summary>
+        ///  热度；1：非常热；2：渐热；3：非常冷；4：渐冷
+        /// </summary>
+        public int Heat { get; set; }
     }
 }
