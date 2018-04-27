@@ -188,10 +188,15 @@ namespace LotteryApp.Algorithm
                 foreach (FactorTypeEnum posFactor in posFactors)
                 {
                     Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
-                    int[] values = posReference.Values.Where(x => x.OccurCount > 1).Select(x => x.Key).OrderBy(x => x).ToArray(); //获取值组合，此处杀了出现零到一次的号码，以及最近15期没出的号码
-                    int[] includeValues = new int[] { }; //posReference.Values.Where(x => x.Heat == 1 || x.Heat == 2).Select(x => x.Key).ToArray(); //获取出现次数在五次以上的号码，做为胆
+                    int[] values = posReference.Values.OrderBy(x => x.OccurCount)
+                                                                               .OrderByDescending(x => x.LastInterval)
+                                                                               .Skip(1)
+                                                                               .Select(x => x.Key)
+                                                                               .OrderBy(x => x)
+                                                                               .ToArray();                                                                                          //获取值组合，此处杀了出现零到一次的号码，
+                    int[] includeValues = posReference.Values.Where(x => x.Heat == 2).Select(x => x.Key).ToArray();  //获取渐热胆
 
-                    int[][] valuePosKeys = Enumerable.Range(0, values.Length).Select(x => x + 3 < values.Length ? Enumerable.Range(x, 4).ToArray() : Enumerable.Range(x, values.Length - x).Concat(Enumerable.Range(0, x + 4 - values.Length)).ToArray()).ToArray();  //获取值位置 连续三位的索引组合
+                    int[][] valuePosKeys = Enumerable.Range(0, values.Length).Select(x => x + 3 < values.Length ? Enumerable.Range(x, 4).ToArray() : Enumerable.Range(x, values.Length - x).Concat(Enumerable.Range(0, x + 4 - values.Length)).ToArray()).ToArray();  //获取值位置 连续四位的索引组合
                     combine = new Combination(values.Length - 4);
                     int[][] remainPosKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == 1).Select(t => (from s in t select s).ToArray()).ToArray(); //获取去掉四个连续位置后，取一码的索引位置组合
 
