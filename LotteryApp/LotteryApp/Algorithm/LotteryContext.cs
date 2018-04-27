@@ -129,7 +129,7 @@ namespace LotteryApp.Algorithm
                 intervals = intervals.Skip(intervals.Length > 5 ? intervals.Length - 5 : 0).ToArray();
                 intervals = intervals.Take(intervals.Length - 1).ToArray();
 
-                factor.Heat = factor.OccurCount >= 5 ? 1 : (factor.LastInterval < 6 && intervals.Select((x, i) => x - (i < intervals.Length - 1 ? intervals[i + 1] : x)).Any(x => x >= 10) ? 2 : 3);
+                factor.Heat = factor.OccurCount >= 5 ? 1 : (factor.LastInterval <= 3 && intervals.Select((x, i) => x - (i < intervals.Length - 1 ? intervals[i + 1] : x)).Any(x => x >= 10) ? 2 : 3);
             }
 
             FactorTypeEnum[] posFactorTypes = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit, FactorTypeEnum.Award };
@@ -188,8 +188,8 @@ namespace LotteryApp.Algorithm
                 foreach (FactorTypeEnum posFactor in posFactors)
                 {
                     Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
-                    int[] values = posReference.Values.Where(x => x.OccurCount > 1).Select(x => x.Key).OrderBy(x => x).ToArray(); //获取值组合，此处杀了出现零到一次的号码
-                    int[] includeValues = posReference.Values.Where(x => x.Heat == 1 || x.Heat == 2).Select(x => x.Key).ToArray(); //获取出现次数在五次以上的号码，做为胆
+                    int[] values = posReference.Values.Where(x => x.OccurCount > 1 && x.LastInterval < 15).Select(x => x.Key).OrderBy(x => x).ToArray(); //获取值组合，此处杀了出现零到一次的号码，以及最近15期没出的号码
+                    int[] includeValues = posReference.Values.Where(x => x.Heat == 1).Select(x => x.Key).ToArray(); //获取出现次数在五次以上的号码，做为胆
 
                     int[][] valuePosKeys = Enumerable.Range(0, values.Length).Select(x => x + 2 < values.Length ? Enumerable.Range(x, 3).ToArray() : Enumerable.Range(x, values.Length - x).Concat(Enumerable.Range(0, x + 3 - values.Length)).ToArray()).ToArray();  //获取值位置 连续三位的索引组合
                     combine = new Combination(values.Length - 3);

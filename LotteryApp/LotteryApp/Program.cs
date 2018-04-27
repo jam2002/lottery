@@ -11,7 +11,7 @@ namespace LotteryApp
             //Run(60, "cqssc,xjssc", "fivestar", "34");
             //Run(20, "cqssc,xjssc,tjssc", "dynamic", "34");
             //Run(20, "cqssc,xjssc,tjssc", "dynamic", "22");
-            Run(30, "cqssc", "anytwo");
+            Run(30, "cqssc", "anytwo", "13");
 
             string commands = Console.ReadLine();
             while (commands != "exit")
