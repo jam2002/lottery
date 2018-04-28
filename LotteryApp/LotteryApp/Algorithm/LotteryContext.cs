@@ -189,12 +189,13 @@ namespace LotteryApp.Algorithm
                 {
                     Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
                     int[] values = posReference.Values.OrderBy(x => x.OccurCount)
-                                                                               .OrderByDescending(x => x.LastInterval)
-                                                                               .Skip(1)
-                                                                               .Select(x => x.Key)
-                                                                               .OrderBy(x => x)
-                                                                               .ToArray();                                                                                          //获取值组合，此处杀了出现零到一次的号码，
-                    int[] includeValues = posReference.Values.Where(x => x.Heat == 2).Select(x => x.Key).ToArray();  //获取渐热胆
+                                                                         .ThenByDescending(x => x.LastInterval)
+                                                                         .Skip(1)
+                                                                         .Select(x => x.Key)
+                                                                         .OrderBy(x => x)
+                                                                         .ToArray();                                                                                 //获取值组合，此处杀了出现零到一次的号码
+                    //int[] includeValues = posReference.Values.Where(x => x.Heat == 2).Select(x => x.Key).ToArray();  //获取渐热胆
+                    int[] includeValues = new int[] { };
 
                     int[][] valuePosKeys = Enumerable.Range(0, values.Length).Select(x => x + 3 < values.Length ? Enumerable.Range(x, 4).ToArray() : Enumerable.Range(x, values.Length - x).Concat(Enumerable.Range(0, x + 4 - values.Length)).ToArray()).ToArray();  //获取值位置 连续四位的索引组合
                     combine = new Combination(values.Length - 4);
@@ -224,7 +225,7 @@ namespace LotteryApp.Algorithm
                     { 4, FactorTypeEnum.Unit}
                 };
 
-                ret.AnyTwo = posKeys.Select(x =>
+                ret.AnyTwo = posKeys.Where(x => x.Sum() % 2 == 0).Select(x =>
                 {
                     var betArray = x.Select(t => new { Pos = t, Values = betValueDic[posMappings[t]] }).ToArray();
                     var filters = from t in betArray[0].Values
@@ -400,11 +401,11 @@ namespace LotteryApp.Algorithm
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
             int maxIntervalCount = type == "any" ? 4 : (type == "dynamic" ? 9 : 9);
             LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" || type == "any" ? true : x.BetCount < maxBetCount))
-                                                                       .OrderByDescending(t => t.HitCount)
-                                                                       .ThenByDescending(t => t.MaxContinuous)
-                                                                       .ThenByDescending(t => t.LastContinuous)
-                                                                       .ThenBy(t => t.LastInterval)
-                                                                        .ToArray();
+                                                                 .OrderByDescending(t => t.HitCount)
+                                                                 .ThenByDescending(t => t.MaxContinuous)
+                                                                 .ThenByDescending(t => t.LastContinuous)
+                                                                 .ThenBy(t => t.LastInterval)
+                                                                 .ToArray();
 
             LotteryResult result = availableList.FirstOrDefault();
             return result;
