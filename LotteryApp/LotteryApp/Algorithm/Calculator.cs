@@ -238,7 +238,8 @@ namespace LotteryApp.Algorithm
 
                 Dictionary<string, LotteryResult> betDic = context.GetAnyTwoResult();
                 string bet = betDic.OrderByDescending(t => t.Value.HitCount)
-                                              .ThenByDescending(t => t.Value.MaxInterval)
+                                              .ThenByDescending(t => t.Value.MaxContinuous)
+                                              .ThenByDescending(t => t.Value.LastContinuous)
                                               .ThenBy(t => t.Value.LastInterval)
                                               .Select(t => t.Key)
                                               .FirstOrDefault();
