@@ -340,7 +340,7 @@ namespace LotteryApp.Algorithm
             return ret;
         }
 
-        public Dictionary<string, LotteryResult> GetAnyTwoResult()
+        public LotteryResult GetAnyTwoResult()
         {
             int[] poses = new int[] { 0, 1, 2, 3, 4 };
             Combination combine = new Combination(poses.Length);
@@ -386,28 +386,25 @@ namespace LotteryApp.Algorithm
             }
 
             Dictionary<int, FactorTypeEnum> posMappings = new Dictionary<int, FactorTypeEnum>
-                {
-                    { 0, FactorTypeEnum.Wan},
-                    { 1, FactorTypeEnum.Thousand},
-                    { 2, FactorTypeEnum.Hundred},
-                    { 3, FactorTypeEnum.Decade},
-                    { 4, FactorTypeEnum.Unit}
-                };
+            {
+                { 0, FactorTypeEnum.Wan},
+                { 1, FactorTypeEnum.Thousand},
+                { 2, FactorTypeEnum.Hundred},
+                { 3, FactorTypeEnum.Decade},
+                { 4, FactorTypeEnum.Unit}
+            };
 
-            //只看 万个，万百，百个，千十
-            Dictionary<string, LotteryResult> ret = posKeys.Select(x =>
-             {
-                 var betArray = x.Select(t => new { Pos = t, Values = betValueDic[posMappings[t]] }).ToArray();
-                 var filters = from t in betArray[0].Values
-                               from s in betArray[1].Values
-                               select new AnyFilter[] { new AnyFilter { Pos = betArray[0].Pos, Values = t }, new AnyFilter { Pos = betArray[1].Pos, Values = s } };
+            IEnumerable<LotteryResult> list = posKeys.SelectMany(x =>
+            {
+                var betArray = x.Select(t => new { Pos = t, Values = betValueDic[posMappings[t]] }).ToArray();
+                var filters = from t in betArray[0].Values
+                              from s in betArray[1].Values
+                              select new AnyFilter[] { new AnyFilter { Pos = betArray[0].Pos, Values = t }, new AnyFilter { Pos = betArray[1].Pos, Values = s } };
 
-                 IEnumerable<LotteryResult> list = filters.Select(t => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, t)).ToArray();
-                 return new { Key = string.Join(string.Empty, x), Result = InferResult(list, "any") };
+                return filters.Select(t => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, t)).ToArray();
+            }).ToArray();
 
-             }).Where(x => x.Result != null).ToDictionary(x => x.Key, x => x.Result);
-
-            return ret;
+            return InferResult(list, "any");
         }
 
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)

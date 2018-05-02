@@ -47,6 +47,6 @@ namespace LotteryApp.Data
         /// <summary>
         /// 任二直选
         /// </summary>
-        public Dictionary<string, LotteryResult> AnyTwo { get; set; }
+        public LotteryResult AnyTwo { get; set; }
     }
 }

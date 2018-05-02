@@ -112,19 +112,12 @@ namespace LotteryApp.Algorithm
                 }
             }
 
-            if (types.Contains("anytwo") && ret.AnyTwo != null && ret.AnyTwo.Any())
+            if (types.Contains("anytwo") && ret.AnyTwo != null)
             {
-                var q = ret.AnyTwo.OrderByDescending(t => t.Value.HitCount)
-                                              .ThenByDescending(t => t.Value.MaxContinuous)
-                                              .ThenByDescending(t => t.Value.LastContinuous)
-                                              .ThenBy(t => t.Value.LastInterval);
-                foreach (var p in q)
-                {
-                    Console.WriteLine(string.Format("{0}：中奖：{1}，最大连中：{2}，最近连中：{3}，最大间隔：{4}，最近间隔：{5}", p.Value.Title, p.Value.HitCount, p.Value.MaxContinuous, p.Value.LastContinuous, p.Value.MaxInterval, p.Value.LastInterval));
-                    Console.WriteLine(p.Value.Filter);
-                    Console.WriteLine(string.Format("中奖号码：{0}", string.Join(",", p.Value.HitPositions.Select(x => Format(context.LotteryNumbers[x])).ToArray())));
-                    Console.WriteLine();
-                }
+                Console.WriteLine(string.Format("{0}：中奖：{1}，最大连中：{2}，最近连中：{3}，最大间隔：{4}，最近间隔：{5}", ret.AnyTwo.Title, ret.AnyTwo.HitCount, ret.AnyTwo.MaxContinuous, ret.AnyTwo.LastContinuous, ret.AnyTwo.MaxInterval, ret.AnyTwo.LastInterval));
+                Console.WriteLine(ret.AnyTwo.Filter);
+                Console.WriteLine(string.Format("中奖号码：{0}", string.Join(",", ret.AnyTwo.HitPositions.Select(x => Format(context.LotteryNumbers[x])).ToArray())));
+                Console.WriteLine();
             }
 
             return resultDic.Values.Any();
@@ -214,20 +207,22 @@ namespace LotteryApp.Algorithm
             int count = 10000;
             int skipCount = TakeNumber;
             int betCycle = 0;
-            int hitCount = 0;
+            int failureCount = 0;
+            double minAmount = 200;
+            double maxAmount = 200;
             double betAmount = 200;
             string[] baseLotteries = GetLotteries(count);
 
             Dictionary<int, int> cycleDic = new Dictionary<int, int>
             {
-                { 0,1},
-                { 1,1},
-                { 2,2},
-                { 3,3},
-                { 4,5},
-                { 5,8},
-                { 6,13}
+                { 0,2},
+                { 1,2},
+                { 2,4},
+                { 3,6},
+                { 4,6},
+                { 5,8}
             };
+            Dictionary<int, int> hitDic = Enumerable.Range(0, 6).ToDictionary(x => x, x => 0);
 
             while (skipCount + cycleDic.Count <= count)
             {
@@ -236,36 +231,41 @@ namespace LotteryApp.Algorithm
                 LotteryNumber[] selectedLottery = LotteryGenerator.GetNumbers(lotteries); ;
                 LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, algorithmArgs);
 
-                Dictionary<string, LotteryResult> betDic = context.GetAnyTwoResult();
-                string bet = betDic.OrderByDescending(t => t.Value.HitCount)
-                                              .ThenByDescending(t => t.Value.MaxContinuous)
-                                              .ThenByDescending(t => t.Value.LastContinuous)
-                                              .ThenBy(t => t.Value.LastInterval)
-                                              .Select(t => t.Key)
-                                              .FirstOrDefault();
+                LotteryResult betResult = context.GetAnyTwoResult();
 
-                if (bet != null)
+                if (betResult != null)
                 {
-                    LotteryResult betResult = betDic[bet];
-
                     betCycle = 0;
                     bool ret = false;
-                    while (betCycle < 7 || ret)
+                    while (betCycle < 6 || ret)
                     {
                         skipCount++;
                         double cycleAmount = 2.5 * cycleDic[betCycle];
                         betAmount = betAmount - cycleAmount;
+                        if (betAmount < minAmount)
+                        {
+                            minAmount = betAmount;
+                        }
 
                         string lottery = baseLotteries[skipCount - 1];
                         ret = betResult.AnyFilters.All(x => x.Values.Contains(int.Parse(lottery[x.Pos].ToString())));
 
                         if (ret)
                         {
-                            hitCount++;
+                            hitDic[betCycle] = hitDic[betCycle] + 1;
                             betAmount = betAmount + cycleDic[betCycle] * 9.78;
+                            if (betAmount > maxAmount)
+                            {
+                                maxAmount = betAmount;
+                            }
                             break;
                         }
                         betCycle++;
+                    }
+
+                    if (!ret)
+                    {
+                        failureCount++;
                     }
                 }
                 else
@@ -273,8 +273,9 @@ namespace LotteryApp.Algorithm
                     skipCount++;
                 }
             }
-            Console.WriteLine("中奖次数：{0}，剩余金额：{1}", hitCount, betAmount);
-        } 
+            Console.WriteLine("中奖次数：{0}，失败次数：{1}，剩余金额：{2}，最大金额：{3}，最小金额：{4}", hitDic.Values.Sum(), failureCount, betAmount, maxAmount, minAmount);
+            Console.WriteLine("中奖间隔：{0}", string.Join(",", hitDic.OrderByDescending(x => x.Value).Select(x => string.Concat(x.Key, "=", x.Value)).ToArray()));
+        }
 
         private string Format(LotteryNumber number)
         {
