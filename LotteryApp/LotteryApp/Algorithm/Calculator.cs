@@ -256,7 +256,7 @@ namespace LotteryApp.Algorithm
                         betAmount = betAmount - cycleAmount;
 
                         string lottery = baseLotteries[skipCount - 1];
-                        ret = betResult.AnyFilters.All(x => x.Values.Contains(Convert.ToInt32(lottery[x.Pos])));
+                        ret = betResult.AnyFilters.All(x => x.Values.Contains(int.Parse(lottery[x.Pos].ToString())));
 
                         if (ret)
                         {
