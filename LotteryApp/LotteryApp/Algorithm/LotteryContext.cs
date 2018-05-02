@@ -179,70 +179,7 @@ namespace LotteryApp.Algorithm
                     HitCount = x.Value.OccurPositions.Length
                 });
 
-                int[] poses = new int[] { 0, 1, 2, 3, 4 };
-                Combination combine = new Combination(poses.Length);
-                int[][] posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select poses[s]).ToArray()).ToArray(); //获取健位置索引组合，比如万百，万千，万十
-
-                int takeContinueNumber = string.IsNullOrWhiteSpace(Args) ? 5 : int.Parse(Args.Split(',').Last()); //获取连续区域长度
-
-                FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
-                Dictionary<FactorTypeEnum, int[][]> betValueDic = new Dictionary<FactorTypeEnum, int[][]> { };
-                foreach (FactorTypeEnum posFactor in posFactors)
-                {
-                    Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
-                    int[] values = posReference.Values.OrderBy(x => x.OccurCount)
-                                                                         .ThenByDescending(x => x.LastInterval)
-                                                                         .Skip(1)
-                                                                         .Select(x => x.Key)
-                                                                         .OrderBy(x => x)
-                                                                         .ToArray();                                                                                                           //获取值组合，此处杀了出现零到一次的号码
-                    //int[] includeValues = posReference.Values.Where(x => x.Heat == 2).Select(x => x.Key).ToArray(); //获取渐热胆
-                    int[] includeValues = new int[] { };
-
-                    int[][] valuePosKeys = Enumerable.Range(0, values.Length).Select(x => x + takeContinueNumber - 1 < values.Length ? Enumerable.Range(x, takeContinueNumber).ToArray() : Enumerable.Range(x, values.Length - x).Concat(Enumerable.Range(0, x + takeContinueNumber - values.Length)).ToArray()).ToArray();  //获取值位置 连续四位的索引组合
-                    combine = new Combination(values.Length - takeContinueNumber);
-                    int[][] remainPosKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == 5 - takeContinueNumber).Select(t => (from s in t select s).ToArray()).ToArray(); //获取去掉四个连续位置后，取一码的索引位置组合
-
-                    IEnumerable<int[]> betValues = valuePosKeys.SelectMany(x =>
-                    {
-                        int[] continued = x.Select(t => values[t]).OrderBy(t => t).ToArray();
-                        if (takeContinueNumber < 5)
-                        {
-                            int[] remained = values.Except(continued).ToArray();
-                            return remainPosKeys.Select(t => t.Select(s => remained[s]).Concat(continued).OrderBy(s => s).ToArray()).ToArray();
-                        }
-                        return new int[][] { continued };
-                    });
-                    if (includeValues.Any())
-                    {
-                        betValues = betValues.Where(x => x.Intersect(includeValues).Count() == includeValues.Length);
-                    }
-                    betValues = betValues.Select(x => new { Key = string.Join("", x), Array = x }).GroupBy(x => x.Key).Select(x => x.First().Array).ToArray();
-
-                    betValueDic.Add(posFactor, betValues.ToArray());
-                }
-
-                Dictionary<int, FactorTypeEnum> posMappings = new Dictionary<int, FactorTypeEnum>
-                {
-                    { 0, FactorTypeEnum.Wan},
-                    { 1, FactorTypeEnum.Thousand},
-                    { 2, FactorTypeEnum.Hundred},
-                    { 3, FactorTypeEnum.Decade},
-                    { 4, FactorTypeEnum.Unit}
-                };
-
-                //只看 万个，万百，百个，千十
-                ret.AnyTwo = posKeys.Where(x => x.Sum() % 2 == 0).Select(x =>
-                {
-                    var betArray = x.Select(t => new { Pos = t, Values = betValueDic[posMappings[t]] }).ToArray();
-                    var filters = from t in betArray[0].Values
-                                  from s in betArray[1].Values
-                                  select new AnyFilter[] { new AnyFilter { Pos = betArray[0].Pos, Values = t }, new AnyFilter { Pos = betArray[1].Pos, Values = s } };
-
-                    IEnumerable<LotteryResult> list = filters.Select(t => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, t)).ToArray();
-                    return new { Key = string.Join(string.Empty, x), Result = InferResult(list, "any") };
-
-                }).Where(x => x.Result != null).ToDictionary(x => x.Key, x => x.Result);
+                ret.AnyTwo = GetAnyTwoResult();
             }
             return ret;
         }
@@ -403,14 +340,83 @@ namespace LotteryApp.Algorithm
             return ret;
         }
 
+        public Dictionary<string, LotteryResult> GetAnyTwoResult()
+        {
+            int[] poses = new int[] { 0, 1, 2, 3, 4 };
+            Combination combine = new Combination(poses.Length);
+            int[][] posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select poses[s]).ToArray()).ToArray(); //获取健位置索引组合，比如万百，万千，万十
+
+            int takeContinueNumber = string.IsNullOrWhiteSpace(Args) ? 5 : int.Parse(Args.Split(',').Last()); //获取连续区域长度
+
+            FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
+            Dictionary<FactorTypeEnum, int[][]> betValueDic = new Dictionary<FactorTypeEnum, int[][]> { };
+            foreach (FactorTypeEnum posFactor in posFactors)
+            {
+                Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
+                int[] values = posReference.Values.OrderBy(x => x.OccurCount)
+                                                                     .ThenByDescending(x => x.LastInterval)
+                                                                     .Skip(1)
+                                                                     .Select(x => x.Key)
+                                                                     .OrderBy(x => x)
+                                                                     .ToArray();                                                                                                           //获取值组合，此处杀了出现零到一次的号码
+                //int[] includeValues = posReference.Values.Where(x => x.Heat == 2).Select(x => x.Key).ToArray();                        //获取渐热胆
+                int[] includeValues = new int[] { };
+
+                int[][] valuePosKeys = Enumerable.Range(0, values.Length).Select(x => x + takeContinueNumber - 1 < values.Length ? Enumerable.Range(x, takeContinueNumber).ToArray() : Enumerable.Range(x, values.Length - x).Concat(Enumerable.Range(0, x + takeContinueNumber - values.Length)).ToArray()).ToArray();  //获取值位置 连续四位的索引组合
+                combine = new Combination(values.Length - takeContinueNumber);
+                int[][] remainPosKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == 5 - takeContinueNumber).Select(t => (from s in t select s).ToArray()).ToArray(); //获取去掉四个连续位置后，取一码的索引位置组合
+
+                IEnumerable<int[]> betValues = valuePosKeys.SelectMany(x =>
+                {
+                    int[] continued = x.Select(t => values[t]).OrderBy(t => t).ToArray();
+                    if (takeContinueNumber < 5)
+                    {
+                        int[] remained = values.Except(continued).ToArray();
+                        return remainPosKeys.Select(t => t.Select(s => remained[s]).Concat(continued).OrderBy(s => s).ToArray()).ToArray();
+                    }
+                    return new int[][] { continued };
+                });
+                if (includeValues.Any())
+                {
+                    betValues = betValues.Where(x => x.Intersect(includeValues).Count() == includeValues.Length);
+                }
+                betValues = betValues.Select(x => new { Key = string.Join("", x), Array = x }).GroupBy(x => x.Key).Select(x => x.First().Array).ToArray();
+
+                betValueDic.Add(posFactor, betValues.ToArray());
+            }
+
+            Dictionary<int, FactorTypeEnum> posMappings = new Dictionary<int, FactorTypeEnum>
+                {
+                    { 0, FactorTypeEnum.Wan},
+                    { 1, FactorTypeEnum.Thousand},
+                    { 2, FactorTypeEnum.Hundred},
+                    { 3, FactorTypeEnum.Decade},
+                    { 4, FactorTypeEnum.Unit}
+                };
+
+            //只看 万个，万百，百个，千十
+            Dictionary<string, LotteryResult> ret = posKeys.Select(x =>
+             {
+                 var betArray = x.Select(t => new { Pos = t, Values = betValueDic[posMappings[t]] }).ToArray();
+                 var filters = from t in betArray[0].Values
+                               from s in betArray[1].Values
+                               select new AnyFilter[] { new AnyFilter { Pos = betArray[0].Pos, Values = t }, new AnyFilter { Pos = betArray[1].Pos, Values = s } };
+
+                 IEnumerable<LotteryResult> list = filters.Select(t => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, t)).ToArray();
+                 return new { Key = string.Join(string.Empty, x), Result = InferResult(list, "any") };
+
+             }).Where(x => x.Result != null).ToDictionary(x => x.Key, x => x.Result);
+
+            return ret;
+        }
+
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "any" ? 4 : (type == "dynamic" ? 9 : 9);
+            int maxIntervalCount = type == "any" ? 5 : (type == "dynamic" ? 9 : 9);
             LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" || type == "any" ? true : x.BetCount < maxBetCount))
                                                                  .OrderByDescending(t => t.HitCount)
-                                                                 .ThenByDescending(t => t.MaxContinuous)
-                                                                 .ThenByDescending(t => t.LastContinuous)
+                                                                 .ThenByDescending(t => t.MaxInterval)
                                                                  .ThenBy(t => t.LastInterval)
                                                                  .ToArray();
 
@@ -602,6 +608,7 @@ namespace LotteryApp.Algorithm
             };
             if (anyFilters != null && anyFilters.Any())
             {
+                ret.AnyFilters = anyFilters;
                 ret.Title = string.Join(string.Empty, anyFilters.Select(t => nameMapping[t.Pos]));
             }
 

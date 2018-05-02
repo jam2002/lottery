@@ -32,7 +32,7 @@ namespace LotteryApp
             string[] names = lotterNames != null && lotterNames != "all" ? lotterNames.Split(',') : LotteryGenerator.GetConfig().Lotteries.Select(x => x.Key).ToArray();
             if (type == null)
             {
-                type = "dynamic";
+                type = "anytwo";
             }
 
             Calculator.ClearCache();
@@ -40,15 +40,12 @@ namespace LotteryApp
             foreach (string name in names)
             {
                 Calculator calclator = new Calculator(name, type, number.Value, algorArgs);
-                bool successStarted = calclator.Start();
+                //calclator.Start();
+                calclator.Validate();
 
-                if (successStarted)
-                {
-                    Console.WriteLine();
-                }
+                Console.WriteLine();
             }
             Console.WriteLine("策略生成结束");
-            Console.WriteLine();
         }
     }
 }

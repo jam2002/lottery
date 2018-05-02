@@ -45,6 +45,8 @@ namespace LotteryApp.Algorithm
         public bool Start()
         {
             string[] lotteries = GetLotteries();
+            lotteries = lotteries.Skip(lotteries.Length - TakeNumber).ToArray();
+
             LotteryNumber[] selectedLottery = null;
             if (lottery.Length >= 5)
             {
@@ -128,7 +130,7 @@ namespace LotteryApp.Algorithm
             return resultDic.Values.Any();
         }
 
-        private string[] GetLotteries()
+        private string[] GetLotteries(int retrieveNumber=200)
         {
             string mainKey = lottery.Key.Split('|')[0];
 
@@ -141,7 +143,7 @@ namespace LotteryApp.Algorithm
             {
                 if (lottery.Source == 1)
                 {
-                    string url = string.Concat("http://data.917500.cn/", mainKey, ".txt");
+                    string url = string.Concat("http://data.917500.cn/", mainKey, retrieveNumber == 200 ? string.Empty : ("_" + retrieveNumber.ToString()), ".txt");
                     HttpClient client = new HttpClient();
                     string content = client.GetStringAsync(url).Result;
                     client.Dispose();
@@ -204,26 +206,74 @@ namespace LotteryApp.Algorithm
                 }
                 lotteryCache[mainKey] = lotteries;
             }
-            return lotteries.Select(x => x.Substring(lottery.StartIndex, lottery.Length)).Skip(lotteries.Length - TakeNumber).ToArray();
+            return lotteries.Select(x => x.Substring(lottery.StartIndex, lottery.Length)).ToArray();
         }
 
-        private void Save(Dictionary<string, LotteryResult> results, string name)
+        public void Validate()
         {
-            string path = @"..\..\Result\" + name;
-            var query = results.Where(x => x.Value != null).Select(ret =>
-            {
-                string numbers = string.Join(",", ret.Value.Numbers.Select(x => Format(x)).ToArray());
-                return new { name = ret.Key, filter = ret.Value.Filter, numbers = numbers };
-            }).ToArray();
+            int count = 10000;
+            int skipCount = TakeNumber;
+            int betCycle = 0;
+            int hitCount = 0;
+            double betAmount = 200;
+            string[] baseLotteries = GetLotteries(count);
 
-            string str = JsonConvert.SerializeObject(query);
-            using (StreamWriter sw = File.CreateText(path))
+            Dictionary<int, int> cycleDic = new Dictionary<int, int>
             {
-                sw.Write(str);
-                sw.Flush();
-                sw.Close();
+                { 0,1},
+                { 1,1},
+                { 2,2},
+                { 3,3},
+                { 4,5},
+                { 5,8},
+                { 6,13}
+            };
+
+            while (skipCount + cycleDic.Count <= count)
+            {
+                string[] lotteries = baseLotteries.Skip(skipCount - TakeNumber).Take(TakeNumber).ToArray();
+
+                LotteryNumber[] selectedLottery = LotteryGenerator.GetNumbers(lotteries); ;
+                LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, algorithmArgs);
+
+                Dictionary<string, LotteryResult> betDic = context.GetAnyTwoResult();
+                string bet = betDic.OrderByDescending(t => t.Value.HitCount)
+                                              .ThenByDescending(t => t.Value.MaxInterval)
+                                              .ThenBy(t => t.Value.LastInterval)
+                                              .Select(t => t.Key)
+                                              .FirstOrDefault();
+
+                if (bet != null)
+                {
+                    LotteryResult betResult = betDic[bet];
+
+                    betCycle = 0;
+                    bool ret = false;
+                    while (betCycle < 7 || ret)
+                    {
+                        skipCount++;
+                        double cycleAmount = 2.5 * cycleDic[betCycle];
+                        betAmount = betAmount - cycleAmount;
+
+                        string lottery = baseLotteries[skipCount - 1];
+                        ret = betResult.AnyFilters.All(x => x.Values.Contains(Convert.ToInt32(lottery[x.Pos])));
+
+                        if (ret)
+                        {
+                            hitCount++;
+                            betAmount = betAmount + cycleDic[betCycle] * 9.78;
+                            break;
+                        }
+                        betCycle++;
+                    }
+                }
+                else
+                {
+                    skipCount++;
+                }
             }
-        }
+            Console.WriteLine("中奖次数：{0}，剩余金额：{1}", hitCount, betAmount);
+        } 
 
         private string Format(LotteryNumber number)
         {

@@ -66,5 +66,10 @@
         /// 筛选标题
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// 任选投注条件
+        /// </summary>
+        public AnyFilter[] AnyFilters { get; set; }
     }
 }
