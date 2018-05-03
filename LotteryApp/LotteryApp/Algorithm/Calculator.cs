@@ -208,6 +208,8 @@ namespace LotteryApp.Algorithm
             int skipCount = TakeNumber;
             int betCycle = 0;
             int failureCount = 0;
+            int continueFailureCount = 0;
+            int lastFailureIndex = 0;
             double minAmount = 200;
             double maxAmount = 200;
             double betAmount = 200;
@@ -215,14 +217,19 @@ namespace LotteryApp.Algorithm
 
             Dictionary<int, int> cycleDic = new Dictionary<int, int>
             {
-                { 0,2},
-                { 1,2},
-                { 2,4},
-                { 3,6},
-                { 4,6},
-                { 5,8}
+                { 0,1},
+                { 1,1},
+                { 2,2},
+                { 3,3},
+                { 4,5},
+                { 5,5}
             };
-            Dictionary<int, int> hitDic = Enumerable.Range(0, 6).ToDictionary(x => x, x => 0);
+            Dictionary<string, int> stopDic = new Dictionary<string, int>
+            {
+                { "4",2},
+                { "5",4}
+            };
+            Dictionary<int, int> hitDic = Enumerable.Range(0, cycleDic.Count).ToDictionary(x => x, x => 0);
 
             while (skipCount + cycleDic.Count <= count)
             {
@@ -237,10 +244,10 @@ namespace LotteryApp.Algorithm
                 {
                     betCycle = 0;
                     bool ret = false;
-                    while (betCycle < 6 || ret)
+                    while (betCycle < cycleDic.Count || ret)
                     {
                         skipCount++;
-                        double cycleAmount = 2.5 * cycleDic[betCycle];
+                        double cycleAmount = 5 * cycleDic[betCycle];
                         betAmount = betAmount - cycleAmount;
                         if (betAmount < minAmount)
                         {
@@ -253,7 +260,8 @@ namespace LotteryApp.Algorithm
                         if (ret)
                         {
                             hitDic[betCycle] = hitDic[betCycle] + 1;
-                            betAmount = betAmount + cycleDic[betCycle] * 9.78;
+                            betAmount = betAmount + cycleDic[betCycle] * 19.56;
+                            Console.WriteLine(string.Format("当前剩余：{0:f2}，当前期数：{1}", betAmount, skipCount));
                             if (betAmount > maxAmount)
                             {
                                 maxAmount = betAmount;
@@ -266,6 +274,25 @@ namespace LotteryApp.Algorithm
                     if (!ret)
                     {
                         failureCount++;
+                        if (continueFailureCount == 0 || lastFailureIndex + cycleDic.Count == skipCount)
+                        {
+                            continueFailureCount++;
+                        }
+                        else
+                        {
+                            continueFailureCount = 0;
+                        }
+                        lastFailureIndex = skipCount;
+                    }
+                    else
+                    {
+                        continueFailureCount = 0;
+                    }
+
+                    if (continueFailureCount == stopDic[algorithmArgs])
+                    {
+                        algorithmArgs = algorithmArgs == "4" ? "5" : "4";
+                        continueFailureCount = 0;
                     }
                 }
                 else
@@ -273,7 +300,7 @@ namespace LotteryApp.Algorithm
                     skipCount++;
                 }
             }
-            Console.WriteLine("中奖次数：{0}，失败次数：{1}，剩余金额：{2}，最大金额：{3}，最小金额：{4}", hitDic.Values.Sum(), failureCount, betAmount, maxAmount, minAmount);
+            Console.WriteLine(string.Format("中奖次数：{0}，失败次数：{1}，剩余金额：{2:f2}，最大金额：{3:f2}，最小金额：{4:f2}", hitDic.Values.Sum(), failureCount, betAmount, maxAmount, minAmount));
             Console.WriteLine("中奖间隔：{0}", string.Join(",", hitDic.OrderByDescending(x => x.Value).Select(x => string.Concat(x.Key, "=", x.Value)).ToArray()));
         }
 
