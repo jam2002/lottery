@@ -318,7 +318,7 @@ namespace LotteryApp.Algorithm
             return ret;
         }
 
-        private LotteryResult GetDynamicPosResult()
+        public LotteryResult GetDynamicPosResult()
         {
             string[] arguments = (Args ?? "34").Split(',');
             int[] number = arguments[0].Select(x => int.Parse(x.ToString())).ToArray();
@@ -335,7 +335,7 @@ namespace LotteryApp.Algorithm
             Func<int[], int[][]> getBetPosKeys = p => combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select p[s]).ToArray()).ToArray();
 
             IEnumerable<LotteryResult> list = posKeys.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, getBetPosKeys(x))).ToArray();
-            LotteryResult ret = arguments.Length > 1 ? list.FirstOrDefault() : InferResult(list, "any");
+            LotteryResult ret = arguments.Length > 1 ? list.FirstOrDefault() : InferResult(list, "dynamic");
 
             return ret;
         }
@@ -358,9 +358,7 @@ namespace LotteryApp.Algorithm
                                                                      .Skip(1)
                                                                      .Select(x => x.Key)
                                                                      .OrderBy(x => x)
-                                                                     .ToArray();                                                                                                           //获取值组合，此处杀了出现零到一次的号码
-                //int[] includeValues = posReference.Values.Where(x => x.Heat == 2).Select(x => x.Key).ToArray();                        //获取渐热胆
-                int[] includeValues = new int[] { };
+                                                                     .ToArray();                                 //获取值组合，此处杀了出现零到一次的号码
 
                 int[][] valuePosKeys = Enumerable.Range(0, values.Length).Select(x => x + takeContinueNumber - 1 < values.Length ? Enumerable.Range(x, takeContinueNumber).ToArray() : Enumerable.Range(x, values.Length - x).Concat(Enumerable.Range(0, x + takeContinueNumber - values.Length)).ToArray()).ToArray();  //获取值位置 连续四位的索引组合
                 combine = new Combination(values.Length - takeContinueNumber);
@@ -376,10 +374,7 @@ namespace LotteryApp.Algorithm
                     }
                     return new int[][] { continued };
                 });
-                if (includeValues.Any())
-                {
-                    betValues = betValues.Where(x => x.Intersect(includeValues).Count() == includeValues.Length);
-                }
+
                 betValues = betValues.Select(x => new { Key = string.Join("", x), Array = x }).GroupBy(x => x.Key).Select(x => x.First().Array).ToArray();
 
                 betValueDic.Add(posFactor, betValues.ToArray());
@@ -410,7 +405,7 @@ namespace LotteryApp.Algorithm
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "any" ? 4 : (type == "dynamic" ? 9 : 9);
+            int maxIntervalCount = type == "any" ? 4 : (type == "dynamic" ? 6 : 9);
             LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" || type == "any" ? true : x.BetCount < maxBetCount))
                                                                  .OrderByDescending(t => t.HitCount)
                                                                  .ThenByDescending(t => t.MaxContinuous)
@@ -608,6 +603,10 @@ namespace LotteryApp.Algorithm
             {
                 ret.AnyFilters = anyFilters;
                 ret.Title = string.Join(string.Empty, anyFilters.Select(t => nameMapping[t.Pos]));
+            }
+            if (dynamicPosKeys != null && dynamicPosKeys.Any())
+            {
+                ret.AnyFilters = dynamicPosKeys.Select(x => new AnyFilter { Pos = -1, Values = x }).ToArray();
             }
 
             return ret;
