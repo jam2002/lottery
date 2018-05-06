@@ -238,7 +238,7 @@ namespace LotteryApp.Algorithm
                 LotteryNumber[] selectedLottery = LotteryGenerator.GetNumbers(lotteries); ;
                 LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, algorithmArgs);
 
-                LotteryResult betResult = context.GetAnyTwoResult();
+                LotteryResult betResult = context.GetAnytwoResultByHeat();
 
                 if (betResult != null)
                 {

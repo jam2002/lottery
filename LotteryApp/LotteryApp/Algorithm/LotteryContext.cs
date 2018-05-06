@@ -126,10 +126,34 @@ namespace LotteryApp.Algorithm
                 factor.HitIntervals = intervals;
                 factor.OrderKey = (LotteryNumbers.Length - factor.LastInterval).ToString("D2") + factor.OccurCount.ToString("D2");
 
-                intervals = intervals.Skip(intervals.Length > 5 ? intervals.Length - 5 : 0).ToArray();
-                intervals = intervals.Take(intervals.Length - 1).ToArray();
-
-                factor.Heat = factor.OccurCount >= 5 && factor.LastInterval < 15 ? 1 : (factor.LastInterval <= 3 && intervals.Select((x, i) => x - (i < intervals.Length - 1 ? intervals[i + 1] : x)).Any(x => x >= 10) ? 2 : 3);
+                if (factor.OccurCount == 0 || factor.OccurCount == 1 || factor.LastInterval >= 20)
+                {
+                    factor.Heat = 1;
+                }
+                else if (factor.OccurCount == 2 && (factor.LastInterval < 20 && factor.LastInterval >= 10))
+                {
+                    factor.Heat = 2;
+                }
+                else if (factor.LastInterval < 20 && factor.LastInterval >= 10)
+                {
+                    factor.Heat = 3;
+                }
+                else if (factor.OccurCount >= 7)
+                {
+                    factor.Heat = 7;
+                }
+                else if (factor.OccurCount >= 5)
+                {
+                    factor.Heat = 6;
+                }
+                else if (factor.OccurCount >= 4)
+                {
+                    factor.Heat = 5;
+                }
+                else
+                {
+                    factor.Heat = 4;
+                }
             }
 
             FactorTypeEnum[] posFactorTypes = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit, FactorTypeEnum.Award };
@@ -139,7 +163,7 @@ namespace LotteryApp.Algorithm
                 Dictionary<int, ReferenceFactor> referenceDic = FactorDic[factorType];
                 foreach (int v in awards.Except(referenceDic.Keys))
                 {
-                    referenceDic.Add(v, new ReferenceFactor { Key = v, HitIntervals = new int[] { }, LastInterval = LotteryNumbers.Length, MaxInterval = LotteryNumbers.Length, OccurCount = 0, OccurPositions = new int[] { }, Type = factorType, Heat = 3 });
+                    referenceDic.Add(v, new ReferenceFactor { Key = v, HitIntervals = new int[] { }, LastInterval = LotteryNumbers.Length, MaxInterval = LotteryNumbers.Length, OccurCount = 0, OccurPositions = new int[] { }, Type = factorType, Heat = 1 });
                 }
             }
         }
@@ -179,7 +203,7 @@ namespace LotteryApp.Algorithm
                     HitCount = x.Value.OccurPositions.Length
                 });
 
-                ret.AnyTwo = GetAnyTwoResult();
+                ret.AnyTwo = GetAnyTwoResultByHit();
             }
             return ret;
         }
@@ -340,7 +364,7 @@ namespace LotteryApp.Algorithm
             return ret;
         }
 
-        public LotteryResult GetAnyTwoResult()
+        public LotteryResult GetAnyTwoResultByHit()
         {
             int[] poses = new int[] { 0, 1, 2, 3, 4 };
             Combination combine = new Combination(poses.Length);
@@ -400,6 +424,41 @@ namespace LotteryApp.Algorithm
             }).ToArray();
 
             return InferResult(list, "any");
+        }
+
+        public LotteryResult GetAnytwoResultByHeat()
+        {
+            FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
+
+            Dictionary<FactorTypeEnum, int> posMappings = new Dictionary<FactorTypeEnum, int>
+            {
+                { FactorTypeEnum.Wan,0},
+                { FactorTypeEnum.Thousand,1},
+                { FactorTypeEnum.Hundred,2},
+                { FactorTypeEnum.Decade,3},
+                { FactorTypeEnum.Unit,4}
+            };
+
+            AnyFilter[] filters = posFactors.Select(x =>
+            {
+                Dictionary<int, ReferenceFactor> posReference = FactorDic[x];
+                Dictionary<int, int> heatDic = posReference.Select(t => t.Value).GroupBy(t => t.Heat).ToDictionary(t => t.Key, t => t.Count());
+                return new { ReferenceDic = posReference, HeatDic = heatDic, Factor = x };
+            }).OrderByDescending(x => x.HeatDic[1])
+               .ThenByDescending(x => x.HeatDic[2])
+               .ThenByDescending(x => x.HeatDic[3])
+               .ThenByDescending(x => x.HeatDic[7])
+               .ThenByDescending(x => x.HeatDic[6])
+               .Take(2)
+               .Select(x =>
+               {
+                   AnyFilter filter = new AnyFilter { Pos = posMappings[x.Factor] };
+                   filter.Values = x.ReferenceDic.Values.OrderBy(t => t.Heat).ThenByDescending(t => t.LastInterval).Skip(5).Select(t => t.Key).OrderBy(t => t).ToArray();
+                   return filter;
+               })
+               .ToArray();
+
+            return new LotteryResult { AnyFilters = filters };
         }
 
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)

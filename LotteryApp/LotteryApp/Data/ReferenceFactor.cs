@@ -46,7 +46,7 @@
         public string OrderKey { get; set; }
 
         /// <summary>
-        ///  热度；1：非常热；2：渐热；3：非常冷；4：渐冷
+        ///  热度：1：极冷；2：相当冷；3：冷；4：温；5：热；6：相当热；7：极热
         /// </summary>
         public int Heat { get; set; }
     }
