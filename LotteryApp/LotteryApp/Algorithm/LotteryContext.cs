@@ -125,35 +125,6 @@ namespace LotteryApp.Algorithm
                 factor.MaxInterval = intervals.Max();
                 factor.HitIntervals = intervals;
                 factor.OrderKey = (LotteryNumbers.Length - factor.LastInterval).ToString("D2") + factor.OccurCount.ToString("D2");
-
-                if (factor.OccurCount == 0 || factor.OccurCount == 1 || factor.LastInterval >= 20)
-                {
-                    factor.Heat = 1;
-                }
-                else if (factor.OccurCount == 2 && (factor.LastInterval < 20 && factor.LastInterval >= 10))
-                {
-                    factor.Heat = 2;
-                }
-                else if (factor.LastInterval < 20 && factor.LastInterval >= 10)
-                {
-                    factor.Heat = 3;
-                }
-                else if (factor.OccurCount >= 7)
-                {
-                    factor.Heat = 7;
-                }
-                else if (factor.OccurCount >= 5)
-                {
-                    factor.Heat = 6;
-                }
-                else if (factor.OccurCount >= 4)
-                {
-                    factor.Heat = 5;
-                }
-                else
-                {
-                    factor.Heat = 4;
-                }
             }
 
             FactorTypeEnum[] posFactorTypes = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit, FactorTypeEnum.Award };
@@ -165,6 +136,46 @@ namespace LotteryApp.Algorithm
                 {
                     referenceDic.Add(v, new ReferenceFactor { Key = v, HitIntervals = new int[] { }, LastInterval = LotteryNumbers.Length, MaxInterval = LotteryNumbers.Length, OccurCount = 0, OccurPositions = new int[] { }, Type = factorType, Heat = 1 });
                 }
+
+                foreach (var factor in referenceDic.Values)
+                {
+                    if (factor.LastInterval >= 20)
+                    {
+                        factor.Heat = 1;
+                    }
+                    else if ((factor.OccurCount == 1 || factor.OccurCount == 2) && (factor.LastInterval < 20 && factor.LastInterval >= 10))
+                    {
+                        factor.Heat = 2;
+                    }
+                    else if (factor.LastInterval < 20 && factor.LastInterval >= 10)
+                    {
+                        factor.Heat = 3;
+                    }
+                    else if (factor.OccurCount >= 7)
+                    {
+                        factor.Heat = 7;
+                    }
+                    else if (factor.OccurCount >= 5)
+                    {
+                        factor.Heat = 6;
+                    }
+                    else if (factor.OccurCount >= 4)
+                    {
+                        factor.Heat = 5;
+                    }
+                    else
+                    {
+                        factor.Heat = 4;
+                    }
+
+                    int[] intervals = factor.HitIntervals.Skip(factor.HitIntervals.Length > 5 ? factor.HitIntervals.Length - 5 : 0).ToArray();
+                    intervals = intervals.Take(intervals.Length - 1).ToArray();
+                    if (factor.LastInterval <= 3 && intervals.Select((x, i) => x - (i < intervals.Length - 1 ? intervals[i + 1] : x)).Any(x => x >= 10))
+                    {
+                        factor.Heat = 6; //渐热号
+                    }
+                }
+
             }
         }
 
@@ -203,7 +214,7 @@ namespace LotteryApp.Algorithm
                     HitCount = x.Value.OccurPositions.Length
                 });
 
-                ret.AnyTwo = GetAnyTwoResultByHit();
+                ret.AnyTwo = GetAnyTwoResultByHeat();
             }
             return ret;
         }
@@ -377,7 +388,7 @@ namespace LotteryApp.Algorithm
             foreach (FactorTypeEnum posFactor in posFactors)
             {
                 Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
-                int[] values = posReference.Values.OrderBy(x => x.OccurCount)
+                int[] values = posReference.Values.OrderBy(x => x.Heat)
                                                                      .ThenByDescending(x => x.LastInterval)
                                                                      .Skip(1)
                                                                      .Select(x => x.Key)
@@ -426,7 +437,7 @@ namespace LotteryApp.Algorithm
             return InferResult(list, "any");
         }
 
-        public LotteryResult GetAnytwoResultByHeat()
+        public LotteryResult GetAnyTwoResultByHeat()
         {
             FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
 
@@ -439,26 +450,42 @@ namespace LotteryApp.Algorithm
                 { FactorTypeEnum.Unit,4}
             };
 
-            AnyFilter[] filters = posFactors.Select(x =>
-            {
-                Dictionary<int, ReferenceFactor> posReference = FactorDic[x];
-                Dictionary<int, int> heatDic = posReference.Select(t => t.Value).GroupBy(t => t.Heat).ToDictionary(t => t.Key, t => t.Count());
-                return new { ReferenceDic = posReference, HeatDic = heatDic, Factor = x };
-            }).OrderByDescending(x => x.HeatDic[1])
-               .ThenByDescending(x => x.HeatDic[2])
-               .ThenByDescending(x => x.HeatDic[3])
-               .ThenByDescending(x => x.HeatDic[7])
-               .ThenByDescending(x => x.HeatDic[6])
+            var query = posFactors.Select(x =>
+             {
+                 Dictionary<int, ReferenceFactor> posReference = FactorDic[x];
+                 Dictionary<int, int> heatDic = posReference.Select(t => t.Value).GroupBy(t => t.Heat).ToDictionary(t => t.Key, t => t.Count());
+                 for (int i = 1; i <= 7; i++)
+                 {
+                     if (!heatDic.ContainsKey(i))
+                     {
+                         heatDic.Add(i, 0);
+                     }
+                 }
+
+                 return new { ReferenceDic = posReference, HeatDic = heatDic, Factor = x };
+             }).OrderByDescending(x => x.HeatDic[1])
+                   .ThenByDescending(x => x.HeatDic[2])
+                   .ThenByDescending(x => x.HeatDic[3])
+                   .ThenByDescending(x => x.HeatDic[7])
+                   .ThenByDescending(x => x.HeatDic[6])
+                   .ToArray();
+
+            AnyFilter[] betArray = query
                .Take(2)
                .Select(x =>
                {
-                   AnyFilter filter = new AnyFilter { Pos = posMappings[x.Factor] };
-                   filter.Values = x.ReferenceDic.Values.OrderBy(t => t.Heat).ThenByDescending(t => t.LastInterval).Skip(5).Select(t => t.Key).OrderBy(t => t).ToArray();
-                   return filter;
+                   int[] values = x.ReferenceDic.Values.OrderBy(t => t.Heat)
+                                                                                 .ThenByDescending(t => t.LastInterval)
+                                                                                 .Skip(5)
+                                                                                 .Select(t => t.Key)
+                                                                                 .OrderBy(t => t)
+                                                                                 .ToArray();
+                   return new AnyFilter { Pos = posMappings[x.Factor], Values = values };
                })
+               .OrderBy(x => x.Pos)
                .ToArray();
 
-            return new LotteryResult { AnyFilters = filters };
+            return new LotteryResult { AnyFilters = betArray, Filter = string.Join("       ", betArray.Select(t => Format(t))) };
         }
 
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)

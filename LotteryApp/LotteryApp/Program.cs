@@ -40,10 +40,8 @@ namespace LotteryApp
             foreach (string name in names)
             {
                 Calculator calclator = new Calculator(name, type, number.Value, algorArgs);
-                //calclator.Start();
-                calclator.Validate();
-
-                Console.WriteLine();
+                calclator.Start();
+                //calclator.Validate();
             }
             Console.WriteLine("策略生成结束");
         }
