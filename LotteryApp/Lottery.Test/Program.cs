@@ -37,7 +37,7 @@ namespace Lottery.Test
             foreach (string name in names)
             {
                 Calculator calclator = new Calculator(name, type, number.Value, algorArgs);
-                string result = calclator.Validate();
+                string result = calclator.Start();
                 Console.WriteLine(result);
             }
             Console.WriteLine("策略生成结束");

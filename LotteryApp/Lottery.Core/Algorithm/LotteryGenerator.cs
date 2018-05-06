@@ -13,7 +13,7 @@ namespace Lottery.Core.Algorithm
         public static LotteryMetaConfig GetConfig()
         {
             LotteryMetaConfig config = null;
-            string path = @"..\..\config.json";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
             if (File.Exists(path))
             {
                 string content = null;
