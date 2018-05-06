@@ -485,7 +485,7 @@ namespace LotteryApp.Algorithm
                .OrderBy(x => x.Pos)
                .ToArray();
 
-            return new LotteryResult { AnyFilters = betArray, Filter = string.Join("       ", betArray.Select(t => Format(t))) };
+            return new LotteryResult { AnyFilters = betArray, Filter = string.Join("   ", betArray.Select(t => Format(t))) };
         }
 
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
