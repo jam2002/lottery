@@ -78,8 +78,8 @@ namespace Lottery.Core.Algorithm
             //    list = list.Where(x => !unaviableCodes.Contains(x.Item1));
             //}
             //Dictionary<string, LotteryResult> resultDic = list.Where(x => types.Contains(x.Item1)).ToDictionary(x => x.Item2, x => x.Item3);
-            //sb.Append(string.Format("{0} 最后一期分析奖号 {1}，分析期数：{2}，分析结果：", lottery.DisplayName, lotteries[lotteries.Length - 1], lotteries.Length));
-            //sb.Append(Environment.NewLine);
+            sb.Append(string.Format("{0} 最后一期分析奖号 {1}，分析期数：{2}，分析结果：", lottery.DisplayName, lotteries[lotteries.Length - 1], lotteries.Length));
+            sb.Append(Environment.NewLine);
 
             //if (resultDic.Values.Any())
             //{
