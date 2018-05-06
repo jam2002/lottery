@@ -41,8 +41,9 @@ namespace Lottery.Core.Algorithm
             lotteryCache.Clear();
         }
 
-        public bool Start()
+        public string Start()
         {
+            StringBuilder sb = new StringBuilder();
             string[] lotteries = GetLotteries();
             lotteries = lotteries.Skip(lotteries.Length - TakeNumber).ToArray();
 
@@ -58,71 +59,68 @@ namespace Lottery.Core.Algorithm
             }
 
             LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, algorithmArgs);
-            CompositeLotteryResult ret = context.GetCompositeResult();
+            //CompositeLotteryResult ret = context.GetCompositeResult();
 
-            string[] types = type.Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-            IEnumerable<Tuple<string, string, LotteryResult>> list = new Tuple<string, string, LotteryResult>[]
-            {
-                new Tuple<string,string, LotteryResult>("three","组三投注策略",ret.GroupThree),
-                new Tuple<string, string,LotteryResult>("six","组三投注策略",ret.GroupSix),
-                new Tuple<string,string, LotteryResult>("compound","复式投注策略",ret.Compound),
-                new Tuple<string,string, LotteryResult>("mix","单式投注策略",ret.Mix),
-                new Tuple<string,string, LotteryResult>("duplicated","直选投注策略",ret.Duplicated),
-                new Tuple<string, string,LotteryResult>("dynamic","不定胆投注策略",ret.DynamicPosition)
-            };
-            list = list.Where(x => x.Item3 != null && (x.Item1 == "dynamic" ? lottery.HasDynamic : true) && (x.Item1 == "three" ? lottery.HasPair : true));
-            if (lottery.Key == "pk10")
-            {
-                string[] unaviableCodes = new string[] { "three", "six", "duplicated" };
-                list = list.Where(x => !unaviableCodes.Contains(x.Item1));
-            }
-            Dictionary<string, LotteryResult> resultDic = list.Where(x => types.Contains(x.Item1)).ToDictionary(x => x.Item2, x => x.Item3);
-            Console.WriteLine(string.Format("{0} 最后一期分析奖号 {1}，分析期数：{2}，分析结果：", lottery.DisplayName, lotteries[lotteries.Length - 1], lotteries.Length));
-            Console.WriteLine();
+            //string[] types = type.Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+            //IEnumerable<Tuple<string, string, LotteryResult>> list = new Tuple<string, string, LotteryResult>[]
+            //{
+            //    new Tuple<string,string, LotteryResult>("three","组三投注策略",ret.GroupThree),
+            //    new Tuple<string, string,LotteryResult>("six","组三投注策略",ret.GroupSix),
+            //    new Tuple<string,string, LotteryResult>("compound","复式投注策略",ret.Compound),
+            //    new Tuple<string,string, LotteryResult>("mix","单式投注策略",ret.Mix),
+            //    new Tuple<string,string, LotteryResult>("duplicated","直选投注策略",ret.Duplicated),
+            //    new Tuple<string, string,LotteryResult>("dynamic","不定胆投注策略",ret.DynamicPosition)
+            //};
+            //list = list.Where(x => x.Item3 != null && (x.Item1 == "dynamic" ? lottery.HasDynamic : true) && (x.Item1 == "three" ? lottery.HasPair : true));
+            //if (lottery.Key == "pk10")
+            //{
+            //    string[] unaviableCodes = new string[] { "three", "six", "duplicated" };
+            //    list = list.Where(x => !unaviableCodes.Contains(x.Item1));
+            //}
+            //Dictionary<string, LotteryResult> resultDic = list.Where(x => types.Contains(x.Item1)).ToDictionary(x => x.Item2, x => x.Item3);
+            //sb.Append(string.Format("{0} 最后一期分析奖号 {1}，分析期数：{2}，分析结果：", lottery.DisplayName, lotteries[lotteries.Length - 1], lotteries.Length));
+            //sb.Append(Environment.NewLine);
 
-            if (resultDic.Values.Any())
-            {
-                foreach (var pair in resultDic)
-                {
-                    Console.WriteLine(string.Format("{0}：一共 {1} 注，最大中奖次数：{2} ，最大间隔：{3}，最近间隔：{4}", pair.Key, pair.Value.BetCount, pair.Value.HitCount, pair.Value.MaxInterval, pair.Value.LastInterval));
-                    Console.WriteLine(string.Format("间隔列表：{0}", string.Join(",", pair.Value.HitIntervals)));
-                    Console.WriteLine(pair.Value.Filter);
-                    Console.WriteLine(string.Format("中奖号码：{0}", string.Join(",", pair.Value.HitPositions.Select(x => Format(context.LotteryNumbers[x])).ToArray())));
-                    if (pair.Key == "单式投注策略")
-                    {
-                        Console.WriteLine(string.Format("投注号码：{0}", string.Join(",", pair.Value.Numbers.Select(x => Format(x)).ToArray())));
-                    }
-                }
-            }
+            //if (resultDic.Values.Any())
+            //{
+            //    foreach (var pair in resultDic)
+            //    {
+            //        sb.Append(string.Format("{0}：一共 {1} 注，最大中奖次数：{2} ，最大间隔：{3}，最近间隔：{4}", pair.Key, pair.Value.BetCount, pair.Value.HitCount, pair.Value.MaxInterval, pair.Value.LastInterval));
+            //        sb.Append(string.Format("间隔列表：{0}", string.Join(",", pair.Value.HitIntervals)));
+            //        sb.Append(pair.Value.Filter);
+            //        sb.Append(string.Format("中奖号码：{0}", string.Join(",", pair.Value.HitPositions.Select(x => Format(context.LotteryNumbers[x])).ToArray())));
+            //        if (pair.Key == "单式投注策略")
+            //        {
+            //            sb.Append(string.Format("投注号码：{0}", string.Join(",", pair.Value.Numbers.Select(x => Format(x)).ToArray())));
+            //        }
+            //    }
+            //}
 
-            if (types.Contains("fivestar") && ret.FiveStar != null && ret.FiveStar.Any())
-            {
-                LotteryResult formRet = null;
-                Dictionary<FiveStarFormEnum, string> forms = GetEnumDescriptions<FiveStarFormEnum>();
-                foreach (var p in forms)
-                {
-                    if (ret.FiveStar.ContainsKey(p.Key))
-                    {
-                        formRet = ret.FiveStar[p.Key];
-                        Console.WriteLine(string.Format("{0}：最大中奖次数：{1} ，最大间隔：{2}，最近间隔：{3}", p.Value, formRet.HitCount, formRet.MaxInterval, formRet.LastInterval));
-                        Console.WriteLine(string.Format("间隔列表：{0}", string.Join(",", formRet.HitIntervals)));
-                        Console.WriteLine();
-                    }
-                }
-            }
+            //if (types.Contains("fivestar") && ret.FiveStar != null && ret.FiveStar.Any())
+            //{
+            //    LotteryResult formRet = null;
+            //    Dictionary<FiveStarFormEnum, string> forms = GetEnumDescriptions<FiveStarFormEnum>();
+            //    foreach (var p in forms)
+            //    {
+            //        if (ret.FiveStar.ContainsKey(p.Key))
+            //        {
+            //            formRet = ret.FiveStar[p.Key];
+            //            sb.Append(string.Format("{0}：最大中奖次数：{1} ，最大间隔：{2}，最近间隔：{3}", p.Value, formRet.HitCount, formRet.MaxInterval, formRet.LastInterval));
+            //            sb.Append(string.Format("间隔列表：{0}", string.Join(",", formRet.HitIntervals)));
+            //        }
+            //    }
+            //}
 
-            if (types.Contains("anytwo") && ret.AnyTwo != null)
+            LotteryResult ret = algorithmArgs == "-5" ? context.GetAnyTwoResultByHeat() : context.GetAnyTwoResultByHit();
+            if (ret != null)
             {
-                //Console.WriteLine(string.Format("{0}：中奖：{1}，最大连中：{2}，最近连中：{3}，最大间隔：{4}，最近间隔：{5}", ret.AnyTwo.Title, ret.AnyTwo.HitCount, ret.AnyTwo.MaxContinuous, ret.AnyTwo.LastContinuous, ret.AnyTwo.MaxInterval, ret.AnyTwo.LastInterval));
-                Console.WriteLine(ret.AnyTwo.Filter);
-                //Console.WriteLine(string.Format("中奖号码：{0}", string.Join(",", ret.AnyTwo.HitPositions.Select(x => Format(context.LotteryNumbers[x])).ToArray())));
-                Console.WriteLine();
+                sb.Append(ret.Filter);
             }
 
-            return resultDic.Values.Any();
+            return sb.ToString();
         }
 
-        private string[] GetLotteries(int retrieveNumber=200)
+        private string[] GetLotteries(int retrieveNumber = 200)
         {
             string mainKey = lottery.Key.Split('|')[0];
 
@@ -201,7 +199,7 @@ namespace Lottery.Core.Algorithm
             return lotteries.Select(x => x.Substring(lottery.StartIndex, lottery.Length)).ToArray();
         }
 
-        public void Validate()
+        public string Validate()
         {
             int count = 1000;
             int skipCount = TakeNumber;
@@ -213,6 +211,7 @@ namespace Lottery.Core.Algorithm
             double maxAmount = 0;
             double betAmount = 0;
             string[] baseLotteries = GetLotteries(count);
+            StringBuilder sb = new StringBuilder();
 
             Dictionary<int, int> cycleDic = new Dictionary<int, int>
             {
@@ -233,7 +232,7 @@ namespace Lottery.Core.Algorithm
                 LotteryNumber[] selectedLottery = LotteryGenerator.GetNumbers(lotteries); ;
                 LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, algorithmArgs);
 
-                betResult = context.GetAnyTwoResultByHeat();
+                betResult = algorithmArgs == "-5" ? context.GetAnyTwoResultByHeat() : context.GetAnyTwoResultByHit();
 
                 if (betResult != null)
                 {
@@ -256,7 +255,8 @@ namespace Lottery.Core.Algorithm
                         {
                             hitDic[betCycle] = hitDic[betCycle] + 1;
                             betAmount = betAmount + cycleDic[betCycle] * 9.78;
-                            Console.WriteLine(string.Format("当前剩余：{0:f2}，当前期数：{1}", betAmount, skipCount));
+                            sb.Append(string.Format("当前剩余：{0:f2}，当前期数：{1}", betAmount, skipCount));
+                            sb.Append(Environment.NewLine);
                             if (betAmount > maxAmount)
                             {
                                 maxAmount = betAmount;
@@ -289,20 +289,18 @@ namespace Lottery.Core.Algorithm
                     skipCount++;
                 }
             }
-            Console.WriteLine(string.Format("中奖次数：{0}，失败次数：{1}，剩余金额：{2:f2}，最大金额：{3:f2}，最小金额：{4:f2}", hitDic.Values.Sum(), failureCount, betAmount, maxAmount, minAmount));
-            Console.WriteLine("中奖间隔：{0}", string.Join(",", hitDic.OrderByDescending(x => x.Value).Select(x => string.Concat(x.Key, "=", x.Value)).ToArray()));
-            Console.WriteLine("最后投注：{0}", betResult != null ? betResult.Filter : string.Empty);
+            sb.Append(string.Format("中奖次数：{0}，失败次数：{1}，剩余金额：{2:f2}，最大金额：{3:f2}，最小金额：{4:f2}", hitDic.Values.Sum(), failureCount, betAmount, maxAmount, minAmount));
+            sb.Append(Environment.NewLine);
+            sb.Append(string.Format("中奖间隔：{0}", string.Join(",", hitDic.OrderByDescending(x => x.Value).Select(x => string.Concat(x.Key, "=", x.Value)).ToArray())));
+            sb.Append(Environment.NewLine);
+            sb.Append(string.Format("最后投注：{0}", betResult != null ? betResult.Filter : string.Empty));
+
+            return sb.ToString();
         }
 
         private string Format(LotteryNumber number)
         {
             return lottery.Key == "pk10" ? string.Join(" ", new int[] { number.Hundred, number.Decade, number.Unit }.Select(x => x == 0 ? "10" : x.ToString("D2")).ToArray()) : number.Key;
-        }
-
-        private bool CanRun()
-        {
-            DateTime[][] times = lottery.TradingHours.Select(x => x.Split('-').Select(t => DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " " + t)).ToArray()).ToArray();
-            return times.Any(x => DateTime.Now >= x[0] && DateTime.Now <= x[1]);
         }
 
         private Dictionary<T, string> GetEnumDescriptions<T>() where T : struct
