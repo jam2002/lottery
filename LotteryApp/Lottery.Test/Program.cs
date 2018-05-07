@@ -8,7 +8,7 @@ namespace Lottery.Test
     {
         static void Main(string[] args)
         {
-            Run(30, "cqssc", "anytwo", "-5");
+            Run(30, "cqssc", "anytwo", "5");
 
             string commands = Console.ReadLine();
             while (commands != "exit")
@@ -36,9 +36,8 @@ namespace Lottery.Test
 
             foreach (string name in names)
             {
-                Calculator calclator = new Calculator(name, type, number.Value, algorArgs);
-                string result = calclator.Start();
-                Console.WriteLine(result);
+                Calculator calclator = new Calculator(name, type, number.Value, algorArgs, t => Console.WriteLine(t));
+                calclator.Validate();
             }
             Console.WriteLine("策略生成结束");
         }

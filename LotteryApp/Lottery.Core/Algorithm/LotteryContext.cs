@@ -385,6 +385,7 @@ namespace Lottery.Core.Algorithm
 
             FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
             Dictionary<FactorTypeEnum, int[][]> betValueDic = new Dictionary<FactorTypeEnum, int[][]> { };
+            int maxSkip = 2;
             foreach (FactorTypeEnum posFactor in posFactors)
             {
                 Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
@@ -393,7 +394,7 @@ namespace Lottery.Core.Algorithm
                                                                      .Skip(1)
                                                                      .Select(x => x.Key)
                                                                      .OrderBy(x => x)
-                                                                     .ToArray();                                 //获取值组合，此处杀了出现零到一次的号码
+                                                                     .ToArray();                                //获取值组合，此处杀了出现零到一次的号码
 
                 int[][] valuePosKeys = Enumerable.Range(0, values.Length).Select(x => x + takeContinueNumber - 1 < values.Length ? Enumerable.Range(x, takeContinueNumber).ToArray() : Enumerable.Range(x, values.Length - x).Concat(Enumerable.Range(0, x + takeContinueNumber - values.Length)).ToArray()).ToArray();  //获取值位置 连续四位的索引组合
                 combine = new Combination(values.Length - takeContinueNumber);
@@ -472,14 +473,14 @@ namespace Lottery.Core.Algorithm
 
             AnyFilter[] betArray = query
                .Take(2)
-               .Select(x =>
+               .Select((x,i) =>
                {
                    int[] values = x.ReferenceDic.Values.OrderBy(t => t.Heat)
-                                                                                 .ThenByDescending(t => t.LastInterval)
-                                                                                 .Skip(5)
-                                                                                 .Select(t => t.Key)
-                                                                                 .OrderBy(t => t)
-                                                                                 .ToArray();
+                                                                            .ThenByDescending(t => t.LastInterval)
+                                                                            .Skip(5)
+                                                                            .Select(t => t.Key)
+                                                                            .OrderBy(t => t)
+                                                                            .ToArray();
                    return new AnyFilter { Pos = posMappings[x.Factor], Values = values };
                })
                .OrderBy(x => x.Pos)

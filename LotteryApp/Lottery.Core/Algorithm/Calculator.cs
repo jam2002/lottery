@@ -20,6 +20,7 @@ namespace Lottery.Core.Algorithm
         string type;
         string algorithmArgs;
         static Dictionary<string, string[]> lotteryCache = new Dictionary<string, string[]> { };
+        Action<string> logger;
 
         public int TakeNumber { get; private set; }
 
@@ -27,13 +28,14 @@ namespace Lottery.Core.Algorithm
         /// 支持 cq, xj, tj
         /// </summary>
         /// <param name="name"></param>
-        public Calculator(string name, string inputType, int takeNumber, string args)
+        public Calculator(string name, string inputType, int takeNumber, string args, Action<string> inputLogger)
         {
             config = LotteryGenerator.GetConfig();
             lottery = config.Lotteries.Where(x => x.Key == name).First();
             TakeNumber = takeNumber;
             type = inputType;
             algorithmArgs = args;
+            logger = inputLogger;
         }
 
         public static void ClearCache()
@@ -41,9 +43,8 @@ namespace Lottery.Core.Algorithm
             lotteryCache.Clear();
         }
 
-        public string Start()
+        public void Start()
         {
-            StringBuilder sb = new StringBuilder();
             string[] lotteries = GetLotteries();
             lotteries = lotteries.Skip(lotteries.Length - TakeNumber).ToArray();
 
@@ -78,8 +79,7 @@ namespace Lottery.Core.Algorithm
             //    list = list.Where(x => !unaviableCodes.Contains(x.Item1));
             //}
             //Dictionary<string, LotteryResult> resultDic = list.Where(x => types.Contains(x.Item1)).ToDictionary(x => x.Item2, x => x.Item3);
-            sb.Append(string.Format("{0} 最后一期分析奖号 {1}，分析期数：{2}，分析结果：", lottery.DisplayName, lotteries[lotteries.Length - 1], lotteries.Length));
-            sb.Append(Environment.NewLine);
+            logger(string.Format("{0} 最后一期分析奖号 {1}，分析期数：{2}，分析结果：", lottery.DisplayName, lotteries[lotteries.Length - 1], lotteries.Length));
 
             //if (resultDic.Values.Any())
             //{
@@ -114,10 +114,8 @@ namespace Lottery.Core.Algorithm
             LotteryResult ret = algorithmArgs == "-5" ? context.GetAnyTwoResultByHeat() : context.GetAnyTwoResultByHit();
             if (ret != null)
             {
-                sb.Append(ret.Filter);
+                logger(ret.Filter);
             }
-
-            return sb.ToString();
         }
 
         private string[] GetLotteries(int retrieveNumber = 200)
@@ -199,7 +197,7 @@ namespace Lottery.Core.Algorithm
             return lotteries.Select(x => x.Substring(lottery.StartIndex, lottery.Length)).ToArray();
         }
 
-        public string Validate()
+        public void Validate()
         {
             int count = 1000;
             int skipCount = TakeNumber;
@@ -211,7 +209,6 @@ namespace Lottery.Core.Algorithm
             double maxAmount = 0;
             double betAmount = 0;
             string[] baseLotteries = GetLotteries(count);
-            StringBuilder sb = new StringBuilder();
 
             Dictionary<int, int> cycleDic = new Dictionary<int, int>
             {
@@ -255,8 +252,7 @@ namespace Lottery.Core.Algorithm
                         {
                             hitDic[betCycle] = hitDic[betCycle] + 1;
                             betAmount = betAmount + cycleDic[betCycle] * 9.78;
-                            sb.Append(string.Format("当前剩余：{0:f2}，当前期数：{1}", betAmount, skipCount));
-                            sb.Append(Environment.NewLine);
+                            logger(string.Format("当前剩余：{0:f2}，当前期数：{1}", betAmount, skipCount));
                             if (betAmount > maxAmount)
                             {
                                 maxAmount = betAmount;
@@ -289,13 +285,9 @@ namespace Lottery.Core.Algorithm
                     skipCount++;
                 }
             }
-            sb.Append(string.Format("中奖次数：{0}，失败次数：{1}，剩余金额：{2:f2}，最大金额：{3:f2}，最小金额：{4:f2}", hitDic.Values.Sum(), failureCount, betAmount, maxAmount, minAmount));
-            sb.Append(Environment.NewLine);
-            sb.Append(string.Format("中奖间隔：{0}", string.Join(",", hitDic.OrderByDescending(x => x.Value).Select(x => string.Concat(x.Key, "=", x.Value)).ToArray())));
-            sb.Append(Environment.NewLine);
-            sb.Append(string.Format("最后投注：{0}", betResult != null ? betResult.Filter : string.Empty));
-
-            return sb.ToString();
+            logger(string.Format("中奖次数：{0}，失败次数：{1}，剩余金额：{2:f2}，最大金额：{3:f2}，最小金额：{4:f2}", hitDic.Values.Sum(), failureCount, betAmount, maxAmount, minAmount));
+            logger(string.Format("中奖间隔：{0}", string.Join(",", hitDic.OrderByDescending(x => x.Value).Select(x => string.Concat(x.Key, "=", x.Value)).ToArray())));
+            logger(string.Format("最后分析奖号：{0}，最后投注：{1}", baseLotteries[skipCount - 1], betResult != null ? betResult.Filter : string.Empty));
         }
 
         private string Format(LotteryNumber number)

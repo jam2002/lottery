@@ -1,4 +1,5 @@
 ﻿using Lottery.Core.Algorithm;
+using System.Text;
 using System.Web.Mvc;
 
 namespace Lottery.Web.Controllers
@@ -9,9 +10,12 @@ namespace Lottery.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            StringBuilder sb = new StringBuilder();
             Calculator.ClearCache();
-            Calculator calculator = new Calculator("cqssc", "anytwo", 30, "-5");
-            ViewBag.Predict = calculator.Start();
+            Calculator calculator = new Calculator("cqssc", "anytwo", 30, "-5", t => sb.Append(t));
+            calculator.Start();
+
+            ViewBag.Predict = sb.ToString();
             return View();
         }
 
@@ -24,9 +28,20 @@ namespace Lottery.Web.Controllers
         [HttpGet]
         public ActionResult Load(int type, int act)
         {
+            StringBuilder sb = new StringBuilder();
             Calculator.ClearCache();
-            Calculator calculator = new Calculator("cqssc", "anytwo", 30, type == 1 ? "5" : "-5");
-            ViewBag.Predict = act == 1 ? calculator.Validate() : calculator.Start();
+            Calculator calculator = new Calculator("cqssc", "anytwo", 30, type == 1 ? "5" : "-5", t => sb.Append(t));
+            if (act == 1)
+            {
+                calculator.Validate();
+            }
+            else
+            {
+                calculator.Start();
+            }
+
+            ViewBag.Predict = sb.ToString();
+
             return View("Index");
         }
     }
