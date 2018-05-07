@@ -217,12 +217,14 @@ namespace Lottery.Core.Algorithm
                 { 2,2},
                 { 3,3},
                 { 4,5},
-                { 5,8}
+                { 5,8},
+                { 6,13},
+                { 7,21}
             };
             Dictionary<int, int> hitDic = Enumerable.Range(0, cycleDic.Count).ToDictionary(x => x, x => 0);
             LotteryResult betResult = null;
 
-            while (skipCount + cycleDic.Count <= count)
+            while (skipCount < count)
             {
                 string[] lotteries = baseLotteries.Skip(skipCount - TakeNumber).Take(TakeNumber).ToArray();
 
@@ -235,7 +237,7 @@ namespace Lottery.Core.Algorithm
                 {
                     betCycle = 0;
                     bool ret = false;
-                    while (betCycle < cycleDic.Count || ret)
+                    while (skipCount < count && (betCycle < cycleDic.Count || ret))
                     {
                         skipCount++;
                         double cycleAmount = 2.5 * cycleDic[betCycle];
