@@ -203,8 +203,6 @@ namespace Lottery.Core.Algorithm
             int skipCount = TakeNumber;
             int betCycle = 0;
             int failureCount = 0;
-            int continueFailureCount = 0;
-            int lastFailureCount = 0;
             double minAmount = 0;
             double maxAmount = 0;
             double betAmount = 0;
@@ -227,7 +225,6 @@ namespace Lottery.Core.Algorithm
             while (skipCount < count)
             {
                 string[] lotteries = baseLotteries.Skip(skipCount - TakeNumber).Take(TakeNumber).ToArray();
-
                 LotteryNumber[] selectedLottery = LotteryGenerator.GetNumbers(lotteries); ;
                 LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, algorithmArgs);
 
@@ -254,32 +251,20 @@ namespace Lottery.Core.Algorithm
                         {
                             hitDic[betCycle] = hitDic[betCycle] + 1;
                             betAmount = betAmount + cycleDic[betCycle] * 9.78;
-                            logger(string.Format("当前剩余：{0:f2}，当前期数：{1}", betAmount, skipCount));
+                            //logger(string.Format("当前剩余：{0:f2}，当前期数：{1}， 中奖号码：{2}，投注策略：{3}，中奖期数：{4}", betAmount, skipCount, lottery, betResult.Filter, betCycle + 1));
                             if (betAmount > maxAmount)
                             {
                                 maxAmount = betAmount;
                             }
+                            betResult = null;
                             break;
                         }
                         betCycle++;
                     }
 
-                    bool continuePlus = false;
                     if (!ret)
                     {
                         failureCount++;
-                        continuePlus = lastFailureCount == 0 || lastFailureCount + cycleDic.Count == skipCount;
-                    }
-
-                    if (continuePlus)
-                    {
-                        continueFailureCount++;
-                        lastFailureCount = skipCount;
-                    }
-                    else
-                    {
-                        continueFailureCount = 0;
-                        lastFailureCount = 0;
                     }
                 }
                 else
@@ -287,9 +272,19 @@ namespace Lottery.Core.Algorithm
                     skipCount++;
                 }
             }
+
+            if (betResult == null)
+            {
+                string[] lotteries = baseLotteries.Skip(skipCount - TakeNumber).Take(TakeNumber).ToArray();
+                LotteryNumber[] selectedLottery = LotteryGenerator.GetNumbers(lotteries); ;
+                LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, algorithmArgs);
+
+                betResult = algorithmArgs == "-5" ? context.GetAnyTwoResultByHeat() : context.GetAnyTwoResultByHit();
+            }
+
             logger(string.Format("中奖次数：{0}，失败次数：{1}，剩余金额：{2:f2}，最大金额：{3:f2}，最小金额：{4:f2}", hitDic.Values.Sum(), failureCount, betAmount, maxAmount, minAmount));
             logger(string.Format("中奖间隔：{0}", string.Join(",", hitDic.OrderByDescending(x => x.Value).Select(x => string.Concat(x.Key, "=", x.Value)).ToArray())));
-            logger(string.Format("最后分析奖号：{0}，最后投注：{1}", baseLotteries[skipCount - 1], betResult != null ? betResult.Filter : string.Empty));
+            logger(string.Format("最后投注奖号：{0}，最后投注策略：{1}", baseLotteries[skipCount - 1], betResult.Filter));
         }
 
         private string Format(LotteryNumber number)

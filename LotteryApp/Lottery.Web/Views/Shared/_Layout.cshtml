@@ -17,6 +17,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                @Html.ActionLink("杀最冷预测", "Load", "Predict", new { type = 2, act = 2 }, new { @class = "navbar-brand" })
+                @Html.ActionLink("五连续预测", "Load", "Predict", new { type = 1, act = 2 }, new { @class = "navbar-brand" })
+                @Html.ActionLink("杀最冷算法验证", "Load", "Predict", new { type = 2, act = 1}, new { @class = "navbar-brand" })
+                @Html.ActionLink("五连续算法验证", "Load", "Predict", new { type = 1, act = 1 }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
