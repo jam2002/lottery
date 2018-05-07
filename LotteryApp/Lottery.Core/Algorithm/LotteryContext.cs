@@ -170,7 +170,7 @@ namespace Lottery.Core.Algorithm
 
                     int[] intervals = factor.HitIntervals.Skip(factor.HitIntervals.Length > 5 ? factor.HitIntervals.Length - 5 : 0).ToArray();
                     intervals = intervals.Take(intervals.Length - 1).ToArray();
-                    if (factor.LastInterval <= 3 && intervals.Select((x, i) => x - (i < intervals.Length - 1 ? intervals[i + 1] : x)).Any(x => x >= 10))
+                    if (factor.LastInterval <= 4 && intervals.Select((x, i) => x - (i < intervals.Length - 1 ? intervals[i + 1] : x)).Any(x => x >= 10))
                     {
                         factor.Heat = 6; //渐热号
                     }
@@ -385,7 +385,6 @@ namespace Lottery.Core.Algorithm
 
             FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
             Dictionary<FactorTypeEnum, int[][]> betValueDic = new Dictionary<FactorTypeEnum, int[][]> { };
-            int maxSkip = 2;
             foreach (FactorTypeEnum posFactor in posFactors)
             {
                 Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
@@ -467,8 +466,8 @@ namespace Lottery.Core.Algorithm
              }).OrderByDescending(x => x.HeatDic[1])
                    .ThenByDescending(x => x.HeatDic[2])
                    .ThenByDescending(x => x.HeatDic[3])
-                   .ThenByDescending(x => x.HeatDic[7])
-                   .ThenByDescending(x => x.HeatDic[6])
+                   .ThenBy(x => x.HeatDic[7])
+                   .ThenBy(x => x.HeatDic[6])
                    .ToArray();
 
             AnyFilter[] betArray = query
