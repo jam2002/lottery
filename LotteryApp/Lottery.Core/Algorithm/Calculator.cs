@@ -215,10 +215,14 @@ namespace Lottery.Core.Algorithm
                 { 2,2},
                 { 3,3},
                 { 4,5},
-                { 5,8},
-                { 6,13},
-                { 7,21}
+                { 5,8}
             };
+            if (algorithmArgs == "-5")
+            {
+                cycleDic.Add(6, 13);
+                cycleDic.Add(7, 21);
+            }
+
             Dictionary<int, int> hitDic = Enumerable.Range(0, cycleDic.Count).ToDictionary(x => x, x => 0);
             LotteryResult betResult = null;
 
