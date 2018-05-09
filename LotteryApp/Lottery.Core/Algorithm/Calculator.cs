@@ -208,20 +208,7 @@ namespace Lottery.Core.Algorithm
             double betAmount = 0;
             string[] baseLotteries = GetLotteries(count);
 
-            Dictionary<int, int> cycleDic = new Dictionary<int, int>
-            {
-                { 0,1},
-                { 1,1},
-                { 2,2},
-                { 3,3},
-                { 4,5},
-                { 5,8}
-            };
-            if (algorithmArgs == "-5")
-            {
-                cycleDic.Add(6, 13);
-                cycleDic.Add(7, 21);
-            }
+            Dictionary<int, int> cycleDic = CreateCycle(1, 12);
 
             Dictionary<int, int> hitDic = Enumerable.Range(0, cycleDic.Count).ToDictionary(x => x, x => 0);
             LotteryResult betResult = null;
@@ -289,6 +276,24 @@ namespace Lottery.Core.Algorithm
             logger(string.Format("中奖次数：{0}，失败次数：{1}，剩余金额：{2:f2}，最大金额：{3:f2}，最小金额：{4:f2}", hitDic.Values.Sum(), failureCount, betAmount, maxAmount, minAmount));
             logger(string.Format("中奖间隔：{0}", string.Join(",", hitDic.OrderByDescending(x => x.Value).Select(x => string.Concat(x.Key, "=", x.Value)).ToArray())));
             logger(string.Format("最后投注奖号：{0}，最后投注策略：{1}", baseLotteries[skipCount - 1], betResult.Filter));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type">1：任二；2：定位胆；3：三星直选</param>
+        /// <param name="cycleCount">计划期数</param>
+        /// <returns></returns>
+        private Dictionary<int, int> CreateCycle(int type, int cycleCount)
+        {
+            int[] counter = Enumerable.Range(0, cycleCount).ToArray();
+            counter[0] = 1;
+            counter[1] = 1;
+            for (var i = 2; i < counter.Length; i++)
+            {
+                counter[i] = counter[i - 1] + counter[i - 2];
+            }
+            return counter.Select((x, i) => new { key = i, value = x }).ToDictionary(x => x.key, x => x.value);
         }
 
         private string Format(LotteryNumber number)
