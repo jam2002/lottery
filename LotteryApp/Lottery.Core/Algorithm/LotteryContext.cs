@@ -145,11 +145,11 @@ namespace Lottery.Core.Algorithm
                     {
                         factor.Heat = 1;
                     }
-                    else if ((factor.OccurCount == 1 || factor.OccurCount == 2) && (factor.LastInterval < 20 && factor.LastInterval >= 10))
+                    else if ((factor.OccurCount == 1 || factor.OccurCount == 2) && (factor.LastInterval < 20 && factor.LastInterval >= 8))
                     {
                         factor.Heat = 2;
                     }
-                    else if (factor.LastInterval < 20 && factor.LastInterval >= 10)
+                    else if (factor.LastInterval < 20 && factor.LastInterval >= 8)
                     {
                         factor.Heat = 3;
                     }
@@ -177,7 +177,6 @@ namespace Lottery.Core.Algorithm
                         factor.Heat = 6; //渐热号
                     }
                 }
-
             }
         }
 
