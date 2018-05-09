@@ -255,7 +255,7 @@ namespace Lottery.Core.Algorithm
                         {
                             hitDic[betCycle] = hitDic[betCycle] + 1;
                             betAmount = betAmount + cycleDic[betCycle] * 9.78;
-                            //logger(string.Format("当前剩余：{0:f2}，当前期数：{1}， 中奖号码：{2}，投注策略：{3}，中奖期数：{4}", betAmount, skipCount, lottery, betResult.Filter, betCycle + 1));
+                            logger(string.Format("当前剩余：{0:f2}，当前期数：{1}， 中奖号码：{2}，投注策略：{3}，中奖期数：{4}", betAmount, skipCount, lottery, betResult.Filter, betCycle + 1));
                             if (betAmount > maxAmount)
                             {
                                 maxAmount = betAmount;

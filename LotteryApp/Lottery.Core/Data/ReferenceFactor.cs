@@ -49,5 +49,10 @@
         ///  热度：1：极冷；2：相当冷；3：冷；4：温；5：热；6：相当热；7：极热
         /// </summary>
         public int Heat { get; set; }
+
+        /// <summary>
+        /// 1: 间隔越来越小；2：间隔越来越大；3：间隔不变
+        /// </summary>
+        public int Trend { get; set; }
     }
 }

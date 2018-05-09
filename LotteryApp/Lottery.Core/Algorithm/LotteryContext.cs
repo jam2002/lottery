@@ -3,6 +3,8 @@ using Lottery.Core.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathNet.Numerics.LinearRegression;
+using MathNet.Numerics;
 
 namespace Lottery.Core.Algorithm
 {
@@ -710,6 +712,19 @@ namespace Lottery.Core.Algorithm
             int[] intervals = occurPostions.Select((x, i) => i == 0 ? x : x - occurPostions[i - 1] - 1).ToArray();
             intervals = intervals.Concat(new[] { LotteryNumbers.Length - 1 - occurPostions[occurPostions.Length - 1] }).ToArray();
             return intervals;
+        }
+
+        private int GetTrend(ReferenceFactor factor)
+        {
+            int ret = 2;
+            if (factor.OccurCount > 1)
+            {
+                double[] x = Enumerable.Range(1, factor.OccurCount).Select(t => (double)t).ToArray();
+                double[] y = factor.HitIntervals.Take(factor.OccurCount).Select(t => (double)t).ToArray();
+                Tuple<double, double> line = Fit.Line(x, y);
+                ret = line.Item2 > 0 ? 2 : 1;
+            }
+            return ret;
         }
 
         private string Format(int[] filter)
