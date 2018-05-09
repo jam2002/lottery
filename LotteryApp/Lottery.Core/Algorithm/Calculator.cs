@@ -215,19 +215,16 @@ namespace Lottery.Core.Algorithm
 
             while (skipCount < count)
             {
-                string[] lotteries = baseLotteries.Skip(skipCount - TakeNumber).Take(TakeNumber).ToArray();
-                LotteryNumber[] selectedLottery = LotteryGenerator.GetNumbers(lotteries); ;
-                LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, algorithmArgs);
-
-                betResult = algorithmArgs == "-5" ? context.GetAnyTwoResultByHeat() : context.GetAnyTwoResultByHit();
+                betResult = GetBetResult(skipCount, baseLotteries);
 
                 if (betResult != null)
                 {
                     betCycle = 0;
                     bool ret = false;
+                    string lottery = null;
+
                     while (skipCount < count && (betCycle < cycleDic.Count || ret))
                     {
-                        skipCount++;
                         double cycleAmount = 2.5 * cycleDic[betCycle];
                         betAmount = betAmount - cycleAmount;
                         if (betAmount < minAmount)
@@ -235,8 +232,11 @@ namespace Lottery.Core.Algorithm
                             minAmount = betAmount;
                         }
 
-                        string lottery = baseLotteries[skipCount - 1];
+                        lottery = baseLotteries[skipCount];
                         ret = betResult.AnyFilters.All(x => x.Values.Contains(int.Parse(lottery[x.Pos].ToString())));
+                        skipCount++;
+
+                        //todo: check position if some award become hot,then need change strategy
 
                         if (ret)
                         {
@@ -256,6 +256,7 @@ namespace Lottery.Core.Algorithm
                     if (!ret)
                     {
                         failureCount++;
+                        logger(string.Format("策略失败，当前期数：{0}，最后一期号码：{1}，投注策略：{2}", skipCount, lottery, betResult.Filter));
                     }
                 }
                 else
@@ -266,16 +267,22 @@ namespace Lottery.Core.Algorithm
 
             if (betResult == null)
             {
-                string[] lotteries = baseLotteries.Skip(skipCount - TakeNumber).Take(TakeNumber).ToArray();
-                LotteryNumber[] selectedLottery = LotteryGenerator.GetNumbers(lotteries); ;
-                LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, algorithmArgs);
-
-                betResult = algorithmArgs == "-5" ? context.GetAnyTwoResultByHeat() : context.GetAnyTwoResultByHit();
+                betResult = GetBetResult(skipCount, baseLotteries);
             }
 
             logger(string.Format("中奖次数：{0}，失败次数：{1}，剩余金额：{2:f2}，最大金额：{3:f2}，最小金额：{4:f2}", hitDic.Values.Sum(), failureCount, betAmount, maxAmount, minAmount));
             logger(string.Format("中奖间隔：{0}", string.Join(",", hitDic.OrderByDescending(x => x.Value).Select(x => string.Concat(x.Key, "=", x.Value)).ToArray())));
             logger(string.Format("最后投注奖号：{0}，最后投注策略：{1}", baseLotteries[skipCount - 1], betResult.Filter));
+        }
+
+        private LotteryResult GetBetResult(int skipCount, string[] baseLotteries)
+        {
+            LotteryResult betResult;
+            string[] lotteries = baseLotteries.Skip(skipCount - TakeNumber).Take(TakeNumber).ToArray();
+            LotteryNumber[] selectedLottery = LotteryGenerator.GetNumbers(lotteries); ;
+            LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, algorithmArgs);
+            betResult = algorithmArgs == "-5" ? context.GetAnyTwoResultByHeat() : context.GetAnyTwoResultByHit();
+            return betResult;
         }
 
         /// <summary>
