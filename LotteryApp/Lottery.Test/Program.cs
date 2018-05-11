@@ -8,7 +8,7 @@ namespace Lottery.Test
     {
         static void Main(string[] args)
         {
-            Run(30, "cqssc", "anytwo", "-5");
+            Run(30, "cqssc", "anytwo", "5");
 
             string commands = Console.ReadLine();
             while (commands != "exit")

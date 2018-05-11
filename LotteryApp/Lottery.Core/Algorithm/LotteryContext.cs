@@ -389,12 +389,15 @@ namespace Lottery.Core.Algorithm
             foreach (FactorTypeEnum posFactor in posFactors)
             {
                 Dictionary<int, ReferenceFactor> posReference = FactorDic[posFactor];
-                int[] values = posReference.Values.OrderBy(x => x.Heat)
-                                                                     .ThenByDescending(x => x.LastInterval)
-                                                                     .Skip(1)
-                                                                     .Select(x => x.Key)
-                                                                     .OrderBy(x => x)
-                                                                     .ToArray();                                //获取值组合，此处杀了出现零到一次的号码
+                int[] values = posReference.Values.Where(x => x.LastInterval < 15)
+                                                                           .Select(x => x.Key)
+                                                                           .OrderBy(x => x)
+                                                                           .ToArray();                               //获取值组合，此处杀了最近15期未出的号码
+
+                if (values.Length < 5)
+                {
+                    values = posReference.Values.OrderBy(x => x.LastInterval).Select(x => x.Key).Except(values).Take(5 - values.Length).Concat(values).OrderBy(x => x).ToArray();
+                }
 
                 int[][] valuePosKeys = Enumerable.Range(0, values.Length).Select(x => x + takeContinueNumber - 1 < values.Length ? Enumerable.Range(x, takeContinueNumber).ToArray() : Enumerable.Range(x, values.Length - x).Concat(Enumerable.Range(0, x + takeContinueNumber - values.Length)).ToArray()).ToArray();  //获取值位置 连续四位的索引组合
                 combine = new Combination(values.Length - takeContinueNumber);
@@ -506,7 +509,13 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult GetFilteredResult(int[] spans, OddEnum[] odds, SizeEnum[] sizes, PrimeEnum[] primes, int[] sums, int[] hundreds, int[] decades, int[] units, int[] maxes, int[] mines, int[] distincts, bool? excludeThree, int[] sequenceKeys = null, int[][] dynamicPosKeys = null, int[] fiveStarForms = null, AnyFilter[] anyFilters = null)
         {
-            IEnumerable<LotteryNumber> query = CurrentLottery.Length == 3 ? Config.Numbers : LotteryNumbers;
+            IEnumerable<LotteryNumber> lotteryNumbers= CurrentLottery.Length == 3 ? Config.Numbers : LotteryNumbers; ;
+            if (anyFilters != null && Args == "5")
+            {
+                lotteryNumbers = lotteryNumbers.Skip(LotteryNumbers.Length - 20).ToArray();   //取最后10期来获取最多中奖次数的五个连续数
+            }
+
+            IEnumerable<LotteryNumber> query = lotteryNumbers;
 
             #region 过滤
             if (spans != null && spans.Any())
@@ -598,16 +607,16 @@ namespace Lottery.Core.Algorithm
             ret.BetCount = ret.Numbers.Length;
 
             Dictionary<string, LotteryNumber> numberDic = ret.Numbers.GroupBy(x => x.Key).ToDictionary(x => x.Key, x => x.First());
-            LotteryResult[] hitQuery = LotteryNumbers.Select((x, i) => new LotteryResult { HitCount = numberDic.ContainsKey(x.Key) ? 1 : 0, HitPositions = new[] { i } }).Where(x => x.HitCount > 0).ToArray();
+            LotteryResult[] hitQuery = lotteryNumbers.Select((x, i) => new LotteryResult { HitCount = numberDic.ContainsKey(x.Key) ? 1 : 0, HitPositions = new[] { i } }).Where(x => x.HitCount > 0).ToArray();
 
             ret.HitCount = hitQuery.Length;
             ret.HitPositions = hitQuery.SelectMany(x => x.HitPositions).ToArray();
-            IEnumerable<string> hitKeys = LotteryNumbers.Where(x => numberDic.ContainsKey(x.Key)).Select(x => x.Key).Distinct().ToArray();
+            IEnumerable<string> hitKeys = lotteryNumbers.Where(x => numberDic.ContainsKey(x.Key)).Select(x => x.Key).Distinct().ToArray();
             ret.PosHitCount = posCounter.Where(x => hitKeys.Contains(x.Key)).Select(x => x.Value).Sum();
 
             if (ret.HitCount > 0)
             {
-                int[] intervals = GetIntervals(ret.HitPositions);
+                int[] intervals = GetIntervals(ret.HitPositions, lotteryNumbers);
                 ret.MaxInterval = intervals.Max();
                 ret.LastInterval = intervals[intervals.Length - 1];
                 ret.HitIntervals = intervals;
@@ -706,10 +715,11 @@ namespace Lottery.Core.Algorithm
             return Enumerable.Range(0, remain).ToArray();
         }
 
-        private int[] GetIntervals(int[] occurPostions)
+        private int[] GetIntervals(int[] occurPostions, IEnumerable<LotteryNumber> lotteryNumbers = null)
         {
+            lotteryNumbers = lotteryNumbers != null ? lotteryNumbers : LotteryNumbers;
             int[] intervals = occurPostions.Select((x, i) => i == 0 ? x : x - occurPostions[i - 1] - 1).ToArray();
-            intervals = intervals.Concat(new[] { LotteryNumbers.Length - 1 - occurPostions[occurPostions.Length - 1] }).ToArray();
+            intervals = intervals.Concat(new[] { lotteryNumbers.Count() - 1 - occurPostions[occurPostions.Length - 1] }).ToArray();
             return intervals;
         }
 

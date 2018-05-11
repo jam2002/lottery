@@ -12,7 +12,7 @@ namespace Lottery.Web.Controllers
         {
             StringBuilder sb = new StringBuilder();
             Calculator.ClearCache();
-            Calculator calculator = new Calculator("cqssc", "anytwo", 30, "-5", t => sb.Append(t));
+            Calculator calculator = new Calculator("cqssc", "anytwo", 30, "5", t => sb.Append(t));
             calculator.Start();
 
             ViewBag.Predict = sb.ToString();
