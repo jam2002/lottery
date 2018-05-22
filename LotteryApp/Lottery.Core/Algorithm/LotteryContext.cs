@@ -215,7 +215,7 @@ namespace Lottery.Core.Algorithm
                     HitCount = x.Value.OccurPositions.Length
                 });
 
-                ret.AnyTwo = GetAnyTwoResultByHeat();
+                //ret.AnyTwo = GetAnyTwoResultByHit();
             }
             return ret;
         }
@@ -495,7 +495,7 @@ namespace Lottery.Core.Algorithm
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "any" ? 4 : (type == "dynamic" ? 6 : 9);
+            int maxIntervalCount = type == "any" ? 4 : (type == "dynamic" ? 9: 9);
             LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" || type == "any" ? true : x.BetCount < maxBetCount))
                                                                  .OrderByDescending(t => t.HitCount)
                                                                  .ThenByDescending(t => t.MaxContinuous)
