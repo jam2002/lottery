@@ -64,6 +64,7 @@ namespace Lottery.Core.Algorithm
 
             string[] types = type.Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
             logger(string.Format("{0} 最后一期分析奖号 {1}，分析期数：{2}，分析结果：", lottery.DisplayName, lotteries[lotteries.Length - 1], lotteries.Length));
+            logger("</br>");
 
             if (types.Contains("fivestar") && ret.FiveStar != null && ret.FiveStar.Any())
             {
@@ -73,7 +74,7 @@ namespace Lottery.Core.Algorithm
                 {
                     logger(string.Format("{0}：最大中奖次数：{1} ，最大间隔：{2}，最近间隔：{3}", forms[p.Key], p.Value.HitCount, p.Value.MaxInterval, p.Value.LastInterval));
                     logger(string.Format("间隔列表：{0}", string.Join(",", p.Value.HitIntervals)));
-                    logger(Environment.NewLine);
+                    logger("</br>");
                 }
             }
 
@@ -88,7 +89,7 @@ namespace Lottery.Core.Algorithm
                 {
                     logger(string.Format("{0}，最大中奖次数：{1} ，最大间隔：{2}，最近间隔：{3}", p.Filter, p.HitCount, p.MaxInterval, p.LastInterval));
                     logger(string.Format("间隔列表：{0}", string.Join(",", p.HitIntervals)));
-                    logger(Environment.NewLine);
+                    logger("</br>");
                 }
             }
         }
@@ -183,7 +184,7 @@ namespace Lottery.Core.Algorithm
             double betAmount = 0;
             string[] baseLotteries = GetLotteries(count);
 
-            Dictionary<int, int> cycleDic = CreateCycle(2, 9);
+            Dictionary<int, int> cycleDic = CreateCycle(2, 7);
 
             Dictionary<int, int> hitDic = Enumerable.Range(0, cycleDic.Count).ToDictionary(x => x, x => 0);
             LotteryResult betResult = null;
@@ -289,8 +290,11 @@ namespace Lottery.Core.Algorithm
                     counter[0] = counter[1] = counter[2] = counter[3] = 1;
                     counter[4] = counter[5] = 2;
                     counter[6] = 3;
-                    counter[7] = 4;
-                    counter[8] = 5;
+                    //counter[7] = 4;
+                    //counter[8] = 5;
+                    //counter[9] = 6;
+                    //counter[10] = 8;
+                    //counter[11] = 10;
                     break;
             }
 

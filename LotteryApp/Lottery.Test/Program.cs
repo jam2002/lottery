@@ -10,7 +10,7 @@ namespace Lottery.Test
         {
             //Run(30, "cqssc", "anytwo", "-5");
             //Run(100, "cqssc", "dynamic", "33");
-            Run(100, "cqssc", "dynamic", "22");
+            Run(20, "cqssc", "dynamic", "22");
             //Run(200, "cqssc", "fivestar", "5");
 
             string commands = Console.ReadLine();
