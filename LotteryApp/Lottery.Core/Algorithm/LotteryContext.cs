@@ -204,7 +204,7 @@ namespace Lottery.Core.Algorithm
 
             if (CurrentLottery.Length == 5)
             {
-                int[] fiveStarForms = Args == null ? new int[] { 1, 2, 3, 4, 5, 6 } : Args.Split(',')[0].Select(x => int.Parse(x.ToString())).ToArray();
+                int[] fiveStarForms = new int[] { 1, 2, 3, 4, 5, 6 };
                 Dictionary<int, ReferenceFactor> factors = FactorDic[FactorTypeEnum.FiveStarForm];
                 ret.FiveStar = factors.Where(x => fiveStarForms.Contains(x.Key)).ToDictionary(x => (FiveStarFormEnum)x.Key, x => new LotteryResult
                 {
@@ -215,7 +215,7 @@ namespace Lottery.Core.Algorithm
                     HitCount = x.Value.OccurPositions.Length
                 });
 
-                //ret.AnyTwo = GetAnyTwoResultByHit();
+                ret.AnyTwo = GetAnyTwoResultByHeat();
             }
             return ret;
         }
@@ -354,9 +354,9 @@ namespace Lottery.Core.Algorithm
             return ret;
         }
 
-        public LotteryResult GetDynamicPosResult()
+        public LotteryResult[] GetDynamicPosResult()
         {
-            string[] arguments = (Args ?? "34").Split(',');
+            string[] arguments = (string.IsNullOrEmpty(Args) || Args.StartsWith("-") ? "22" : Args).Split(',');
             int[] number = arguments[0].Select(x => int.Parse(x.ToString())).ToArray();
             int keyCount = number[0];//码数，任选二，任选三，任选四
             int betCount = number.Length > 1 ? number[1] : keyCount;//投注数，任选二选二码，任选三选三码，四码，任选四选四码，五码
@@ -371,7 +371,7 @@ namespace Lottery.Core.Algorithm
             Func<int[], int[][]> getBetPosKeys = p => combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select p[s]).ToArray()).ToArray();
 
             IEnumerable<LotteryResult> list = posKeys.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, getBetPosKeys(x))).ToArray();
-            LotteryResult ret = arguments.Length > 1 ? list.FirstOrDefault() : InferResult(list, "dynamic");
+            LotteryResult[] ret = InferResults(list);
 
             return ret;
         }
@@ -495,7 +495,7 @@ namespace Lottery.Core.Algorithm
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
             int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "any" ? 4 : (type == "dynamic" ? 9: 9);
+            int maxIntervalCount = type == "any" ? 4 : 8;
             LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" || type == "any" ? true : x.BetCount < maxBetCount))
                                                                  .OrderByDescending(t => t.HitCount)
                                                                  .ThenByDescending(t => t.MaxContinuous)
@@ -505,6 +505,17 @@ namespace Lottery.Core.Algorithm
 
             LotteryResult result = availableList.FirstOrDefault();
             return result;
+        }
+
+        private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
+        {
+            LotteryResult[] availableList = list.OrderByDescending(t => t.HitCount)
+                                                                        .ThenByDescending(t => t.MaxContinuous)
+                                                                        .ThenByDescending(t => t.LastContinuous)
+                                                                        .ThenBy(t => t.LastInterval)
+                                                                        .Take(3)
+                                                                        .ToArray();
+            return availableList;
         }
 
         private LotteryResult GetFilteredResult(int[] spans, OddEnum[] odds, SizeEnum[] sizes, PrimeEnum[] primes, int[] sums, int[] hundreds, int[] decades, int[] units, int[] maxes, int[] mines, int[] distincts, bool? excludeThree, int[] sequenceKeys = null, int[][] dynamicPosKeys = null, int[] fiveStarForms = null, AnyFilter[] anyFilters = null)

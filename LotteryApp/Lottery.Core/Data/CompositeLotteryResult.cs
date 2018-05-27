@@ -32,7 +32,7 @@ namespace Lottery.Core.Data
         /// <summary>
         /// 不定胆
         /// </summary>
-        public LotteryResult DynamicPosition { get; set; }
+        public LotteryResult[] DynamicPosition { get; set; }
 
         /// <summary>
         /// 直选
