@@ -668,7 +668,7 @@ namespace Lottery.Core.Algorithm
                 { "大小", sizes},
                 { "奇偶", odds},
                 { "质合", primes},
-                { "不定胆", dynamicPosKeys},
+                { "不定位", dynamicPosKeys},
                 { "任选二", anyFilters}
             };
             ret.Filter = string.Join(Environment.NewLine, filterDic.Where(x => x.Value != null).Select(x =>
@@ -685,7 +685,7 @@ namespace Lottery.Core.Algorithm
                     case "质合":
                         filterDisplay = string.Join(",", (PrimeEnum[])x.Value);
                         break;
-                    case "不定胆":
+                    case "不定位":
                         filterDisplay = string.Join(";", ((int[][])x.Value).Select(t => Format(t)));
                         break;
                     case "任选二":
