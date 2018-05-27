@@ -70,7 +70,7 @@ namespace Lottery.Core.Algorithm
             {
                 FiveStarFormEnum[] onlyNeed = new FiveStarFormEnum[] { FiveStarFormEnum.Group10, FiveStarFormEnum.Group20, FiveStarFormEnum.Group30, FiveStarFormEnum.Group5 };
                 Dictionary<FiveStarFormEnum, string> forms = GetEnumDescriptions<FiveStarFormEnum>();
-                foreach (var p in ret.FiveStar.Where(x => onlyNeed.Contains(x.Key)))
+                foreach (var p in ret.FiveStar.Where(x => onlyNeed.Contains(x.Key)).OrderBy(x=>x.Key))
                 {
                     logger(string.Format("{0}：最大中奖次数：{1} ，最大间隔：{2}，最近间隔：{3}", forms[p.Key], p.Value.HitCount, p.Value.MaxInterval, p.Value.LastInterval));
                     logger(string.Format("间隔列表：{0}", string.Join(",", p.Value.HitIntervals)));
