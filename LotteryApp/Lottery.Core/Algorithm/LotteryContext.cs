@@ -509,10 +509,9 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
-            LotteryResult[] availableList = list.OrderByDescending(t => t.HitCount)
-                                                                        .ThenByDescending(t => t.MaxContinuous)
-                                                                        .ThenByDescending(t => t.LastContinuous)
-                                                                        .ThenBy(t => t.LastInterval)
+            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 9)
+                                                                        .OrderByDescending(t => t.HitCount)
+                                                                        .ThenBy(t => t.MaxInterval)
                                                                         .Take(3)
                                                                         .ToArray();
             return availableList;

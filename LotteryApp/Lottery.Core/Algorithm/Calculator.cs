@@ -175,7 +175,7 @@ namespace Lottery.Core.Algorithm
 
         public void Validate()
         {
-            int count = 1000;
+            int count = 10000;
             int skipCount = TakeNumber;
             int betCycle = 0;
             int failureCount = 0;
