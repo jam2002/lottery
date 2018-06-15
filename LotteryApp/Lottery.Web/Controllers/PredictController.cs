@@ -35,7 +35,7 @@ namespace Lottery.Web.Controllers
                 { 1,"5"},
                 { 2,"-5"},
                 { 3,"22"},
-                { 4,"33"},
+                { 4,"34"},
                 { 5,null},
             };
             Dictionary<int, string> algorthmDic = new Dictionary<int, string>
