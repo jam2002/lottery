@@ -27,9 +27,8 @@ namespace Lottery.Web.Controllers
         /// <param name="action">1：验证过去1000期；2：预测下一期</param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Load(int type, int act, int? number = null)
+        public ActionResult Load(int type, int act, int number = 30, string name = "cqssc")
         {
-            number = number ?? 30;
             Dictionary<int, string> argDic = new Dictionary<int, string>
             {
                 { 1,"5"},
@@ -49,7 +48,7 @@ namespace Lottery.Web.Controllers
 
             StringBuilder sb = new StringBuilder();
             Calculator.ClearCache();
-            Calculator calculator = new Calculator("cqssc", algorthmDic[type], number.Value, argDic[type], t => sb.Append(t));
+            Calculator calculator = new Calculator(name, algorthmDic[type], number, argDic[type], t => sb.Append(t));
             if (act == 1)
             {
                 calculator.Validate();
