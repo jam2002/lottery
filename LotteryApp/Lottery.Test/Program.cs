@@ -1,6 +1,6 @@
-﻿using Lottery.Core.Algorithm;
+﻿using Lottery.Core;
+using Lottery.Core.Algorithm;
 using System;
-using System.Linq;
 
 namespace Lottery.Test
 {
@@ -8,41 +8,27 @@ namespace Lottery.Test
     {
         static void Main(string[] args)
         {
-            //Run(30, "cqssc", "anytwo", "-5");
-            Run(20, "cqssc", "dynamic", "33");
-            //Run(10, "cqssc", "dynamic", "22");
-            //Run(200, "cqssc", "fivestar", "5");
-
-            string commands = Console.ReadLine();
-            while (commands != "exit")
+            InputOptions[] options = new InputOptions[]
             {
-                string[] inputArgs = commands.Split(' ').Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().ToArray();
-                int number = inputArgs.Length > 1 ? int.Parse(inputArgs[1]) : 60;
-                string name = inputArgs.Length > 2 ? inputArgs[2] : null;
-                string type = inputArgs.Length > 3 ? inputArgs[3] : null;
-                string algorArgs = inputArgs.Length > 4 ? inputArgs[4] : null;
-                Run(number, name, type, algorArgs);
-                commands = Console.ReadLine();
-            }
-        }
+                new InputOptions {  Number =20, LotteryName = "cqssc", GameName = "dynamic",  GameArgs = "34" },
+                new InputOptions {  Number =20, LotteryName = "cqssc", GameName = "dynamic",  GameArgs = "22" },
+                new InputOptions {  Number =30, LotteryName = "cqssc|after", GameName = "groupThree" },
+                new InputOptions {  Number =30, LotteryName = "cqssc|middle", GameName = "groupThree" },
+                new InputOptions {  Number =30, LotteryName = "cqssc|front", GameName = "groupThree" },
 
-        static void Run(int? number = null, string lotterNames = null, string type = null, string algorArgs = null)
-        {
-            number = number.HasValue ? number.Value : 60;
-            string[] names = lotterNames != null && lotterNames != "all" ? lotterNames.Split(',') : LotteryGenerator.GetConfig().Lotteries.Select(x => x.Key).ToArray();
-            if (type == null)
+                new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "34" },
+                new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "22" },
+                new InputOptions {  Number =30, LotteryName = "xjssc|after", GameName = "groupThree" },
+                new InputOptions {  Number =30, LotteryName = "xjssc|middle", GameName = "groupThree" },
+                new InputOptions {  Number =30, LotteryName = "xjssc|front", GameName = "groupThree" }
+            };
+            OutputResult[] outputs = Calculator.GetResults(options);
+            foreach (OutputResult r in outputs)
             {
-                type = "anytwo";
-            }
-
-            Calculator.ClearCache();
-
-            foreach (string name in names)
-            {
-                Calculator calclator = new Calculator(name, type, number.Value, algorArgs, t => Console.WriteLine(t));
-                calclator.Start();
+                Console.WriteLine(r.ToReadString());
             }
             Console.WriteLine("策略生成结束");
+            Console.ReadLine();
         }
     }
 }

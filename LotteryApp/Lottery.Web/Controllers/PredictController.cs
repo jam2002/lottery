@@ -1,5 +1,5 @@
-﻿using Lottery.Core.Algorithm;
-using System.Collections.Generic;
+﻿using Lottery.Core;
+using Lottery.Core.Algorithm;
 using System.Text;
 using System.Web.Mvc;
 
@@ -11,12 +11,28 @@ namespace Lottery.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            StringBuilder sb = new StringBuilder();
-            Calculator.ClearCache();
-            Calculator calculator = new Calculator("cqssc", "anytwo", 30, "5", t => sb.Append(t));
-            calculator.Start();
+            InputOptions[] options = new InputOptions[]
+            {
+                new InputOptions {  Number =20, LotteryName = "cqssc", GameName = "dynamic",  GameArgs = "34" },
+                new InputOptions {  Number =20, LotteryName = "cqssc", GameName = "dynamic",  GameArgs = "22" },
+                new InputOptions {  Number =30, LotteryName = "cqssc|after", GameName = "groupThree" },
+                new InputOptions {  Number =30, LotteryName = "cqssc|middle", GameName = "groupThree" },
+                new InputOptions {  Number =30, LotteryName = "cqssc|front", GameName = "groupThree" },
 
-            ViewBag.Predict = sb.ToString();
+                new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "34" },
+                new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "22" },
+                new InputOptions {  Number =30, LotteryName = "xjssc|after", GameName = "groupThree" },
+                new InputOptions {  Number =30, LotteryName = "xjssc|middle", GameName = "groupThree" },
+                new InputOptions {  Number =30, LotteryName = "xjssc|front", GameName = "groupThree" }
+            };
+            OutputResult[] outputs = Calculator.GetResults(options);
+            StringBuilder builer = new StringBuilder();
+            foreach (OutputResult r in outputs)
+            {
+                builer.AppendLine(r.ToReadString(true));
+                builer.Append("<br/>");
+            }
+            ViewBag.Predict = builer.ToString();
             return View();
         }
 
@@ -29,37 +45,6 @@ namespace Lottery.Web.Controllers
         [HttpGet]
         public ActionResult Load(int type, int act, int number = 30, string name = "cqssc")
         {
-            Dictionary<int, string> argDic = new Dictionary<int, string>
-            {
-                { 1,"5"},
-                { 2,"-5"},
-                { 3,"22"},
-                { 4,"34"},
-                { 5,null},
-            };
-            Dictionary<int, string> algorthmDic = new Dictionary<int, string>
-            {
-                { 1,"anytwo"},
-                { 2,"anytwo"},
-                { 3,"dynamic"},
-                { 4,"dynamic"},
-                { 5,"fivestar"},
-            };
-
-            StringBuilder sb = new StringBuilder();
-            Calculator.ClearCache();
-            Calculator calculator = new Calculator(name, algorthmDic[type], number, argDic[type], t => sb.Append(t));
-            if (act == 1)
-            {
-                calculator.Validate();
-            }
-            else
-            {
-                calculator.Start();
-            }
-
-            ViewBag.Predict = sb.ToString();
-
             return View("Index");
         }
     }

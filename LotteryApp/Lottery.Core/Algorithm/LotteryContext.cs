@@ -180,42 +180,36 @@ namespace Lottery.Core.Algorithm
             }
         }
 
-        public CompositeLotteryResult GetCompositeResult()
+        public LotteryResult[] GetGameResult(string gameName)
         {
-            CompositeLotteryResult ret = new CompositeLotteryResult { };
-            ret.DynamicPosition = GetDynamicPosResult();
-
-            if (CurrentLottery.Length == 3)
+            LotteryResult[] ret = null;
+            switch (gameName)
             {
-                ret.Mix = GetMixResult();
-                ret.Compound = GetCompoundResult();
-                ret.Duplicated = GetDuplicatedResult();
-
-                ReferenceFactor pair = FactorDic[FactorTypeEnum.Distinct].ContainsKey(2) ? FactorDic[FactorTypeEnum.Distinct][2] : null;
-                if (pair != null && pair.MaxInterval <= 5)
-                {
-                    ret.GroupThree = GetFilteredResult(null, null, null, null, null, null, null, null, null, null, new int[] { 2 }, null);
-                }
-                else
-                {
-                    ret.GroupSix = GetGroupSixResult();
-                }
-            }
-
-            if (CurrentLottery.Length == 5)
-            {
-                int[] fiveStarForms = new int[] { 1, 2, 3, 4, 5, 6 };
-                Dictionary<int, ReferenceFactor> factors = FactorDic[FactorTypeEnum.FiveStarForm];
-                ret.FiveStar = factors.Where(x => fiveStarForms.Contains(x.Key)).ToDictionary(x => (FiveStarFormEnum)x.Key, x => new LotteryResult
-                {
-                    MaxInterval = x.Value.MaxInterval,
-                    LastInterval = x.Value.LastInterval,
-                    HitPositions = x.Value.OccurPositions,
-                    HitIntervals = x.Value.HitIntervals,
-                    HitCount = x.Value.OccurPositions.Length
-                });
-
-                ret.AnyTwo = GetAnyTwoResultByHeat();
+                case "dynamic":
+                    ret = GetDynamicPosResult();
+                    break;
+                case "anytwo":
+                    ret = new[] { GetAnyTwoResultByHeat() };
+                    break;
+                case "fivestar":
+                    int[] fiveStarForms = new int[] { 3, 4, 5, 6 };
+                    Dictionary<int, ReferenceFactor> factors = FactorDic[FactorTypeEnum.FiveStarForm];
+                    ret = factors.Where(x => fiveStarForms.Contains(x.Key)).OrderBy(x => x.Key).Select(x => x.Value.ToResult()).ToArray();
+                    break;
+                case "mix":
+                    ret = new[] { GetMixResult() };
+                    break;
+                case "groupThree":
+                    ReferenceFactor factor = FactorDic[FactorTypeEnum.Distinct].ContainsKey(2) ? FactorDic[FactorTypeEnum.Distinct][2] : null;
+                    if (factor != null && factor.MaxInterval <= 6)
+                    {
+                        LotteryResult r = factor.ToResult();
+                        r.Filter = "组三";
+                        return new[] { r };
+                    }
+                    break;
+                default:
+                    break;
             }
             return ret;
         }
@@ -273,88 +267,7 @@ namespace Lottery.Core.Algorithm
             return InferResult(list);
         }
 
-        private LotteryResult GetSimpleMixResult()
-        {
-            int[] orderSpans = FactorDic[FactorTypeEnum.Span].OrderBy(x => x.Value.OrderKey).Select(x => x.Key).ToArray();
-            int[] orderMax = FactorDic[FactorTypeEnum.Max].Where(x => x.Key >= 4).OrderBy(x => x.Value.OrderKey).Select(x => x.Key).ToArray();
-            int[] orderMin = FactorDic[FactorTypeEnum.Min].Where(x => x.Key <= 6).OrderBy(x => x.Value.OrderKey).Select(x => x.Key).ToArray();
-
-            int[][] allSkips = (from x in Enumerable.Range(2, 4)
-                                from y in Enumerable.Range(0, 5)
-                                from z in Enumerable.Range(0, 5)
-                                select new[] { x, y, z }).ToArray();
-
-            IEnumerable<LotteryResult> list = allSkips.Select(x => GetFilteredResult(orderSpans.Skip(x[0]).ToArray(),
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    orderMax.Skip(x[1]).ToArray(),
-                                                                                                                                    orderMin.Skip(x[2]).ToArray(),
-                                                                                                                                    DistinctCounts, null)).ToArray();
-
-            return InferResult(list);
-        }
-
-        private LotteryResult GetCompoundResult()
-        {
-            int[] orderHundreds = FactorDic[FactorTypeEnum.Hundred].OrderBy(x => x.Value.OrderKey).Select(x => x.Key).ToArray();
-            int[] orderDecades = FactorDic[FactorTypeEnum.Decade].OrderBy(x => x.Value.OrderKey).Select(x => x.Key).ToArray();
-            int[] orderUnits = FactorDic[FactorTypeEnum.Unit].OrderBy(x => x.Value.OrderKey).Select(x => x.Key).ToArray();
-
-            int[][] allSkips = (from x in GetSkipArray(FactorTypeEnum.Award, 10 - orderHundreds.Length)
-                                from y in GetSkipArray(FactorTypeEnum.Award, 10 - orderDecades.Length)
-                                from z in GetSkipArray(FactorTypeEnum.Award, 10 - orderUnits.Length)
-                                select new[] { x, y, z }).ToArray();
-
-            IEnumerable<LotteryResult> list = allSkips.Select(x => GetFilteredResult(null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    orderHundreds.Skip(x[0]).ToArray(),
-                                                                                                                                    orderDecades.Skip(x[1]).ToArray(),
-                                                                                                                                    orderUnits.Skip(x[2]).ToArray(),
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    DistinctCounts, null)).ToArray();
-
-            return InferResult(list);
-        }
-
-        private LotteryResult GetGroupSixResult()
-        {
-            int[] awards = FactorDic[FactorTypeEnum.Award].OrderBy(x => x.Value.OrderKey).Select(x => x.Key).ToArray();
-
-            int[][] allSkips = Enumerable.Range(3, 2).Select(x => new int[] { x, x, x }).ToArray();
-
-            IEnumerable<LotteryResult> list = allSkips.Select(x => GetFilteredResult(null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    awards.Skip(x[0]).ToArray(),
-                                                                                                                                    awards.Skip(x[1]).ToArray(),
-                                                                                                                                    awards.Skip(x[2]).ToArray(),
-                                                                                                                                    null,
-                                                                                                                                    null,
-                                                                                                                                    new int[] { 3 }, null)).ToArray();
-
-            return InferResult(list, "six");
-        }
-
-        private LotteryResult GetDuplicatedResult()
-        {
-            int[] sequenceKeys = FactorDic[FactorTypeEnum.SequenceKey].Where(x => x.Value.OccurCount > 1 && x.Value.LastInterval <= 15).OrderByDescending(x => x.Value.OccurCount).Select(x => x.Key).ToArray();
-
-            LotteryResult ret = GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, sequenceKeys);
-            return ret;
-        }
-
-        public LotteryResult[] GetDynamicPosResult()
+        private LotteryResult[] GetDynamicPosResult()
         {
             string[] arguments = (string.IsNullOrEmpty(Args) || Args.StartsWith("-") ? "22" : Args).Split(',');
             int[] number = arguments[0].Select(x => int.Parse(x.ToString())).ToArray();
@@ -376,7 +289,7 @@ namespace Lottery.Core.Algorithm
             return ret;
         }
 
-        public LotteryResult GetAnyTwoResultByHit()
+        private LotteryResult GetAnyTwoResultByHit()
         {
             int[] poses = new int[] { 0, 1, 2, 3, 4 };
             Combination combine = new Combination(poses.Length);
@@ -441,7 +354,7 @@ namespace Lottery.Core.Algorithm
             return InferResult(list, "any");
         }
 
-        public LotteryResult GetAnyTwoResultByHeat()
+        private LotteryResult GetAnyTwoResultByHeat()
         {
             FactorTypeEnum[] posFactors = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
 
@@ -494,24 +407,17 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult InferResult(IEnumerable<LotteryResult> list, string type = null)
         {
-            int maxBetCount = type == "six" ? 220 : CurrentLottery.MaxBetCount;
-            int maxIntervalCount = type == "any" ? 4 : 8;
-            LotteryResult[] availableList = list.Where(x => x.MaxInterval < maxIntervalCount && (type == "dynamic" || type == "any" ? true : x.BetCount < maxBetCount))
-                                                                 .OrderByDescending(t => t.HitCount)
-                                                                 .ThenByDescending(t => t.MaxContinuous)
-                                                                 .ThenByDescending(t => t.LastContinuous)
-                                                                 .ThenBy(t => t.LastInterval)
-                                                                 .ToArray();
-
+            LotteryResult[] availableList = list.OrderByDescending(t => t.HitCount).ThenBy(t => t.MaxInterval).ThenBy(t => t.LastInterval).ToArray();
             LotteryResult result = availableList.FirstOrDefault();
             return result;
         }
 
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
-            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 9)
+            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15)
                                                                         .OrderByDescending(t => t.HitCount)
                                                                         .ThenBy(t => t.MaxInterval)
+                                                                        .ThenBy(t => t.LastInterval)
                                                                         .Take(3)
                                                                         .ToArray();
             return availableList;
@@ -519,7 +425,7 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult GetFilteredResult(int[] spans, OddEnum[] odds, SizeEnum[] sizes, PrimeEnum[] primes, int[] sums, int[] hundreds, int[] decades, int[] units, int[] maxes, int[] mines, int[] distincts, bool? excludeThree, int[] sequenceKeys = null, int[][] dynamicPosKeys = null, int[] fiveStarForms = null, AnyFilter[] anyFilters = null)
         {
-            IEnumerable<LotteryNumber> lotteryNumbers= CurrentLottery.Length == 3 ? Config.Numbers : LotteryNumbers; ;
+            IEnumerable<LotteryNumber> lotteryNumbers= CurrentLottery.Length == 3 ? Config.Numbers : LotteryNumbers;
             if (anyFilters != null && Args == "5")
             {
                 lotteryNumbers = lotteryNumbers.Skip(LotteryNumbers.Length - 20).ToArray();   //取最后10期来获取最多中奖次数的五个连续数

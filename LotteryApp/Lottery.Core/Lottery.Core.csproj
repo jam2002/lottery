@@ -62,9 +62,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm\InputOptions.cs" />
     <Compile Include="Algorithm\Calculator.cs" />
     <Compile Include="Algorithm\LotteryContext.cs" />
     <Compile Include="Algorithm\LotteryGenerator.cs" />
+    <Compile Include="Algorithm\OutputResult.cs" />
     <Compile Include="Data\AnyFilter.cs" />
     <Compile Include="Data\CompositeLotteryResult.cs" />
     <Compile Include="Data\FactorTypeEnum.cs" />
@@ -77,6 +79,7 @@
     <Compile Include="Data\PrimeEnum.cs" />
     <Compile Include="Data\ReferenceFactor.cs" />
     <Compile Include="Data\SizeEnum.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
