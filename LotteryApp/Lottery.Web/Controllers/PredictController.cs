@@ -38,16 +38,18 @@ namespace Lottery.Web.Controllers
             return View();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type">1: 五连续算法；2：杀最冷算法；3：五星二码不定位；4：五星三码不定位；5：五星组选形态</param>
-        /// <param name="action">1：验证过去1000期；2：预测下一期</param>
-        /// <returns></returns>
         [HttpGet]
-        public ActionResult Load(int type, int act, int number = 30, string name = "cqssc")
+        public ActionResult Validate()
         {
-            return View("Index");
+            InputOptions[] options = new InputOptions[]
+            {
+                 new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "34", RetrieveNumber =10000 }
+            };
+            ValidationResult r = Validator.Validate(options);
+            StringBuilder builer = new StringBuilder();
+            builer.Append(r.ToReadString(true));
+            ViewBag.Predict = builer.ToString();
+            return View();
         }
     }
 }

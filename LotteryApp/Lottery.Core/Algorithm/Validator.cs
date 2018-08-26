@@ -7,9 +7,9 @@ namespace Lottery.Core.Algorithm
 {
     public class Validator
     {
-        public static void Validate(InputOptions[] options)
+        public static ValidationResult Validate(InputOptions[] options)
         {
-            int count = 10000;
+            int count = options[0].RetrieveNumber;
             int skipCount = options[0].Number;
             int betCycle = 0;
             int failureCount = 0;
@@ -21,6 +21,8 @@ namespace Lottery.Core.Algorithm
             Dictionary<int, int> hitDic = Enumerable.Range(0, 9).ToDictionary(x => x, x => 0);
             LotteryResult betResult = null;
             int allCount = 0;
+
+            Calculator.ClearCache();
 
             while (skipCount < count)
             {
@@ -85,7 +87,22 @@ namespace Lottery.Core.Algorithm
                 }
             }
 
-            Console.WriteLine($"当前资金：{betAmount}，最低：{minAmount}，最高：{maxAmount}, 四飞次数：{allCount}, 中奖统计：{string.Join(",", hitDic.Select(t => string.Concat(t.Key, "=", t.Value)))}");
+            if (betResult == null)
+            {
+                betResult = Calculator.GetResults(options, false).SelectMany(t => t.Output).OrderByDescending(t => t.HitCount).ThenBy(t => t.MaxInterval).ThenBy(t => t.LastInterval).FirstOrDefault();
+            }
+
+            ValidationResult validation = new ValidationResult
+            {
+                Amount = betAmount,
+                MaxAmount = maxAmount,
+                MinAmount = minAmount,
+                BetResult = betResult,
+                HitAllNumber = allCount,
+                HitDic = hitDic,
+                LastLotteryNumber = Calculator.GetCache()[betResult.LotteryName].Last()
+            };
+            return validation;
         }
 
         /// <summary>

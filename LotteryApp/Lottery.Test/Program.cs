@@ -42,9 +42,10 @@ namespace Lottery.Test
         {
             InputOptions[] options = new InputOptions[]
             {
-                   new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "34", RetrieveNumber =10000 }
+                   new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "34", RetrieveNumber =1000 }
             };
-            Validator.Validate(options);
+            ValidationResult r = Validator.Validate(options);
+            Console.WriteLine(r.ToReadString());
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Lottery.Core.Algorithm;
 using Lottery.Core.Data;
+using System.Linq;
 using System.Text;
 
 namespace Lottery.Core
@@ -23,6 +24,20 @@ namespace Lottery.Core
                     builder.AppendLine("<br/>");
                 }
             }
+
+            return builder.ToString();
+        }
+
+        public static string ToReadString(this ValidationResult valiation, bool isHtml = false)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine($"最后分析奖号：{valiation.LastLotteryNumber}， 最后投注策略：{valiation.BetResult.LotteryName} - {valiation.BetResult.Filter}：最大中奖次数：{ valiation.BetResult.HitCount} ，最大间隔：{valiation.BetResult.MaxInterval}，最近间隔：{valiation.BetResult.LastInterval}，间隔列表：{string.Join(",", valiation.BetResult.HitIntervals)}");
+            if (isHtml)
+            {
+                builder.AppendLine("<br/>");
+            }
+            builder.AppendLine($"当前资金：{valiation.Amount}，最低：{valiation.MinAmount}，最高：{valiation.MaxAmount}, 四飞次数：{valiation.HitAllNumber}, 中奖统计：{string.Join(",", valiation.HitDic.Select(t => string.Concat(t.Key, "=", t.Value)))}");
 
             return builder.ToString();
         }
