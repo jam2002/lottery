@@ -49,7 +49,7 @@ namespace Lottery.Web.Controllers
             StringBuilder builer = new StringBuilder();
             builer.Append(r.ToReadString(true));
             ViewBag.Predict = builer.ToString();
-            return View();
+            return View("Index");
         }
     }
 }
