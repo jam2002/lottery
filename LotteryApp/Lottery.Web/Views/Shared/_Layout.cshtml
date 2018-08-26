@@ -17,8 +17,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("综合分析", "Index", "Predict", new {  }, new { @class = "navbar-brand" })
-                @Html.ActionLink("验证一万期", "Validate", "Predict", new { }, new { @class = "navbar-brand" })
+                @Html.ActionLink("新疆", "Index", "Predict", new {  }, new { @class = "navbar-brand" })
+                @Html.ActionLink("重庆", "Load", "Predict", new { name= "cqssc"}, new { @class = "navbar-brand" })
+                @Html.ActionLink("验证新疆", "Validate", "Predict", new { name = "xjssc" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("验证重庆", "Validate", "Predict", new { name = "cqssc" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

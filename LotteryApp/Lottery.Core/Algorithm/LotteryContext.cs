@@ -618,7 +618,7 @@ namespace Lottery.Core.Algorithm
                         filterDisplay = string.Join(",", (PrimeEnum[])x.Value);
                         break;
                     case "不定位":
-                        filterDisplay = string.Join(";", ((int[][])x.Value).Select(t => Format(t)));
+                        filterDisplay = string.Join(";", Format(((int[][])x.Value).SelectMany(t => t).Distinct().ToArray()));
                         break;
                     case "任选二":
                         filterDisplay = string.Join(";", ((AnyFilter[])x.Value).Select(t => Format(t)));
