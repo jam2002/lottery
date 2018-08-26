@@ -277,6 +277,29 @@ namespace Lottery.Core.Algorithm
             return InferResult(list);
         }
 
+        private LotteryResult[] GetDynamicPosLookBehindResult()
+        {
+            LotteryResult[] lookBehind = null;
+            //if (InputOption.GameArgs == "34")
+            //{
+            //    InputOption.GameArgs = "33";
+            //    lookBehind = GetDynamicPosResult();
+            //    InputOption.GameArgs = "34";
+            //}
+
+            LotteryResult[] list = GetDynamicPosResult();
+            if (lookBehind?.Any() == true)
+            {
+                string[] coreValues = lookBehind.Take(1).SelectMany(t => t.AnyFilters.Select(q => string.Join(string.Empty, q.Values))).ToArray();
+                list = list.Select(t => new
+                {
+                    bet = t,
+                    values = t.AnyFilters.Select(q => string.Join(string.Empty, q.Values)).ToArray()
+                }).Where(t => t.values.Any(q => coreValues.Any(c => q.Contains(c)))).Select(t => t.bet).ToArray();
+            }
+            return list;
+        }
+
         private LotteryResult[] GetDynamicPosResult()
         {
             string[] arguments = (string.IsNullOrEmpty(InputOption.GameArgs) || InputOption.GameArgs.StartsWith("-") ? "22" : InputOption.GameArgs).Split(',');

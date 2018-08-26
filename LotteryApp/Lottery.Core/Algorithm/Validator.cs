@@ -20,6 +20,8 @@ namespace Lottery.Core.Algorithm
             Dictionary<int, int> cycleDic = null;
             Dictionary<int, int> hitDic = Enumerable.Range(0, 9).ToDictionary(x => x, x => 0);
             LotteryResult betResult = null;
+
+
             int allCount = 0;
 
             Calculator.ClearCache();
@@ -27,14 +29,15 @@ namespace Lottery.Core.Algorithm
             while (skipCount < count)
             {
                 betResult = Calculator.GetResults(options, false).SelectMany(t => t.Output).OrderByDescending(t => t.HitCount).ThenBy(t => t.MaxInterval).ThenBy(t => t.LastInterval).FirstOrDefault();
-                int cycleType = betResult.GameName.StartsWith("dynamic34") ? 2 : (betResult.GameName.StartsWith("dynamic22") ? 3 : 1);
-                cycleDic = CreateCycle(cycleType, 9);
-
-                double baseAmount = cycleType == 2 ? 22.482 : 6.666;
-                double baseBetAmount = cycleType == 2 ? 4 : 1;
 
                 if (betResult != null)
                 {
+                    int cycleType = betResult.GameName.StartsWith("dynamic34") ? 2 : (betResult.GameName.StartsWith("dynamic22") ? 3 : 1);
+                    cycleDic = CreateCycle(cycleType, 9);
+
+                    double baseAmount = cycleType == 2 ? 22.482 : 6.666;
+                    double baseBetAmount = cycleType == 2 ? 4 : 1;
+
                     betCycle = 0;
                     bool ret = false;
                     string lottery = null;

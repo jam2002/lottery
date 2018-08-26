@@ -13,19 +13,12 @@ namespace Lottery.Web.Controllers
         {
             InputOptions[] options = new InputOptions[]
             {
-                new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "34" },
-                new InputOptions {  Number =20, LotteryName = "cqssc", GameName = "dynamic",  GameArgs = "34" },
-
-                new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "22" },
-                new InputOptions {  Number =20, LotteryName = "cqssc", GameName = "dynamic",  GameArgs = "22" },
-
+                new InputOptions {  Number =30, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "33" },
+                new InputOptions {  Number =30, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "34" },
+                new InputOptions {  Number =30, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "22" },
                 new InputOptions {  Number =30, LotteryName = "xjssc|after", GameName = "groupThree" },
                 new InputOptions {  Number =30, LotteryName = "xjssc|middle", GameName = "groupThree" },
-                new InputOptions {  Number =30, LotteryName = "xjssc|front", GameName = "groupThree" },
-
-                new InputOptions {  Number =30, LotteryName = "cqssc|after", GameName = "groupThree" },
-                new InputOptions {  Number =30, LotteryName = "cqssc|middle", GameName = "groupThree" },
-                new InputOptions {  Number =30, LotteryName = "cqssc|front", GameName = "groupThree" }
+                new InputOptions {  Number =30, LotteryName = "xjssc|front", GameName = "groupThree" }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
             StringBuilder builer = new StringBuilder();
@@ -43,7 +36,7 @@ namespace Lottery.Web.Controllers
         {
             InputOptions[] options = new InputOptions[]
             {
-                 new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "34", RetrieveNumber =10000 }
+                 new InputOptions {  Number =30, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "34", RetrieveNumber =10000 }
             };
             ValidationResult r = Validator.Validate(options);
             StringBuilder builer = new StringBuilder();
