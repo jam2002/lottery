@@ -1,13 +1,10 @@
 ﻿using HtmlAgilityPack;
 using Lottery.Core.Data;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -31,9 +28,12 @@ namespace Lottery.Core.Algorithm
             option = input;
         }
 
-        public static OutputResult[] GetResults(InputOptions[] options)
+        public static OutputResult[] GetResults(InputOptions[] options, bool clearCache = true)
         {
-            ClearCache();
+            if (clearCache)
+            {
+                ClearCache();
+            }
 
             return options.Select(t =>
             {
@@ -47,10 +47,15 @@ namespace Lottery.Core.Algorithm
             lotteryCache.Clear();
         }
 
+        public static Dictionary<string, string[]> GetCache()
+        {
+            return lotteryCache;
+        }
+
         public OutputResult Start()
         {
             string[] lotteries = GetLotteries();
-            lotteries = lotteries.Skip(lotteries.Length - option.Number).ToArray();
+            lotteries = lotteries.Skip((option.SkipCount.HasValue ? option.SkipCount.Value : lotteries.Length) - option.Number).Take(option.Number).ToArray();
 
             LotteryNumber[] selectedLottery = null;
             if (lottery.Length >= 5)
@@ -63,8 +68,8 @@ namespace Lottery.Core.Algorithm
                 selectedLottery = lotteries.Select(x => lotteryDic[x]).ToArray();
             }
 
-            LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, option.GameArgs);
-            LotteryResult[] result = context.GetGameResult(option.GameName);
+            LotteryContext context = new LotteryContext(config, selectedLottery, option);
+            LotteryResult[] result = context.GetGameResult();
 
             OutputResult ret = new OutputResult
             {
@@ -76,20 +81,25 @@ namespace Lottery.Core.Algorithm
             return ret;
         }
 
-        private string[] GetLotteries(int retrieveNumber = 200)
+        private string[] GetLotteries()
         {
             string mainKey = lottery.Key.Split('|')[0];
 
             string[] lotteries = null;
-            if (lotteryCache.ContainsKey(mainKey))
+            if (lotteryCache.ContainsKey(lottery.Key))
             {
-                lotteries = lotteryCache[mainKey];
+                lotteries = lotteryCache[lottery.Key];
+            }
+            else if (lotteryCache.ContainsKey(mainKey))
+            {
+                lotteries = lotteryCache[mainKey].Select(x => x.Substring(lottery.StartIndex, lottery.Length)).ToArray();
+                lotteryCache[lottery.Key] = lotteries;
             }
             else
             {
                 if (lottery.Source == 1)
                 {
-                    string url = string.Concat("http://data.917500.cn/", mainKey, retrieveNumber == 200 ? string.Empty : ("_" + retrieveNumber.ToString()), ".txt");
+                    string url = string.Concat("http://data.917500.cn/", mainKey, option.RetrieveNumber == 200 ? string.Empty : ("_" + option.RetrieveNumber.ToString()), ".txt");
                     HttpClient client = new HttpClient();
                     string content = client.GetStringAsync(url).Result;
                     client.Dispose();
@@ -150,142 +160,15 @@ namespace Lottery.Core.Algorithm
                                                  .Reverse()
                                                  .ToArray();
                 }
+
                 lotteryCache[mainKey] = lotteries;
-            }
-            return lotteries.Select(x => x.Substring(lottery.StartIndex, lottery.Length)).ToArray();
-        }
-
-        public void Validate()
-        {
-            int count = 10000;
-            int skipCount = option.Number;
-            int betCycle = 0;
-            int failureCount = 0;
-            double minAmount = 0;
-            double maxAmount = 0;
-            double betAmount = 0;
-            string[] baseLotteries = GetLotteries(count);
-
-            Dictionary<int, int> cycleDic = CreateCycle(2, 7);
-
-            Dictionary<int, int> hitDic = Enumerable.Range(0, cycleDic.Count).ToDictionary(x => x, x => 0);
-            LotteryResult betResult = null;
-
-            while (skipCount < count)
-            {
-                betResult = GetBetResult(skipCount, baseLotteries);
-
-                if (betResult != null)
+                if (mainKey != lottery.Key)
                 {
-                    betCycle = 0;
-                    bool ret = false;
-                    string lottery = null;
-
-                    while (skipCount < count && (betCycle < cycleDic.Count || ret))
-                    {
-                        double cycleAmount = 4 * cycleDic[betCycle];
-                        betAmount = betAmount - cycleAmount;
-                        if (betAmount < minAmount)
-                        {
-                            minAmount = betAmount;
-                        }
-
-                        lottery = baseLotteries[skipCount];
-                        skipCount++;
-
-                        if (ret)
-                        {
-                            hitDic[betCycle] = hitDic[betCycle] + 1;
-                            betAmount = betAmount + cycleDic[betCycle] * 26.666;
-                            if (betAmount > maxAmount)
-                            {
-                                maxAmount = betAmount;
-                            }
-                            betResult = null;
-                            break;
-                        }
-                        betCycle++;
-                    }
-
-                    if (!ret)
-                    {
-                        failureCount++;
-                    }
-                }
-                else
-                {
-                    skipCount++;
+                    lotteryCache[lottery.Key] = lotteries.Select(x => x.Substring(lottery.StartIndex, lottery.Length)).ToArray();
+                    lotteries = lotteryCache[lottery.Key];
                 }
             }
-
-            if (betResult == null)
-            {
-                betResult = GetBetResult(skipCount, baseLotteries);
-            }
-        }
-
-        private LotteryResult GetBetResult(int skipCount, string[] baseLotteries)
-        {
-            string[] lotteries = baseLotteries.Skip(skipCount - option.Number).Take(option.Number).ToArray();
-            LotteryNumber[] selectedLottery = LotteryGenerator.GetNumbers(lotteries); ;
-            LotteryContext context = new LotteryContext(config, selectedLottery, lottery.Key, option.GameArgs);
-
-            LotteryResult betResult = context.GetGameResult(option.GameName).FirstOrDefault();
-
-            return betResult;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type">1：任二；2：不定胆；3：三星直选</param>
-        /// <param name="cycleCount">计划期数</param>
-        /// <returns></returns>
-        private Dictionary<int, int> CreateCycle(int type, int cycleCount)
-        {
-            Dictionary<int, int> cycleDic = null;
-            int[] counter = Enumerable.Range(0, cycleCount).ToArray();
-            switch (type)
-            {
-                case 1:
-                    counter[0] = 1;
-                    counter[1] = 1;
-                    for (var i = 2; i < counter.Length; i++)
-                    {
-                        counter[i] = counter[i - 1] + counter[i - 2];
-                    }
-                    break;
-                case 2:
-                    counter[0] = counter[1] = counter[2] = counter[3] = 1;
-                    counter[4] = counter[5] = 2;
-                    counter[6] = 3;
-                    //counter[7] = 4;
-                    //counter[8] = 5;
-                    //counter[9] = 6;
-                    //counter[10] = 8;
-                    //counter[11] = 10;
-                    break;
-            }
-
-            cycleDic = counter.Select((x, i) => new { key = i, value = x }).ToDictionary(x => x.key, x => x.value);
-
-            return cycleDic;
-        }
-
-        private string Format(LotteryNumber number)
-        {
-            return lottery.Key == "pk10" ? string.Join(" ", new int[] { number.Hundred, number.Decade, number.Unit }.Select(x => x == 0 ? "10" : x.ToString("D2")).ToArray()) : number.Key;
-        }
-
-        private Dictionary<T, string> GetEnumDescriptions<T>() where T : struct
-        {
-            Type type = typeof(T);
-            var fields = type.GetFields().ToDictionary(x => x.Name, x => x);
-            return Enum.GetNames(type).Select(x => new
-            {
-                key = (T)Enum.Parse(type, x),
-                description = fields[x].GetCustomAttribute<DescriptionAttribute>().Description
-            }).ToDictionary(x => x.key, x => x.description);
+            return lotteries;
         }
     }
 }

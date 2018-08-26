@@ -67,6 +67,7 @@
     <Compile Include="Algorithm\LotteryContext.cs" />
     <Compile Include="Algorithm\LotteryGenerator.cs" />
     <Compile Include="Algorithm\OutputResult.cs" />
+    <Compile Include="Algorithm\Validator.cs" />
     <Compile Include="Data\AnyFilter.cs" />
     <Compile Include="Data\CompositeLotteryResult.cs" />
     <Compile Include="Data\FactorTypeEnum.cs" />

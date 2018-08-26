@@ -71,5 +71,12 @@
         /// 任选投注条件
         /// </summary>
         public AnyFilter[] AnyFilters { get; set; }
+
+        /// <summary>
+        /// 彩票玩法
+        /// </summary>
+        public string LotteryName { get; set; }
+
+        public string GameName { get; set; }
     }
 }
