@@ -212,11 +212,15 @@ namespace Lottery.Core.Algorithm
                     break;
             }
 
-            foreach (LotteryResult r in ret)
+            if (ret != null)
             {
-                r.LotteryName = InputOption.LotteryName;
-                r.GameName = InputOption.GameName + (InputOption.GameArgs ?? string.Empty);
+                foreach (LotteryResult r in ret)
+                {
+                    r.LotteryName = InputOption.LotteryName;
+                    r.GameName = InputOption.GameName + (InputOption.GameArgs ?? string.Empty);
+                }
             }
+
             return ret;
         }
 
