@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Lottery.Core.Data;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -118,7 +119,7 @@ namespace Lottery.Core.Algorithm
                         return ret;
                     }).ToArray();
                 }
-                else
+                else if (lottery.Source == 2)
                 {
                     CookieContainer cookieContainer = new CookieContainer();
 
@@ -159,6 +160,20 @@ namespace Lottery.Core.Algorithm
                                                  .Select(x => string.Join(string.Empty, x.Elements("td").Skip(1).Take(5).Select(t => t.FirstChild.InnerText)))
                                                  .Reverse()
                                                  .ToArray();
+                }
+                else
+                {
+                    string url = string.Concat("https://150106.com/api/lastOpenedIssues.php?id=1&issueCount=", option.RetrieveNumber);
+                    HttpClient client = new HttpClient();
+
+                    using (Stream sm = client.GetStreamAsync(url).Result)
+                    {
+                        using (StreamReader sr = new StreamReader(sm))
+                        {
+                            string content = sr.ReadToEnd();
+                            lotteries = JObject.Parse(content).Value<string>("result").Split(',').Select(t => new { no = t.Split('|')[0], value = t.Split('|')[1] }).OrderBy(t => t.no).Select(t => t.value).ToArray();
+                        }
+                    }
                 }
 
                 lotteryCache[mainKey] = lotteries;

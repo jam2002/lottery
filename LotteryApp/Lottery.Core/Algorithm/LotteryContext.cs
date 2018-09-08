@@ -109,8 +109,7 @@ namespace Lottery.Core.Algorithm
 
         private void BuildAwardFactor(LotteryNumber number, int pos)
         {
-            int[] awards = new[] { number.Hundred, number.Decade, number.Unit }.Distinct().ToArray();
-            foreach (int key in awards)
+            foreach (int key in number.DistinctNumbers)
             {
                 BuildFactor(FactorTypeEnum.Award, key, pos);
             }
@@ -127,56 +126,6 @@ namespace Lottery.Core.Algorithm
                 factor.MaxInterval = intervals.Max();
                 factor.HitIntervals = intervals;
                 factor.OrderKey = (LotteryNumbers.Length - factor.LastInterval).ToString("D2") + factor.OccurCount.ToString("D2");
-            }
-
-            FactorTypeEnum[] posFactorTypes = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit, FactorTypeEnum.Award };
-            int[] awards = Enumerable.Range(0, 10).ToArray();
-            foreach (FactorTypeEnum factorType in posFactorTypes)
-            {
-                Dictionary<int, ReferenceFactor> referenceDic = FactorDic[factorType];
-                foreach (int v in awards.Except(referenceDic.Keys))
-                {
-                    referenceDic.Add(v, new ReferenceFactor { Key = v, HitIntervals = new int[] { }, LastInterval = LotteryNumbers.Length, MaxInterval = LotteryNumbers.Length, OccurCount = 0, OccurPositions = new int[] { }, Type = factorType, Heat = 1 });
-                }
-
-                foreach (var factor in referenceDic.Values)
-                {
-                    if (factor.LastInterval >= 20)
-                    {
-                        factor.Heat = 1;
-                    }
-                    else if ((factor.OccurCount == 1 || factor.OccurCount == 2) && (factor.LastInterval < 20 && factor.LastInterval >= 8))
-                    {
-                        factor.Heat = 2;
-                    }
-                    else if (factor.LastInterval < 20 && factor.LastInterval >= 8)
-                    {
-                        factor.Heat = 3;
-                    }
-                    else if (factor.OccurCount >= 7)
-                    {
-                        factor.Heat = 7;
-                    }
-                    else if (factor.OccurCount >= 5)
-                    {
-                        factor.Heat = 6;
-                    }
-                    else if (factor.OccurCount >= 4)
-                    {
-                        factor.Heat = 5;
-                    }
-                    else
-                    {
-                        factor.Heat = 4;
-                    }
-
-                    int[] intervals = factor.HitIntervals.Skip(factor.HitIntervals.Length > 5 ? factor.HitIntervals.Length - 5 : 0).ToArray();
-                    intervals = intervals.Take(intervals.Length - 1).ToArray();
-                    if (factor.LastInterval <= 4 && intervals.Select((x, i) => x - (i < intervals.Length - 1 ? intervals[i + 1] : x)).Any(x => x >= 10))
-                    {
-                        factor.Heat = 6; //渐热号
-                    }
-                }
             }
         }
 
@@ -275,29 +224,6 @@ namespace Lottery.Core.Algorithm
             }
 
             return InferResult(list);
-        }
-
-        private LotteryResult[] GetDynamicPosLookBehindResult()
-        {
-            LotteryResult[] lookBehind = null;
-            //if (InputOption.GameArgs == "34")
-            //{
-            //    InputOption.GameArgs = "33";
-            //    lookBehind = GetDynamicPosResult();
-            //    InputOption.GameArgs = "34";
-            //}
-
-            LotteryResult[] list = GetDynamicPosResult();
-            if (lookBehind?.Any() == true)
-            {
-                string[] coreValues = lookBehind.Take(1).SelectMany(t => t.AnyFilters.Select(q => string.Join(string.Empty, q.Values))).ToArray();
-                list = list.Select(t => new
-                {
-                    bet = t,
-                    values = t.AnyFilters.Select(q => string.Join(string.Empty, q.Values)).ToArray()
-                }).Where(t => t.values.Any(q => coreValues.Any(c => q.Contains(c)))).Select(t => t.bet).ToArray();
-            }
-            return list;
         }
 
         private LotteryResult[] GetDynamicPosResult()
@@ -445,7 +371,7 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
-            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15)
+            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 7 && t.HitCount >= 5 && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s => FactorDic[FactorTypeEnum.Award][s].LastInterval < 5 && FactorDic[FactorTypeEnum.Award][s].OccurCount >= 8))
                                                                         .OrderByDescending(t => t.HitCount)
                                                                         .ThenBy(t => t.MaxInterval)
                                                                         .ThenBy(t => t.LastInterval)
