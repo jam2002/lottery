@@ -28,7 +28,7 @@ namespace Lottery.Core.Algorithm
 
             while (skipCount < count)
             {
-                betResult = Calculator.GetResults(options, false).SelectMany(t => t.Output).OrderByDescending(t => t.HitCount).ThenBy(t => t.MaxInterval).ThenBy(t => t.LastInterval).FirstOrDefault();
+                betResult = GetBetResult(options);
 
                 if (betResult != null)
                 {
@@ -92,7 +92,7 @@ namespace Lottery.Core.Algorithm
 
             if (betResult == null)
             {
-                betResult = Calculator.GetResults(options, false).SelectMany(t => t.Output).OrderByDescending(t => t.HitCount).ThenBy(t => t.MaxInterval).ThenBy(t => t.LastInterval).FirstOrDefault();
+                betResult = GetBetResult(options);
             }
 
             ValidationResult validation = new ValidationResult
@@ -106,6 +106,17 @@ namespace Lottery.Core.Algorithm
                 LastLotteryNumber = Calculator.GetCache()[betResult.LotteryName].Last()
             };
             return validation;
+        }
+
+        private static LotteryResult GetBetResult(InputOptions[] options)
+        {
+            IEnumerable<LotteryResult> list = Calculator.GetResults(options, false)
+                                             .SelectMany(t => t.Output)
+                                             .Where(t => t.HitCount >= 5 && t.LastInterval < 5)
+                                             .OrderByDescending(t => t.HitCount)
+                                             .ThenBy(t => t.LastInterval)
+                                             .ToArray();
+            return list.FirstOrDefault();
         }
 
         /// <summary>

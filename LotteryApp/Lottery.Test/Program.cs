@@ -44,7 +44,7 @@ namespace Lottery.Test
         {
             InputOptions[] options = new InputOptions[]
             {
-                   new InputOptions {  Number =60, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "22", RetrieveNumber =1000 }
+                   new InputOptions {  Number =30, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "22", RetrieveNumber =10000 }
             };
             ValidationResult r = Validator.Validate(options);
             Console.WriteLine(r.ToReadString());
