@@ -26,7 +26,6 @@ namespace Lottery.Web.Controllers
         {
             InputOptions[] options = new InputOptions[]
             {
-                new InputOptions {  Number =60, LotteryName = name, GameName = "dynamic",  GameArgs = "22" },
                 new InputOptions {  Number =30, LotteryName = name, GameName = "dynamic",  GameArgs = "22" },
                 new InputOptions {  Number =60, LotteryName = name, GameName = "dynamic",  GameArgs = "33" },
             };
