@@ -20,14 +20,13 @@ namespace Lottery.Test
         {
             InputOptions[] options = new InputOptions[]
             {
-                    new InputOptions {  Number =20, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = "22" }
+                    new InputOptions {  Number =60, LotteryName = "cqssc", GameName = "dynamic",  GameArgs = "22" },
+                    new InputOptions {  Number =30, LotteryName = "cqssc", GameName = "dynamic",  GameArgs = "22" },
+                    new InputOptions {  Number =60, LotteryName = "cqssc", GameName = "dynamic",  GameArgs = "33" }
 
-                    //new InputOptions {  Number =30, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "33" },
-                    //new InputOptions {  Number =30, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "34" },
-                    //new InputOptions {  Number =20, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "22" },
-                    //new InputOptions {  Number =30, LotteryName = "xjssc|after", GameName = "groupThree" },
-                    //new InputOptions {  Number =30, LotteryName = "xjssc|middle", GameName = "groupThree" },
-                    //new InputOptions {  Number =30, LotteryName = "xjssc|front", GameName = "groupThree" }
+                    //new InputOptions {  Number =60, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "22" },
+                    //new InputOptions {  Number =30, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "22" },
+                    //new InputOptions {  Number =60, LotteryName = "xjssc", GameName = "dynamic",  GameArgs = "33" }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
             foreach (OutputResult r in outputs)

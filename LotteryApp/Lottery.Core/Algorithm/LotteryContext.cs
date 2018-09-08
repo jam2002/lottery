@@ -371,7 +371,8 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
-            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 7 && t.HitCount >= 5 && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s => FactorDic[FactorTypeEnum.Award][s].LastInterval < 5 && FactorDic[FactorTypeEnum.Award][s].OccurCount >= 8))
+            int max = InputOption.Number > 30 ? 15 : 9;
+            LotteryResult[] availableList = list.Where(t => t.MaxInterval < max && t.HitCount >= 5)
                                                                         .OrderByDescending(t => t.HitCount)
                                                                         .ThenBy(t => t.MaxInterval)
                                                                         .ThenBy(t => t.LastInterval)

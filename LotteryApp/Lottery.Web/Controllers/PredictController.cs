@@ -28,15 +28,7 @@ namespace Lottery.Web.Controllers
             {
                 new InputOptions {  Number =60, LotteryName = name, GameName = "dynamic",  GameArgs = "22" },
                 new InputOptions {  Number =30, LotteryName = name, GameName = "dynamic",  GameArgs = "22" },
-
-                new InputOptions {  Number =60, LotteryName = name, GameName = "dynamic",  GameArgs = "34" },
-                new InputOptions {  Number =30, LotteryName = name, GameName = "dynamic",  GameArgs = "34" },
-
                 new InputOptions {  Number =60, LotteryName = name, GameName = "dynamic",  GameArgs = "33" },
-
-                new InputOptions {  Number =30, LotteryName = $"{name}|after", GameName = "groupThree" },
-                new InputOptions {  Number =30, LotteryName = $"{name}|middle", GameName = "groupThree" },
-                new InputOptions {  Number =30, LotteryName = $"{name}|front", GameName = "groupThree" }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
             StringBuilder builer = new StringBuilder();
