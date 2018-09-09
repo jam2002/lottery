@@ -163,17 +163,10 @@ namespace Lottery.Core.Algorithm
                 }
                 else
                 {
-                    string url = string.Concat("https://150106.com/api/lastOpenedIssues.php?id=1&issueCount=", option.RetrieveNumber);
+                    string url = string.Concat("http://tx-ssc.com/api/getData");
                     HttpClient client = new HttpClient();
-
-                    using (Stream sm = client.GetStreamAsync(url).Result)
-                    {
-                        using (StreamReader sr = new StreamReader(sm))
-                        {
-                            string content = sr.ReadToEnd();
-                            lotteries = JObject.Parse(content).Value<string>("result").Split(',').Select(t => new { no = t.Split('|')[0], value = t.Split('|')[1] }).OrderBy(t => t.no).Select(t => t.value).ToArray();
-                        }
-                    }
+                    string content = client.GetStringAsync(url).Result;
+                    lotteries = JArray.Parse(content).Select(t => new { no = t.Value<string>("issue"), value = string.Join(string.Empty, t.Value<string>("code").Split(',')) }).OrderBy(t => t.no).Select(t => t.value).ToArray();
                 }
 
                 lotteryCache[mainKey] = lotteries;
