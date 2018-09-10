@@ -12,39 +12,22 @@ namespace Lottery.Test
         static void Main(string[] args)
         {
             Console.WriteLine("服务正在初始化.....");
+
             DateTime start = DateTime.Now;
-
-            SimpleBet lastBet = null;
-            int betIndex = 1;
-            Timer timer = new Timer(delegate
+            SimpleBetParameters p = new SimpleBetParameters
             {
-                SimpleBet currentBet = Invoke();
-
-                Action Reset = () =>
+                LastBet = null,
+                BetIndex = 1,
+                Dispatcher =(t,v) =>
                 {
-                    Console.Title = $"【{currentBet.BetAward}】";
-                    lastBet = currentBet;
-                    betIndex = 1;
-
-                    UpdateInfo(currentBet.BetAward, betIndex, 2);
-                };
-
-                if (lastBet == null)
-                {
-                    Reset();
-                    return;
+                    Console.WriteLine(t);
+                    if (v != null)
+                    {
+                        Console.Title = v;
+                    }
                 }
-
-                bool isHit = betIndex < 5 && currentBet.LastLotteryNumber.Contains(lastBet.BetAward);
-                int status = isHit ? 1 : (betIndex == 4 ? 3 : 2);
-                UpdateInfo(lastBet.BetAward, status == 1 || status == 3 ? betIndex : ++betIndex, status);
-
-                if (status == 1 || status == 3)
-                {
-                    Reset();
-                }
-                Console.WriteLine();
-            }, null, start.Second < 20 ? (20 - start.Second) * 1000 : (80 - start.Second) * 1000, 60000);
+            };
+            Timer timer = new Timer(StartBet, p, start.Second < 20 ? (20 - start.Second) * 1000 : (80 - start.Second) * 1000, 60000);
 
             Console.WriteLine("服务已运行");
             Console.ReadLine();
@@ -57,20 +40,55 @@ namespace Lottery.Test
         /// <param name="award"></param>
         /// <param name="betIndex"></param>
         /// <param name="status"></param>
-        static void UpdateInfo(string award, int betIndex, int status)
+        static string BuildInfo(string award, int betIndex, int status)
         {
+            string ret = null;
             string betTime = DateTime.Now.ToString("HH:mm:ss");
             switch (status)
             {
                 case 1:
-                    Console.WriteLine($"{betTime}，当前计划投注号：{award}，已中奖，中奖轮次：{betIndex}");
+                    ret = $"{betTime}，当前计划投注号：{award}，已中奖，中奖轮次：{betIndex}";
                     break;
                 case 2:
-                    Console.WriteLine($"{betTime}，当前计划投注号：{award}，轮次：{betIndex}，计划中...");
+                    ret = $"{betTime}，当前计划投注号：{award}，轮次：{betIndex}，计划中...";
                     break;
                 case 3:
-                    Console.WriteLine($"{betTime}，当前计划投注号：{award}，已失败");
+                    ret = $"{betTime}，当前计划投注号：{award}，已失败";
                     break;
+            }
+            return ret;
+        }
+
+        static void StartBet(object state)
+        {
+            SimpleBetParameters p = state as SimpleBetParameters;
+            SimpleBet currentBet = Invoke();
+            foreach (OutputResult r in currentBet.Results)
+            {
+                p.Dispatcher(r.ToReadString(), null);
+            }
+
+            Action Reset = () =>
+            {
+                p.LastBet = currentBet;
+                p.BetIndex = 1;
+
+                p.Dispatcher(BuildInfo(currentBet.BetAward, p.BetIndex, 2), $"【{currentBet.BetAward}】");
+            };
+
+            if (p.LastBet == null)
+            {
+                Reset();
+                return;
+            }
+
+            bool isHit = p.BetIndex < 5 && currentBet.LastLotteryNumber.Contains(p.LastBet.BetAward);
+            int status = isHit ? 1 : (p.BetIndex == 4 ? 3 : 2);
+            p.Dispatcher(BuildInfo(p.LastBet.BetAward, status == 1 || status == 3 ? p.BetIndex : ++p.BetIndex, status), null);
+
+            if (status == 1 || status == 3)
+            {
+                Reset();
             }
         }
 
@@ -78,14 +96,9 @@ namespace Lottery.Test
         {
             InputOptions[] options = new InputOptions[]
             {
-                    new InputOptions {  Number =50, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = "11" }
+                 new InputOptions {  Number =50, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = "11" }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
-            foreach (OutputResult r in outputs)
-            {
-                Console.WriteLine(r.ToReadString());
-            }
-
             SimpleBet bet = null;
             if (outputs.Any())
             {

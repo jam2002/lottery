@@ -81,6 +81,7 @@
     <Compile Include="Data\PrimeEnum.cs" />
     <Compile Include="Data\ReferenceFactor.cs" />
     <Compile Include="Data\SimpleBet.cs" />
+    <Compile Include="Data\SimpleBetParameters.cs" />
     <Compile Include="Data\SizeEnum.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

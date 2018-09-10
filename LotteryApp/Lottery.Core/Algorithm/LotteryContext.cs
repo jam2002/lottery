@@ -233,16 +233,24 @@ namespace Lottery.Core.Algorithm
             int keyCount = number[0];//码数，任选二，任选三，任选四
             int betCount = number.Length > 1 ? number[1] : keyCount;//投注数，任选二选二码，任选三选三码，四码，任选四选四码，五码
 
-            int[][] posKeys = null;
             int[] numbers = arguments.Length > 1 ? arguments[1].Select(x => int.Parse(x.ToString())).OrderBy(x => x).ToArray() : (CurrentLottery.Length <= 5 ? new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } : new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
+            IEnumerable<LotteryResult> list = null;
 
-            Combination combine = new Combination(numbers.Length);
+            if (keyCount > 1)
+            {
+                int[][] posKeys = null;
+                Combination combine = new Combination(numbers.Length);
 
-            posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == betCount).Select(t => (from s in t select numbers[s]).ToArray()).ToArray();
-            combine = new Combination(betCount);
-            Func<int[], int[][]> getBetPosKeys = p => combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select p[s]).ToArray()).ToArray();
+                posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == betCount).Select(t => (from s in t select numbers[s]).ToArray()).ToArray();
+                combine = new Combination(betCount);
+                Func<int[], int[][]> getBetPosKeys = p => combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select p[s]).ToArray()).ToArray();
 
-            IEnumerable<LotteryResult> list = posKeys.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, getBetPosKeys(x))).ToArray();
+                list = posKeys.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, getBetPosKeys(x))).ToArray();
+            }
+            else
+            {
+                list = numbers.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, new int[][] { new[] { x } })).ToArray();
+            }
             LotteryResult[] ret = InferResults(list);
 
             return ret;
