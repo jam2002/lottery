@@ -19,10 +19,6 @@ namespace Lottery.Test
             Timer timer = new Timer(delegate
             {
                 SimpleBet currentBet = Invoke();
-                foreach (OutputResult r in currentBet.Results)
-                {
-                    Console.WriteLine(r.ToReadString());
-                }
 
                 Action Reset = () =>
                 {
@@ -63,16 +59,17 @@ namespace Lottery.Test
         /// <param name="status"></param>
         static void UpdateInfo(string award, int betIndex, int status)
         {
+            string betTime = DateTime.Now.ToString("HH:mm:ss");
             switch (status)
             {
                 case 1:
-                    Console.WriteLine($"当前计划投注号：{award}，已中奖，中奖轮次：{betIndex}");
+                    Console.WriteLine($"{betTime}，当前计划投注号：{award}，已中奖，中奖轮次：{betIndex}");
                     break;
                 case 2:
-                    Console.WriteLine($"当前计划投注号：{award}，轮次：{betIndex}，计划中...");
+                    Console.WriteLine($"{betTime}，当前计划投注号：{award}，轮次：{betIndex}，计划中...");
                     break;
                 case 3:
-                    Console.WriteLine($"当前计划投注号：{award}，已失败");
+                    Console.WriteLine($"{betTime}，当前计划投注号：{award}，已失败");
                     break;
             }
         }
@@ -84,6 +81,11 @@ namespace Lottery.Test
                     new InputOptions {  Number =50, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = "11" }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
+            foreach (OutputResult r in outputs)
+            {
+                Console.WriteLine(r.ToReadString());
+            }
+
             SimpleBet bet = null;
             if (outputs.Any())
             {

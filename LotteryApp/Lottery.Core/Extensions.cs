@@ -10,7 +10,8 @@ namespace Lottery.Core
         public static string ToReadString(this OutputResult output, bool isHtml = false)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine($"{output.DisplayName} 最后一期分析奖号 {output.LastLotteryNumber}，分析期数：{output.Number}，分析结果：");
+            builder.Append($"{output.DisplayName} 最后一期分析奖号 {output.LastLotteryNumber}，分析期数：{output.Number}，分析结果：");
+            builder.Append("\n");
             if (isHtml)
             {
                 builder.AppendLine("<br/>");
@@ -18,7 +19,8 @@ namespace Lottery.Core
 
             foreach (LotteryResult r in output.Output)
             {
-                builder.AppendLine($"{r.Filter}：最大中奖次数：{ r.HitCount} ，最大间隔：{r.MaxInterval}，最近间隔：{r.LastInterval}，间隔列表：{string.Join(",", r.HitIntervals)}");
+                builder.Append($"{r.Filter}：最大中奖次数：{ r.HitCount} ，最大间隔：{r.MaxInterval}，最近间隔：{r.LastInterval}，间隔列表：{string.Join(",", r.HitIntervals)}");
+                builder.Append("\n");
                 if (isHtml)
                 {
                     builder.AppendLine("<br/>");
