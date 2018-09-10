@@ -19,6 +19,11 @@ namespace Lottery.Test
             Timer timer = new Timer(delegate
             {
                 SimpleBet currentBet = Invoke();
+                foreach (OutputResult r in currentBet.Results)
+                {
+                    Console.WriteLine(r.ToReadString());
+                }
+
                 if (lastBet == null)
                 {
                     lastBet = currentBet;
@@ -67,17 +72,14 @@ namespace Lottery.Test
                     new InputOptions {  Number =50, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = "11" }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
-            foreach (OutputResult r in outputs)
-            {
-                //Console.WriteLine(r.ToReadString());
-            }
             SimpleBet bet = null;
             if (outputs.Any())
             {
                 bet = new SimpleBet
                 {
                     LastLotteryNumber = outputs[0].LastLotteryNumber,
-                    BetAward = outputs[0].Output[0].AnyFilters[0].Values[0].ToString()
+                    BetAward = outputs[0].Output[0].AnyFilters[0].Values[0].ToString(),
+                    Results = outputs
                 };
             }
             return bet;
