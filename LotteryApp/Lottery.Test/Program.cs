@@ -1,5 +1,6 @@
 ﻿using Lottery.Core;
 using Lottery.Core.Algorithm;
+using Lottery.Core.Data;
 using System;
 using System.Linq;
 using System.Threading;
@@ -13,18 +14,53 @@ namespace Lottery.Test
             Console.WriteLine("服务正在初始化.....");
             DateTime start = DateTime.Now;
 
+            SimpleBet lastBet = null;
+            int betIndex = 0;
             Timer timer = new Timer(delegate
             {
-                string ret = Invoke();
-                Console.Title = $"【{ret}】";
-            }, null, start.Second < 20 ? (20 - start.Second) * 1000 : (80 - start.Second) * 1000, 60000 * 4);
+                SimpleBet currentBet = Invoke();
+                if (lastBet == null)
+                {
+                    lastBet = currentBet;
+                }
+
+                bool isHit = currentBet.LastLotteryNumber.Contains(lastBet.BetAward);
+                if (betIndex < 5 && betIndex > 0 && isHit)
+                {
+                    Console.WriteLine($"当前计划投注号：{lastBet.BetAward}，已中奖，中奖轮次：{betIndex}");
+
+                    Console.Title = $"【{currentBet.BetAward}】";
+                    lastBet = currentBet;
+                    betIndex = 0;
+
+                    Console.WriteLine($"当前计划投注号：{currentBet.BetAward}，轮次：{betIndex + 1}，计划中...");
+                }
+                else
+                {
+                    if (betIndex < 4)
+                    {
+                        Console.Title = $"【{lastBet.BetAward}】";
+                        betIndex++;
+                        Console.WriteLine($"当前计划投注号：{lastBet.BetAward}，轮次：{betIndex}，计划中...");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"当前计划投注号：{lastBet.BetAward}，已失败");
+                        Console.Title = $"【{currentBet.BetAward}】";
+                        lastBet = currentBet;
+                        betIndex = 0;
+
+                        Console.WriteLine($"当前计划投注号：{currentBet.BetAward}，轮次：{betIndex + 1}，计划中...");
+                    }
+                }
+            }, null, start.Second < 20 ? (20 - start.Second) * 1000 : (80 - start.Second) * 1000, 60000);
 
             Console.WriteLine("服务已运行");
             Console.ReadLine();
             timer.Dispose();
         }
 
-        static string Invoke()
+        static SimpleBet Invoke()
         {
             InputOptions[] options = new InputOptions[]
             {
@@ -33,9 +69,18 @@ namespace Lottery.Test
             OutputResult[] outputs = Calculator.GetResults(options);
             foreach (OutputResult r in outputs)
             {
-                Console.WriteLine(r.ToReadString());
+                //Console.WriteLine(r.ToReadString());
             }
-            return outputs.Any() ? outputs[0].Output[0].AnyFilters[0].Values[0].ToString() : string.Empty;
+            SimpleBet bet = null;
+            if (outputs.Any())
+            {
+                bet = new SimpleBet
+                {
+                    LastLotteryNumber = outputs[0].LastLotteryNumber,
+                    BetAward = outputs[0].Output[0].AnyFilters[0].Values[0].ToString()
+                };
+            }
+            return bet;
         }
 
         static void Validate()

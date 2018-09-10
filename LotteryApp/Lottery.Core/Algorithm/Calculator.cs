@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using Lottery.Core.Data;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -163,10 +164,17 @@ namespace Lottery.Core.Algorithm
                 }
                 else
                 {
-                    string url = string.Concat("http://tx-ssc.com/api/getData");
-                    HttpClient client = new HttpClient();
-                    string content = client.GetStringAsync(url).Result;
-                    lotteries = JArray.Parse(content).Select(t => new { no = t.Value<string>("issue"), value = string.Join(string.Empty, t.Value<string>("code").Split(',')) }).OrderBy(t => t.no).Select(t => t.value).ToArray();
+                    try
+                    {
+                        string url = string.Concat("http://tx-ssc.com/api/getData");
+                        HttpClient client = new HttpClient();
+                        string content = client.GetStringAsync(url).Result;
+                        lotteries = JArray.Parse(content).Select(t => new { no = t.Value<string>("issue"), value = string.Join(string.Empty, t.Value<string>("code").Split(',')) }).OrderBy(t => t.no).Select(t => t.value).ToArray();
+                    }
+                    catch
+                    {
+                        Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} 获取开奖数据异常！");
+                    }
                 }
 
                 lotteryCache[mainKey] = lotteries;
