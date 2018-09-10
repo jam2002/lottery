@@ -86,8 +86,8 @@ namespace Lottery.Test
                 return;
             }
 
-            bool isHit = p.BetIndex < 5 && currentBet.LastLotteryNumber.Contains(p.LastBet.BetAward);
-            int status = isHit ? 1 : (p.BetIndex == 4 ? 3 : 2);
+            bool isHit = p.BetIndex < 6 && currentBet.LastLotteryNumber.Contains(p.LastBet.BetAward);
+            int status = isHit ? 1 : (p.BetIndex == 5 ? 3 : 2);
             p.Dispatcher(BuildInfo(p.LastBet.BetAward, status == 1 || status == 3 ? p.BetIndex : ++p.BetIndex, status), null);
 
             if (status == 1 || status == 3)
