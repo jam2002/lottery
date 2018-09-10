@@ -15,7 +15,7 @@ namespace Lottery.Test
             DateTime start = DateTime.Now;
 
             SimpleBet lastBet = null;
-            int betIndex = 0;
+            int betIndex = 1;
             Timer timer = new Timer(delegate
             {
                 SimpleBet currentBet = Invoke();
@@ -24,45 +24,57 @@ namespace Lottery.Test
                     Console.WriteLine(r.ToReadString());
                 }
 
-                if (lastBet == null)
+                Action Reset = () =>
                 {
-                    lastBet = currentBet;
-                }
-
-                bool isHit = currentBet.LastLotteryNumber.Contains(lastBet.BetAward);
-                if (betIndex < 5 && betIndex > 0 && isHit)
-                {
-                    Console.WriteLine($"当前计划投注号：{lastBet.BetAward}，已中奖，中奖轮次：{betIndex}");
-
                     Console.Title = $"【{currentBet.BetAward}】";
                     lastBet = currentBet;
-                    betIndex = 0;
+                    betIndex = 1;
 
-                    Console.WriteLine($"当前计划投注号：{currentBet.BetAward}，轮次：{betIndex + 1}，计划中...");
-                }
-                else
+                    UpdateInfo(currentBet.BetAward, betIndex, 2);
+                };
+
+                if (lastBet == null)
                 {
-                    if (betIndex < 4)
-                    {
-                        Console.Title = $"【{lastBet.BetAward}】";
-                        betIndex++;
-                        Console.WriteLine($"当前计划投注号：{lastBet.BetAward}，轮次：{betIndex}，计划中...");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"当前计划投注号：{lastBet.BetAward}，已失败");
-                        Console.Title = $"【{currentBet.BetAward}】";
-                        lastBet = currentBet;
-                        betIndex = 0;
-
-                        Console.WriteLine($"当前计划投注号：{currentBet.BetAward}，轮次：{betIndex + 1}，计划中...");
-                    }
+                    Reset();
+                    return;
                 }
+
+                bool isHit = betIndex < 5 && currentBet.LastLotteryNumber.Contains(lastBet.BetAward);
+                int status = isHit ? 1 : (betIndex == 4 ? 3 : 2);
+                UpdateInfo(lastBet.BetAward, status == 1 || status == 3 ? betIndex : ++betIndex, status);
+
+                if (status == 1 || status == 3)
+                {
+                    Reset();
+                }
+                Console.WriteLine();
             }, null, start.Second < 20 ? (20 - start.Second) * 1000 : (80 - start.Second) * 1000, 60000);
 
             Console.WriteLine("服务已运行");
             Console.ReadLine();
             timer.Dispose();
+        }
+
+        /// <summary>
+        /// 1: 已中奖；2：计划中；3：已失败
+        /// </summary>
+        /// <param name="award"></param>
+        /// <param name="betIndex"></param>
+        /// <param name="status"></param>
+        static void UpdateInfo(string award, int betIndex, int status)
+        {
+            switch (status)
+            {
+                case 1:
+                    Console.WriteLine($"当前计划投注号：{award}，已中奖，中奖轮次：{betIndex}");
+                    break;
+                case 2:
+                    Console.WriteLine($"当前计划投注号：{award}，轮次：{betIndex}，计划中...");
+                    break;
+                case 3:
+                    Console.WriteLine($"当前计划投注号：{award}，已失败");
+                    break;
+            }
         }
 
         static SimpleBet Invoke()
