@@ -387,8 +387,8 @@ namespace Lottery.Core.Algorithm
                                                                                                                         int[] intervals = f.HitIntervals.Where(c => c > 0).ToArray();
                                                                                                                         return intervals.Skip(intervals.Length - 2).All(c => c < 4);
                                                                                                                     }))
-                                                                        .OrderByDescending(t => t.HitCount)
-                                                                        .ThenBy(t => t.MaxInterval)
+                                                                        .OrderBy(t => t.MaxInterval)
+                                                                        .ThenByDescending(t => t.HitCount)
                                                                         .ThenBy(t => t.LastInterval)
                                                                         .Take(3)
                                                                         .ToArray();

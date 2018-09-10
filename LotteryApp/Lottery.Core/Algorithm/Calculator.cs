@@ -18,20 +18,6 @@ namespace Lottery.Core.Algorithm
         LotteryMetaConfig config;
         InputOptions option;
         static Dictionary<string, string[]> lotteryCache = new Dictionary<string, string[]> { };
-        static HttpClient _httpClient;
-
-        static Calculator()
-        {
-            InitClient();
-            _httpClient.SendAsync(new HttpRequestMessage { Method = new HttpMethod("HEAD"), RequestUri = new Uri("http://tx-ssc.com") }).Result.EnsureSuccessStatusCode();
-        }
-
-        static void InitClient()
-        {
-            _httpClient = new HttpClient();
-            _httpClient.Timeout = new TimeSpan(0, 0, 10);
-            _httpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
-        }
 
         /// <summary>
         /// 支持 cq, xj, tj
@@ -178,22 +164,13 @@ namespace Lottery.Core.Algorithm
                 }
                 else
                 {
-                    try
+                    HttpWebRequest webRequest = WebRequest.CreateHttp("http://tx-ssc.com/api/getData");
+                    using (HttpWebResponse response = webRequest.GetResponse() as HttpWebResponse)
                     {
-                        string content = _httpClient.GetStringAsync("http://tx-ssc.com/api/getData").Result;
-                        lotteries = JArray.Parse(content).Select(t => new { no = t.Value<string>("issue"), value = string.Join(string.Empty, t.Value<string>("code").Split(',')) }).OrderBy(t => t.no).Select(t => t.value).ToArray();
-                    }
-                    catch
-                    {
-                        try
+                        using (StreamReader sr = new StreamReader(response.GetResponseStream()))
                         {
-                            InitClient();
-                            string content = _httpClient.GetStringAsync("http://tx-ssc.com/api/getData").Result;
+                            string content = sr.ReadToEnd();
                             lotteries = JArray.Parse(content).Select(t => new { no = t.Value<string>("issue"), value = string.Join(string.Empty, t.Value<string>("code").Split(',')) }).OrderBy(t => t.no).Select(t => t.value).ToArray();
-                        }
-                        catch
-                        {
-                            Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} 获取开奖数据异常！");
                         }
                     }
                 }

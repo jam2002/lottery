@@ -3,6 +3,7 @@ using Lottery.Core.Algorithm;
 using Lottery.Core.Data;
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading;
 
 namespace Lottery.Test
@@ -11,6 +12,9 @@ namespace Lottery.Test
     {
         static void Main(string[] args)
         {
+            var sp = ServicePointManager.FindServicePoint(new Uri("http://tx-ssc.com"));
+            sp.ConnectionLimit = 10;
+
             Console.WriteLine("服务正在初始化.....");
 
             DateTime start = DateTime.Now;
