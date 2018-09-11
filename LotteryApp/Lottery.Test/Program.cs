@@ -111,7 +111,7 @@ namespace Lottery.Test
                 bet = new SimpleBet
                 {
                     LastLotteryNumber = outputs[0].LastLotteryNumber,
-                    BetAward = outputs[0].Output[0].AnyFilters[0].Values,
+                    BetAward = outputs[0].Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray(),
                     Results = outputs
                 };
             }
