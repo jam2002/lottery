@@ -6,9 +6,13 @@ namespace Lottery.Core.Data
     {
         public SimpleBet LastBet { get; set; }
 
+        public string GameArgs { get; set; }
+
         public int BetIndex { get; set; }
 
         public int BetCycle { get; set; }
+
+        public bool ChangeBetNumberOnceHit { get; set; }
 
         public Action<string, string> Dispatcher { get; set; }
     }

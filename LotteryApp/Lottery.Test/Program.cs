@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using System.Configuration;
 
 namespace Lottery.Test
 {
@@ -22,7 +23,9 @@ namespace Lottery.Test
             {
                 LastBet = null,
                 BetIndex = 1,
-                BetCycle = 7,
+                BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
+                ChangeBetNumberOnceHit = bool.Parse(ConfigurationManager.AppSettings["ChangeBetNumberOnceHit"]),
+                GameArgs = ConfigurationManager.AppSettings["GameArgs"],
                 Dispatcher = (t, v) =>
                  {
                      Console.WriteLine(t);
@@ -68,23 +71,38 @@ namespace Lottery.Test
         static void StartBet(object state)
         {
             SimpleBetParameters p = state as SimpleBetParameters;
-            SimpleBet currentBet = Invoke();
+            SimpleBet currentBet = Invoke(p.GameArgs);
             foreach (OutputResult r in currentBet.Results)
             {
                 p.Dispatcher(r.ToReadString(), null);
             }
 
-            Action Reset = () =>
+            Action<int> Reset = (s) =>
             {
                 p.LastBet = currentBet;
                 p.BetIndex = 1;
 
-                p.Dispatcher(BuildInfo(currentBet.BetAward, p.BetIndex, 2), $"【{string.Join(",", currentBet.BetAward)}】");
+                string bet = null;
+                if (s == 3 || p.ChangeBetNumberOnceHit)
+                {
+                    if (p.GameArgs == "11")
+                    {
+                        bet = string.Join(",", currentBet.BetAward);
+                    }
+                    else
+                    {
+                        int number = int.Parse(p.GameArgs[0].ToString());
+                        string[] betNumbers = LotteryGenerator.GetConfig().Numbers.Where(t => t.DistinctNumbers.Intersect(currentBet.BetAward).Count() >= number).Select(t => t.Key).ToArray();
+                        bet = string.Join(",", betNumbers);
+                    }
+                    bet = $"【{bet}】";
+                }
+                p.Dispatcher(BuildInfo(currentBet.BetAward, p.BetIndex, 2), bet);
             };
 
             if (p.LastBet == null)
             {
-                Reset();
+                Reset(3);
                 return;
             }
 
@@ -94,15 +112,15 @@ namespace Lottery.Test
 
             if (status == 1 || status == 3)
             {
-                Reset();
+                Reset(status);
             }
         }
 
-        static SimpleBet Invoke()
+        static SimpleBet Invoke(string gameArgs)
         {
             InputOptions[] options = new InputOptions[]
             {
-                 new InputOptions {  Number =50, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = "34" }
+                 new InputOptions {  Number =50, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = gameArgs }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
             SimpleBet bet = null;
