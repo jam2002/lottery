@@ -8,6 +8,8 @@ namespace Lottery.Core.Data
 
         public int BetIndex { get; set; }
 
+        public int BetCycle { get; set; }
+
         public Action<string, string> Dispatcher { get; set; }
     }
 }

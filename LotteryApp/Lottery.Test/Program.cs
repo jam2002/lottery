@@ -22,14 +22,15 @@ namespace Lottery.Test
             {
                 LastBet = null,
                 BetIndex = 1,
-                Dispatcher =(t,v) =>
-                {
-                    Console.WriteLine(t);
-                    if (v != null)
-                    {
-                        Console.Title = v;
-                    }
-                }
+                BetCycle = 4,
+                Dispatcher = (t, v) =>
+                 {
+                     Console.WriteLine(t);
+                     if (v != null)
+                     {
+                         Console.Title = v;
+                     }
+                 }
             };
             Timer timer = new Timer(StartBet, p, start.Second < 10 ? (10 - start.Second) * 1000 : (70 - start.Second) * 1000, 60000);
 
@@ -86,8 +87,8 @@ namespace Lottery.Test
                 return;
             }
 
-            bool isHit = p.BetIndex < 6 && currentBet.LastLotteryNumber.Contains(p.LastBet.BetAward);
-            int status = isHit ? 1 : (p.BetIndex == 5 ? 3 : 2);
+            bool isHit = p.BetIndex <= p.BetCycle && currentBet.LastLotteryNumber.Contains(p.LastBet.BetAward);
+            int status = isHit ? 1 : (p.BetIndex == p.BetCycle ? 3 : 2);
             p.Dispatcher(BuildInfo(p.LastBet.BetAward, status == 1 || status == 3 ? p.BetIndex : ++p.BetIndex, status), null);
 
             if (status == 1 || status == 3)
