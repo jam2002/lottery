@@ -381,12 +381,12 @@ namespace Lottery.Core.Algorithm
         {
             int max = InputOption.Number > 30 ? 15 : 9;
             LotteryResult[] availableList = list.Where(t => t.MaxInterval < max && t.HitCount >= 5 &&
-                                                                                            t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s =>
-                                                                                                                    {
-                                                                                                                        ReferenceFactor f = FactorDic[FactorTypeEnum.Award][s];
-                                                                                                                        int[] intervals = f.HitIntervals.Where(c => c > 0).ToArray();
-                                                                                                                        return intervals.Skip(intervals.Length - 3).All(c => c < 4);
-                                                                                                                    }))
+                                                                                      (InputOption.Number > 30 ? true : t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s =>
+                                                                                                               {
+                                                                                                                   ReferenceFactor f = FactorDic[FactorTypeEnum.Award][s];
+                                                                                                                   int[] intervals = f.HitIntervals.Where(c => c > 0).ToArray();
+                                                                                                                   return intervals.Skip(intervals.Length - 3).All(c => c < 4);
+                                                                                                               })))
                                                                         .OrderByDescending(t => t.HitCount)
                                                                         .ThenBy(t => t.MaxInterval)
                                                                         .ThenBy(t => t.LastInterval)

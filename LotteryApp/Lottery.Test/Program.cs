@@ -22,7 +22,7 @@ namespace Lottery.Test
             {
                 LastBet = null,
                 BetIndex = 1,
-                BetCycle = 4,
+                BetCycle = 7,
                 Dispatcher = (t, v) =>
                  {
                      Console.WriteLine(t);
@@ -45,20 +45,21 @@ namespace Lottery.Test
         /// <param name="award"></param>
         /// <param name="betIndex"></param>
         /// <param name="status"></param>
-        static string BuildInfo(string award, int betIndex, int status)
+        static string BuildInfo(int[] award, int betIndex, int status)
         {
             string ret = null;
             string betTime = DateTime.Now.ToString("HH:mm:ss");
+            string betAwards = string.Join(",", award);
             switch (status)
             {
                 case 1:
-                    ret = $"{betTime}，当前计划投注号：{award}，已中奖，中奖轮次：{betIndex}";
+                    ret = $"{betTime}，当前计划投注号：{betAwards}，已中奖，中奖轮次：{betIndex}";
                     break;
                 case 2:
-                    ret = $"{betTime}，当前计划投注号：{award}，轮次：{betIndex}，计划中...";
+                    ret = $"{betTime}，当前计划投注号：{betAwards}，轮次：{betIndex}，计划中...";
                     break;
                 case 3:
-                    ret = $"{betTime}，当前计划投注号：{award}，已失败";
+                    ret = $"{betTime}，当前计划投注号：{betAwards}，已失败";
                     break;
             }
             return ret;
@@ -78,7 +79,7 @@ namespace Lottery.Test
                 p.LastBet = currentBet;
                 p.BetIndex = 1;
 
-                p.Dispatcher(BuildInfo(currentBet.BetAward, p.BetIndex, 2), $"【{currentBet.BetAward}】");
+                p.Dispatcher(BuildInfo(currentBet.BetAward, p.BetIndex, 2), $"【{string.Join(",", currentBet.BetAward)}】");
             };
 
             if (p.LastBet == null)
@@ -87,7 +88,7 @@ namespace Lottery.Test
                 return;
             }
 
-            bool isHit = p.BetIndex <= p.BetCycle && currentBet.LastLotteryNumber.Contains(p.LastBet.BetAward);
+            bool isHit = p.BetIndex <= p.BetCycle && p.LastBet.BetAward.All(t => currentBet.LastLotteryNumber.Contains(t.ToString()));
             int status = isHit ? 1 : (p.BetIndex == p.BetCycle ? 3 : 2);
             p.Dispatcher(BuildInfo(p.LastBet.BetAward, status == 1 || status == 3 ? p.BetIndex : ++p.BetIndex, status), null);
 
@@ -101,7 +102,7 @@ namespace Lottery.Test
         {
             InputOptions[] options = new InputOptions[]
             {
-                 new InputOptions {  Number =50, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = "11" }
+                 new InputOptions {  Number =50, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = "34" }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
             SimpleBet bet = null;
@@ -110,7 +111,7 @@ namespace Lottery.Test
                 bet = new SimpleBet
                 {
                     LastLotteryNumber = outputs[0].LastLotteryNumber,
-                    BetAward = outputs[0].Output[0].AnyFilters[0].Values[0].ToString(),
+                    BetAward = outputs[0].Output[0].AnyFilters[0].Values,
                     Results = outputs
                 };
             }
