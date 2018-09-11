@@ -392,13 +392,14 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
             int max = InputOption.Number > 30 ? 15 : 9;
+            int last = InputOption.GameArgs == "11" ? 4 : 7;
             LotteryResult[] availableList = list.Where(t => t.MaxInterval < max && t.HitCount >= 5 &&
-                                                                                      (InputOption.Number > 30 ? true : t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s =>
+                                                                                                            t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s =>
                                                                                                                {
                                                                                                                    ReferenceFactor f = FactorDic[FactorTypeEnum.Award][s];
                                                                                                                    int[] intervals = f.HitIntervals.Where(c => c > 0).ToArray();
-                                                                                                                   return intervals.Skip(intervals.Length - 3).All(c => c < 4);
-                                                                                                               })))
+                                                                                                                   return intervals.Skip(intervals.Length - 3).All(c => c < last);
+                                                                                                               }))
                                                                         .OrderByDescending(t => t.HitCount)
                                                                         .ThenBy(t => t.MaxInterval)
                                                                         .ThenBy(t => t.LastInterval)

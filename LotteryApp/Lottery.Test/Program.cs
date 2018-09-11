@@ -77,27 +77,28 @@ namespace Lottery.Test
                 p.Dispatcher(r.ToReadString(), null);
             }
 
+            int number = int.Parse(p.GameArgs[0].ToString());
+
             Action<int> Reset = (s) =>
             {
-                p.LastBet = currentBet;
                 p.BetIndex = 1;
 
                 string bet = null;
-                if (s == 3 || p.ChangeBetNumberOnceHit)
+                bool changed = s == 3 || p.ChangeBetNumberOnceHit;
+                if (changed)
                 {
+                    p.LastBet = currentBet;
                     if (p.GameArgs == "11")
                     {
-                        bet = string.Join(",", currentBet.BetAward);
+                        bet = $"【{string.Join(",", currentBet.BetAward)}】";
                     }
                     else
                     {
-                        int number = int.Parse(p.GameArgs[0].ToString());
                         string[] betNumbers = LotteryGenerator.GetConfig().Numbers.Where(t => t.DistinctNumbers.Intersect(currentBet.BetAward).Count() >= number).Select(t => t.Key).ToArray();
-                        bet = string.Join(",", betNumbers);
+                        bet = $"【{string.Join(" ", betNumbers)}】";
                     }
-                    bet = $"【{bet}】";
                 }
-                p.Dispatcher(BuildInfo(currentBet.BetAward, p.BetIndex, 2), bet);
+                p.Dispatcher(BuildInfo(p.LastBet.BetAward, p.BetIndex, 2), bet);
             };
 
             if (p.LastBet == null)
@@ -106,7 +107,7 @@ namespace Lottery.Test
                 return;
             }
 
-            bool isHit = p.BetIndex <= p.BetCycle && p.LastBet.BetAward.Where(t => currentBet.LastLotteryNumber.Contains(t.ToString())).Count() >= p.LastBet.BetAward.Length - 1;
+            bool isHit = p.BetIndex <= p.BetCycle && currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).Intersect(p.LastBet.BetAward).Count() >= number;
             int status = isHit ? 1 : (p.BetIndex == p.BetCycle ? 3 : 2);
             p.Dispatcher(BuildInfo(p.LastBet.BetAward, status == 1 || status == 3 ? p.BetIndex : ++p.BetIndex, status), null);
 
