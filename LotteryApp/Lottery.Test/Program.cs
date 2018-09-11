@@ -31,7 +31,7 @@ namespace Lottery.Test
                     }
                 }
             };
-            Timer timer = new Timer(StartBet, p, start.Second < 20 ? (20 - start.Second) * 1000 : (80 - start.Second) * 1000, 60000);
+            Timer timer = new Timer(StartBet, p, start.Second < 10 ? (10 - start.Second) * 1000 : (70 - start.Second) * 1000, 60000);
 
             Console.WriteLine("服务已运行");
             Console.ReadLine();

@@ -385,10 +385,10 @@ namespace Lottery.Core.Algorithm
                                                                                                                     {
                                                                                                                         ReferenceFactor f = FactorDic[FactorTypeEnum.Award][s];
                                                                                                                         int[] intervals = f.HitIntervals.Where(c => c > 0).ToArray();
-                                                                                                                        return intervals.Skip(intervals.Length - 3).All(c => c < 5);
+                                                                                                                        return intervals.Skip(intervals.Length - 3).All(c => c < 4);
                                                                                                                     }))
-                                                                        .OrderBy(t => t.MaxInterval)
-                                                                        .ThenByDescending(t => t.HitCount)
+                                                                        .OrderByDescending(t => t.HitCount)
+                                                                        .ThenBy(t => t.MaxInterval)
                                                                         .ThenBy(t => t.LastInterval)
                                                                         .Take(3)
                                                                         .ToArray();
