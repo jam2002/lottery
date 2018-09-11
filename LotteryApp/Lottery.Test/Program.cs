@@ -88,7 +88,7 @@ namespace Lottery.Test
                 return;
             }
 
-            bool isHit = p.BetIndex <= p.BetCycle && p.LastBet.BetAward.All(t => currentBet.LastLotteryNumber.Contains(t.ToString()));
+            bool isHit = p.BetIndex <= p.BetCycle && p.LastBet.BetAward.Where(t => currentBet.LastLotteryNumber.Contains(t.ToString())).Count() >= p.LastBet.BetAward.Length - 1;
             int status = isHit ? 1 : (p.BetIndex == p.BetCycle ? 3 : 2);
             p.Dispatcher(BuildInfo(p.LastBet.BetAward, status == 1 || status == 3 ? p.BetIndex : ++p.BetIndex, status), null);
 
