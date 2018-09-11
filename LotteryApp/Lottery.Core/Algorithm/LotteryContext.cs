@@ -18,6 +18,22 @@ namespace Lottery.Core.Algorithm
         public int[] DistinctCounts { get; private set; }
         public InputOptions InputOption { get; private set; }
 
+        public static readonly Dictionary<int, int[][]> BetGroups;
+        static LotteryContext()
+        {
+            BetGroups = new Dictionary<int, int[][]> { };
+
+            int[] numbers = Enumerable.Range(0, 10).ToArray();
+            int[] betNumbers = Enumerable.Range(2, 3).ToArray();
+            foreach (int c in betNumbers)
+            {
+                Combination combine = new Combination(numbers.Length);
+                var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == c);
+                int[][] posKeys = tmp.Select(t => (from s in t select numbers[s]).ToArray()).ToArray();
+                BetGroups.Add(c, posKeys);
+            }
+        }
+
         public LotteryContext(LotteryMetaConfig config, LotteryNumber[] numbers, InputOptions input)
         {
             Config = config;
@@ -238,14 +254,10 @@ namespace Lottery.Core.Algorithm
 
             if (keyCount > 1)
             {
-                int[][] posKeys = null;
-                Combination combine = new Combination(numbers.Length);
-
-                posKeys = combine.GetRowsForAllPicks().Where(t => t.Picks == betCount).Select(t => (from s in t select numbers[s]).ToArray()).ToArray();
-                combine = new Combination(betCount);
+                Combination combine = new Combination(betCount);
                 Func<int[], int[][]> getBetPosKeys = p => combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select p[s]).ToArray()).ToArray();
 
-                list = posKeys.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, getBetPosKeys(x))).ToArray();
+                list = BetGroups[betCount].Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, getBetPosKeys(x))).ToArray();
             }
             else
             {
