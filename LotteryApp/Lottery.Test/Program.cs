@@ -35,7 +35,7 @@ namespace Lottery.Test
                          Console.Title = v;
                      }
                  }
-            };
+            }；
             Timer timer = new Timer(StartBet, p, start.Second < 20 ? (20 - start.Second) * 1000 : (80 - start.Second) * 1000, 60000);
 
             Console.WriteLine("服务已运行");
