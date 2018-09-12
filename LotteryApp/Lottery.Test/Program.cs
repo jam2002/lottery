@@ -95,8 +95,9 @@ namespace Lottery.Test
                     }
                     else
                     {
-                        string[] betNumbers = LotteryGenerator.GetConfig().Numbers.Where(t => t.DistinctNumbers.Intersect(currentBet.BetAward).Count() >= number).Select(t => t.Key).ToArray();
-                        bet = $"【{string.Join(" ", betNumbers)}】";
+                        //string[] betNumbers = LotteryGenerator.GetConfig().Numbers.Where(t => t.DistinctNumbers.Intersect(currentBet.BetAward).Count() >= number).Select(t => t.Key).ToArray();
+                        //bet = $"【{string.Join(" ", betNumbers)}】";
+                        bet = $"【{string.Join(",", currentBet.BetAward)}】";
                     }
                 }
                 p.Dispatcher(BuildInfo(p.LastBet.BetAward, p.BetIndex, 2), bet);

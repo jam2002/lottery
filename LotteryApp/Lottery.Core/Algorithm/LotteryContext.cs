@@ -391,7 +391,7 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
-            int max = InputOption.Number > 30 ? 15 : 9;
+            int max = InputOption.Number > 30 ? 20 : 9;
             int last = InputOption.GameArgs == "11" ? 4 : 7;
             LotteryResult[] availableList = list.Where(t => t.MaxInterval < max && t.HitCount >= 5 &&
                                                                                                             t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s =>
