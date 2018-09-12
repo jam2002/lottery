@@ -26,6 +26,7 @@ namespace Lottery.Test
                 BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
                 ChangeBetNumberOnceHit = bool.Parse(ConfigurationManager.AppSettings["ChangeBetNumberOnceHit"]),
                 GameArgs = ConfigurationManager.AppSettings["GameArgs"],
+                GameNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]),
                 Dispatcher = (t, v) =>
                  {
                      Console.WriteLine(t);
@@ -35,7 +36,7 @@ namespace Lottery.Test
                      }
                  }
             };
-            Timer timer = new Timer(StartBet, p, start.Second < 10 ? (10 - start.Second) * 1000 : (70 - start.Second) * 1000, 60000);
+            Timer timer = new Timer(StartBet, p, start.Second < 20 ? (20 - start.Second) * 1000 : (80 - start.Second) * 1000, 60000);
 
             Console.WriteLine("服务已运行");
             Console.ReadLine();
@@ -71,7 +72,7 @@ namespace Lottery.Test
         static void StartBet(object state)
         {
             SimpleBetParameters p = state as SimpleBetParameters;
-            SimpleBet currentBet = Invoke(p.GameArgs);
+            SimpleBet currentBet = Invoke(p.GameNumber, p.GameArgs);
             foreach (OutputResult r in currentBet.Results)
             {
                 p.Dispatcher(r.ToReadString(), null);
@@ -117,11 +118,11 @@ namespace Lottery.Test
             }
         }
 
-        static SimpleBet Invoke(string gameArgs)
+        static SimpleBet Invoke(int gameNumber, string gameArgs)
         {
             InputOptions[] options = new InputOptions[]
             {
-                 new InputOptions {  Number =50, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = gameArgs }
+                 new InputOptions {  Number =gameNumber, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = gameArgs }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
             SimpleBet bet = null;

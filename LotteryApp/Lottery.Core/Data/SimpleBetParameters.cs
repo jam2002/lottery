@@ -8,6 +8,8 @@ namespace Lottery.Core.Data
 
         public string GameArgs { get; set; }
 
+        public int GameNumber { get; set; }
+
         public int BetIndex { get; set; }
 
         public int BetCycle { get; set; }

@@ -165,6 +165,7 @@ namespace Lottery.Core.Algorithm
                 else
                 {
                     HttpWebRequest webRequest = WebRequest.CreateHttp("http://tx-ssc.com/api/getData");
+                    webRequest.Timeout = 5000;
                     using (HttpWebResponse response = webRequest.GetResponse() as HttpWebResponse)
                     {
                         using (StreamReader sr = new StreamReader(response.GetResponseStream()))
