@@ -391,17 +391,18 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
-            LotteryResult[] availableList = list.Where(t => t.HitCount >= 5 && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s =>
-                                                                                                                              {
-                                                                                                                                  ReferenceFactor f = FactorDic[FactorTypeEnum.Award][s];
-                                                                                                                                  int[] intervals = f.HitIntervals.Where(c => c > 0).ToArray();
-                                                                                                                                  return intervals.Skip(intervals.Length - 2).All(c => c < InputOption.BetCycle);
-                                                                                                                              }))
-                                                                        .OrderByDescending(t => t.HitCount)
-                                                                        .ThenBy(t => t.MaxInterval)
-                                                                        .ThenBy(t => t.LastInterval)
-                                                                        .Take(3)
-                                                                        .ToArray();
+            Func<int[], bool> checkIntervals = t =>
+            {
+                int[] intervals = t.Where(c => c > 0).ToArray();
+                return intervals.Skip(intervals.Length - 2).All(c => c < InputOption.BetCycle);
+            };
+
+            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && checkIntervals(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s => checkIntervals(FactorDic[FactorTypeEnum.Award][s].HitIntervals)))
+                                                            .OrderByDescending(t => t.HitCount)
+                                                            .ThenBy(t => t.MaxInterval)
+                                                            .ThenBy(t => t.LastInterval)
+                                                            .Take(3)
+                                                            .ToArray();
             return availableList;
         }
 
