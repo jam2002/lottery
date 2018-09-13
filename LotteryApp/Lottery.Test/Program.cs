@@ -72,7 +72,7 @@ namespace Lottery.Test
         static void StartBet(object state)
         {
             SimpleBetParameters p = state as SimpleBetParameters;
-            SimpleBet currentBet = Invoke(p.GameNumber, p.GameArgs);
+            SimpleBet currentBet = Invoke(p);
             foreach (OutputResult r in currentBet.Results)
             {
                 p.Dispatcher(r.ToReadString(), null);
@@ -119,11 +119,11 @@ namespace Lottery.Test
             }
         }
 
-        static SimpleBet Invoke(int gameNumber, string gameArgs)
+        static SimpleBet Invoke(SimpleBetParameters p)
         {
             InputOptions[] options = new InputOptions[]
             {
-                 new InputOptions {  Number =gameNumber, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = gameArgs }
+                 new InputOptions {  Number =p.GameNumber, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = p.GameArgs, BetCycle = p.BetCycle }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
             SimpleBet bet = null;

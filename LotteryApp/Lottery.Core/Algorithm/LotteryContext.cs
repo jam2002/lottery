@@ -391,15 +391,12 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
-            int max = InputOption.Number > 30 ? 20 : 9;
-            int last = InputOption.GameArgs == "11" ? 4 : 7;
-            LotteryResult[] availableList = list.Where(t => t.MaxInterval < max && t.HitCount >= 5 &&
-                                                                                                            t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s =>
-                                                                                                               {
-                                                                                                                   ReferenceFactor f = FactorDic[FactorTypeEnum.Award][s];
-                                                                                                                   int[] intervals = f.HitIntervals.Where(c => c > 0).ToArray();
-                                                                                                                   return intervals.Skip(intervals.Length - 2).All(c => c <= last);
-                                                                                                               }))
+            LotteryResult[] availableList = list.Where(t => t.HitCount >= 5 && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s =>
+                                                                                                                              {
+                                                                                                                                  ReferenceFactor f = FactorDic[FactorTypeEnum.Award][s];
+                                                                                                                                  int[] intervals = f.HitIntervals.Where(c => c > 0).ToArray();
+                                                                                                                                  return intervals.Skip(intervals.Length - 2).All(c => c < InputOption.BetCycle);
+                                                                                                                              }))
                                                                         .OrderByDescending(t => t.HitCount)
                                                                         .ThenBy(t => t.MaxInterval)
                                                                         .ThenBy(t => t.LastInterval)

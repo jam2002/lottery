@@ -14,6 +14,8 @@
 
         public string GameArgs { get; set; }
 
+        public int BetCycle { get; set; }
+
         public InputOptions()
         {
             RetrieveNumber = 200;
