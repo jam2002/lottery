@@ -116,6 +116,7 @@ namespace Lottery.Test
 
             if (p.LastBet == null)
             {
+                p.LastBet = currentBet;
                 Reset(null);
                 return;
             }
