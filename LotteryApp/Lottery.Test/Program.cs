@@ -94,7 +94,7 @@ namespace Lottery.Test
                 }
 
                 string bet = null;
-                bool changed = p.ContinuousFailureCount == 2 || (p.ChangeBetNumberOnceHit && s == 1);
+                bool changed = s == null || p.ContinuousFailureCount == 2 || (p.ChangeBetNumberOnceHit && s == 1);
                 if (changed)
                 {
                     p.LastBet = currentBet;
@@ -116,7 +116,6 @@ namespace Lottery.Test
 
             if (p.LastBet == null)
             {
-                p.LastBet = currentBet;
                 Reset(null);
                 return;
             }
