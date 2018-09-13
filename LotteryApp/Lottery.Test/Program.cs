@@ -80,15 +80,26 @@ namespace Lottery.Test
 
             int number = int.Parse(p.GameArgs[0].ToString());
 
-            Action<int> Reset = (s) =>
+            Action<int?> Reset = (s) =>
             {
                 p.BetIndex = 1;
 
+                if (s == 1)
+                {
+                    p.ContinuousFailureCount = 0;
+                }
+                if (s == 3)
+                {
+                    p.ContinuousFailureCount++;
+                }
+
                 string bet = null;
-                bool changed = s == 3 || p.ChangeBetNumberOnceHit;
+                bool changed = p.ContinuousFailureCount == 2 || p.ChangeBetNumberOnceHit;
                 if (changed)
                 {
                     p.LastBet = currentBet;
+                    p.ContinuousFailureCount = 0;
+
                     if (p.GameArgs == "11")
                     {
                         bet = $"【{string.Join(",", currentBet.BetAward)}】";
@@ -105,7 +116,7 @@ namespace Lottery.Test
 
             if (p.LastBet == null)
             {
-                Reset(3);
+                Reset(null);
                 return;
             }
 

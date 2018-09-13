@@ -14,6 +14,8 @@ namespace Lottery.Core.Data
 
         public int BetCycle { get; set; }
 
+        public int ContinuousFailureCount { get; set; }
+
         public bool ChangeBetNumberOnceHit { get; set; }
 
         public Action<string, string> Dispatcher { get; set; }

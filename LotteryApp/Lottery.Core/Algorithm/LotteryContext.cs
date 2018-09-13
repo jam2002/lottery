@@ -398,11 +398,12 @@ namespace Lottery.Core.Algorithm
             };
 
             LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && checkIntervals(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s => checkIntervals(FactorDic[FactorTypeEnum.Award][s].HitIntervals)))
-                                                            .OrderByDescending(t => t.HitCount)
-                                                            .ThenBy(t => t.MaxInterval)
-                                                            .ThenBy(t => t.LastInterval)
-                                                            .Take(3)
-                                                            .ToArray();
+                                                                       .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
+                                                                       .ThenByDescending(t => t.HitCount)
+                                                                       .ThenBy(t => t.MaxInterval)
+                                                                       .ThenBy(t => t.LastInterval)
+                                                                       .Take(3)
+                                                                       .ToArray();
             return availableList;
         }
 
