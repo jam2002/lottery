@@ -164,15 +164,13 @@ namespace Lottery.Core.Algorithm
                 }
                 else
                 {
-                    HttpWebRequest webRequest = WebRequest.CreateHttp("http://tx-ssc.com/api/getData");
-                    webRequest.Timeout = 5000;
-                    using (HttpWebResponse response = webRequest.GetResponse() as HttpWebResponse)
+                    try
                     {
-                        using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-                        {
-                            string content = sr.ReadToEnd();
-                            lotteries = JArray.Parse(content).Select(t => new { no = t.Value<string>("issue"), value = string.Join(string.Empty, t.Value<string>("code").Split(',')) }).OrderBy(t => t.no).Select(t => t.value).ToArray();
-                        }
+                        lotteries = GetTsNumbers("http://tx-ssc.com/api/getData");
+                    }
+                    catch
+                    {
+                        lotteries = GetTsNumbers("https://www.pp926.com/api/lastOpenedIssues.php?id=1&issueCount=100");
                     }
                 }
 
@@ -181,6 +179,31 @@ namespace Lottery.Core.Algorithm
                 {
                     lotteryCache[lottery.Key] = lotteries.Select(x => x.Substring(lottery.StartIndex, lottery.Length)).ToArray();
                     lotteries = lotteryCache[lottery.Key];
+                }
+            }
+            return lotteries;
+        }
+
+        private string[] GetTsNumbers(string apiPath)
+        {
+            string[] lotteries;
+            bool isOffical = apiPath.StartsWith("http://tx-ssc.com/api");
+
+            HttpWebRequest webRequest = WebRequest.CreateHttp(apiPath);
+            webRequest.Timeout = 5000;
+            using (HttpWebResponse response = webRequest.GetResponse() as HttpWebResponse)
+            {
+                using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+                {
+                    string content = sr.ReadToEnd();
+                    if (isOffical)
+                    {
+                        lotteries = JArray.Parse(content).Select(t => new { no = t.Value<string>("issue"), value = string.Join(string.Empty, t.Value<string>("code").Split(',')) }).OrderBy(t => t.no).Select(t => t.value).ToArray();
+                    }
+                    else
+                    {
+                        lotteries = JObject.Parse(content).Value<string>("result").Split(',').Select(t => new { no = t.Split('|')[0], value = t.Split('|')[1] }).OrderBy(t => t.no).Select(t => t.value).ToArray();
+                    }
                 }
             }
             return lotteries;
