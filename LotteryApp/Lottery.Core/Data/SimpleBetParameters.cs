@@ -18,6 +18,8 @@ namespace Lottery.Core.Data
 
         public bool ChangeBetNumberOnceHit { get; set; }
 
+        public bool BetRepeat { get; set; }
+
         public Action<string, string> Dispatcher { get; set; }
     }
 }

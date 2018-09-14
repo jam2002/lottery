@@ -397,6 +397,11 @@ namespace Lottery.Core.Algorithm
                 return intervals.Skip(intervals.Length - 2).All(c => c < InputOption.BetCycle);
             };
 
+            if (InputOption.BetRepeat)
+            {
+                LotteryNumber number = LotteryNumbers.Last();
+                list = list.Where(t => t.AnyFilters.SelectMany(q => q.Values).Distinct().Any(c => number.RepeatNumbers.Contains(c)));
+            }
             LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && checkIntervals(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s => checkIntervals(FactorDic[FactorTypeEnum.Award][s].HitIntervals)))
                                                                        .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
                                                                        .ThenByDescending(t => t.HitCount)

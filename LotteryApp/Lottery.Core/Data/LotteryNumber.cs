@@ -38,6 +38,11 @@
         public int[] DistinctNumbers { get; set; }
 
         /// <summary>
+        /// 对子胆码
+        /// </summary>
+        public int[] RepeatNumbers { get; set; }
+
+        /// <summary>
         /// 按升序排列的胆码，比如 125，15
         /// </summary>
         public int SequenceKey { get; set; }

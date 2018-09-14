@@ -16,6 +16,8 @@
 
         public int BetCycle { get; set; }
 
+        public bool BetRepeat { get; set; }
+
         public InputOptions()
         {
             RetrieveNumber = 200;

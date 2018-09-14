@@ -24,6 +24,7 @@ namespace Lottery.Test
                 LastBet = null,
                 BetIndex = 1,
                 BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
+                BetRepeat = bool.Parse(ConfigurationManager.AppSettings["BetRepeat"]),
                 ChangeBetNumberOnceHit = bool.Parse(ConfigurationManager.AppSettings["ChangeBetNumberOnceHit"]),
                 GameArgs = ConfigurationManager.AppSettings["GameArgs"],
                 GameNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]),
@@ -111,6 +112,7 @@ namespace Lottery.Test
                         bet = $"【{string.Join(",", currentBet.BetAward)}】";
                     }
                 }
+
                 p.Dispatcher(BuildInfo(p.LastBet.BetAward, p.BetIndex, 2), bet);
             };
 
@@ -134,7 +136,7 @@ namespace Lottery.Test
         {
             InputOptions[] options = new InputOptions[]
             {
-                 new InputOptions {  Number =p.GameNumber, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = p.GameArgs, BetCycle = p.BetCycle }
+                 new InputOptions {  Number =p.GameNumber, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = p.GameArgs, BetCycle = p.BetCycle, BetRepeat = p.BetRepeat  }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
             SimpleBet bet = null;
