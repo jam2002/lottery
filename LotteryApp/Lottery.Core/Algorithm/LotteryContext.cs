@@ -406,6 +406,7 @@ namespace Lottery.Core.Algorithm
             LotteryNumber last = LotteryNumbers[LotteryNumbers.Length - 1];
             LotteryNumber subLast = LotteryNumbers[LotteryNumbers.Length - 2];
             int[] repeats = last.DistinctNumbers.Intersect(subLast.DistinctNumbers).ToArray();
+            repeats = repeats.Where(t => FactorDic[FactorTypeEnum.Award][t].HitIntervals.Reverse().TakeWhile(c => c == 0).Count() <= 3).ToArray();
 
             Func<LotteryResult, bool> checkRepeat = t =>
             {

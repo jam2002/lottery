@@ -108,8 +108,9 @@ namespace Lottery.Test
                 }
                 else
                 {
+                    int[] betAwards = p.LastBet?.BetAward ?? new int[] { };
                     p.BetIndex = 0;
-                    p.Dispatcher(BuildInfo(p.LastBet.BetAward, p.BetIndex, 4), string.Empty);
+                    p.Dispatcher(BuildInfo(betAwards, p.BetIndex, 4), string.Empty);
                 }
             };
 
