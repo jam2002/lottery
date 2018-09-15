@@ -400,13 +400,12 @@ namespace Lottery.Core.Algorithm
             Func<int[], bool> checkIntervals = t =>
             {
                 int[] intervals = t.Where(c => c > 0).ToArray();
-                return intervals.Skip(intervals.Length - 3).All(c => c < InputOption.BetCycle);
+                return intervals.Skip(intervals.Length - 1).All(c => c < InputOption.BetCycle);
             };
 
             LotteryNumber last = LotteryNumbers[LotteryNumbers.Length - 1];
             LotteryNumber subLast = LotteryNumbers[LotteryNumbers.Length - 2];
             int[] repeats = last.DistinctNumbers.Intersect(subLast.DistinctNumbers).ToArray();
-            repeats = last.RepeatNumbers.Concat(repeats).Distinct().ToArray();
 
             Func<LotteryResult, bool> checkRepeat = t =>
             {
@@ -419,7 +418,7 @@ namespace Lottery.Core.Algorithm
                 return ret;
             };
 
-            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && checkIntervals(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s => checkIntervals(FactorDic[FactorTypeEnum.Award][s].HitIntervals)))
+            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && checkIntervals(t.HitIntervals))
                                                                        .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
                                                                        .ThenByDescending(t => t.HitCount)
                                                                        .ThenBy(t => t.MaxInterval)
