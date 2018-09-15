@@ -400,13 +400,32 @@ namespace Lottery.Core.Algorithm
             Func<int[], bool> checkIntervals = t =>
             {
                 int[] intervals = t.Where(c => c > 0).ToArray();
-                return intervals.Skip(intervals.Length - 2).All(c => c < InputOption.BetCycle);
+                return intervals.Skip(intervals.Length - 2).All(c => c < InputOption.BetCycle - 2);
             };
 
             LotteryNumber last = LotteryNumbers[LotteryNumbers.Length - 1];
             LotteryNumber subLast = LotteryNumbers[LotteryNumbers.Length - 2];
             int[] repeats = last.DistinctNumbers.Intersect(subLast.DistinctNumbers).ToArray();
-            repeats = repeats.Where(t => FactorDic[FactorTypeEnum.Award][t].HitIntervals.Reverse().TakeWhile(c => c == 0).Count() <= 3).ToArray();
+            repeats = repeats.Where(t =>
+            {
+                int[] intervals = FactorDic[FactorTypeEnum.Award][t].HitIntervals.Reverse().ToArray();
+                bool currentLimit = intervals.TakeWhile(c => c == 0).Count() <= 3;
+                List<int> heads = new List<int> { };
+                int head = 0;
+                for (int i = 0; i < intervals.Length; i++)
+                {
+                    if (intervals[i] == 0)
+                    {
+                        heads.Add(head);
+                    }
+                    else
+                    {
+                        head = i;
+                    }
+                }
+                bool allLimit = heads.GroupBy(c => c).Select(c => c.Count()).Where(c => c >= 4).Count() < 2;
+                return currentLimit && allLimit;
+            }).ToArray();
 
             Func<LotteryResult, bool> checkRepeat = t =>
             {
