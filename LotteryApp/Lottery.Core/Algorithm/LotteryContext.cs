@@ -56,7 +56,8 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.Award, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.SequenceKey, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.DynamicPosition, new Dictionary<int, ReferenceFactor> { } },
-                { FactorTypeEnum.FiveStarForm, new Dictionary<int, ReferenceFactor> { } }
+                { FactorTypeEnum.FiveStarForm, new Dictionary<int, ReferenceFactor> { } },
+                { FactorTypeEnum.RepeatNumber, new Dictionary<int, ReferenceFactor> { } }
             };
             MaxSkipDic = new Dictionary<FactorTypeEnum, int>
             {
@@ -128,6 +129,11 @@ namespace Lottery.Core.Algorithm
             foreach (int key in number.DistinctNumbers)
             {
                 BuildFactor(FactorTypeEnum.Award, key, pos);
+            }
+
+            foreach (int key in number.RepeatNumbers)
+            {
+                BuildFactor(FactorTypeEnum.RepeatNumber, key, pos);
             }
         }
 
@@ -394,14 +400,24 @@ namespace Lottery.Core.Algorithm
             Func<int[], bool> checkIntervals = t =>
             {
                 int[] intervals = t.Where(c => c > 0).ToArray();
-                return intervals.Skip(intervals.Length - 2).All(c => c < InputOption.BetCycle);
+                return intervals.Skip(intervals.Length - 3).All(c => c < InputOption.BetCycle);
             };
 
-            if (InputOption.BetRepeat)
+            Func<LotteryResult, int> checkRepeat = t =>
             {
-                LotteryNumber number = LotteryNumbers.Last();
-                list = list.Where(t => t.AnyFilters.SelectMany(q => q.Values).Distinct().Any(c => number.RepeatNumbers.Contains(c)));
-            }
+                int ret = 100;
+                if (InputOption.BetRepeat && InputOption.GameArgs == "11")
+                {
+                    int award = t.AnyFilters.SelectMany(q => q.Values).Distinct().First();
+                    Dictionary<int, ReferenceFactor> factors = FactorDic[FactorTypeEnum.RepeatNumber];
+                    if (factors.ContainsKey(award))
+                    {
+                        ret = factors[award].LastInterval == FactorDic[FactorTypeEnum.Award][award].LastInterval ? factors[award].LastInterval : ret;
+                    }
+                }
+                return ret;
+            };
+
             LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && checkIntervals(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s => checkIntervals(FactorDic[FactorTypeEnum.Award][s].HitIntervals)))
                                                                        .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
                                                                        .ThenByDescending(t => t.HitCount)
@@ -409,6 +425,8 @@ namespace Lottery.Core.Algorithm
                                                                        .ThenBy(t => t.LastInterval)
                                                                        .Take(3)
                                                                        .ToArray();
+
+            availableList = availableList.OrderBy(t => checkRepeat(t)).ToArray();
             return availableList;
         }
 

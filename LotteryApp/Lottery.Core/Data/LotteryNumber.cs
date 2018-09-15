@@ -28,7 +28,7 @@
         public int TwoCount { get; set; }
 
         /// <summary>
-        /// 3或者5个数去重后的数量
+        /// 去重之后胆码的数量
         /// </summary>
         public int Distinct { get; set; }
 

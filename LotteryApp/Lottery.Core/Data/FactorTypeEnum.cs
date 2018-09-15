@@ -46,6 +46,11 @@
         /// <summary>
         /// 万位
         /// </summary>
-        Wan = 17
+        Wan = 17,
+
+        /// <summary>
+        /// 对子胆码
+        /// </summary>
+        RepeatNumber = 18
     }
 }

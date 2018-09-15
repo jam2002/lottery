@@ -22,7 +22,7 @@ namespace Lottery.Test
             SimpleBetParameters p = new SimpleBetParameters
             {
                 LastBet = null,
-                BetIndex = 1,
+                BetIndex = 0,
                 BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
                 BetRepeat = bool.Parse(ConfigurationManager.AppSettings["BetRepeat"]),
                 ChangeBetNumberOnceHit = bool.Parse(ConfigurationManager.AppSettings["ChangeBetNumberOnceHit"]),
@@ -66,6 +66,9 @@ namespace Lottery.Test
                 case 3:
                     ret = $"{betTime}，当前计划投注号：{betAwards}，已失败";
                     break;
+                case 4:
+                    ret = $"{betTime}，当前计划没有投注号，等待中";
+                    break;
             }
             return ret;
         }
@@ -83,23 +86,12 @@ namespace Lottery.Test
 
             Action<int?> Reset = (s) =>
             {
-                p.BetIndex = 1;
-
-                if (s == 1)
-                {
-                    p.ContinuousFailureCount = 0;
-                }
-                if (s == 3)
-                {
-                    p.ContinuousFailureCount++;
-                }
-
                 string bet = null;
-                bool changed = s == null || s == 3 || (p.ChangeBetNumberOnceHit && s == 1);
+                bool changed = currentBet.BetAward.Any() && (p.BetIndex == 0 || s == 3 || (p.ChangeBetNumberOnceHit && s == 1));
                 if (changed)
                 {
+                    p.BetIndex = 1;
                     p.LastBet = currentBet;
-                    p.ContinuousFailureCount = 0;
 
                     if (p.GameArgs == "11")
                     {
@@ -111,20 +103,28 @@ namespace Lottery.Test
                         //bet = $"【{string.Join(" ", betNumbers)}】";
                         bet = $"【{string.Join(",", currentBet.BetAward)}】";
                     }
-                }
 
-                p.Dispatcher(BuildInfo(p.LastBet.BetAward, p.BetIndex, 2), bet);
+                    p.Dispatcher(BuildInfo(p.LastBet.BetAward, p.BetIndex, 2), bet);
+                }
+                else
+                {
+                    p.BetIndex = 0;
+                    p.Dispatcher(BuildInfo(p.LastBet.BetAward, p.BetIndex, 4), string.Empty);
+                }
             };
 
-            if (p.LastBet == null)
+            if (p.BetIndex == 0)
             {
-                Reset(null);
+                Reset(4);
                 return;
             }
 
-            bool isHit = p.BetIndex <= p.BetCycle && currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).Intersect(p.LastBet.BetAward).Count() >= number;
+            bool isHit = p.BetIndex > 0 && p.BetIndex <= p.BetCycle && currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).Intersect(p.LastBet.BetAward).Count() >= number;
             int status = isHit ? 1 : (p.BetIndex == p.BetCycle ? 3 : 2);
-            p.Dispatcher(BuildInfo(p.LastBet.BetAward, status == 1 || status == 3 ? p.BetIndex : ++p.BetIndex, status), null);
+            if (p.BetIndex > 0)
+            {
+                p.Dispatcher(BuildInfo(p.LastBet.BetAward, status == 1 || status == 3 ? p.BetIndex : ++p.BetIndex, status), null);
+            }
 
             if (status == 1 || status == 3)
             {
@@ -145,7 +145,7 @@ namespace Lottery.Test
                 bet = new SimpleBet
                 {
                     LastLotteryNumber = outputs[0].LastLotteryNumber,
-                    BetAward = outputs[0].Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray(),
+                    BetAward = outputs[0].Output.Any() ? outputs[0].Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray() : new int[] { },
                     Results = outputs
                 };
             }
