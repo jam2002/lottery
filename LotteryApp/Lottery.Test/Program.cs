@@ -90,20 +90,17 @@ namespace Lottery.Test
                 bool changed = currentBet.BetAward.Any() && (p.BetIndex == 0 || s == 3 || (p.ChangeBetNumberOnceHit && s == 1));
                 if (changed)
                 {
-                    p.BetIndex = 1;
-                    p.LastBet = currentBet;
-
-                    if (p.GameArgs == "11")
+                    if (p.GameArgs == "22")
                     {
-                        bet = $"【{string.Join(",", currentBet.BetAward)}】";
+                        bet = $"【{string.Join("", currentBet.BetAward)} {string.Join("", currentBet.BetAward.Reverse().ToArray())}】";
                     }
                     else
                     {
-                        //string[] betNumbers = LotteryGenerator.GetConfig().Numbers.Where(t => t.DistinctNumbers.Intersect(currentBet.BetAward).Count() >= number).Select(t => t.Key).ToArray();
-                        //bet = $"【{string.Join(" ", betNumbers)}】";
                         bet = $"【{string.Join(",", currentBet.BetAward)}】";
                     }
 
+                    p.BetIndex = 1;
+                    p.LastBet = currentBet;
                     p.Dispatcher(BuildInfo(p.LastBet.BetAward, p.BetIndex, 2), bet);
                 }
                 else

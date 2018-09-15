@@ -400,7 +400,7 @@ namespace Lottery.Core.Algorithm
             Func<int[], bool> checkIntervals = t =>
             {
                 int[] intervals = t.Where(c => c > 0).ToArray();
-                return intervals.Skip(intervals.Length - 1).All(c => c < InputOption.BetCycle);
+                return intervals.Skip(intervals.Length - 2).All(c => c < InputOption.BetCycle);
             };
 
             LotteryNumber last = LotteryNumbers[LotteryNumbers.Length - 1];
@@ -419,14 +419,14 @@ namespace Lottery.Core.Algorithm
                 return ret;
             };
 
-            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && checkIntervals(t.HitIntervals))
-                                                                       .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
+            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && t.HitCount >= 3 && checkIntervals(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s => checkIntervals(FactorDic[FactorTypeEnum.Award][s].HitIntervals)))
+                                                                        .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
                                                                        .ThenByDescending(t => t.HitCount)
                                                                        .ThenBy(t => t.MaxInterval)
                                                                        .ThenBy(t => t.LastInterval)
                                                                        .ToArray();
 
-            availableList = availableList.Where(t => checkRepeat(t)).ToArray();
+            availableList = availableList.Where(t => checkRepeat(t)).Take(3).ToArray();
             return availableList;
         }
 
