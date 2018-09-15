@@ -403,17 +403,18 @@ namespace Lottery.Core.Algorithm
                 return intervals.Skip(intervals.Length - 3).All(c => c < InputOption.BetCycle);
             };
 
-            Func<LotteryResult, int> checkRepeat = t =>
+            LotteryNumber last = LotteryNumbers[LotteryNumbers.Length - 1];
+            LotteryNumber subLast = LotteryNumbers[LotteryNumbers.Length - 2];
+            int[] repeats = last.DistinctNumbers.Intersect(subLast.DistinctNumbers).ToArray();
+            repeats = last.RepeatNumbers.Concat(repeats).Distinct().ToArray();
+
+            Func<LotteryResult, bool> checkRepeat = t =>
             {
-                int ret = 100;
+                bool ret = true;
                 if (InputOption.BetRepeat && InputOption.GameArgs == "11")
                 {
                     int award = t.AnyFilters.SelectMany(q => q.Values).Distinct().First();
-                    Dictionary<int, ReferenceFactor> factors = FactorDic[FactorTypeEnum.RepeatNumber];
-                    if (factors.ContainsKey(award))
-                    {
-                        ret = factors[award].LastInterval == FactorDic[FactorTypeEnum.Award][award].LastInterval ? factors[award].LastInterval : ret;
-                    }
+                    ret = repeats.Contains(award);
                 }
                 return ret;
             };
@@ -423,10 +424,9 @@ namespace Lottery.Core.Algorithm
                                                                        .ThenByDescending(t => t.HitCount)
                                                                        .ThenBy(t => t.MaxInterval)
                                                                        .ThenBy(t => t.LastInterval)
-                                                                       .Take(3)
                                                                        .ToArray();
 
-            availableList = availableList.OrderBy(t => checkRepeat(t)).ToArray();
+            availableList = availableList.Where(t => checkRepeat(t)).ToArray();
             return availableList;
         }
 
