@@ -446,10 +446,10 @@ namespace Lottery.Core.Algorithm
                                                                        .ThenByDescending(t => t.HitCount)
                                                                        .ThenBy(t => t.MaxInterval)
                                                                        .ThenBy(t => t.LastInterval)
-                                                                       .Take(4)
+                                                                       .Take(3)
                                                                        .ToArray();
 
-            availableList = availableList.Where(t => checkRepeat(t)).ToArray();
+            //availableList = availableList.Where(t => checkRepeat(t)).ToArray();
             return availableList;
         }
 
