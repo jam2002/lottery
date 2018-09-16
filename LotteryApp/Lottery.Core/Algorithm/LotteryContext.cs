@@ -397,10 +397,11 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
+            int maxInterval = InputOption.GameArgs == "11" ? InputOption.BetCycle : 5;
             Func<int[], bool> checkIntervals = t =>
             {
                 int[] intervals = t.Where(c => c > 0).ToArray();
-                return intervals.Skip(intervals.Length - 3).All(c => c <= InputOption.BetCycle - 2);
+                return intervals.Skip(intervals.Length - 2).All(c => c < maxInterval);
             };
 
             LotteryNumber last = LotteryNumbers[LotteryNumbers.Length - 1];
@@ -440,7 +441,7 @@ namespace Lottery.Core.Algorithm
                 return ret;
             };
 
-            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && t.HitCount >= 3 && checkIntervals(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s => checkIntervals(FactorDic[FactorTypeEnum.Award][s].HitIntervals)))
+            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && t.HitCount >= 3 && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(s => checkIntervals(FactorDic[FactorTypeEnum.Award][s].HitIntervals)))
                                                                         .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
                                                                        .ThenByDescending(t => t.HitCount)
                                                                        .ThenBy(t => t.MaxInterval)
