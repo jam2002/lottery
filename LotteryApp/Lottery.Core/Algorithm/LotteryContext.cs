@@ -406,7 +406,7 @@ namespace Lottery.Core.Algorithm
 
             LotteryNumber last = LotteryNumbers[LotteryNumbers.Length - 1];
             LotteryNumber subLast = LotteryNumbers[LotteryNumbers.Length - 2];
-            int[] repeats = last.DistinctNumbers.Intersect(subLast.DistinctNumbers).ToArray();
+            int[] repeats = last.DistinctNumbers.Intersect(subLast.DistinctNumbers).ToArray().Concat(last.RepeatNumbers).Concat(subLast.RepeatNumbers).Distinct().ToArray();
             repeats = repeats.Where(t =>
             {
                 int[] intervals = FactorDic[FactorTypeEnum.Award][t].HitIntervals;
@@ -427,7 +427,7 @@ namespace Lottery.Core.Algorithm
                 bool isNotOverHeat = continuousHits.Where(c => c.count >= 4).Count() < 2;
                 bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
                 bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
-                return isNotOverHeat && isNotCurrentOverHeat && isNotOrphan;
+                return isNotOverHeat && isNotOrphan;
             }).ToArray();
 
             Func<LotteryResult, bool> checkRepeat = t =>
