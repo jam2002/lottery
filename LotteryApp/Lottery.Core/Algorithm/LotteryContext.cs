@@ -400,7 +400,7 @@ namespace Lottery.Core.Algorithm
             Func<int[], bool> checkIntervals = t =>
             {
                 int[] intervals = t.Where(c => c > 0).ToArray();
-                return intervals.Skip(intervals.Length - 2).All(c => c < InputOption.BetCycle - 2);
+                return intervals.Skip(intervals.Length - 3).All(c => c <= InputOption.BetCycle - 2);
             };
 
             LotteryNumber last = LotteryNumbers[LotteryNumbers.Length - 1];
