@@ -120,49 +120,7 @@ namespace Lottery.Core.Algorithm
                         return ret;
                     }).ToArray();
                 }
-                else if (lottery.Source == 2)
-                {
-                    CookieContainer cookieContainer = new CookieContainer();
-
-                    HttpWebRequest request = WebRequest.Create("https://www.caipiaokong.com/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=LW3pV&inajax=1") as HttpWebRequest;
-                    request.Method = "POST";
-                    request.KeepAlive = false;
-                    request.ContentType = "application/x-www-form-urlencoded";
-                    request.CookieContainer = cookieContainer;
-                    request.Referer = "https://www.caipiaokong.com/member.php?mod=logging&action=login";
-                    string postString = "formhash=edac6fc2&referer=https%3A%2F%2Fwww.caipiaokong.com%2Flottery%2Fhljssc.html&username=jam2002&password=240a865854971ac529a947c889352688&questionid=0&answer=&cookietime=2592000";
-                    byte[] postData = Encoding.ASCII.GetBytes(postString);
-                    request.ContentLength = postData.Length;
-                    request.AllowAutoRedirect = false;
-                    Stream outputStream = request.GetRequestStream();
-                    outputStream.Write(postData, 0, postData.Length);
-                    outputStream.Close();
-
-                    HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-                    Stream responseStream = response.GetResponseStream();
-                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                    string srcString = reader.ReadToEnd();
-
-                    string key = mainKey.EndsWith("115") ? (mainKey.Substring(0, mainKey.Length - 3) + "syxw") : mainKey;
-                    request = WebRequest.Create(string.Concat("https://www.caipiaokong.com/lottery/", key, ".html")) as HttpWebRequest;
-                    request.Method = "GET";
-                    request.KeepAlive = false;
-                    request.CookieContainer = cookieContainer;
-
-                    response = request.GetResponse() as HttpWebResponse;
-                    responseStream = response.GetResponseStream();
-                    reader = new StreamReader(responseStream, Encoding.UTF8);
-                    srcString = reader.ReadToEnd();
-
-                    HtmlDocument doc = new HtmlDocument();
-                    doc.LoadHtml(srcString);
-                    HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//*[@id=\"wp\"]/div[3]/div[1]/div[2]/table/tbody/tr");
-                    lotteries = nodes.Skip(1)
-                                                 .Select(x => string.Join(string.Empty, x.Elements("td").Skip(1).Take(5).Select(t => t.FirstChild.InnerText)))
-                                                 .Reverse()
-                                                 .ToArray();
-                }
-                else
+                else if (lottery.Source == 3)
                 {
                     try
                     {

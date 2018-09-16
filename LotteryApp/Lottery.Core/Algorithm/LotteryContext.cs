@@ -425,7 +425,8 @@ namespace Lottery.Core.Algorithm
                 var continuousHits = heads.GroupBy(c => c).Select(c => new { key = c.Key, count = c.Count() }).ToArray();
                 bool isNotOverHeat = continuousHits.Where(c => c.count >= 4).Count() < 2;
                 bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
-                return isNotOverHeat && isNotCurrentOverHeat;
+                bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
+                return isNotOverHeat && isNotCurrentOverHeat && isNotOrphan;
             }).ToArray();
 
             Func<LotteryResult, bool> checkRepeat = t =>
