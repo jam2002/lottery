@@ -401,7 +401,7 @@ namespace Lottery.Core.Algorithm
             Func<int[], bool> checkIntervals = t =>
             {
                 int[] intervals = t.Where(c => c > 0).ToArray();
-                return intervals.Skip(intervals.Length - 2).All(c => c < maxInterval);
+                return intervals.Skip(intervals.Length - 3).All(c => c < maxInterval);
             };
 
             LotteryNumber last = LotteryNumbers[LotteryNumbers.Length - 1];
