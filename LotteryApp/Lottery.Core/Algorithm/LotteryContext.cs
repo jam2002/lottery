@@ -408,23 +408,24 @@ namespace Lottery.Core.Algorithm
             int[] repeats = last.DistinctNumbers.Intersect(subLast.DistinctNumbers).ToArray();
             repeats = repeats.Where(t =>
             {
-                int[] intervals = FactorDic[FactorTypeEnum.Award][t].HitIntervals.Reverse().ToArray();
-                bool currentLimit = intervals.TakeWhile(c => c == 0).Count() <= 3;
+                int[] intervals = FactorDic[FactorTypeEnum.Award][t].HitIntervals;
+                intervals = intervals.Take(intervals.Length - 1).ToArray();
+
+                bool currentLimit = intervals.Reverse().TakeWhile(c => c == 0).Count() <= 3;
                 List<int> heads = new List<int> { };
                 int head = 0;
                 for (int i = 0; i < intervals.Length; i++)
                 {
-                    if (intervals[i] == 0)
-                    {
-                        heads.Add(head);
-                    }
-                    else
+                    if (intervals[i] != 0)
                     {
                         head = i;
                     }
+                    heads.Add(head);
                 }
-                bool allLimit = heads.GroupBy(c => c).Select(c => c.Count()).Where(c => c >= 4).Count() < 2;
-                return currentLimit && allLimit;
+                var continuousHits = heads.GroupBy(c => c).Select(c => new { key = c.Key, count = c.Count() }).ToArray();
+                bool isNotOverHeat = continuousHits.Where(c => c.count >= 4).Count() < 2;
+                bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
+                return isNotOverHeat && isNotCurrentOverHeat;
             }).ToArray();
 
             Func<LotteryResult, bool> checkRepeat = t =>
@@ -443,9 +444,10 @@ namespace Lottery.Core.Algorithm
                                                                        .ThenByDescending(t => t.HitCount)
                                                                        .ThenBy(t => t.MaxInterval)
                                                                        .ThenBy(t => t.LastInterval)
+                                                                       .Take(4)
                                                                        .ToArray();
 
-            availableList = availableList.Where(t => checkRepeat(t)).Take(3).ToArray();
+            availableList = availableList.Where(t => checkRepeat(t)).ToArray();
             return availableList;
         }
 
