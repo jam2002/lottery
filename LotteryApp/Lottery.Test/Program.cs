@@ -92,7 +92,7 @@ namespace Lottery.Test
                 {
                     if (p.GameArgs == "22")
                     {
-                        bet = $"【{string.Join("", currentBet.BetAward)} {string.Join("", currentBet.BetAward.Reverse().ToArray())}】";
+                        bet = $"【{currentBet.BetAward[0]}{currentBet.BetAward[1]} {currentBet.BetAward[0]}{currentBet.BetAward[2]} {currentBet.BetAward[1]}{currentBet.BetAward[0]} {currentBet.BetAward[2]}{currentBet.BetAward[0]}】";
                     }
                     else
                     {
@@ -146,6 +146,29 @@ namespace Lottery.Test
                     awards = outputs.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.SelectMany(q => q.Values)).ToArray()).ToArray();
                     int current = p.LastBet.BetAward[0];
                     awards = awards.Where(c => c != current).Take(1).ToArray();
+                }
+
+                if (p.GameArgs == "22")
+                {
+                    int[][] values = outputs[0].Output.Select(c => c.AnyFilters[0].Values).ToArray();
+                    int[] first = values[0];
+                    bool found = false;
+                    foreach (int[] temp in values.Skip(1))
+                    {
+                        if (temp.Intersect(first).Any())
+                        {
+                            int u = temp.Intersect(first).First();
+                            first = new[] { u }.Concat(first).Concat(temp).Distinct().ToArray();
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        first = first.Concat(values[1]).ToArray();
+                    }
+                    awards = first;
                 }
 
                 bet = new SimpleBet
