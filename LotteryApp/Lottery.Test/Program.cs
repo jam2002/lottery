@@ -116,8 +116,9 @@ namespace Lottery.Test
                 Reset(4);
                 return;
             }
-
-            bool isHit = p.BetIndex > 0 && p.BetIndex <= p.BetCycle && currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).Intersect(p.LastBet.BetAward).Count() >= number;
+            int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
+            int[][] betValues = p.GameArgs == "22" ? new int[][] { new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[1] }, new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[2] } } : new int[][] { p.LastBet.BetAward };
+            bool isHit = p.BetIndex > 0 && p.BetIndex <= p.BetCycle && betValues.Any(t => t.Intersect(current).Count() >= t.Length);
             int status = isHit ? 1 : (p.BetIndex == p.BetCycle ? 3 : 2);
             if (p.BetIndex > 0)
             {
