@@ -138,7 +138,13 @@ namespace Lottery.Test
                  new InputOptions {  Number =p.GameNumber, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = p.GameArgs, BetCycle = p.BetCycle, BetRepeat = p.BetRepeat  }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
-            SimpleBet bet = null;
+            SimpleBet bet = new SimpleBet
+            {
+                LastLotteryNumber = string.Empty,
+                BetAward = new int[] { },
+                Results = outputs
+            };
+
             if (outputs.Any() && outputs[0].Output.Any())
             {
                 int[] awards = outputs[0].Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
@@ -172,12 +178,8 @@ namespace Lottery.Test
                     awards = first;
                 }
 
-                bet = new SimpleBet
-                {
-                    LastLotteryNumber = outputs[0].LastLotteryNumber,
-                    BetAward = awards,
-                    Results = outputs
-                };
+                bet.BetAward = awards;
+                bet.LastLotteryNumber = outputs[0].LastLotteryNumber;
             }
             return bet;
         }
