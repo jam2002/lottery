@@ -157,7 +157,7 @@ namespace Lottery.Test
 
                 if (p.GameArgs == "22")
                 {
-                    int[][] values = outputs[0].Output.Select(c => c.AnyFilters[0].Values).ToArray();
+                    int[][] values = outputs[0].Output.OrderBy(c => c.MaxInterval).ThenByDescending(c => c.HitCount).Select(c => c.AnyFilters[0].Values).ToArray();
                     int[] first = values[0];
                     bool found = false;
                     foreach (int[] temp in values.Skip(1))
