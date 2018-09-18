@@ -25,6 +25,7 @@ namespace Lottery.Test
                 BetIndex = 0,
                 BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
                 BetRepeat = bool.Parse(ConfigurationManager.AppSettings["BetRepeat"]),
+                LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 ChangeBetNumberOnceHit = bool.Parse(ConfigurationManager.AppSettings["ChangeBetNumberOnceHit"]),
                 GameArgs = ConfigurationManager.AppSettings["GameArgs"],
                 GameNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]),
@@ -94,6 +95,10 @@ namespace Lottery.Test
                     {
                         bet = $"【{currentBet.BetAward[0]}{currentBet.BetAward[1]} {currentBet.BetAward[0]}{currentBet.BetAward[2]} {currentBet.BetAward[1]}{currentBet.BetAward[0]} {currentBet.BetAward[2]}{currentBet.BetAward[0]}】";
                     }
+                    else if (p.GameArgs == "23")
+                    {
+                        bet = $"【{string.Join(" ", LotteryGenerator.GetConfig().Numbers.Where(c => c.DistinctNumbers.Intersect(currentBet.BetAward).Count() >= number).Select(c => c.Key).ToArray())}】";
+                    }
                     else
                     {
                         bet = $"【{string.Join(",", currentBet.BetAward)}】";
@@ -118,7 +123,7 @@ namespace Lottery.Test
             }
             int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
             int[][] betValues = p.GameArgs == "22" ? new int[][] { new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[1] }, new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[2] } } : new int[][] { p.LastBet.BetAward };
-            bool isHit = p.BetIndex > 0 && p.BetIndex <= p.BetCycle && betValues.Any(t => t.Intersect(current).Count() >= t.Length);
+            bool isHit = p.BetIndex > 0 && p.BetIndex <= p.BetCycle && betValues.Any(t => t.Intersect(current).Count() >= number);
             int status = isHit ? 1 : (p.BetIndex == p.BetCycle ? 3 : 2);
             if (p.BetIndex > 0)
             {
@@ -135,7 +140,7 @@ namespace Lottery.Test
         {
             InputOptions[] options = new InputOptions[]
             {
-                 new InputOptions {  Number =p.GameNumber, LotteryName = "tsssc", GameName = "dynamic",  GameArgs = p.GameArgs, BetCycle = p.BetCycle, BetRepeat = p.BetRepeat  }
+                 new InputOptions {  Number =p.GameNumber, LotteryName = p.LotteryName, GameName = "dynamic",  GameArgs = p.GameArgs, BetCycle = p.BetCycle, BetRepeat = p.BetRepeat  }
             };
             OutputResult[] outputs = Calculator.GetResults(options);
             SimpleBet bet = new SimpleBet

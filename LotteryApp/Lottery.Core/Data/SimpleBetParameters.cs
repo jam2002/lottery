@@ -6,6 +6,8 @@ namespace Lottery.Core.Data
     {
         public SimpleBet LastBet { get; set; }
 
+        public string LotteryName { get; set; }
+
         public string GameArgs { get; set; }
 
         public int GameNumber { get; set; }
