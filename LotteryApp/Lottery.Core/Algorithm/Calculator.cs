@@ -131,6 +131,10 @@ namespace Lottery.Core.Algorithm
                         lotteries = GetTsNumbers("https://www.pp926.com/api/lastOpenedIssues.php?id=1&issueCount=100");
                     }
                 }
+                else if (lottery.Source == 4)
+                {
+                    lotteries = GetMdNumbers();
+                }
 
                 lotteryCache[mainKey] = lotteries;
                 if (mainKey != lottery.Key)
@@ -164,6 +168,33 @@ namespace Lottery.Core.Algorithm
                     }
                 }
             }
+            return lotteries;
+        }
+
+        private string[] GetMdNumbers()
+        {
+            string[] lotteries;
+            string param = "id=18&pnum=50";
+            byte[] bs = Encoding.UTF8.GetBytes(param);
+            HttpWebRequest webRequest = WebRequest.CreateHttp("http://wdpay.9vcpp.cn/lotterytrend/getsscchart");
+            webRequest.Method = "POST";
+            webRequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+            webRequest.ContentLength = bs.Length;
+            using (Stream reqStream = webRequest.GetRequestStream())
+            {
+                reqStream.Write(bs, 0, bs.Length);
+            }
+
+            webRequest.Timeout = 5000;
+            using (HttpWebResponse response = webRequest.GetResponse() as HttpWebResponse)
+            {
+                using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+                {
+                    string content = sr.ReadToEnd();
+                    lotteries = JObject.Parse(content)["data"].Select(c => ((JArray)c)[1].ToString()).ToArray();
+                }
+            }
+
             return lotteries;
         }
     }

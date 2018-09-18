@@ -27,6 +27,7 @@ namespace Lottery.Core.Algorithm
             {
                 CD.Lottery[] lotteries = new CD.Lottery[]
                 {
+                    new CD.Lottery {  Key = "mdssc", DisplayName="美东两分彩",Source=4, StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true },
                     new CD.Lottery {  Key = "tsssc", DisplayName="腾讯分分彩",Source=3, StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                     new CD.Lottery {  Key = "cqssc", DisplayName="重庆时时彩",Source=1, RegexPattern = @"(?<=\d{11}\s)(\d\s){4}\d", StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                     new CD.Lottery {  Key = "cqssc|front", DisplayName="重庆时时彩 前三",Source=1, RegexPattern = @"(?<=\d{11}\s)(\d\s){4}\d", StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
