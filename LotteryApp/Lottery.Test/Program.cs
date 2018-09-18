@@ -137,11 +137,19 @@ namespace Lottery.Test
 
         static SimpleBet Invoke(SimpleBetParameters p)
         {
+            Calculator.ClearCache();
             InputOptions[] options = new InputOptions[]
             {
-                 new InputOptions {  Number =p.GameNumber, LotteryName = p.LotteryName, GameName = "dynamic",  GameArgs = p.GameArgs, BetCycle = p.BetCycle, BetRepeat = p.BetRepeat  }
+                 new InputOptions { Number =p.GameNumber, LotteryName = p.LotteryName, GameName = "dynamic",  GameArgs = p.GameArgs, BetCycle = p.BetCycle, BetRepeat = p.BetRepeat  }
             };
-            OutputResult[] outputs = Calculator.GetResults(options);
+            if (p.GameArgs == "23")
+            {
+                options = options.Concat(new[]
+                {
+                    new InputOptions {  Number =p.GameNumber, LotteryName = p.LotteryName, GameName = "dynamic",  GameArgs = "22", BetCycle = p.BetCycle, BetRepeat = p.BetRepeat  }
+                }).ToArray();
+            }
+            OutputResult[] outputs = Calculator.GetResults(options, false);
             SimpleBet bet = new SimpleBet
             {
                 LastLotteryNumber = string.Empty,
@@ -180,6 +188,17 @@ namespace Lottery.Test
                         first = first.Concat(values[1]).ToArray();
                     }
                     awards = first;
+                }
+
+                if (p.GameArgs == "23")
+                {
+                    int[][] values = outputs[1].Output.Select(c => c.AnyFilters[0].Values).ToArray();
+                    List<int[]> list = new List<int[]> { };
+                    int[][] heads = values.Where(c => c.Intersect(awards).Count() >= c.Length).ToArray();
+                    if (heads.Length > 1)
+                    {
+                        awards = heads.Take(2).Aggregate((a, b) => a.Concat(b).ToArray()).GroupBy(c => c).OrderByDescending(c => c.Count()).Select(c => c.Key).ToArray();
+                    }
                 }
 
                 bet.BetAward = awards;
