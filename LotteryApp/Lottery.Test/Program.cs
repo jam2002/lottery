@@ -92,14 +92,9 @@ namespace Lottery.Test
                 bool changed = currentBet.BetAward.Any() && (p.BetIndex == 0 || s == 3 || (p.ChangeBetNumberOnceHit && s == 1));
                 if (changed)
                 {
-                    if (p.GameArgs == "22" || p.GameArgs == "23")
+                    if (p.GameArgs == "23")
                     {
                         List<IEnumerable<int>> list = new List<IEnumerable<int>> { new[] { 0, 1 }, new int[] { 0, 2 }, new int[] { 2, 0 }, new int[] { 1, 0 } };
-                        if (p.GameArgs == "23")
-                        {
-                            list.Add(new[] { 1, 2 });
-                            list.Add(new[] { 2, 1 });
-                        }
                         bet = $"【{string.Join(" ", list.Select(c => string.Join(string.Empty, c.Select(q => currentBet.BetAward[q]))))}】";
                     }
                     else
@@ -126,7 +121,7 @@ namespace Lottery.Test
             }
 
             int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
-            int[][] betValues = p.GameArgs == "22" ? new int[][] { new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[1] }, new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[2] } } : new int[][] { p.LastBet.BetAward };
+            int[][] betValues = p.GameArgs == "23" ? new int[][] { new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[1] }, new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[2] } } : new int[][] { p.LastBet.BetAward };
             bool isHit = p.BetIndex > 0 && p.BetIndex <= p.BetCycle && betValues.Any(t => t.Intersect(current).Count() >= number);
             int status = isHit ? 1 : (p.BetIndex == p.BetCycle ? 3 : 2);
             if (p.BetIndex > 0)
