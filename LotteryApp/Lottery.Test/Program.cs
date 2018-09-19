@@ -39,6 +39,7 @@ namespace Lottery.Test
                      }
                  }
             };
+            //StartBet(p);
             Timer timer = new Timer(StartBet, p, start.Second < 15 ? (15 - start.Second) * 1000 : (75 - start.Second) * 1000, int.Parse(ConfigurationManager.AppSettings["GameInterval"]));
 
             Console.WriteLine("服务已运行");
@@ -158,6 +159,12 @@ namespace Lottery.Test
                     awards = outputs.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.SelectMany(q => q.Values)).ToArray()).ToArray();
                     int current = p.LastBet.BetAward[0];
                     awards = awards.Where(c => c != current).Take(1).ToArray();
+                }
+
+                if (p.GameArgs == "22")
+                {
+                    awards = outputs[0].Output.Where(c => c.HitCount >= 7).Select(c => c.AnyFilters.SelectMany(t => t.Values).Distinct().ToArray()).FirstOrDefault();
+                    awards = awards ?? new int[] { };
                 }
 
                 bet.BetAward = awards;

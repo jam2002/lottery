@@ -397,41 +397,47 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
-            int maxInterval = InputOption.GameArgs == "11" ? InputOption.BetCycle : 5;
+            Func<int[], bool> checkInterval = intervals =>
+             {
+                 int[] unconIntervals = intervals.Where(c => c > 0).ToArray();
+                 return unconIntervals.Skip(unconIntervals.Length - 3).All(c => c < InputOption.BetCycle);
+             };
 
             int[] repeats = FactorDic[FactorTypeEnum.Award].Keys.Where(t =>
              {
                  int[] intervals = FactorDic[FactorTypeEnum.Award][t].HitIntervals;
-                 intervals = intervals.Take(intervals.Length - 1).ToArray();
+                 bool isValid = checkInterval(intervals);
 
-                 int[] unconIntervals = intervals.Where(c => c > 0).ToArray();
-                 bool isInsideInterval = unconIntervals.Skip(unconIntervals.Length - 3).All(c => c < maxInterval);
-
-                 bool currentLimit = intervals.Reverse().TakeWhile(c => c == 0).Count() <= 3;
-                 List<int> heads = new List<int> { };
-                 int head = 0;
-                 for (int i = 0; i < intervals.Length; i++)
+                 if (InputOption.GameArgs == "11" && isValid)
                  {
-                     if (intervals[i] != 0)
+                     bool currentLimit = intervals.Reverse().TakeWhile(c => c == 0).Count() <= 3;
+                     List<int> heads = new List<int> { };
+                     int head = 0;
+                     for (int i = 0; i < intervals.Length; i++)
                      {
-                         head = i;
+                         if (intervals[i] != 0)
+                         {
+                             head = i;
+                         }
+                         heads.Add(head);
                      }
-                     heads.Add(head);
+                     var continuousHits = heads.GroupBy(c => c).Select(c => new { key = c.Key, count = c.Count() }).ToArray();
+                     bool isNotOverHeat = continuousHits.Where(c => c.count >= 4).Count() < 3;
+                     bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
+                     bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
+
+                     isValid = isNotCurrentOverHeat && isNotOrphan && isNotOverHeat;
                  }
-                 var continuousHits = heads.GroupBy(c => c).Select(c => new { key = c.Key, count = c.Count() }).ToArray();
-                 bool isNotOverHeat = continuousHits.Where(c => c.count >= 4).Count() < 3;
-                 bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
-                 bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
-                 return (InputOption.GameArgs == "11" ? isNotOverHeat : true) && isInsideInterval;
+                 return isValid;
              }).ToArray();
 
-            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 11 && t.HitCount >= 9 && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(q => repeats.Contains(q)))
-                                                             .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
-                                                             .ThenBy(t => t.MaxInterval)
-                                                             .ThenByDescending(t => t.HitCount)
-                                                             .ThenBy(t => t.LastInterval)
-                                                             .Take(3)
-                                                             .ToArray();
+            LotteryResult[] availableList = list.Where(t => t.HitIntervals != null && checkInterval(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(q => repeats.Contains(q)))
+                                                                         .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
+                                                                         .ThenBy(t => t.MaxInterval)
+                                                                         .ThenByDescending(t => t.HitCount)
+                                                                         .ThenBy(t => t.LastInterval)
+                                                                         .Take(3)
+                                                                         .ToArray();
 
             return availableList;
         }
