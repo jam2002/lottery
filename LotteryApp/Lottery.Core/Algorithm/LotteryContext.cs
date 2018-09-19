@@ -448,13 +448,6 @@ namespace Lottery.Core.Algorithm
                                                                        .ThenBy(t => t.LastInterval)
                                                                        .Take(3)
                                                                        .ToArray();
-            foreach (LotteryResult r in availableList)
-            {
-                foreach (AnyFilter f in r.AnyFilters)
-                {
-                    f.Values = f.Values.OrderByDescending(t => FactorDic[FactorTypeEnum.Award][t].OccurCount).ToArray();
-                }
-            }
 
             //availableList = availableList.Where(t => checkRepeat(t)).ToArray();
             return availableList;
