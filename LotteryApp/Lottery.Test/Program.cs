@@ -92,9 +92,9 @@ namespace Lottery.Test
                 bool changed = currentBet.BetAward.Any() && (p.BetIndex == 0 || s == 3 || (p.ChangeBetNumberOnceHit && s == 1));
                 if (changed)
                 {
-                    if (p.GameArgs == "23")
+                    if (p.GameArgs == "22")
                     {
-                        List<IEnumerable<int>> list = new List<IEnumerable<int>> { new[] { 0, 1 }, new int[] { 0, 2 }, new int[] { 2, 0 }, new int[] { 1, 0 } };
+                        List<IEnumerable<int>> list = new List<IEnumerable<int>> { new[] { 0, 1 }, new int[] { 1, 0 }, new int[] { 2, 3 }, new int[] { 3, 2 } };
                         bet = $"【{string.Join(" ", list.Select(c => string.Join(string.Empty, c.Select(q => currentBet.BetAward[q]))))}】";
                     }
                     else
@@ -121,7 +121,7 @@ namespace Lottery.Test
             }
 
             int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
-            int[][] betValues = p.GameArgs == "23" ? new int[][] { new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[1] }, new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[2] } } : new int[][] { p.LastBet.BetAward };
+            int[][] betValues = p.GameArgs == "22" ? new int[][] { new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[1] }, new int[] { p.LastBet.BetAward[2], p.LastBet.BetAward[3] } } : new int[][] { p.LastBet.BetAward };
             bool isHit = p.BetIndex > 0 && p.BetIndex <= p.BetCycle && betValues.Any(t => t.Intersect(current).Count() >= number);
             int status = isHit ? 1 : (p.BetIndex == p.BetCycle ? 3 : 2);
             if (p.BetIndex > 0)
@@ -142,13 +142,6 @@ namespace Lottery.Test
             {
                  new InputOptions { Number =p.GameNumber, LotteryName = p.LotteryName, GameName = "dynamic",  GameArgs = p.GameArgs, BetCycle = p.BetCycle, BetRepeat = p.BetRepeat  }
             };
-            if (p.GameArgs == "23")
-            {
-                options = options.Concat(new[]
-                {
-                    new InputOptions {  Number =p.GameNumber, LotteryName = p.LotteryName, GameName = "dynamic",  GameArgs = "22", BetCycle = p.BetCycle, BetRepeat = p.BetRepeat  }
-                }).ToArray();
-            }
             OutputResult[] outputs = Calculator.GetResults(options, false);
             SimpleBet bet = new SimpleBet
             {
@@ -170,35 +163,7 @@ namespace Lottery.Test
                 if (p.GameArgs == "22")
                 {
                     int[][] values = outputs[0].Output.Select(c => c.AnyFilters[0].Values).ToArray();
-                    int[] first = values[0];
-                    bool found = false;
-                    foreach (int[] temp in values.Skip(1))
-                    {
-                        if (temp.Intersect(first).Any())
-                        {
-                            int u = temp.Intersect(first).First();
-                            first = new[] { u }.Concat(first).Concat(temp).Distinct().ToArray();
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        first = first.Concat(values[1]).ToArray();
-                    }
-                    awards = first;
-                }
-
-                if (p.GameArgs == "23")
-                {
-                    int[][] values = outputs[1].Output.Select(c => c.AnyFilters[0].Values).ToArray();
-                    List<int[]> list = new List<int[]> { };
-                    int[][] heads = values.Where(c => c.Intersect(awards).Count() >= c.Length).ToArray();
-                    if (heads.Length > 1)
-                    {
-                        awards = heads.Take(2).Aggregate((a, b) => a.Concat(b).ToArray()).GroupBy(c => c).OrderByDescending(c => c.Count()).Select(c => c.Key).ToArray();
-                    }
+                    awards = values.Take(2).Aggregate((a, b) => a.Concat(b).ToArray());
                 }
 
                 bet.BetAward = awards;
