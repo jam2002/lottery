@@ -422,10 +422,10 @@ namespace Lottery.Core.Algorithm
                  bool isNotOverHeat = continuousHits.Where(c => c.count >= 4).Count() < 3;
                  bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
                  bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
-                 return isNotOverHeat && isInsideInterval;
+                 return (InputOption.GameArgs == "11" ? isNotOverHeat : true) && isInsideInterval;
              }).ToArray();
 
-            LotteryResult[] availableList = list.Where(t => t.AnyFilters.SelectMany(q => q.Values).Distinct().All(q => repeats.Contains(q)))
+            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && t.HitCount >= 5 && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(q => repeats.Contains(q)))
                                                              .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
                                                              .ThenBy(t => t.MaxInterval)
                                                              .ThenByDescending(t => t.HitCount)
