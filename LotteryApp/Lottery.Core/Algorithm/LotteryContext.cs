@@ -425,7 +425,7 @@ namespace Lottery.Core.Algorithm
                  return (InputOption.GameArgs == "11" ? isNotOverHeat : true) && isInsideInterval;
              }).ToArray();
 
-            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 15 && t.HitCount >= 5 && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(q => repeats.Contains(q)))
+            LotteryResult[] availableList = list.Where(t => t.MaxInterval < 11 && t.HitCount >= 9 && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(q => repeats.Contains(q)))
                                                              .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
                                                              .ThenBy(t => t.MaxInterval)
                                                              .ThenByDescending(t => t.HitCount)
