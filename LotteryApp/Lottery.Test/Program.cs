@@ -94,7 +94,7 @@ namespace Lottery.Test
                 {
                     if (p.GameArgs == "22")
                     {
-                        List<IEnumerable<int>> list = new List<IEnumerable<int>> { new[] { 0, 1 }, new int[] { 1, 0 }, new int[] { 2, 3 }, new int[] { 3, 2 } };
+                        List<IEnumerable<int>> list = new List<IEnumerable<int>> { new[] { 0, 1 }, new int[] { 1, 0 } };
                         bet = $"【{string.Join(" ", list.Select(c => string.Join(string.Empty, c.Select(q => currentBet.BetAward[q]))))}】";
                     }
                     else
@@ -121,7 +121,7 @@ namespace Lottery.Test
             }
 
             int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
-            int[][] betValues = p.GameArgs == "22" ? new int[][] { new int[] { p.LastBet.BetAward[0], p.LastBet.BetAward[1] }, new int[] { p.LastBet.BetAward[2], p.LastBet.BetAward[3] } } : new int[][] { p.LastBet.BetAward };
+            int[][] betValues = new int[][] { p.LastBet.BetAward };
             bool isHit = p.BetIndex > 0 && p.BetIndex <= p.BetCycle && betValues.Any(t => t.Intersect(current).Count() >= number);
             int status = isHit ? 1 : (p.BetIndex == p.BetCycle ? 3 : 2);
             if (p.BetIndex > 0)
@@ -158,12 +158,6 @@ namespace Lottery.Test
                     awards = outputs.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.SelectMany(q => q.Values)).ToArray()).ToArray();
                     int current = p.LastBet.BetAward[0];
                     awards = awards.Where(c => c != current).Take(1).ToArray();
-                }
-
-                if (p.GameArgs == "22")
-                {
-                    int[][] values = outputs[0].Output.Select(c => c.AnyFilters[0].Values).ToArray();
-                    awards = values.Take(2).Aggregate((a, b) => a.Concat(b).ToArray());
                 }
 
                 bet.BetAward = awards;
