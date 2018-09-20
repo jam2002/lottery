@@ -399,6 +399,10 @@ namespace Lottery.Core.Algorithm
         {
             Func<int[], bool> checkInterval = intervals =>
              {
+                 if (InputOption.GameArgs == "13")
+                 {
+                     return true;
+                 }
                  int[] unconIntervals = intervals.Where(c => c > 0).ToArray();
                  return unconIntervals.Skip(unconIntervals.Length - 3).All(c => c < InputOption.BetCycle);
              };
@@ -407,34 +411,35 @@ namespace Lottery.Core.Algorithm
                            on new { p.Key, p.Value.LastInterval } equals new { q.Key, q.Value.LastInterval }
                         orderby p.Value.LastInterval descending
                         select p.Key;
-            int[] horizontalRepeats = query.ToArray();
-            int[] vertialRepeats = LotteryNumbers[LotteryNumbers.Length - 1].DistinctNumbers.Intersect(LotteryNumbers[LotteryNumbers.Length - 2].DistinctNumbers).ToArray();
-            int[] pairs = horizontalRepeats.Concat(vertialRepeats).Distinct().ToArray();
+            int[] pairs = query.ToArray();
 
             int[] repeats = FactorDic[FactorTypeEnum.Award].Keys.Where(t =>
              {
-                 int[] intervals = FactorDic[FactorTypeEnum.Award][t].HitIntervals;
-                 bool isValid = checkInterval(intervals);
-
-                 if (InputOption.GameArgs == "11" && isValid)
+                 bool isValid = false;
+                 if (InputOption.GameArgs == "13")
                  {
-                     bool currentLimit = intervals.Reverse().TakeWhile(c => c == 0).Count() <= 3;
-                     List<int> heads = new List<int> { };
-                     int head = 0;
-                     for (int i = 0; i < intervals.Length; i++)
-                     {
-                         if (intervals[i] != 0)
-                         {
-                             head = i;
-                         }
-                         heads.Add(head);
-                     }
-                     var continuousHits = heads.GroupBy(c => c).Select(c => new { key = c.Key, count = c.Count() }).ToArray();
-                     bool isNotOverHeat = continuousHits.Where(c => c.count >= 4).Count() < 3;
-                     bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
-                     bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
+                     //bool currentLimit = intervals.Reverse().TakeWhile(c => c == 0).Count() <= 3;
+                     //List<int> heads = new List<int> { };
+                     //int head = 0;
+                     //for (int i = 0; i < intervals.Length; i++)
+                     //{
+                     //    if (intervals[i] != 0)
+                     //    {
+                     //        head = i;
+                     //    }
+                     //    heads.Add(head);
+                     //}
+                     //var continuousHits = heads.GroupBy(c => c).Select(c => new { key = c.Key, count = c.Count() }).ToArray();
+                     //bool isNotOverHeat = continuousHits.Where(c => c.count >= 4).Count() < 3;
+                     //bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
+                     //bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
 
-                     isValid = isNotOrphan && pairs.Contains(t);
+                     isValid = pairs.Contains(t);
+                 }
+                 else
+                 {
+                     int[] intervals = FactorDic[FactorTypeEnum.Award][t].HitIntervals;
+                     isValid = checkInterval(intervals);
                  }
                  return isValid;
              }).ToArray();
@@ -451,7 +456,7 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult GetFilteredResult(int[] spans, OddEnum[] odds, SizeEnum[] sizes, PrimeEnum[] primes, int[] sums, int[] hundreds, int[] decades, int[] units, int[] maxes, int[] mines, int[] distincts, bool? excludeThree, int[] sequenceKeys = null, int[][] dynamicPosKeys = null, int[] fiveStarForms = null, AnyFilter[] anyFilters = null)
         {
-            IEnumerable<LotteryNumber> lotteryNumbers= CurrentLottery.Length == 3 ? Config.Numbers : LotteryNumbers;
+            IEnumerable<LotteryNumber> lotteryNumbers= LotteryNumbers;
 
             IEnumerable<LotteryNumber> query = lotteryNumbers;
 
