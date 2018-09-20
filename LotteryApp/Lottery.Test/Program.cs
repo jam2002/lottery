@@ -154,6 +154,11 @@ namespace Lottery.Test
             if (outputs.Any() && outputs[0].Output.Any())
             {
                 int[] awards = outputs[0].Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
+                if (p.GameArgs == "22")
+                {
+                    awards = outputs[0].Output.Where(c => c.WinCount >= 8).FirstOrDefault()?.AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
+                    awards = awards ?? new int[] { };
+                }
 
                 bet.BetAward = awards;
                 bet.LastLotteryNumber = outputs[0].LastLotteryNumber;

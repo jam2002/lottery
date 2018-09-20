@@ -440,11 +440,11 @@ namespace Lottery.Core.Algorithm
              }).ToArray();
 
             LotteryResult[] availableList = list.Where(t => t.HitIntervals != null && checkInterval(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(q => repeats.Contains(q)))
-                                                             .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
-                                                             .ThenByDescending(t => t.LastInterval)
-                                                             .ThenByDescending(t => t.HitCount)
-                                                             .Take(3)
-                                                             .ToArray();
+                                                                        .OrderByDescending(t => t.WinCount)
+                                                                        .ThenByDescending(t => t.LastInterval)
+                                                                        .ThenBy(t => t.MaxInterval)
+                                                                        .Take(3)
+                                                                        .ToArray();
 
             return availableList;
         }
@@ -558,29 +558,7 @@ namespace Lottery.Core.Algorithm
                 ret.MaxInterval = intervals.Max();
                 ret.LastInterval = intervals[intervals.Length - 1];
                 ret.HitIntervals = intervals;
-
-                List<Tuple<int, int>> tuples = new List<Tuple<int, int>> { };
-                for (int i = 0; i < intervals.Length; i++)
-                {
-                    int key = intervals[i];
-                    if (key == 0)
-                    {
-                        int j = i;
-                        while (j >= 0 && intervals[j] == 0)
-                        {
-                            j--;
-                        }
-                        tuples.Add(new Tuple<int, int>(j, i - j + 1));
-                    }
-                }
-                var continuousArray = tuples.GroupBy(x => x.Item1).Select(x => new { Start = x.Key, MaxCount = x.Select(t => t.Item2).Max() }).ToArray();
-                ret.MaxContinuous = continuousArray.Any() ? continuousArray.Max(x => x.MaxCount) : 0;
-                ret.LastContinuous = continuousArray.Any() ? continuousArray.Last().MaxCount : 0;
-            }
-            else
-            {
-                ret.MaxInterval = ret.LastInterval = LotteryNumbers.Length;
-                ret.MaxContinuous = ret.LastContinuous = 0;
+                ret.WinCount = intervals.Where(q => q < InputOption.BetCycle).Count();
             }
 
             Dictionary<string, object> filterDic = new Dictionary<string, object>
