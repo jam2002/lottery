@@ -154,12 +154,6 @@ namespace Lottery.Test
             if (outputs.Any() && outputs[0].Output.Any())
             {
                 int[] awards = outputs[0].Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
-                if (p.LastBet != null && p.GameArgs == "11")
-                {
-                    awards = outputs.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.SelectMany(q => q.Values)).ToArray()).ToArray();
-                    int current = p.LastBet.BetAward[0];
-                    awards = awards.Where(c => c != current).Take(1).ToArray();
-                }
 
                 if (p.GameArgs == "22")
                 {
