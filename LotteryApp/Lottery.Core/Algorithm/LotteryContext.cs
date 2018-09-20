@@ -399,16 +399,23 @@ namespace Lottery.Core.Algorithm
         {
             Func<int[], bool> checkInterval = intervals =>
              {
+                 if (InputOption.GameArgs == "11")
+                 {
+                     return true;
+                 }
                  int[] unconIntervals = intervals.Where(c => c > 0).ToArray();
                  return unconIntervals.Skip(unconIntervals.Length - 3).All(c => c < InputOption.BetCycle);
              };
+
+            int minLast = FactorDic[FactorTypeEnum.RepeatNumber].Select(c => c.Value.LastInterval).Min();
+            int[] pairs = FactorDic[FactorTypeEnum.RepeatNumber].Where(c => c.Value.LastInterval == minLast).Select(c => c.Key).ToArray();
 
             int[] repeats = FactorDic[FactorTypeEnum.Award].Keys.Where(t =>
              {
                  int[] intervals = FactorDic[FactorTypeEnum.Award][t].HitIntervals;
                  bool isValid = checkInterval(intervals);
 
-                 if (InputOption.GameArgs == "11" && isValid)
+                 if (InputOption.GameArgs == "11")
                  {
                      bool currentLimit = intervals.Reverse().TakeWhile(c => c == 0).Count() <= 3;
                      List<int> heads = new List<int> { };
@@ -426,7 +433,7 @@ namespace Lottery.Core.Algorithm
                      bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
                      bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
 
-                     isValid = isNotCurrentOverHeat && isNotOrphan && isNotOverHeat;
+                     isValid = pairs.Contains(t);
                  }
                  return isValid;
              }).ToArray();
