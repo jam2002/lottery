@@ -155,12 +155,6 @@ namespace Lottery.Test
             {
                 int[] awards = outputs[0].Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
 
-                if (p.GameArgs == "22")
-                {
-                    awards = outputs[0].Output.Where(c => c.HitCount >= 7).Select(c => c.AnyFilters.SelectMany(t => t.Values).Distinct().ToArray()).FirstOrDefault();
-                    awards = awards ?? new int[] { };
-                }
-
                 bet.BetAward = awards;
                 bet.LastLotteryNumber = outputs[0].LastLotteryNumber;
             }

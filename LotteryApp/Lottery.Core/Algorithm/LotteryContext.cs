@@ -440,12 +440,11 @@ namespace Lottery.Core.Algorithm
              }).ToArray();
 
             LotteryResult[] availableList = list.Where(t => t.HitIntervals != null && checkInterval(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(q => repeats.Contains(q)))
-                                                                         .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
-                                                                         .ThenBy(t => t.MaxInterval)
-                                                                         .ThenByDescending(t => t.HitCount)
-                                                                         .ThenBy(t => t.LastInterval)
-                                                                         .Take(3)
-                                                                         .ToArray();
+                                                             .OrderByDescending(t => t.HitIntervals.Where(q => q < InputOption.BetCycle).Count())
+                                                             .ThenByDescending(t => t.LastInterval)
+                                                             .ThenByDescending(t => t.HitCount)
+                                                             .Take(3)
+                                                             .ToArray();
 
             return availableList;
         }
