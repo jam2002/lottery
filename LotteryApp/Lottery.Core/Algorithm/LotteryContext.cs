@@ -405,6 +405,7 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[FactorTypeEnum.RepeatNumber]
                         join q in FactorDic[FactorTypeEnum.Award]
                            on new { p.Key, p.Value.LastInterval } equals new { q.Key, q.Value.LastInterval }
+                        where p.Value.LastInterval >= 2
                         orderby p.Value.LastInterval descending
                         select p.Key;
             int[] horizontalRepeats = query.ToArray();
