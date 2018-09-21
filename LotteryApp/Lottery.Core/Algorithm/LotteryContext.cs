@@ -410,7 +410,7 @@ namespace Lottery.Core.Algorithm
                         join q in FactorDic[FactorTypeEnum.Award]
                            on new { p.Key, p.Value.LastInterval } equals new { q.Key, q.Value.LastInterval }
                         where p.Value.LastInterval >= 2
-                        orderby p.Value.LastInterval descending
+                        orderby p.Value.LastInterval
                         select p.Key;
             int[] pairs = query.ToArray();
 
