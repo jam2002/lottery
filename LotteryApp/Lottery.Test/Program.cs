@@ -98,6 +98,12 @@ namespace Lottery.Test
                         List<IEnumerable<int>> list = new List<IEnumerable<int>> { new[] { 0, 1 }, new int[] { 1, 0 } };
                         bet = $"【{string.Join(" ", list.Select(c => string.Join(string.Empty, c.Select(q => currentBet.BetAward[q]))))}】";
                     }
+                    else if (p.GameArgs == "13")
+                    {
+                        int award = currentBet.BetAward[0];
+                        string[] values = Enumerable.Range(0, 10).SelectMany(c => new string[] { c.ToString() + award.ToString(), award.ToString() + c.ToString() }).Distinct().ToArray();
+                        bet = $"【{string.Join(" ", values)}】";
+                    }
                     else
                     {
                         bet = $"【{string.Join(",", currentBet.BetAward)}】";
@@ -146,7 +152,7 @@ namespace Lottery.Test
             OutputResult[] outputs = Calculator.GetResults(options, false);
             SimpleBet bet = new SimpleBet
             {
-                LastLotteryNumber = string.Empty,
+                LastLotteryNumber = outputs.Any() ? outputs[0].LastLotteryNumber : string.Empty,
                 BetAward = new int[] { },
                 Results = outputs
             };
@@ -154,9 +160,13 @@ namespace Lottery.Test
             if (outputs.Any() && outputs[0].Output.Any())
             {
                 int[] awards = outputs[0].Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
+                if (p.GameArgs == "22")
+                {
+                    awards = outputs[0].Output.Where(c => c.WinCount >= 8).FirstOrDefault()?.AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
+                    awards = awards ?? new int[] { };
+                }
 
                 bet.BetAward = awards;
-                bet.LastLotteryNumber = outputs[0].LastLotteryNumber;
             }
             return bet;
         }
