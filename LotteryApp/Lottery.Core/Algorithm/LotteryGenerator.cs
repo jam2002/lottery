@@ -108,7 +108,11 @@ namespace Lottery.Core.Algorithm
             number.TwoCount = remainders.Where(t => t == 2).Count();
             number.DistinctNumbers = array.Distinct().OrderBy(t => t).ToArray();
             number.Distinct = number.DistinctNumbers.Length;
-            number.RepeatNumbers = array.GroupBy(t => t).Where(t => t.Count() > 1).Select(t => t.Key).OrderBy(t => t).ToArray();
+            number.RepeatNumbers = new int[] {
+                array[0] == array[1] ? array[0]: -1,
+                array[0] == array[2] ? array[1]: -1,
+                array[1] == array[2] ? array[1]: -1
+            }.Where(c => c >= 0).Distinct().ToArray();
             number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));
             number.BetKeyPairs = new int[][] { array };
 

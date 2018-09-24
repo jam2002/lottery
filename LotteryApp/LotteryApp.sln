@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lottery.Test", "Lottery.Test\Lottery.Test.csproj", "{ACE20854-DD25-4168-A156-D968575D70B8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lottery.Core", "Lottery.Core\Lottery.Core.csproj", "{913E7610-E9FC-40A6-AC93-7235198528A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lottery.Web", "Lottery.Web\Lottery.Web.csproj", "{61168D39-D3CA-4FC2-9B40-41779B17C0FD}"
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ACE20854-DD25-4168-A156-D968575D70B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACE20854-DD25-4168-A156-D968575D70B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACE20854-DD25-4168-A156-D968575D70B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACE20854-DD25-4168-A156-D968575D70B8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{913E7610-E9FC-40A6-AC93-7235198528A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{913E7610-E9FC-40A6-AC93-7235198528A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{913E7610-E9FC-40A6-AC93-7235198528A0}.Release|Any CPU.ActiveCfg = Release|Any CPU

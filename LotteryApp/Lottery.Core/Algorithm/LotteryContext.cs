@@ -409,10 +409,10 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[FactorTypeEnum.RepeatNumber]
                         join q in FactorDic[FactorTypeEnum.Award]
                            on new { p.Key, p.Value.LastInterval } equals new { q.Key, q.Value.LastInterval }
-                        where p.Value.LastInterval >= 2
                         orderby p.Value.LastInterval
                         select p.Key;
             int[] pairs = query.ToArray();
+            int[] warms = FactorDic[FactorTypeEnum.Award].Where(c => c.Value.LastInterval <= 5).OrderByDescending(c => c.Value.OccurCount).Take(7).Select(c => c.Key).ToArray();
 
             int[] repeats = FactorDic[FactorTypeEnum.Award].Keys.Where(t =>
              {
@@ -435,7 +435,7 @@ namespace Lottery.Core.Algorithm
                      //bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
                      //bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
 
-                     isValid = pairs.Contains(t);
+                     isValid = pairs.Contains(t) && warms.Contains(t);
                  }
                  else
                  {

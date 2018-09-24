@@ -45,6 +45,7 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -67,6 +68,7 @@
     <Compile Include="Algorithm\LotteryContext.cs" />
     <Compile Include="Algorithm\LotteryGenerator.cs" />
     <Compile Include="Algorithm\OutputResult.cs" />
+    <Compile Include="Plan\PlanInvoker.cs" />
     <Compile Include="Algorithm\ValidationResult.cs" />
     <Compile Include="Algorithm\Validator.cs" />
     <Compile Include="Data\AnyFilter.cs" />
@@ -81,9 +83,13 @@
     <Compile Include="Data\PrimeEnum.cs" />
     <Compile Include="Data\ReferenceFactor.cs" />
     <Compile Include="Data\SimpleBet.cs" />
-    <Compile Include="Data\SimpleBetParameters.cs" />
     <Compile Include="Data\SizeEnum.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Plan\Dynamic.cs" />
+    <Compile Include="Plan\Dynamic15.cs" />
+    <Compile Include="Plan\Dynamic22.cs" />
+    <Compile Include="Plan\Dynamic13.cs" />
+    <Compile Include="Plan\IPlan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

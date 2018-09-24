@@ -11,5 +11,7 @@ namespace Lottery.Core.Algorithm
         public int Number { get; set; }
 
         public LotteryResult[] Output { get; set; }
+
+        public InputOptions Input { get; set; }
     }
 }

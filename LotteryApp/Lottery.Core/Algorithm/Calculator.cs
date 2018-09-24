@@ -78,7 +78,8 @@ namespace Lottery.Core.Algorithm
                 DisplayName = lottery.DisplayName,
                 LastLotteryNumber = lotteries[lotteries.Length - 1],
                 Number = option.Number,
-                Output = result
+                Output = result,
+                Input = option
             };
             return ret;
         }
