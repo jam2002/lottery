@@ -30,13 +30,7 @@ namespace Lottery.App
                 Number = 1,
                 GameArgs = "13",
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"], "|", c),
-                Dispatcher = (u, v) =>
-                {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        SetResult(c, u, v);
-                    });
-                }
+                Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
             Dynamic22 five = new Dynamic22
@@ -47,13 +41,7 @@ namespace Lottery.App
                 GameArgs = "22",
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Number = 2,
-                Dispatcher = (u, v) =>
-                {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        SetResult("five", u, v);
-                    });
-                }
+                Dispatcher = (u, v) => UpdateUI("five", u, v)
             };
 
             Dictionary<string, IPlan> dic = dynamics.Concat(new IPlan[] { five }).ToDictionary(c => c.GetKey(), c => c);
@@ -65,39 +53,43 @@ namespace Lottery.App
             this.invoker.Close();
         }
 
-        private void SetResult(string code, string desc, string value)
+        private void UpdateUI(string code, string desc, string value)
         {
-            RichTextBox descBox = null;
-            RichTextBox valueBox = null;
-            switch (code)
+            this.Dispatcher.Invoke(() =>
             {
-                case "front":
-                    descBox = this.txtFrontDesc;
-                    valueBox = this.txtFrontValue;
-                    break;
-                case "middle":
-                    descBox = this.txtMiddleDesc;
-                    valueBox = this.txtMiddleValue;
-                    break;
-                case "after":
-                    descBox = this.txtAfterDesc;
-                    valueBox = this.txtAfterValue;
-                    break;
-                case "five":
-                    descBox = this.txtFiveDesc;
-                    valueBox = this.txtFiveValue;
-                    break;
-            }
+                RichTextBox descBox = null;
+                RichTextBox valueBox = null;
+                switch (code)
+                {
+                    case "front":
+                        descBox = this.txtFrontDesc;
+                        valueBox = this.txtFrontValue;
+                        break;
+                    case "middle":
+                        descBox = this.txtMiddleDesc;
+                        valueBox = this.txtMiddleValue;
+                        break;
+                    case "after":
+                        descBox = this.txtAfterDesc;
+                        valueBox = this.txtAfterValue;
+                        break;
+                    case "five":
+                        descBox = this.txtFiveDesc;
+                        valueBox = this.txtFiveValue;
+                        break;
+                }
 
-            if (!string.IsNullOrEmpty(desc))
-            {
-                descBox.AppendText(desc);
-            }
-            if (!string.IsNullOrEmpty(value))
-            {
-                valueBox.Document.Blocks.Clear();
-                valueBox.AppendText(value);
-            }
+                if (!string.IsNullOrEmpty(desc))
+                {
+                    descBox.AppendText(desc);
+                    descBox.AppendText(Environment.NewLine);
+                }
+                if (!string.IsNullOrEmpty(value))
+                {
+                    valueBox.Document.Blocks.Clear();
+                    valueBox.AppendText(value);
+                }
+            });
         }
     }
 }
