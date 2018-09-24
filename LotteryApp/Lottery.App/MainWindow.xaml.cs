@@ -84,7 +84,7 @@ namespace Lottery.App
                     descBox.AppendText(desc);
                     descBox.AppendText(Environment.NewLine);
                 }
-                if (!string.IsNullOrEmpty(value))
+                if (value != null)
                 {
                     valueBox.Document.Blocks.Clear();
                     valueBox.AppendText(value);
