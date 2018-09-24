@@ -81,7 +81,7 @@ namespace Lottery.App
                     break;
                 case "after":
                     descBox = this.txtAfterDesc;
-                    valueBox = this.txtMiddleValue;
+                    valueBox = this.txtAfterValue;
                     break;
                 case "five":
                     descBox = this.txtFiveDesc;
@@ -91,7 +91,6 @@ namespace Lottery.App
 
             if (!string.IsNullOrEmpty(desc))
             {
-                descBox.AppendText(Environment.NewLine);
                 descBox.AppendText(desc);
             }
             if (!string.IsNullOrEmpty(value))

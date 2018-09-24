@@ -5,38 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lottery.App"
         mc:Ignorable="d"
-        Title="计划软件" Height="350" Width="525" Loaded="Window_Loaded" Closed="Window_Closed">
-     <StackPanel>
+        Title="计划软件" Loaded="Window_Loaded" Closed="Window_Closed">
+     <StackPanel CanVerticallyScroll="True">
         <TextBlock Margin="0,10">前三一码</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtFrontDesc" Height="40" Width="220"/>
+            <RichTextBox Name="txtFrontDesc" Height="100" Width="500"/>
             <TextBlock Margin="10">投注</TextBlock>
-            <RichTextBox Name="txtFrontValue" Height="40" Width="220"/>
+            <RichTextBox Name="txtFrontValue" Height="100" Width="500"/>
         </StackPanel>
 
         <TextBlock Margin="0,10">中三一码</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtMiddleDesc" Height="40" Width="220"/>
+            <RichTextBox Name="txtMiddleDesc" Height="100" Width="500"/>
             <TextBlock Margin="10">投注</TextBlock>
-            <RichTextBox Name="txtMiddleValue" Height="40" Width="220"/>
+            <RichTextBox Name="txtMiddleValue" Height="100" Width="500"/>
         </StackPanel>
 
         <TextBlock Margin="0,10">后三一码</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtAfterDesc" Height="40" Width="220"/>
+            <RichTextBox Name="txtAfterDesc" Height="100" Width="500"/>
             <TextBlock Margin="10">投注</TextBlock>
-            <RichTextBox Name="txtAfterValue" Height="40" Width="220"/>
+            <RichTextBox Name="txtAfterValue" Height="100" Width="500"/>
         </StackPanel>
 
         <TextBlock Margin="0,10">五星二码</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtFiveDesc" Height="40" Width="220"/>
+            <RichTextBox Name="txtFiveDesc" Height="100" Width="500"/>
             <TextBlock Margin="10">投注</TextBlock>
-            <RichTextBox Name="txtFiveValue" Height="40" Width="220"/>
+            <RichTextBox Name="txtFiveValue" Height="100" Width="500"/>
         </StackPanel>
     </StackPanel>
 </Window>
