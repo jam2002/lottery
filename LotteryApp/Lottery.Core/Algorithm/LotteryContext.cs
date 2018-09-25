@@ -435,7 +435,7 @@ namespace Lottery.Core.Algorithm
         private bool CheckInterval(int[] intervals)
         {
             int[] unconIntervals = intervals.Where(c => c > 0).ToArray();
-            return unconIntervals.Skip(unconIntervals.Length - 3).All(c => c < InputOption.BetCycle);
+            return unconIntervals.Skip(unconIntervals.Length - 3).All(c => c <= 5);
         }
 
         private LotteryResult InferResult(IEnumerable<LotteryResult> list)

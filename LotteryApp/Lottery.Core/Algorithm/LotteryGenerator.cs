@@ -116,7 +116,7 @@ namespace Lottery.Core.Algorithm
             }.Where(c => c >= 0).Distinct().ToArray();
             if (type == 5)
             {
-                number.AdjacentNumbers = new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray(), new int[] { array[0], array[2], array[4] } }.Select(c => GetAdjacents(c)).Where(c => c > 100).Distinct().ToArray();
+                number.AdjacentNumbers = new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray() }.Select(c => GetAdjacents(c)).Where(c => c > 100).Distinct().ToArray();
                 Combination combine = new Combination(number.DistinctNumbers.Length);
                 var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);
                 number.AllPairs = tmp.Select(t => (from s in t select number.DistinctNumbers[s]).ToArray()).Select(t => 100 + t[0] * 10 + t[1]).ToArray();
