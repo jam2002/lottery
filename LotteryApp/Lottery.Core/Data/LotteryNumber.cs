@@ -43,6 +43,16 @@
         public int[] RepeatNumbers { get; set; }
 
         /// <summary>
+        /// 重号与相邻号组合
+        /// </summary>
+        public int[] AdjacentNumbers { get; set; }
+
+        /// <summary>
+        /// 任意两不同数组合
+        /// </summary>
+        public int[] AllPairs { get; set; }
+
+        /// <summary>
         /// 按升序排列的胆码，比如 125，15
         /// </summary>
         public int SequenceKey { get; set; }
@@ -51,8 +61,6 @@
         /// 不定胆，胆码组；比如重庆时时彩，就可以前三与后三；11选5即是所有五码
         /// </summary>
         public int[][] BetKeyPairs { get; set; }
-
-        //public 
 
         /// <summary>
         /// 五星形态，1：组120；2：组60；3：组30；4：组20；5：组10；6：组5；

@@ -57,7 +57,9 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.SequenceKey, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.DynamicPosition, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.FiveStarForm, new Dictionary<int, ReferenceFactor> { } },
-                { FactorTypeEnum.RepeatNumber, new Dictionary<int, ReferenceFactor> { } }
+                { FactorTypeEnum.RepeatNumber, new Dictionary<int, ReferenceFactor> { } },
+                { FactorTypeEnum.AdjacentNumber, new Dictionary<int, ReferenceFactor> { } },
+                { FactorTypeEnum.AllPairs, new Dictionary<int, ReferenceFactor> { } }
             };
             MaxSkipDic = new Dictionary<FactorTypeEnum, int>
             {
@@ -135,6 +137,16 @@ namespace Lottery.Core.Algorithm
             {
                 BuildFactor(FactorTypeEnum.RepeatNumber, key, pos);
             }
+
+            foreach (int key in number.AdjacentNumbers)
+            {
+                BuildFactor(FactorTypeEnum.AdjacentNumber, key, pos);
+            }
+
+            foreach (int key in number.AllPairs)
+            {
+                BuildFactor(FactorTypeEnum.AllPairs, key, pos);
+            }
         }
 
         private void BuildInterval()
@@ -158,6 +170,9 @@ namespace Lottery.Core.Algorithm
             {
                 case "dynamic":
                     ret = GetDynamicPosResult();
+                    break;
+                case "adjacent":
+                    ret = GetAdjacentResult();
                     break;
                 case "anytwo":
                     ret = new[] { GetAnyTwoResultByHeat() };
@@ -272,6 +287,33 @@ namespace Lottery.Core.Algorithm
             LotteryResult[] ret = InferResults(list);
 
             return ret;
+        }
+
+        private LotteryResult[] GetAdjacentResult()
+        {
+            var query = from p in FactorDic[FactorTypeEnum.AdjacentNumber]
+                        join q in FactorDic[FactorTypeEnum.AllPairs]
+                           on new { p.Key, p.Value.LastInterval } equals new { q.Key, q.Value.LastInterval }
+                        where new int[] { (p.Key - 100) / 10, (p.Key - 100) % 10 }.All(c => CheckInterval(FactorDic[FactorTypeEnum.Award][c].HitIntervals))
+                        orderby p.Value.LastInterval, p.Value.OccurCount descending
+                        select p.Key;
+            return query.Take(3).Select(c =>
+            {
+                ReferenceFactor factor = FactorDic[FactorTypeEnum.AllPairs][c];
+                return new LotteryResult
+                {
+                    GameName = "adjacent",
+                    HitIntervals = factor.HitIntervals,
+                    HitCount = factor.OccurCount,
+                    LotteryName = InputOption.LotteryName,
+                    LastInterval = factor.LastInterval,
+                    MaxInterval = factor.MaxInterval,
+                    AnyFilters = new AnyFilter[]
+                    {
+                        new AnyFilter{  Values =new int[] { (c - 100) / 10, (c - 100) % 10 } }
+                    }
+                };
+            }).ToArray();
         }
 
         private LotteryResult GetAnyTwoResultByHit()
@@ -390,6 +432,12 @@ namespace Lottery.Core.Algorithm
             return new LotteryResult { AnyFilters = betArray, Filter = string.Join("   ", betArray.Select(t => Format(t))) };
         }
 
+        private bool CheckInterval(int[] intervals)
+        {
+            int[] unconIntervals = intervals.Where(c => c > 0).ToArray();
+            return unconIntervals.Skip(unconIntervals.Length - 3).All(c => c < InputOption.BetCycle);
+        }
+
         private LotteryResult InferResult(IEnumerable<LotteryResult> list)
         {
             return list.OrderByDescending(t => t.HitCount).ThenBy(t => t.MaxInterval).ThenBy(t => t.LastInterval).FirstOrDefault();
@@ -397,15 +445,6 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] InferResults(IEnumerable<LotteryResult> list)
         {
-            Func<int[], bool> checkInterval = intervals =>
-             {
-                 if (InputOption.GameArgs == "13")
-                 {
-                     return true;
-                 }
-                 int[] unconIntervals = intervals.Where(c => c > 0).ToArray();
-                 return unconIntervals.Skip(unconIntervals.Length - 3).All(c => c < InputOption.BetCycle);
-             };
             var query = from p in FactorDic[FactorTypeEnum.RepeatNumber]
                         join q in FactorDic[FactorTypeEnum.Award]
                            on new { p.Key, p.Value.LastInterval } equals new { q.Key, q.Value.LastInterval }
@@ -440,12 +479,12 @@ namespace Lottery.Core.Algorithm
                  else
                  {
                      int[] intervals = FactorDic[FactorTypeEnum.Award][t].HitIntervals;
-                     isValid = checkInterval(intervals);
+                     isValid = CheckInterval(intervals);
                  }
                  return isValid;
              }).ToArray();
 
-            LotteryResult[] availableList = list.Where(t => t.HitIntervals != null && checkInterval(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(q => repeats.Contains(q)))
+            LotteryResult[] availableList = list.Where(t => t.HitIntervals != null && CheckInterval(t.HitIntervals) && t.AnyFilters.SelectMany(q => q.Values).Distinct().All(q => repeats.Contains(q)))
                                                                         .OrderByDescending(t => t.WinCount)
                                                                         .ThenByDescending(t => t.LastInterval)
                                                                         .ThenBy(t => t.MaxInterval)
@@ -643,19 +682,6 @@ namespace Lottery.Core.Algorithm
             int[] intervals = occurPostions.Select((x, i) => i == 0 ? x : x - occurPostions[i - 1] - 1).ToArray();
             intervals = intervals.Concat(new[] { lotteryNumbers.Count() - 1 - occurPostions[occurPostions.Length - 1] }).ToArray();
             return intervals;
-        }
-
-        private int GetTrend(ReferenceFactor factor)
-        {
-            int ret = 2;
-            if (factor.OccurCount > 1)
-            {
-                double[] x = Enumerable.Range(1, factor.OccurCount).Select(t => (double)t).ToArray();
-                double[] y = factor.HitIntervals.Take(factor.OccurCount).Select(t => (double)t).ToArray();
-                Tuple<double, double> line = Fit.Line(x, y);
-                ret = line.Item2 > 0 ? 2 : 1;
-            }
-            return ret;
         }
 
         private string Format(int[] filter)

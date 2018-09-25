@@ -16,6 +16,8 @@ namespace Lottery.Core.Plan
 
         public int Number { get; set; }
 
+        public string GameName { get; set; }
+
         public string GameArgs { get; set; }
 
         public Action<string, string> Dispatcher { get; set; }

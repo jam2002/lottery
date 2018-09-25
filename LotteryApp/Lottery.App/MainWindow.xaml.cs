@@ -28,6 +28,7 @@ namespace Lottery.App
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
+                GameName = "dynamic",
                 GameArgs = "13",
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"], "|", c),
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
@@ -38,6 +39,7 @@ namespace Lottery.App
                 BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
                 BetIndex = 0,
                 LastBet = null,
+                GameName = "adjacent",
                 GameArgs = "22",
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Number = 2,

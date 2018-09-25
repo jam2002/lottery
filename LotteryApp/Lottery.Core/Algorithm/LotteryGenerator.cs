@@ -1,4 +1,5 @@
-﻿using Lottery.Core.Data;
+﻿using Kw.Combinatorics;
+using Lottery.Core.Data;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -113,6 +114,19 @@ namespace Lottery.Core.Algorithm
                 array[0] == array[2] ? array[1]: -1,
                 array[1] == array[2] ? array[1]: -1
             }.Where(c => c >= 0).Distinct().ToArray();
+            if (type == 5)
+            {
+                number.AdjacentNumbers = new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray(), new int[] { array[0], array[2], array[4] } }.Select(c => GetAdjacents(c)).Where(c => c > 100).Distinct().ToArray();
+                Combination combine = new Combination(number.DistinctNumbers.Length);
+                var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);
+                number.AllPairs = tmp.Select(t => (from s in t select number.DistinctNumbers[s]).ToArray()).Select(t => 100 + t[0] + t[1]).ToArray();
+            }
+            else
+            {
+                number.AdjacentNumbers = new int[] { };
+                number.AllPairs = new int[] { };
+            }
+            
             number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));
             number.BetKeyPairs = new int[][] { array };
 
@@ -136,6 +150,12 @@ namespace Lottery.Core.Algorithm
                 }
             }
             return number;
+        }
+
+        private static int GetAdjacents(int[] array)
+        {
+            int[] adjacents = array.GroupBy(c => c).Select(c => c.Key).OrderBy(c => c).ToArray();
+            return adjacents.Length == 2 ? 100 + adjacents[0] + adjacents[1] : -1;
         }
 
         private static LotteryNumber[] GetAllNumbers(int type)

@@ -9,6 +9,8 @@ namespace Lottery.Core.Plan
 
         string LotteryName { get; set; }
 
+        string GameName { get; set; }
+
         string GameArgs { get; set; }
 
         int BetIndex { get; set; }

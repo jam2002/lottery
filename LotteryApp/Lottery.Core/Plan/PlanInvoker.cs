@@ -40,7 +40,7 @@ namespace Lottery.Core.Plan
             {
                 Number = takeNumber,
                 LotteryName = c.LotteryName,
-                GameName = "dynamic",
+                GameName = c.GameName,
                 GameArgs = c.GameArgs,
                 BetCycle = c.BetCycle
             }).ToArray();
@@ -57,7 +57,7 @@ namespace Lottery.Core.Plan
                 if (c?.Output.Any() == true)
                 {
                     int[] awards = c.Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
-                    if (c.Input.GameArgs == "22")
+                    if (c.Input.GameName == "dynamic" && c.Input.GameArgs == "22")
                     {
                         awards = c.Output.Where(d => d.WinCount >= 8).FirstOrDefault()?.AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
                         awards = awards ?? new int[] { };

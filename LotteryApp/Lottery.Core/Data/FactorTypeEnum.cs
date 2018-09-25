@@ -51,6 +51,16 @@
         /// <summary>
         /// 对子胆码
         /// </summary>
-        RepeatNumber = 18
+        RepeatNumber = 18,
+
+        /// <summary>
+        /// 对子与领号胆码组合
+        /// </summary>
+        AdjacentNumber = 19,
+
+        /// <summary>
+        /// 任意两不同数的组合
+        /// </summary>
+        AllPairs = 20
     }
 }
