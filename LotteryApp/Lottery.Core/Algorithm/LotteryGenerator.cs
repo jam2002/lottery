@@ -113,26 +113,13 @@ namespace Lottery.Core.Algorithm
                 array[0] == array[1] ? array[0]: -1,
                 array[0] == array[2] ? array[1]: -1,
                 array[1] == array[2] ? array[1]: -1
-            }.Where(c => c >= 0).Distinct().ToArray();
-            if (type == 5)
-            {
-                number.AdjacentNumbers = new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray() }.Select(c => GetAdjacents(c)).Where(c => c > 100).Distinct().ToArray();
-                Combination combine = new Combination(number.DistinctNumbers.Length);
-                var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);
-                number.AllPairs = tmp.Select(t => (from s in t select number.DistinctNumbers[s]).ToArray()).Select(t => 100 + t[0] * 10 + t[1]).ToArray();
-            }
-            else
-            {
-                number.AdjacentNumbers = new int[] { };
-                number.AllPairs = new int[] { };
-            }
-            
+            }.Where(c => c >= 0).Distinct().ToArray();            
             number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));
             number.BetKeyPairs = new int[][] { array };
 
             if (type == 5)
             {
-                int repeatNumbers = array.GroupBy(t => t).Where(t => t.Count() > 1).Select(t => t.Key).Count();
+                int[] repeats = array.GroupBy(t => t).Where(t => t.Count() > 1).Select(t => t.Key).OrderBy(t => t).ToArray();
                 switch (number.Distinct)
                 {
                     case 5:
@@ -142,12 +129,22 @@ namespace Lottery.Core.Algorithm
                         number.FiveStarForm = 2;
                         break;
                     case 3:
-                        number.FiveStarForm = repeatNumbers == 2 ? 3 : 4;
+                        number.FiveStarForm = repeats.Length == 2 ? 3 : 4;
                         break;
                     case 2:
-                        number.FiveStarForm = repeatNumbers == 2 ? 5 : 6;
+                        number.FiveStarForm = repeats.Length == 2 ? 5 : 6;
                         break;
                 }
+
+                number.AdjacentNumbers = number.FiveStarForm == 3 ? new int[] { GetAdjacents(repeats) } : new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray() }.Select(c => GetAdjacents(c)).Where(c => c > 100).Distinct().ToArray();
+                Combination combine = new Combination(number.DistinctNumbers.Length);
+                var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);
+                number.AllPairs = tmp.Select(t => (from s in t select number.DistinctNumbers[s]).ToArray()).Select(t => 100 + t[0] * 10 + t[1]).ToArray();
+            }
+            else
+            {
+                number.AdjacentNumbers = new int[] { };
+                number.AllPairs = new int[] { };
             }
             return number;
         }
