@@ -26,7 +26,7 @@ namespace Lottery.Core.Plan
 
         public string GetKey()
         {
-            return string.Concat(LotteryName, ".", GameArgs);
+            return string.Concat(LotteryName, ".", GameName, ".", GameArgs ?? string.Empty);
         }
 
         public void Invoke(SimpleBet currentBet)

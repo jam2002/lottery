@@ -203,7 +203,6 @@ namespace Lottery.Core.Algorithm
                 foreach (LotteryResult r in ret)
                 {
                     r.LotteryName = InputOption.LotteryName;
-                    r.GameName = InputOption.GameName + (InputOption.GameArgs ?? string.Empty);
                 }
             }
 

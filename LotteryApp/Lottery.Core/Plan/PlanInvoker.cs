@@ -78,7 +78,8 @@ namespace Lottery.Core.Plan
             {
                 if (bet.Results.Any())
                 {
-                    string key = string.Concat(bet.Results[0].Input.LotteryName, ".", bet.Results[0].Input.GameArgs);
+                    InputOptions input = bet.Results[0].Input;
+                    string key = string.Concat(input.LotteryName, ".", input.GameName, ".", input.GameArgs ?? string.Empty);
                     IPlan plan = planDic[key];
                     plan.Invoke(bet);
                 }
