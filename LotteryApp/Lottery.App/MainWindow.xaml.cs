@@ -58,24 +58,24 @@ namespace Lottery.App
             this.Dispatcher.Invoke(() =>
             {
                 RichTextBox descBox = null;
-                RichTextBox valueBox = null;
+                System.Windows.Forms.RichTextBox valueBox = null;
                 switch (code)
                 {
                     case "front":
                         descBox = this.txtFrontDesc;
-                        valueBox = this.txtFrontValue;
+                        valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "middle":
                         descBox = this.txtMiddleDesc;
-                        valueBox = this.txtMiddleValue;
+                        valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "after":
                         descBox = this.txtAfterDesc;
-                        valueBox = this.txtAfterValue;
+                        valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "five":
                         descBox = this.txtFiveDesc;
-                        valueBox = this.txtFiveValue;
+                        valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                 }
 
@@ -86,7 +86,7 @@ namespace Lottery.App
                 }
                 if (value != null)
                 {
-                    valueBox.Document.Blocks.Clear();
+                    valueBox.Clear();
                     valueBox.AppendText(value);
                 }
             });
