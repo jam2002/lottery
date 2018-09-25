@@ -434,6 +434,10 @@ namespace Lottery.Core.Algorithm
 
         private bool CheckInterval(int[] intervals)
         {
+            if (InputOption.GameArgs == "13")
+            {
+                return true;
+            }
             int[] unconIntervals = intervals.Where(c => c > 0).ToArray();
             return unconIntervals.Skip(unconIntervals.Length - 3).All(c => c <= 5);
         }
@@ -452,7 +456,6 @@ namespace Lottery.Core.Algorithm
                         orderby q.Value.LastInterval, q.Value.OccurCount descending
                         select p.Key;
             int[] pairs = query.ToArray();
-            int[] warms = FactorDic[FactorTypeEnum.Award].Where(c => c.Value.LastInterval <= 5).OrderByDescending(c => c.Value.OccurCount).Take(7).Select(c => c.Key).ToArray();
 
             int[] repeats = FactorDic[FactorTypeEnum.Award].Keys.Where(t =>
              {
@@ -475,7 +478,7 @@ namespace Lottery.Core.Algorithm
                      //bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
                      //bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
 
-                     isValid = pairs.Contains(t) && warms.Contains(t);
+                     isValid = pairs.Contains(t);
                  }
                  else
                  {
