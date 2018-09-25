@@ -448,7 +448,7 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[FactorTypeEnum.RepeatNumber]
                         join q in FactorDic[FactorTypeEnum.Award]
                            on new { p.Key, p.Value.LastInterval } equals new { q.Key, q.Value.LastInterval }
-                        orderby p.Value.LastInterval
+                        orderby p.Value.OccurCount descending, p.Value.LastInterval descending
                         select p.Key;
             int[] pairs = query.ToArray();
             int[] warms = FactorDic[FactorTypeEnum.Award].Where(c => c.Value.LastInterval <= 5).OrderByDescending(c => c.Value.OccurCount).Take(7).Select(c => c.Key).ToArray();
