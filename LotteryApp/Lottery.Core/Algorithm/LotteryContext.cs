@@ -203,6 +203,7 @@ namespace Lottery.Core.Algorithm
                 foreach (LotteryResult r in ret)
                 {
                     r.LotteryName = InputOption.LotteryName;
+
                 }
             }
 
@@ -293,7 +294,7 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[FactorTypeEnum.AdjacentNumber]
                         join q in FactorDic[FactorTypeEnum.AllPairs]
                            on new { p.Key, p.Value.LastInterval } equals new { q.Key, q.Value.LastInterval }
-                        where new int[] { (p.Key - 100) / 10, (p.Key - 100) % 10 }.All(c => CheckInterval(FactorDic[FactorTypeEnum.Award][c].HitIntervals))
+                        where p.Value.LastInterval < 8 && new int[] { (p.Key - 100) / 10, (p.Key - 100) % 10 }.All(c => CheckInterval(FactorDic[FactorTypeEnum.Award][c].HitIntervals))
                         orderby p.Value.LastInterval, p.Value.OccurCount descending
                         select p.Key;
             return query.Take(3).Select(c =>

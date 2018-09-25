@@ -119,7 +119,7 @@ namespace Lottery.Core.Algorithm
                 number.AdjacentNumbers = new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray(), new int[] { array[0], array[2], array[4] } }.Select(c => GetAdjacents(c)).Where(c => c > 100).Distinct().ToArray();
                 Combination combine = new Combination(number.DistinctNumbers.Length);
                 var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);
-                number.AllPairs = tmp.Select(t => (from s in t select number.DistinctNumbers[s]).ToArray()).Select(t => 100 + t[0] + t[1]).ToArray();
+                number.AllPairs = tmp.Select(t => (from s in t select number.DistinctNumbers[s]).ToArray()).Select(t => 100 + t[0] * 10 + t[1]).ToArray();
             }
             else
             {
@@ -155,7 +155,7 @@ namespace Lottery.Core.Algorithm
         private static int GetAdjacents(int[] array)
         {
             int[] adjacents = array.GroupBy(c => c).Select(c => c.Key).OrderBy(c => c).ToArray();
-            return adjacents.Length == 2 ? 100 + adjacents[0] + adjacents[1] : -1;
+            return adjacents.Length == 2 ? (100 + adjacents[0] * 10 + adjacents[1]) : -1;
         }
 
         private static LotteryNumber[] GetAllNumbers(int type)
