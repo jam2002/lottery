@@ -108,12 +108,7 @@ namespace Lottery.Core.Algorithm
             number.OneCount = remainders.Where(t => t == 1).Count();
             number.TwoCount = remainders.Where(t => t == 2).Count();
             number.DistinctNumbers = array.Distinct().OrderBy(t => t).ToArray();
-            number.Distinct = number.DistinctNumbers.Length;
-            number.RepeatNumbers = new int[] {
-                array[0] == array[1] ? array[0]: -1,
-                array[0] == array[2] ? array[1]: -1,
-                array[1] == array[2] ? array[1]: -1
-            }.Where(c => c >= 0).Distinct().ToArray();            
+            number.Distinct = number.DistinctNumbers.Length;       
             number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));
             number.BetKeyPairs = new int[][] { array };
 
@@ -136,23 +131,42 @@ namespace Lottery.Core.Algorithm
                         break;
                 }
 
-                number.AdjacentNumbers = number.FiveStarForm == 3 ? new int[] { GetAdjacents(repeats) } : new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray(), new int[] { array[0], array[2], array[4] } }.Select(c => GetAdjacents(c)).Where(c => c > 100).Distinct().ToArray();
+                int[][] threeArrays = new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray(), new int[] { array[0], array[2], array[4] } };
+                number.AdjacentNumbers = threeArrays.Select((c, i) => GetAdjacents(c, i)).Where(c => c > 100).Distinct().ToArray();
+                number.RepeatNumbers = threeArrays.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
+
                 Combination combine = new Combination(number.DistinctNumbers.Length);
                 var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);
                 number.AllPairs = tmp.Select(t => (from s in t select number.DistinctNumbers[s]).ToArray()).Select(t => 100 + t[0] * 10 + t[1]).ToArray();
             }
             else
             {
+                number.RepeatNumbers = new int[][] { array }.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
                 number.AdjacentNumbers = new int[] { };
                 number.AllPairs = new int[] { };
             }
             return number;
         }
 
-        private static int GetAdjacents(int[] array)
+        private static int GetAdjacents(int[] array, int index)
         {
+            int value = -1;
             int[] adjacents = array.GroupBy(c => c).Select(c => c.Key).OrderBy(c => c).ToArray();
-            return adjacents.Length == 2 ? (100 + adjacents[0] * 10 + adjacents[1]) : -1;
+            if (adjacents.Length == 2)
+            {
+                bool isOk = index == 0 && (array[0] == array[1] || array[0] == array[2]);
+                isOk = isOk || index == 1;
+                isOk = isOk || (index == 2 && (array[1] == array[2] || array[0] == array[2]));
+                isOk = isOk || (index == 3 && array[0] == array[2]);
+                value = isOk ? (100 + adjacents[0] * 10 + adjacents[1]) : value;
+            }
+            return value;
+        }
+
+        private static int GetRepeats(int[] array)
+        {
+            int[] repeats = array.GroupBy(c => c).Where(c => c.Count() > 1).Select(c => c.Key).ToArray();
+            return repeats.Any() ? repeats[0] : -1;
         }
 
         private static LotteryNumber[] GetAllNumbers(int type)

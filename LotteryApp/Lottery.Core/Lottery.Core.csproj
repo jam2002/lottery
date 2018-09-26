@@ -68,6 +68,7 @@
     <Compile Include="Algorithm\LotteryContext.cs" />
     <Compile Include="Algorithm\LotteryGenerator.cs" />
     <Compile Include="Algorithm\OutputResult.cs" />
+    <Compile Include="Plan\Dynamic17.cs" />
     <Compile Include="Plan\PlanInvoker.cs" />
     <Compile Include="Algorithm\ValidationResult.cs" />
     <Compile Include="Algorithm\Validator.cs" />

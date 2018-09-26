@@ -54,9 +54,7 @@ namespace Lottery.Core.Plan
                 return;
             }
 
-            int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
-            int[][] betValues = new int[][] { LastBet.BetAward };
-            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && betValues.Any(t => t.Intersect(current).Count() >= Number);
+            bool isHit = IsHit(currentBet);
             int status = isHit ? 1 : (BetIndex == BetCycle ? 3 : 2);
             if (BetIndex > 0)
             {
@@ -67,6 +65,14 @@ namespace Lottery.Core.Plan
             {
                 Reset(status);
             }
+        }
+
+        public virtual bool IsHit(SimpleBet currentBet)
+        {
+            int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
+            int[][] betValues = new int[][] { LastBet.BetAward };
+            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && betValues.Any(t => t.Intersect(current).Count() >= Number);
+            return isHit;
         }
 
         /// <summary>

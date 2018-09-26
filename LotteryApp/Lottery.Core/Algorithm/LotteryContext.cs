@@ -295,7 +295,7 @@ namespace Lottery.Core.Algorithm
                         join q in FactorDic[FactorTypeEnum.AllPairs]
                            on new { p.Key, p.Value.LastInterval } equals new { q.Key, q.Value.LastInterval }
                         where p.Value.LastInterval <= 7
-                        orderby q.Value.LastInterval, q.Value.OccurCount descending
+                        orderby q.Value.LastInterval descending, q.Value.OccurCount descending
                         select p.Key;
             return query.Take(3).Select(c =>
             {
@@ -434,7 +434,7 @@ namespace Lottery.Core.Algorithm
 
         private bool CheckInterval(int[] intervals)
         {
-            if (InputOption.GameArgs == "13")
+            if (InputOption.GameArgs == "13" || InputOption.GameArgs == "17")
             {
                 return true;
             }
@@ -452,15 +452,15 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[FactorTypeEnum.RepeatNumber]
                         join q in FactorDic[FactorTypeEnum.Award]
                            on new { p.Key, p.Value.LastInterval } equals new { q.Key, q.Value.LastInterval }
-                        where q.Value.LastInterval <=5
-                        orderby q.Value.LastInterval, q.Value.OccurCount descending
+                        where q.Value.LastInterval <=7
+                        orderby q.Value.LastInterval descending, q.Value.OccurCount descending
                         select p.Key;
             int[] pairs = query.ToArray();
 
             int[] repeats = FactorDic[FactorTypeEnum.Award].Keys.Where(t =>
              {
                  bool isValid = false;
-                 if (InputOption.GameArgs == "13")
+                 if (InputOption.GameArgs == "13" || InputOption.GameArgs == "17")
                  {
                      //bool currentLimit = intervals.Reverse().TakeWhile(c => c == 0).Count() <= 3;
                      //List<int> heads = new List<int> { };

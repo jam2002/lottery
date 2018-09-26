@@ -21,7 +21,7 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string[] suffixes = new string[] { "front", "middle", "after" };
+            string[] suffixes = new string[] { "front", "after" };
             Dynamic13[] dynamics = suffixes.Select(c => new Dynamic13
             {
                 BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
@@ -33,6 +33,18 @@ namespace Lottery.App
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"], "|", c),
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
+
+            Dynamic17 middle = new Dynamic17
+            {
+                BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
+                BetIndex = 0,
+                LastBet = null,
+                GameName = "dynamic",
+                GameArgs = "17",
+                LotteryName = ConfigurationManager.AppSettings["LotteryName"],
+                Number = 1,
+                Dispatcher = (u, v) => UpdateUI("middle", u, v)
+            };
 
             Dynamic22 five = new Dynamic22
             {
@@ -46,7 +58,7 @@ namespace Lottery.App
                 Dispatcher = (u, v) => UpdateUI("five", u, v)
             };
 
-            Dictionary<string, IPlan> dic = dynamics.Concat(new IPlan[] { five }).ToDictionary(c => c.GetKey(), c => c);
+            Dictionary<string, IPlan> dic = dynamics.Concat(new IPlan[] { middle, five }).ToDictionary(c => c.GetKey(), c => c);
             this.invoker = new PlanInvoker(dic);
         }
 
