@@ -24,7 +24,7 @@ namespace Lottery.Core.Plan
             takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
 
             DateTime start = DateTime.Now;
-            timer = new Timer(StartBet, null, 0, int.Parse(ConfigurationManager.AppSettings["GameInterval"]));
+            timer = new Timer(StartBet, null, start.Second < 15 ? (15 - start.Second) * 1000 : (75 - start.Second) * 1000, int.Parse(ConfigurationManager.AppSettings["GameInterval"]));
         }
 
         public void Close()
