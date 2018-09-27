@@ -434,10 +434,6 @@ namespace Lottery.Core.Algorithm
 
         private bool CheckInterval(int[] intervals)
         {
-            if (InputOption.GameArgs == "13" || InputOption.GameArgs == "17")
-            {
-                return true;
-            }
             int[] unconIntervals = intervals.Where(c => c > 0).ToArray();
             return unconIntervals.Skip(unconIntervals.Length - 3).All(c => c <= 5);
         }
@@ -462,23 +458,24 @@ namespace Lottery.Core.Algorithm
                  bool isValid = false;
                  if (InputOption.GameArgs == "13" || InputOption.GameArgs == "17")
                  {
-                     //bool currentLimit = intervals.Reverse().TakeWhile(c => c == 0).Count() <= 3;
-                     //List<int> heads = new List<int> { };
-                     //int head = 0;
-                     //for (int i = 0; i < intervals.Length; i++)
-                     //{
-                     //    if (intervals[i] != 0)
-                     //    {
-                     //        head = i;
-                     //    }
-                     //    heads.Add(head);
-                     //}
-                     //var continuousHits = heads.GroupBy(c => c).Select(c => new { key = c.Key, count = c.Count() }).ToArray();
-                     //bool isNotOverHeat = continuousHits.Where(c => c.count >= 4).Count() < 3;
-                     //bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
-                     //bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
+                     int[] intervals = FactorDic[FactorTypeEnum.Award][t].HitIntervals;
+                     bool currentLimit = intervals.Reverse().TakeWhile(c => c == 0).Count() <= 3;
+                     List<int> heads = new List<int> { };
+                     int head = 0;
+                     for (int i = 0; i < intervals.Length; i++)
+                     {
+                         if (intervals[i] != 0)
+                         {
+                             head = i;
+                         }
+                         heads.Add(head);
+                     }
+                     var continuousHits = heads.GroupBy(c => c).Select(c => new { key = c.Key, count = c.Count() }).ToArray();
+                     bool isNotOverHeat = continuousHits.Where(c => c.count >= 4).Count() < 3;
+                     bool isNotCurrentOverHeat = continuousHits.Last().count <= 3;
+                     bool isNotOrphan = continuousHits.Skip(continuousHits.Length - 3).Where(c => c.count == 1).Count() < 2;
 
-                     isValid = pairs.Contains(t);
+                     isValid = isNotOverHeat && isNotOrphan && pairs.Contains(t);
                  }
                  else
                  {
