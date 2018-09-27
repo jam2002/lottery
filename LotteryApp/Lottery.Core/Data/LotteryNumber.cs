@@ -37,10 +37,21 @@
         /// </summary>
         public int[] DistinctNumbers { get; set; }
 
-        /// <summary>
-        /// 对子胆码
-        /// </summary>
         public int[] RepeatNumbers { get; set; }
+
+        /// <summary>
+        /// 前三对子胆码
+        /// </summary>
+        public int[] LeftRepeatNumbers { get; set; }
+
+        /// <summary>
+        /// 后三对子胆码
+        /// </summary>
+        public int[] RightRepeatNumbers { get; set; }
+
+        public int[] LeftAwards { get; set; }
+
+        public int[] RightAwards { get; set; }
 
         /// <summary>
         /// 重号与相邻号组合

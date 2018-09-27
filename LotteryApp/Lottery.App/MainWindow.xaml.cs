@@ -28,23 +28,23 @@ namespace Lottery.App
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
-                GameName = "dynamic",
-                GameArgs = "13",
-                LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"], "|", c),
+                GameName = "symmetric",
+                GameArgs = c,
+                LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
-            Dynamic17 middle = new Dynamic17
-            {
-                BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
-                BetIndex = 0,
-                LastBet = null,
-                GameName = "dynamic",
-                GameArgs = "17",
-                LotteryName = ConfigurationManager.AppSettings["LotteryName"],
-                Number = 1,
-                Dispatcher = (u, v) => UpdateUI("middle", u, v)
-            };
+            //Dynamic17 middle = new Dynamic17
+            //{
+            //    BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
+            //    BetIndex = 0,
+            //    LastBet = null,
+            //    GameName = "dynamic",
+            //    GameArgs = "17",
+            //    LotteryName = ConfigurationManager.AppSettings["LotteryName"],
+            //    Number = 1,
+            //    Dispatcher = (u, v) => UpdateUI("middle", u, v)
+            //};
 
             Dynamic22 five = new Dynamic22
             {
@@ -58,7 +58,7 @@ namespace Lottery.App
                 Dispatcher = (u, v) => UpdateUI("five", u, v)
             };
 
-            Dictionary<string, IPlan> dic = dynamics.Concat(new IPlan[] { middle, five }).ToDictionary(c => c.GetKey(), c => c);
+            Dictionary<string, IPlan> dic = dynamics.Concat(new IPlan[] { five }).ToDictionary(c => c.GetKey(), c => c);
             this.invoker = new PlanInvoker(dic);
         }
 

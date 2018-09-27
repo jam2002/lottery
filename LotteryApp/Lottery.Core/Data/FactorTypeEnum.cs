@@ -48,19 +48,36 @@
         /// </summary>
         Wan = 17,
 
+        RepeatNumber =24,
+
         /// <summary>
-        /// 对子胆码
+        /// 前三对子胆码
         /// </summary>
-        RepeatNumber = 18,
+        LeftRepeatNumber = 18,
+
+        /// <summary>
+        /// 后三对子胆码
+        /// </summary>
+        RightRepeatNumber = 19,
+
+        /// <summary>
+        /// 前三胆码
+        /// </summary>
+        LeftAward = 20,
+
+        /// <summary>
+        /// 后三胆码
+        /// </summary>
+        RightAward = 21,
 
         /// <summary>
         /// 对子与领号胆码组合
         /// </summary>
-        AdjacentNumber = 19,
+        AdjacentNumber = 22,
 
         /// <summary>
         /// 任意两不同数的组合
         /// </summary>
-        AllPairs = 20
+        AllPairs = 23
     }
 }

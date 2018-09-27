@@ -133,7 +133,12 @@ namespace Lottery.Core.Algorithm
 
                 int[][] threeArrays = new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray(), new int[] { array[0], array[2], array[4] } };
                 number.AdjacentNumbers = threeArrays.Select((c, i) => GetAdjacents(c, i)).Where(c => c > 100).Distinct().ToArray();
-                number.RepeatNumbers = threeArrays.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
+                number.RepeatNumbers =threeArrays.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
+
+                number.LeftRepeatNumbers = new int[][] { array.Take(3).ToArray() }.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
+                number.RightRepeatNumbers = new int[][] { array.Skip(2).Take(3).ToArray() }.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
+                number.LeftAwards = array.Take(3).Distinct().OrderBy(c => c).ToArray();
+                number.RightAwards = array.Skip(2).Take(3).Distinct().OrderBy(c => c).ToArray();
 
                 Combination combine = new Combination(number.DistinctNumbers.Length);
                 var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);
@@ -141,7 +146,8 @@ namespace Lottery.Core.Algorithm
             }
             else
             {
-                number.RepeatNumbers = new int[][] { array }.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
+                number.LeftRepeatNumbers = number.RightRepeatNumbers = new int[][] { array }.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
+                number.LeftAwards = number.RightAwards = array.Distinct().OrderBy(c => c).ToArray();
                 number.AdjacentNumbers = new int[] { };
                 number.AllPairs = new int[] { };
             }
@@ -165,7 +171,8 @@ namespace Lottery.Core.Algorithm
 
         private static int GetRepeats(int[] array)
         {
-            return array[0] == array[1] || array[1] == array[2] || array[0] == array[2] ? array[1] : -1;
+            int[] repeats = array.GroupBy(c => c).Where(c => c.Count() > 1).Select(c => c.Key).ToArray();
+            return repeats.Any() ? repeats[0] : -1;
         }
 
         private static LotteryNumber[] GetAllNumbers(int type)
