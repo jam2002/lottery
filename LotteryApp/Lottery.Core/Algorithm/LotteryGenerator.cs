@@ -156,16 +156,8 @@ namespace Lottery.Core.Algorithm
 
         private static int GetAdjacents(int[] array, int index)
         {
-            int value = -1;
             int[] adjacents = array.GroupBy(c => c).Select(c => c.Key).OrderBy(c => c).ToArray();
-            if (adjacents.Length == 2)
-            {
-                bool isOk = index == 0 && (array[0] == array[1] || array[0] == array[2]);
-                isOk = isOk || index == 1;
-                isOk = isOk || (index == 2 && (array[1] == array[2] || array[0] == array[2]));
-                value = isOk ? (100 + adjacents[0] * 10 + adjacents[1]) : value;
-            }
-            return value;
+            return adjacents.Length == 2 ? (100 + adjacents[0] * 10 + adjacents[1]) : -1;
         }
 
         private static int GetRepeats(int[] array)
