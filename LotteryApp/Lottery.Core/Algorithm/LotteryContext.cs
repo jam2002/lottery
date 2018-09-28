@@ -302,7 +302,7 @@ namespace Lottery.Core.Algorithm
                         join q in FactorDic[FactorTypeEnum.AllPairs]
                            on p.Key equals q.Key
                         where p.Value.LastInterval <= q.Value.LastInterval && p.Value.LastInterval <= 7
-                        orderby q.Value.LastInterval descending, q.Value.OccurCount descending
+                        orderby q.Value.LastInterval, q.Value.OccurCount descending
                         select p.Key;
             return query.Take(3).Select(c =>
             {
