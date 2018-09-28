@@ -131,7 +131,7 @@ namespace Lottery.Core.Algorithm
                         break;
                 }
 
-                int[][] threeArrays = new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray(), new int[] { array[0], array[2], array[4] } };
+                int[][] threeArrays = new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray() };
                 number.AdjacentNumbers = threeArrays.Select((c, i) => GetAdjacents(c, i)).Where(c => c > 100).Distinct().ToArray();
                 number.RepeatNumbers =threeArrays.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
 
@@ -163,7 +163,6 @@ namespace Lottery.Core.Algorithm
                 bool isOk = index == 0 && (array[0] == array[1] || array[0] == array[2]);
                 isOk = isOk || index == 1;
                 isOk = isOk || (index == 2 && (array[1] == array[2] || array[0] == array[2]));
-                isOk = isOk || (index == 3 && array[0] == array[2]);
                 value = isOk ? (100 + adjacents[0] * 10 + adjacents[1]) : value;
             }
             return value;
