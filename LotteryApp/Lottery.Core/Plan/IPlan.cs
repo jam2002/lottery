@@ -19,6 +19,8 @@ namespace Lottery.Core.Plan
 
         int Number { get; set; }
 
+        int? TakeNumber { get; set; }
+
         Action<string, string> Dispatcher { get; set; }
 
         void Invoke(SimpleBet currentBet);

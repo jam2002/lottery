@@ -38,7 +38,7 @@ namespace Lottery.Core.Plan
             Calculator.ClearCache();
             InputOptions[] options = planDic.Values.Select(c => new InputOptions
             {
-                Number = takeNumber,
+                Number = c.TakeNumber.HasValue ? c.TakeNumber.Value : takeNumber,
                 LotteryName = c.LotteryName,
                 GameName = c.GameName,
                 GameArgs = c.GameArgs,

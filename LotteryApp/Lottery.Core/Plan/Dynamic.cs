@@ -16,6 +16,8 @@ namespace Lottery.Core.Plan
 
         public int Number { get; set; }
 
+        public int? TakeNumber { get; set; }
+
         public string GameName { get; set; }
 
         public string GameArgs { get; set; }
@@ -31,6 +33,11 @@ namespace Lottery.Core.Plan
 
         public void Invoke(SimpleBet currentBet)
         {
+            foreach (var p in currentBet.Results)
+            {
+                Dispatcher(p.ToReadString(), null);
+            }
+
             Action<int> Reset = (s) =>
             {
                 bool changed = currentBet.BetAward.Any() && (BetIndex == 0 || s == 3 || s == 1);

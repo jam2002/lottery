@@ -34,31 +34,21 @@ namespace Lottery.App
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
-            //Dynamic17 middle = new Dynamic17
-            //{
-            //    BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
-            //    BetIndex = 0,
-            //    LastBet = null,
-            //    GameName = "dynamic",
-            //    GameArgs = "17",
-            //    LotteryName = ConfigurationManager.AppSettings["LotteryName"],
-            //    Number = 1,
-            //    Dispatcher = (u, v) => UpdateUI("middle", u, v)
-            //};
-
-            Dynamic22 five = new Dynamic22
+            string[] gameNames = new string[] { "adjacent", "history" };
+            Dynamic22[] adjacents = gameNames.Select(c => new Dynamic22
             {
                 BetCycle = 9,
                 BetIndex = 0,
                 LastBet = null,
-                GameName = "adjacent",
+                TakeNumber = 30,
+                GameName = c,
                 GameArgs = "22",
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Number = 2,
-                Dispatcher = (u, v) => UpdateUI("five", u, v)
-            };
+                Dispatcher = (u, v) => UpdateUI(c, u, v)
+            }).ToArray();
 
-            Dictionary<string, IPlan> dic = dynamics.Concat(new IPlan[] { five }).ToDictionary(c => c.GetKey(), c => c);
+            Dictionary<string, IPlan> dic = dynamics.Concat(adjacents.OfType<IPlan>()).ToDictionary(c => c.GetKey(), c => c);
             this.invoker = new PlanInvoker(dic);
         }
 
@@ -79,17 +69,17 @@ namespace Lottery.App
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "middle":
-                        descBox = this.txtMiddleDesc;
-                        valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
-                        break;
                     case "after":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "five":
+                    case "adjacent":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
+                        break;
+                    case "history":
+                        descBox = this.txtFiftyDesc;
+                        valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                 }
 

@@ -2,28 +2,42 @@
 using Lottery.Core.Data;
 using System.Linq;
 using System.Text;
+using System;
 
 namespace Lottery.Core
 {
     public static class Extensions
     {
-        public static string ToReadString(this OutputResult output, bool isHtml = false)
+        private static void AddNewLine(StringBuilder builder, bool isHtml)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append($"{output.DisplayName} 最后一期分析奖号 {output.LastLotteryNumber}，分析期数：{output.Number}，分析结果：");
-            builder.Append("\n");
             if (isHtml)
             {
                 builder.AppendLine("<br/>");
             }
-
-            foreach (LotteryResult r in output.Output)
+            else
             {
-                builder.Append($"{r.Filter}：最大中奖次数：{ r.HitCount} ，最大间隔：{r.MaxInterval}，最近间隔：{r.LastInterval}，间隔列表：{string.Join(",", r.HitIntervals)}");
-                builder.Append("\n");
-                if (isHtml)
+                builder.Append(Environment.NewLine);
+            }
+        }
+
+        public static string ToReadString(this OutputResult output, bool isHtml = false)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append($"{output.DisplayName} 最后一期分析奖号 {output.LastLotteryNumber}，分析期数：{output.Number}，分析结果：");
+
+            if (output.Output.Any())
+            {
+                AddNewLine(builder, isHtml);
+
+                for (int i=0;i< output.Output.Length;i++)
                 {
-                    builder.AppendLine("<br/>");
+                    LotteryResult r = output.Output[i];
+                    builder.Append($"{r.Filter}：最大中奖次数：{ r.HitCount} ，最大间隔：{r.MaxInterval}，最近间隔：{r.LastInterval}，间隔列表：{string.Join(",", r.HitIntervals)}");
+
+                    if (i < output.Output.Length - 1)
+                    {
+                        AddNewLine(builder, isHtml);
+                    }
                 }
             }
 

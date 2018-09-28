@@ -178,6 +178,9 @@ namespace Lottery.Core.Algorithm
                 case "adjacent":
                     ret = GetAdjacentResult();
                     break;
+                case "history":
+                    ret = GetHistoryResult();
+                    break;
                 case "symmetric":
                     ret = GetSymmetricResult();
                     break;
@@ -301,26 +304,19 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[FactorTypeEnum.AdjacentNumber]
                         join q in FactorDic[FactorTypeEnum.AllPairs]
                            on p.Key equals q.Key
-                        where p.Value.LastInterval <= q.Value.LastInterval && p.Value.LastInterval <= 3
-                        orderby q.Value.LastInterval descending, q.Value.OccurCount descending
+                        where p.Value.LastInterval <= q.Value.LastInterval && p.Value.LastInterval <= 5
+                        orderby q.Value.OccurCount descending, q.Value.LastInterval descending
                         select p.Key;
-            return query.Take(3).Select(c =>
-            {
-                ReferenceFactor factor = FactorDic[FactorTypeEnum.AllPairs][c];
-                return new LotteryResult
-                {
-                    GameName = "adjacent",
-                    HitIntervals = factor.HitIntervals,
-                    HitCount = factor.OccurCount,
-                    LotteryName = InputOption.LotteryName,
-                    LastInterval = factor.LastInterval,
-                    MaxInterval = factor.MaxInterval,
-                    AnyFilters = new AnyFilter[]
-                    {
-                        new AnyFilter{  Values =new int[] { (c - 100) / 10, (c - 100) % 10 } }
-                    }
-                };
-            }).ToArray();
+            return Build(query);
+        }
+
+        private LotteryResult[] GetHistoryResult()
+        {
+            var query = from p in FactorDic[FactorTypeEnum.AllPairs]
+                        where p.Value.LastInterval <= 5 && p.Value.OccurCount >= 7
+                        orderby p.Value.OccurCount descending, p.Value.LastInterval descending
+                        select p.Key;
+            return Build(query);
         }
 
         private LotteryResult[] GetSymmetricResult()
@@ -331,8 +327,8 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[r]
                         join q in FactorDic[s]
                            on p.Key equals q.Key
-                        where p.Value.LastInterval <= q.Value.LastInterval && p.Value.LastInterval <= 3
-                        orderby q.Value.LastInterval descending, q.Value.OccurCount descending
+                        where p.Value.LastInterval <= q.Value.LastInterval && p.Value.LastInterval <= 5
+                        orderby q.Value.OccurCount descending, q.Value.LastInterval descending
                         select p.Key;
             return query.Take(3).Select(c =>
             {
@@ -348,7 +344,30 @@ namespace Lottery.Core.Algorithm
                     AnyFilters = new AnyFilter[]
                     {
                         new AnyFilter{  Values =new int[] { c } }
-                    }
+                    },
+                    Filter = $"不定位：{c}"
+                };
+            }).ToArray();
+        }
+
+        private LotteryResult[] Build(IEnumerable<int> awards)
+        {
+            return awards.Take(3).Select(c =>
+            {
+                ReferenceFactor factor = FactorDic[FactorTypeEnum.AllPairs][c];
+                return new LotteryResult
+                {
+                    GameName = InputOption.GameName,
+                    HitIntervals = factor.HitIntervals,
+                    HitCount = factor.OccurCount,
+                    LotteryName = InputOption.LotteryName,
+                    LastInterval = factor.LastInterval,
+                    MaxInterval = factor.MaxInterval,
+                    AnyFilters = new AnyFilter[]
+                    {
+                        new AnyFilter{  Values =new int[] { (c - 100) / 10, (c - 100) % 10 } }
+                    },
+                    Filter = $"不定位：{(c - 100) / 10}, {(c - 100) % 10}"
                 };
             }).ToArray();
         }
