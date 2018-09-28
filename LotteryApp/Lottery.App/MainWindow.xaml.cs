@@ -24,7 +24,7 @@ namespace Lottery.App
             string[] suffixes = new string[] { "front", "after" };
             Dynamic13[] dynamics = suffixes.Select(c => new Dynamic13
             {
-                BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
+                BetCycle = 7,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
@@ -48,7 +48,7 @@ namespace Lottery.App
 
             Dynamic22 five = new Dynamic22
             {
-                BetCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]),
+                BetCycle = 9,
                 BetIndex = 0,
                 LastBet = null,
                 GameName = "adjacent",
