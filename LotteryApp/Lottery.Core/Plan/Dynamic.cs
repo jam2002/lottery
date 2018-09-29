@@ -66,7 +66,8 @@ namespace Lottery.Core.Plan
             int status = isHit ? 1 : (BetIndex == BetCycle ? 3 : 2);
             if (BetIndex > 0)
             {
-                Dispatcher(BuildInfo(LastBet.BetAward, status == 1 || status == 3 ? BetIndex : ++BetIndex, status), GetChangedBetString(currentBet, status));
+                string bet = GetChangedBetString(currentBet, status);
+                Dispatcher(BuildInfo(LastBet.BetAward, status == 1 || status == 3 ? BetIndex : ++BetIndex, status), bet);
             }
 
             if (status == 1 || status == 3)

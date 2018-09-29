@@ -7,9 +7,13 @@ namespace Lottery.Core.Plan
     {
         public override string GetBetString(SimpleBet currentBet)
         {
-            int award = currentBet.BetAward[0];
-            string[] values = Enumerable.Range(0, 10).SelectMany(c => new string[] { c.ToString() + award.ToString(), award.ToString() + c.ToString() }).Distinct().ToArray();
-            return $"【{string.Join(" ", values)}】";
+            if (currentBet.BetAward.Any())
+            {
+                int award = currentBet.BetAward[0];
+                string[] values = Enumerable.Range(0, 10).SelectMany(c => new string[] { c.ToString() + award.ToString(), award.ToString() + c.ToString() }).Distinct().ToArray();
+                return $"【{string.Join(" ", values)}】";
+            }
+            return null;
         }
 
         public override bool IsHit(SimpleBet currentBet)
@@ -23,7 +27,7 @@ namespace Lottery.Core.Plan
 
         public override string GetChangedBetString(SimpleBet currentBet, int status)
         {
-            if (status == 2 && BetIndex <= 4)
+            if (status == 2 && BetIndex <= 4 && currentBet.BetAward.Any())
             {
                 LastBet = currentBet;
                 return GetBetString(currentBet);
