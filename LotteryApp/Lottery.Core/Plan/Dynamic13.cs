@@ -23,7 +23,7 @@ namespace Lottery.Core.Plan
 
         public override string GetChangedBetString(SimpleBet currentBet, int status)
         {
-            if (status == 2 && BetIndex <= 4 && BetIndex > 1)
+            if (status == 2 && BetIndex <= 4)
             {
                 return GetBetString(currentBet);
             }
