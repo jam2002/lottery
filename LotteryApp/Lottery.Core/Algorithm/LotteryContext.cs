@@ -313,7 +313,7 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetHistoryResult()
         {
             var query = from p in FactorDic[FactorTypeEnum.AllPairs]
-                        where p.Value.LastInterval <= 5 && p.Value.OccurCount >= 7
+                        where p.Value.LastInterval <= 5 && p.Value.OccurCount >= 5
                         orderby p.Value.OccurCount descending, p.Value.LastInterval descending
                         select p.Key;
             return Build(query);
@@ -321,14 +321,14 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSymmetricResult()
         {
-            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.RightRepeatNumber : FactorTypeEnum.LeftRepeatNumber;
+            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftRepeatNumber : FactorTypeEnum.RightRepeatNumber;
             FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : FactorTypeEnum.RightAward;
 
             var query = from p in FactorDic[r]
                         join q in FactorDic[s]
                            on p.Key equals q.Key
                         where p.Value.LastInterval <= q.Value.LastInterval && p.Value.LastInterval <= 5
-                        orderby q.Value.OccurCount descending, q.Value.LastInterval descending
+                        orderby q.Value.LastInterval
                         select p.Key;
             return query.Take(3).Select(c =>
             {

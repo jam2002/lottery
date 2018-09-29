@@ -1,4 +1,5 @@
-﻿using Lottery.Core.Data;
+﻿using Lottery.Core.Algorithm;
+using Lottery.Core.Data;
 using System;
 using System.Linq;
 
@@ -65,7 +66,7 @@ namespace Lottery.Core.Plan
             int status = isHit ? 1 : (BetIndex == BetCycle ? 3 : 2);
             if (BetIndex > 0)
             {
-                Dispatcher(BuildInfo(LastBet.BetAward, status == 1 || status == 3 ? BetIndex : ++BetIndex, status), null);
+                Dispatcher(BuildInfo(LastBet.BetAward, status == 1 || status == 3 ? BetIndex : ++BetIndex, status), GetChangedBetString(currentBet, status));
             }
 
             if (status == 1 || status == 3)
@@ -80,6 +81,16 @@ namespace Lottery.Core.Plan
             int[][] betValues = new int[][] { LastBet.BetAward };
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && betValues.Any(t => t.Intersect(current).Count() >= Number);
             return isHit;
+        }
+
+        public virtual string GetChangedBetString(SimpleBet currentBet, int status)
+        {
+            return null;
+        }
+
+        public virtual int[] GetBetAwards(OutputResult output)
+        {
+            return output.Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
         }
 
         /// <summary>

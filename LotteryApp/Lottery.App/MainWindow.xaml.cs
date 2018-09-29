@@ -40,7 +40,7 @@ namespace Lottery.App
                 BetCycle = 9,
                 BetIndex = 0,
                 LastBet = null,
-                TakeNumber = 30,
+                TakeNumber = c == "history" ? 20 : 50,
                 GameName = c,
                 GameArgs = "22",
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],

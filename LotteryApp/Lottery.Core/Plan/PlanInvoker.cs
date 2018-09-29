@@ -56,13 +56,8 @@ namespace Lottery.Core.Plan
                 };
                 if (c?.Output.Any() == true)
                 {
-                    int[] awards = c.Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
-                    if (c.Input.GameName == "dynamic" && c.Input.GameArgs == "22")
-                    {
-                        awards = c.Output.Where(d => d.WinCount >= 8).FirstOrDefault()?.AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
-                        awards = awards ?? new int[] { };
-                    }
-                    bet.BetAward = awards;
+                    IPlan plan = planDic[GetKey(c.Input)];
+                    bet.BetAward = plan.GetBetAwards(c);
                 }
                 return bet;
             });
@@ -78,12 +73,16 @@ namespace Lottery.Core.Plan
             {
                 if (bet.Results.Any())
                 {
-                    InputOptions input = bet.Results[0].Input;
-                    string key = string.Concat(input.LotteryName, ".", input.GameName, ".", input.GameArgs ?? string.Empty);
+                    string key = GetKey(bet.Results[0].Input);
                     IPlan plan = planDic[key];
                     plan.Invoke(bet);
                 }
             }
+        }
+
+        private string GetKey(InputOptions input)
+        {
+            return string.Concat(input.LotteryName, ".", input.GameName, ".", input.GameArgs ?? string.Empty);
         }
     }
 }

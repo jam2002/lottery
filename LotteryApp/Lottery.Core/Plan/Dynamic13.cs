@@ -20,5 +20,14 @@ namespace Lottery.Core.Plan
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && betValues.Any(t => t.Intersect(current).Count() >= Number);
             return isHit;
         }
+
+        public override string GetChangedBetString(SimpleBet currentBet, int status)
+        {
+            if (status == 2 && BetIndex <= 4 && BetIndex > 1)
+            {
+                return GetBetString(currentBet);
+            }
+            return base.GetChangedBetString(currentBet, status);
+        }
     }
 }

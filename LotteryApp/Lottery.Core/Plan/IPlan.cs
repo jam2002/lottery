@@ -1,4 +1,5 @@
-﻿using Lottery.Core.Data;
+﻿using Lottery.Core.Algorithm;
+using Lottery.Core.Data;
 using System;
 
 namespace Lottery.Core.Plan
@@ -26,5 +27,7 @@ namespace Lottery.Core.Plan
         void Invoke(SimpleBet currentBet);
 
         string GetKey();
+
+        int[] GetBetAwards(OutputResult output);
     }
 }
