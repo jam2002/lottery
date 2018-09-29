@@ -25,6 +25,7 @@ namespace Lottery.Core.Plan
         {
             if (status == 2 && BetIndex <= 4)
             {
+                LastBet = currentBet;
                 return GetBetString(currentBet);
             }
             return base.GetChangedBetString(currentBet, status);
