@@ -27,11 +27,11 @@ namespace Lottery.Core.Plan
 
         public override string GetChangedBetString(SimpleBet currentBet, int status)
         {
-            if (status == 2 && BetIndex <= 3 && currentBet.BetAward.Any())
-            {
-                LastBet = currentBet;
-                return GetBetString(currentBet);
-            }
+            //if (status == 2 && BetIndex <= 3 && currentBet.BetAward.Any())
+            //{
+            //    LastBet = currentBet;
+            //    return GetBetString(currentBet);
+            //}
             return base.GetChangedBetString(currentBet, status);
         }
     }
