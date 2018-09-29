@@ -313,7 +313,6 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetHistoryResult()
         {
             var query = from p in FactorDic[FactorTypeEnum.AllPairs]
-                        where p.Value.LastInterval <= 5 && p.Value.OccurCount >= 5
                         orderby p.Value.OccurCount descending, p.Value.LastInterval descending
                         select p.Key;
             return Build(query);
