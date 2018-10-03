@@ -21,14 +21,27 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string[] suffixes = new string[] { "front", "after" };
-            Dynamic13[] dynamics = suffixes.Select(c => new Dynamic13
+            string[] gameArgs = new string[] { "front", "after" };
+            Dynamic13[] dynamics = gameArgs.Select(c => new Dynamic13
             {
                 BetCycle = 7,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
                 GameName = "symmetric",
+                GameArgs = c,
+                LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
+                Dispatcher = (u, v) => UpdateUI(c, u, v)
+            }).ToArray();
+
+            gameArgs = new string[] { "first", "second" };
+            Dynamic15[] singles = gameArgs.Select(c => new Dynamic15
+            {
+                BetCycle = 5,
+                BetIndex = 0,
+                LastBet = null,
+                Number = 1,
+                GameName = "single",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
@@ -48,7 +61,7 @@ namespace Lottery.App
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
-            Dictionary<string, IPlan> dic = dynamics.Concat(adjacents.OfType<IPlan>()).ToDictionary(c => c.GetKey(), c => c);
+            Dictionary<string, IPlan> dic = dynamics.Concat(singles.OfType<IPlan>()).Concat(adjacents.OfType<IPlan>()).ToDictionary(c => c.GetKey(), c => c);
             this.invoker = new PlanInvoker(dic);
         }
 
@@ -72,6 +85,14 @@ namespace Lottery.App
                     case "after":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
+                        break;
+                    case "first":
+                        descBox = this.txtOneAwardDesc;
+                        valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
+                        break;
+                    case "second":
+                        descBox = this.txtOneAwardSecDesc;
+                        valueBox = this.txtOneAwardSecHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "adjacent":
                         descBox = this.txtFiveDesc;
