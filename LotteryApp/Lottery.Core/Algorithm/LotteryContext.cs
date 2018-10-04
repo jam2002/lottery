@@ -242,7 +242,8 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetSingleResult()
         {
             var query = from p in FactorDic[FactorTypeEnum.Award]
-                        orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
+                        where p.Value.FailureCount <= 1
+                        orderby p.Value.OccurCount descending, p.Value.LastInterval descending
                         select p.Key;
             if (InputOption.GameArgs == "second")
             {
