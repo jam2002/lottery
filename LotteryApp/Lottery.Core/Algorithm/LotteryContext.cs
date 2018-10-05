@@ -241,14 +241,16 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSingleResult()
         {
-            var query = from p in FactorDic[FactorTypeEnum.Award]
+            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "after" ? FactorTypeEnum.RightAward : FactorTypeEnum.Award);
+
+            var query = from p in FactorDic[r]
                         orderby p.Value.FailureCount <= 1 ? 1 : p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
                         select p.Key;
             if (InputOption.GameArgs == "second")
             {
                 query = query.Skip(1);
             }
-            return Build(query, FactorTypeEnum.Award);
+            return Build(query, r);
         }
 
         private LotteryResult[] GetSymmetricResult()
