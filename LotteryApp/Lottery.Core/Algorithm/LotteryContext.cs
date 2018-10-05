@@ -225,9 +225,9 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[FactorTypeEnum.AdjacentNumber]
                         join q in FactorDic[FactorTypeEnum.AllPairs]
                            on p.Key equals q.Key
-                        where p.Value.LastInterval <= q.Value.LastInterval && p.Value.LastInterval <= 7
-                        orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
-                        select p.Key;
+                        where q.Value.LastInterval <= 7
+                        orderby q.Value.FailureCount, q.Value.OccurCount descending, q.Value.LastInterval descending
+                        select q.Key;
             return Build(query, FactorTypeEnum.AllPairs);
         }
 
@@ -244,6 +244,7 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "after" ? FactorTypeEnum.RightAward : FactorTypeEnum.Award);
 
             var query = from p in FactorDic[r]
+                        where p.Value.LastInterval >= 2 && p.Value.FailureCount <= 1
                         orderby p.Value.FailureCount <= 1 ? 1 : p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
                         select p.Key;
             if (InputOption.GameArgs == "second")
@@ -272,7 +273,7 @@ namespace Lottery.Core.Algorithm
             return awards.Take(3).Select(c =>
             {
                 ReferenceFactor factor = FactorDic[type][c];
-                int[] values = type == FactorTypeEnum.AllPairs ? new int[] { (c - 100) / 10, (c - 100) % 10 } : new int[] { c };
+                int[] values = type == FactorTypeEnum.AllPairs || type == FactorTypeEnum.AdjacentNumber ? new int[] { (c - 100) / 10, (c - 100) % 10 } : new int[] { c };
                 return new LotteryResult
                 {
                     GameName = InputOption.GameName,
