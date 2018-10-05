@@ -22,13 +22,13 @@ namespace Lottery.App
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             string[] gameArgs = new string[] { "front", "after" };
-            Dynamic135[] dynamics = gameArgs.Select(c => new Dynamic135
+            Dynamic13[] dynamics = gameArgs.Select(c => new Dynamic13
             {
-                BetCycle = 5,
+                BetCycle = 8,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
-                GameName = "single",
+                GameName = "symmetric",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
