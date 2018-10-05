@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace Lottery.Core.Plan
 {
+    /// <summary>
+    /// 五星二码
+    /// </summary>
     public class Dynamic22 : Dynamic
     {
         public override string GetBetString(SimpleBet currentBet)

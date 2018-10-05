@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace Lottery.Core.Plan
 {
+    /// <summary>
+    /// 中三一码，五星对称
+    /// </summary>
     public class Dynamic17 : Dynamic
     {
         public override string GetBetString(SimpleBet currentBet)

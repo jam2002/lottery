@@ -131,13 +131,10 @@ namespace Lottery.Core.Algorithm
                         break;
                 }
 
-                //number.AdjacentNumbers = (from u in repeats
-                //                          from v in number.DistinctNumbers.Except(repeats)
-                //                          let temp = new int[] { u, v }.OrderBy(c => c).ToArray()
-                //                          select 100 + temp[0] * 10 + temp[1]).ToArray();
+                number.AdjacentNumbers = repeats.SelectMany(c => new[] { new { adj = c + 1, value = 100 + c * 10 + c + 1 }, new { adj = c - 1, value = 100 + (c - 1) * 10 + c } }).Where(c => number.DistinctNumbers.Contains(c.adj)).Select(c => c.value).Distinct().ToArray();
 
                 int[][] threeArrays = new int[][] { array.Take(3).ToArray(), array.Skip(1).Take(3).ToArray(), array.Skip(2).Take(3).ToArray(), new int[] { array[0], array[2], array[4] } };
-                number.AdjacentNumbers = threeArrays.Select((c, i) => GetAdjacents(c, i)).Where(c => c > 100).Distinct().ToArray();
+                //number.AdjacentNumbers = threeArrays.Select((c, i) => GetAdjacents(c, i)).Where(c => c > 100).Distinct().ToArray();
                 number.RepeatNumbers =threeArrays.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
 
                 number.LeftRepeatNumbers = new int[][] { array.Take(3).ToArray() }.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
