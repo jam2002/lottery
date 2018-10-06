@@ -21,7 +21,7 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string[] gameArgs = new string[] { "front", "after" };
+            string[] gameArgs = new string[] { "front", "middle",  "after" };
             Dynamic13[] dynamics = gameArgs.Select(c => new Dynamic13
             {
                 BetCycle = 8,
@@ -80,6 +80,10 @@ namespace Lottery.App
                     case "front":
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
+                        break;
+                    case "middle":
+                        descBox = this.txtMiddleDesc;
+                        valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "after":
                         descBox = this.txtAfterDesc;

@@ -48,7 +48,7 @@
         /// </summary>
         Wan = 17,
 
-        RepeatNumber =24,
+        RepeatNumber = 24,
 
         /// <summary>
         /// 前三对子胆码
@@ -61,6 +61,11 @@
         RightRepeatNumber = 19,
 
         /// <summary>
+        /// 中三对子胆码
+        /// </summary>
+        MiddleRepeatNumber = 24,
+
+        /// <summary>
         /// 前三胆码
         /// </summary>
         LeftAward = 20,
@@ -69,6 +74,11 @@
         /// 后三胆码
         /// </summary>
         RightAward = 21,
+
+        /// <summary>
+        /// 中三胆码
+        /// </summary>
+        MiddleAward = 25,
 
         /// <summary>
         /// 对子与领号胆码组合

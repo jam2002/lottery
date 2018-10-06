@@ -49,9 +49,13 @@
         /// </summary>
         public int[] RightRepeatNumbers { get; set; }
 
+        public int[] MiddleRepeatNumbers { get; set; }
+
         public int[] LeftAwards { get; set; }
 
         public int[] RightAwards { get; set; }
+
+        public int[] MiddleAwards { get; set; }
 
         /// <summary>
         /// 重号与相邻号组合
