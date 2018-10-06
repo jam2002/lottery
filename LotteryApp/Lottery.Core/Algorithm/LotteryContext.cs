@@ -58,8 +58,10 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.FiveStarForm, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.RepeatNumber, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.LeftRepeatNumber, new Dictionary<int, ReferenceFactor> { } },
+                { FactorTypeEnum.MiddleRepeatNumber, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.RightRepeatNumber, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.LeftAward, new Dictionary<int, ReferenceFactor> { } },
+                { FactorTypeEnum.MiddleAward, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.RightAward, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.AdjacentNumber, new Dictionary<int, ReferenceFactor> { } },
                 { FactorTypeEnum.AllPairs, new Dictionary<int, ReferenceFactor> { } }
@@ -123,9 +125,11 @@ namespace Lottery.Core.Algorithm
             {
                 { FactorTypeEnum.Award, number.DistinctNumbers},
                 { FactorTypeEnum.LeftAward, number.LeftAwards},
+                { FactorTypeEnum.MiddleAward, number.MiddleAwards},
                 { FactorTypeEnum.RightAward, number.RightAwards},
                 { FactorTypeEnum.RepeatNumber, number.RepeatNumbers},
                 { FactorTypeEnum.LeftRepeatNumber, number.LeftRepeatNumbers},
+                { FactorTypeEnum.MiddleRepeatNumber, number.MiddleRepeatNumbers},
                 { FactorTypeEnum.RightRepeatNumber, number.RightRepeatNumbers},
                 { FactorTypeEnum.AdjacentNumber, number.AdjacentNumbers},
                 { FactorTypeEnum.AllPairs, number.AllPairs}
@@ -256,15 +260,15 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSymmetricResult()
         {
-            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftRepeatNumber : FactorTypeEnum.RightRepeatNumber;
-            FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : FactorTypeEnum.RightAward;
+            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftRepeatNumber : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleRepeatNumber : FactorTypeEnum.RightRepeatNumber);
+            FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleAward : FactorTypeEnum.RightAward);
 
             var query = from p in FactorDic[r]
                         join q in FactorDic[s]
                            on p.Key equals q.Key
-                        where p.Value.LastInterval <= q.Value.LastInterval && q.Value.LastInterval >= 2
-                        orderby q.Value.LastInterval descending, q.Value.OccurCount descending
-                        select p.Key;
+                        where p.Value.LastInterval <= q.Value.LastInterval && q.Value.LastInterval >= 2 && q.Value.LastInterval <= 7
+                        orderby q.Value.FailureCount, q.Value.LastInterval descending, q.Value.OccurCount descending
+                        select q.Key;
             return Build(query, r);
         }
 
