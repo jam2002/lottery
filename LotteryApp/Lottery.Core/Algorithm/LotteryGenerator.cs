@@ -150,7 +150,7 @@ namespace Lottery.Core.Algorithm
             }
             else
             {
-                number.LeftRepeatNumbers = number.RightRepeatNumbers = new int[][] { array }.Select(c => GetRepeats(c)).Where(c => c >= 0).Distinct().ToArray();
+                number.LeftRepeatNumbers = number.RightRepeatNumbers = new int[][] { array }.Select(c => GetRepeats(c, null)).Where(c => c >= 0).Distinct().ToArray();
                 number.LeftAwards = number.RightAwards = array.Distinct().OrderBy(c => c).ToArray();
                 number.AdjacentNumbers = new int[] { };
                 number.AllPairs = new int[] { };
