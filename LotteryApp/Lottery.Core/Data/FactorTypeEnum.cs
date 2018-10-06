@@ -63,7 +63,7 @@
         /// <summary>
         /// 中三对子胆码
         /// </summary>
-        MiddleRepeatNumber = 24,
+        MiddleRepeatNumber = 25,
 
         /// <summary>
         /// 前三胆码
@@ -78,7 +78,7 @@
         /// <summary>
         /// 中三胆码
         /// </summary>
-        MiddleAward = 25,
+        MiddleAward = 26,
 
         /// <summary>
         /// 对子与领号胆码组合
