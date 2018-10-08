@@ -168,13 +168,12 @@ namespace Lottery.Core.Algorithm
 
         private static int GetRepeats(int[] array, int? pos)
         {
-            int[] r = array.GroupBy(c => c).Where(c => c.Count() > 1).Select(c => c.Key).ToArray();
-            if (pos == null || pos == 2)
-                return r.Any() ? r[0] : -1;
-            else if (pos == 1)
-                return r.Any() && array[1] != array[2] ? r[0] : -1;
+            int r = array[0] == array[2] || array[1] == array[2] || array[0] == array[1] ? array[1] : -1;
+
+            if (pos == null || pos == 1)
+                return r;
             else
-                return r.Any() && array[0] != array[1] ? r[0] : -1;
+                return array[0] != array[1] ? r : -1;
         }
 
         private static LotteryNumber[] GetAllNumbers(int type)
