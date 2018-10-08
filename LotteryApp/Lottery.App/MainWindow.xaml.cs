@@ -34,7 +34,7 @@ namespace Lottery.App
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
-            gameArgs = new string[] { "first", "second" };
+            gameArgs = new string[] { "first" };
             Dynamic15[] singles = gameArgs.Select(c => new Dynamic15
             {
                 BetCycle = 5,
@@ -92,10 +92,6 @@ namespace Lottery.App
                     case "first":
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
-                        break;
-                    case "second":
-                        descBox = this.txtOneAwardSecDesc;
-                        valueBox = this.txtOneAwardSecHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "adjacent":
                         descBox = this.txtFiveDesc;

@@ -21,21 +21,11 @@ namespace Lottery.Core.Plan
 
         public override bool IsHit(SimpleBet currentBet)
         {
-            int number = GameArgs == "front" ? 0 : 2;
+            int number = GameArgs == "front" ? 0 : (GameArgs == "middle" ? 1 : 2);
             int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).Skip(number).Take(3).ToArray();
             int[][] betValues = new int[][] { LastBet.BetAward };
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && betValues.Any(t => t.Intersect(current).Count() >= Number);
             return isHit;
-        }
-
-        public override string GetChangedBetString(SimpleBet currentBet, int status)
-        {
-            //if (status == 2 && BetIndex <= 3 && currentBet.BetAward.Any())
-            //{
-            //    LastBet = currentBet;
-            //    return GetBetString(currentBet);
-            //}
-            return base.GetChangedBetString(currentBet, status);
         }
     }
 }

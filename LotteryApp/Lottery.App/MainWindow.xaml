@@ -12,7 +12,7 @@
         <TextBlock Margin="0,10">前三一码</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtFrontDesc" Height="50" Width="500"/>
+            <RichTextBox Name="txtFrontDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
             <TextBlock Margin="10">投注</TextBlock>
             <WindowsFormsHost Height="50" Width="500" Name="txtFrontHost">
                 <WinFormControls:RichTextBox Name="txtFrontValue"></WinFormControls:RichTextBox>
@@ -22,7 +22,7 @@
         <TextBlock Margin="0,10">中三一码</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtMiddleDesc" Height="50" Width="500"/>
+            <RichTextBox Name="txtMiddleDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
             <TextBlock Margin="10">投注</TextBlock>
             <WindowsFormsHost Height="50" Width="500" Name="txtMiddleHost">
                 <WinFormControls:RichTextBox Name="txtMiddleValue"></WinFormControls:RichTextBox>
@@ -32,7 +32,7 @@
         <TextBlock Margin="0,10">后三一码</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtAfterDesc" Height="50" Width="500"/>
+            <RichTextBox Name="txtAfterDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
             <TextBlock Margin="10">投注</TextBlock>
             <WindowsFormsHost Height="50" Width="500" Name="txtAfterHost">
                 <WinFormControls:RichTextBox Name="txtAfterValue"></WinFormControls:RichTextBox>
@@ -42,27 +42,17 @@
         <TextBlock Margin="0,10">五星一码</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtOneAwardDesc" Height="50" Width="500"/>
+            <RichTextBox Name="txtOneAwardDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
             <TextBlock Margin="10">投注</TextBlock>
             <WindowsFormsHost Height="50" Width="500" Name="txtOneAwardHost">
                 <WinFormControls:RichTextBox Name="txtOneAwardValue"></WinFormControls:RichTextBox>
             </WindowsFormsHost>
         </StackPanel>
 
-        <TextBlock Margin="0,10">五星次一码</TextBlock>
-        <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-            <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtOneAwardSecDesc" Height="50" Width="500"/>
-            <TextBlock Margin="10">投注</TextBlock>
-            <WindowsFormsHost Height="50" Width="500" Name="txtOneAwardSecHost">
-                <WinFormControls:RichTextBox Name="txtOneAwardSecValue"></WinFormControls:RichTextBox>
-            </WindowsFormsHost>
-        </StackPanel>
-
         <TextBlock Margin="0,10">五星相邻二码</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtFiveDesc" Height="50" Width="500"/>
+            <RichTextBox Name="txtFiveDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
             <TextBlock Margin="10">投注</TextBlock>
             <WindowsFormsHost Height="50" Width="500" Name="txtFiveHost">
                 <WinFormControls:RichTextBox Name="txtFiveValue"></WinFormControls:RichTextBox>
@@ -72,7 +62,7 @@
         <TextBlock Margin="0,10">五星历史二码</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
-            <RichTextBox Name="txtFiftyDesc" Height="50" Width="500"/>
+            <RichTextBox Name="txtFiftyDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
             <TextBlock Margin="10">投注</TextBlock>
             <WindowsFormsHost Height="50" Width="500" Name="txtFiftyHost">
                 <WinFormControls:RichTextBox Name="txtFiftyValue"></WinFormControls:RichTextBox>
