@@ -53,17 +53,17 @@
         /// <summary>
         /// 前三对子胆码
         /// </summary>
-        LeftRepeatNumber = 18,
+        LeftRepeat = 18,
 
         /// <summary>
         /// 后三对子胆码
         /// </summary>
-        RightRepeatNumber = 19,
+        RightRepeat = 19,
 
         /// <summary>
         /// 中三对子胆码
         /// </summary>
-        MiddleRepeatNumber = 25,
+        MiddleRepeat = 25,
 
         /// <summary>
         /// 前三胆码

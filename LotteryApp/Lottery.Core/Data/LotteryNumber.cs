@@ -42,14 +42,14 @@
         /// <summary>
         /// 前三对子胆码
         /// </summary>
-        public int[] LeftRepeatNumbers { get; set; }
+        public int[] LeftRepeats { get; set; }
 
         /// <summary>
         /// 后三对子胆码
         /// </summary>
-        public int[] RightRepeatNumbers { get; set; }
+        public int[] RightRepeats { get; set; }
 
-        public int[] MiddleRepeatNumbers { get; set; }
+        public int[] MiddleRepeats { get; set; }
 
         public int[] LeftAwards { get; set; }
 
