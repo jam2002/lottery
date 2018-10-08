@@ -21,7 +21,7 @@ namespace Lottery.Core.Plan
 
         public override bool IsHit(SimpleBet currentBet)
         {
-            int number = GameArgs == "front" ? 0 : (GameArgs == "middle" ? 1 : 2);
+            int number = GameArgs == "front" ? 0 : 2;
             int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).Skip(number).Take(3).ToArray();
             int[][] betValues = new int[][] { LastBet.BetAward };
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && betValues.Any(t => t.Intersect(current).Count() >= Number);
