@@ -168,7 +168,7 @@ namespace Lottery.Core.Algorithm
 
         private static int GetRepeats(int[] array, int? pos)
         {
-            int r = array[0] == array[2] || array[1] == array[2] || array[0] == array[1] ? array[1] : -1;
+            int r = array[0] == array[2] ? array[0] : (array[1] == array[2] || array[0] == array[1] ? array[1] : -1);
 
             if (pos == null || pos == 1)
                 return r;
