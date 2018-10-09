@@ -3,8 +3,6 @@ using Lottery.Core.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MathNet.Numerics.LinearRegression;
-using MathNet.Numerics;
 
 namespace Lottery.Core.Algorithm
 {
@@ -158,15 +156,6 @@ namespace Lottery.Core.Algorithm
                 default:
                     break;
             }
-
-            if (ret != null)
-            {
-                foreach (LotteryResult r in ret)
-                {
-                    r.LotteryName = InputOption.LotteryName;
-                }
-            }
-
             return ret;
         }
 
@@ -223,10 +212,7 @@ namespace Lottery.Core.Algorithm
                         where p.Value.LastInterval >= 2 && p.Value.FailureCount <= 1
                         orderby p.Value.FailureCount <= 1 ? 1 : p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
                         select p.Key;
-            if (InputOption.GameArgs == "second")
-            {
-                query = query.Skip(1);
-            }
+
             return Build(query, r);
         }
 
@@ -416,7 +402,7 @@ namespace Lottery.Core.Algorithm
             }
             #endregion
 
-            LotteryResult ret = new LotteryResult() { Numbers = query.ToArray() };
+            LotteryResult ret = new LotteryResult() { Numbers = query.ToArray(), LotteryName = InputOption.LotteryName };
             ret.BetAmount = ret.Numbers.Length * 2;
             ret.BetCount = ret.Numbers.Length;
 
