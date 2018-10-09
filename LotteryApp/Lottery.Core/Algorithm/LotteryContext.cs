@@ -218,13 +218,13 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSymmetricResult()
         {
-            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftRepeat : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleRepeat : FactorTypeEnum.RightRepeat);
+            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.RightRepeat : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleRepeat : FactorTypeEnum.LeftRepeat);
             FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleAward : FactorTypeEnum.RightAward);
 
             var query = from p in FactorDic[r]
                         join q in FactorDic[s]
                            on p.Key equals q.Key
-                        where p.Value.LastInterval <= q.Value.LastInterval && q.Value.LastInterval >= 2 && q.Value.LastInterval <= 9
+                        where p.Value.LastInterval <= q.Value.LastInterval && q.Value.LastInterval <= 5
                         orderby q.Value.LastInterval descending, q.Value.OccurCount descending
                         select q.Key;
             return Build(query, r);
