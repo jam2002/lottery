@@ -172,11 +172,12 @@ namespace Lottery.Core.Algorithm
 
             int[] repeats = array.GroupBy(c => c).Where(c => c.Count() > 1).Select(c => c.Key).OrderBy(c => c).ToArray();
             int r = repeats.Any() ? repeats[0] : -1;
+            return r;
 
-            if (pos == null || pos == 1)
-                return r;
-            else
-                return r != -1 && array[0] != array[1] ? r : -1;
+            //if (pos == null || pos == 1)
+            //    return r;
+            //else
+            //    return r != -1 && array[0] != array[1] ? r : -1;
         }
 
         private static LotteryNumber[] GetAllNumbers(int type)
