@@ -218,17 +218,14 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSymmetricResult()
         {
-            //中三，后三都将投注到后三
             FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftRepeat : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleRepeat : FactorTypeEnum.RightRepeat);
-            FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : FactorTypeEnum.RightAward;
-
-            int[] hotAwards = FactorDic[s].Where(c => c.Value.LastInterval <= 10).OrderByDescending(c => c.Value.OccurCount).ThenBy(c => c.Value.LastInterval).Take(7).Select(c => c.Key).ToArray();
+            FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleAward : FactorTypeEnum.RightAward);
 
             var query = from p in FactorDic[r]
                         join q in FactorDic[s]
                            on p.Key equals q.Key
-                        where p.Value.LastInterval <= q.Value.LastInterval && q.Value.LastInterval <= 7 && q.Value.LastInterval >= 2 && hotAwards.Contains(q.Key)
-                        orderby q.Value.LastInterval descending, q.Value.OccurCount descending
+                        where p.Value.LastInterval <= q.Value.LastInterval && q.Value.LastInterval <= 7 && q.Value.LastInterval >= 2
+                        orderby q.Value.LastInterval, q.Value.OccurCount descending
                         select q.Key;
             return Build(query, r);
         }
