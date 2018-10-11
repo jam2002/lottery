@@ -24,10 +24,11 @@ namespace Lottery.App
             string[] gameArgs = new string[] { "front", "middle",  "after" };
             Dynamic13[] dynamics = gameArgs.Select(c => new Dynamic13
             {
-                BetCycle = 8,
+                BetCycle = 7,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
+                TakeNumber = 30,
                 GameName = "symmetric",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
