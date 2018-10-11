@@ -206,7 +206,14 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSingleResult()
         {
-            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "after" ? FactorTypeEnum.RightAward : FactorTypeEnum.Award);
+            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+            {
+                { "front", FactorTypeEnum.LeftAward},
+                { "middle", FactorTypeEnum.MiddleAward},
+                { "after", FactorTypeEnum.RightAward},
+                { "first", FactorTypeEnum.Award}
+            };
+            FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
             var query = from p in FactorDic[r]
                         where p.Value.LastInterval >= 2 && p.Value.FailureCount <= 1
