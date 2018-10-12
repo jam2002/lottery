@@ -228,13 +228,13 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftRepeat : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleRepeat : FactorTypeEnum.RightRepeat);
             FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleAward : FactorTypeEnum.RightAward);
 
-            int[] hotAwards = FactorDic[s].Where(c => c.Value.MaxInterval < 10).OrderByDescending(c => c.Value.OccurCount).Take(7).Select(c => c.Key).ToArray();
+            int[] hotAwards = FactorDic[s].Where(c => c.Value.MaxInterval < 12 && c.Value.LastInterval < 7).OrderByDescending(c => c.Value.OccurCount).Take(7).Select(c => c.Key).ToArray();
 
             var query = from p in FactorDic[r]
                         join q in FactorDic[s]
                            on p.Key equals q.Key
-                        where p.Value.LastInterval <= q.Value.LastInterval && q.Value.FailureCount <= 1 && hotAwards.Contains(q.Key)
-                        orderby q.Value.OccurCount descending, q.Value.LastInterval descending
+                        where p.Value.LastInterval <= q.Value.LastInterval && hotAwards.Contains(q.Key)
+                        orderby q.Value.FailureCount, q.Value.OccurCount descending, q.Value.LastInterval descending
                         select q.Key;
             return Build(query, r);
         }

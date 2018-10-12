@@ -28,7 +28,6 @@ namespace Lottery.App
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
-                TakeNumber = 30,
                 GameName = "symmetric",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
