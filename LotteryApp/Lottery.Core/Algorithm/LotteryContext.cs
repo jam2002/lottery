@@ -216,7 +216,7 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
             var query = from p in FactorDic[r]
-                        where p.Value.LastInterval >= 2 && p.Value.FailureCount <= 1
+                        where p.Value.LastInterval >= 2 && p.Value.FailureCount <= 1 && p.Value.LastInterval < InputOption.BetCycle
                         orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
                         select p.Key;
 
