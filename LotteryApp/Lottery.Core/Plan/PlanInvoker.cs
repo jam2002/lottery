@@ -1,36 +1,42 @@
-﻿using Lottery.Core.Algorithm;
+﻿using Hangfire;
+using Hangfire.SQLite;
+using Lottery.Core.Algorithm;
 using Lottery.Core.Data;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Net;
-using System.Threading;
 
 namespace Lottery.Core.Plan
 {
     public class PlanInvoker
     {
-        private Timer timer;
         private Dictionary<string, IPlan> planDic;
         private int takeNumber;
 
         public PlanInvoker(Dictionary<string, IPlan> plans)
         {
-            ServicePoint sp = ServicePointManager.FindServicePoint(new Uri("http://tx-ssc.com"));
+            string path = Path.Combine(Environment.CurrentDirectory, "lottery.db");
+            if (!File.Exists(path))
+            {
+                SQLiteConnection.CreateFile(path);
+            }
+
+            ServicePoint sp = ServicePointManager.FindServicePoint(new Uri("https://www.pp926.com/api/lastOpenedIssues.php"));
             sp.ConnectionLimit = 10;
 
             planDic = plans;
             takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
 
-            DateTime start = DateTime.Now;
-            timer = new Timer(StartBet, null, start.Second < 15 ? (15 - start.Second) * 1000 : (75 - start.Second) * 1000, int.Parse(ConfigurationManager.AppSettings["GameInterval"]));
-        }
+            GlobalConfiguration.Configuration.UseSQLiteStorage("sqlite");
+            BackgroundJobServer server = new BackgroundJobServer();
+            RecurringJob.AddOrUpdate(() => StartBet(), "15 * * * *");
 
-        public void Close()
-        {
-            this.timer.Dispose();
-            this.timer = null;
+            //DateTime start = DateTime.Now;
+            //timer = new Timer(StartBet, null, start.Second < 15 ? (15 - start.Second) * 1000 : (75 - start.Second) * 1000, int.Parse(ConfigurationManager.AppSettings["GameInterval"]));
         }
 
         private SimpleBet[] Invoke()
@@ -38,7 +44,7 @@ namespace Lottery.Core.Plan
             Calculator.ClearCache();
             InputOptions[] options = planDic.Values.Select(c => new InputOptions
             {
-                Number = c.TakeNumber.HasValue ? c.TakeNumber.Value : takeNumber,
+                Number = c.TakeNumber ?? takeNumber,
                 LotteryName = c.LotteryName,
                 GameName = c.GameName,
                 GameArgs = c.GameArgs,
@@ -65,7 +71,7 @@ namespace Lottery.Core.Plan
             return query.ToArray();
         }
 
-        private void StartBet(object state)
+        public void StartBet()
         {
             SimpleBet[] currentBets = Invoke();
 

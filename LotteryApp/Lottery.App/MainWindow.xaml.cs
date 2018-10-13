@@ -64,11 +64,6 @@ namespace Lottery.App
             this.invoker = new PlanInvoker(dic);
         }
 
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            this.invoker.Close();
-        }
-
         private void UpdateUI(string code, string desc, string value)
         {
             this.Dispatcher.Invoke(() =>
