@@ -234,7 +234,7 @@ namespace Lottery.Core.Algorithm
 
                 var query = from p in FactorDic[r]
                             where p.Value.FailureCount <= 1 && p.Value.LastInterval < InputOption.BetCycle
-                            orderby p.Value.FailureCount, p.Value.LastInterval descending, p.Value.OccurCount descending
+                            orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
                             select p.Key;
 
                 return Build(query, r);
