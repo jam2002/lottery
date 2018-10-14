@@ -1,7 +1,7 @@
-﻿using Hangfire;
-using Hangfire.SQLite;
-using Lottery.Core.Algorithm;
+﻿using Lottery.Core.Algorithm;
 using Lottery.Core.Data;
+using Quartz;
+using Quartz.Impl;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,10 +14,13 @@ namespace Lottery.Core.Plan
 {
     public class PlanInvoker
     {
+        private IScheduler scheduler;
         private Dictionary<string, IPlan> planDic;
         private int takeNumber;
 
-        public PlanInvoker(Dictionary<string, IPlan> plans)
+        public static readonly PlanInvoker Current = new PlanInvoker();
+
+        public void Init(Dictionary<string, IPlan> plans)
         {
             string path = Path.Combine(Environment.CurrentDirectory, "lottery.db");
             if (!File.Exists(path))
@@ -31,12 +34,14 @@ namespace Lottery.Core.Plan
             planDic = plans;
             takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
 
-            GlobalConfiguration.Configuration.UseSQLiteStorage("sqlite");
-            BackgroundJobServer server = new BackgroundJobServer();
-            RecurringJob.AddOrUpdate(() => StartBet(), "15 * * * *");
+            scheduler = StdSchedulerFactory.GetDefaultScheduler();
+            scheduler.Start();
 
-            //DateTime start = DateTime.Now;
-            //timer = new Timer(StartBet, null, start.Second < 15 ? (15 - start.Second) * 1000 : (75 - start.Second) * 1000, int.Parse(ConfigurationManager.AppSettings["GameInterval"]));
+            IJobDetail job = JobBuilder.Create<SimpleJob>().WithIdentity("job1", "group1").Build();
+            DateTime start = DateTime.Now;
+            start = start.AddSeconds(start.Second < 15 ? (15 - start.Second) : (75 - start.Second));
+            ITrigger trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(1).RepeatForever()).Build();
+            scheduler.ScheduleJob(job, trigger);
         }
 
         private SimpleBet[] Invoke()
@@ -69,6 +74,11 @@ namespace Lottery.Core.Plan
             });
 
             return query.ToArray();
+        }
+
+        public void Close()
+        {
+            scheduler.Shutdown();
         }
 
         public void StartBet()

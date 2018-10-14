@@ -13,7 +13,6 @@ namespace Lottery.App
     /// </summary>
     public partial class MainWindow : Window
     {
-        private PlanInvoker invoker;
         public MainWindow()
         {
             InitializeComponent();
@@ -28,6 +27,7 @@ namespace Lottery.App
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
+                TakeNumber = 100,
                 GameName = "single",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
@@ -61,7 +61,7 @@ namespace Lottery.App
             }).ToArray();
 
             Dictionary<string, IPlan> dic = dynamics.Concat(singles.OfType<IPlan>()).Concat(adjacents.OfType<IPlan>()).ToDictionary(c => c.GetKey(), c => c);
-            this.invoker = new PlanInvoker(dic);
+            PlanInvoker.Current.Init(dic);
         }
 
         private void UpdateUI(string code, string desc, string value)
@@ -109,6 +109,11 @@ namespace Lottery.App
                     valueBox.AppendText(value);
                 }
             });
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            PlanInvoker.Current.Close();
         }
     }
 }
