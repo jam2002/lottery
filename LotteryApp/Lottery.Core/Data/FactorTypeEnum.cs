@@ -88,6 +88,12 @@
         /// <summary>
         /// 任意两不同数的组合
         /// </summary>
-        AllPairs = 23
+        AllPairs = 23,
+
+        LeftDistinct = 27,
+
+        MiddleDistinct = 28,
+
+        RightDistinct = 29
     }
 }

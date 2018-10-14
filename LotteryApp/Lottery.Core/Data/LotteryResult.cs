@@ -73,5 +73,7 @@
         public string LotteryName { get; set; }
 
         public string GameName { get; set; }
+
+        public FactorTypeEnum Type { get; set; }
     }
 }

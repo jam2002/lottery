@@ -140,11 +140,16 @@ namespace Lottery.Core.Algorithm
                 number.RepeatNumbers =threeArrays.Select(c => GetRepeats(c, null)).Where(c => c >= 0).Distinct().ToArray();
 
                 number.LeftRepeats = new int[] { GetRepeats(left, 1) }.Distinct().Where(c => c >= 0).ToArray();
-                number.MiddleRepeats = new int[] { GetRepeats(middle, 2) }.Distinct().Where(c => c >= 0).ToArray();
-                number.RightRepeats = new int[] { GetRepeats(right, 3) }.Distinct().Where(c => c >= 0).ToArray();
                 number.LeftAwards = left.Distinct().OrderBy(c => c).ToArray();
+                number.LeftDistinct = number.LeftAwards.Length <= 2 ? 2 : 3;
+
+                number.MiddleRepeats = new int[] { GetRepeats(middle, 2) }.Distinct().Where(c => c >= 0).ToArray();
                 number.MiddleAwards = middle.Distinct().OrderBy(c => c).ToArray();
+                number.MiddleDistinct = number.MiddleAwards.Length <= 2 ? 2 : 3;
+
+                number.RightRepeats = new int[] { GetRepeats(right, 3) }.Distinct().Where(c => c >= 0).ToArray();
                 number.RightAwards = right.Distinct().OrderBy(c => c).ToArray();
+                number.RightDistinct = number.RightAwards.Length <= 2 ? 2 : 3;
 
                 Combination combine = new Combination(number.DistinctNumbers.Length);
                 var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);

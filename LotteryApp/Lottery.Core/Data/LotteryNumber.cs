@@ -32,6 +32,12 @@
         /// </summary>
         public int Distinct { get; set; }
 
+        public int LeftDistinct { get; set; }
+
+        public int MiddleDistinct { get; set; }
+
+        public int RightDistinct { get; set; }
+
         /// <summary>
         /// 去重之后按升序排列的胆码
         /// </summary>

@@ -61,6 +61,9 @@ namespace Lottery.Core.Algorithm
                 BuildFactor(FactorTypeEnum.Unit, n.Unit, i);
                 BuildFactor(FactorTypeEnum.Distinct, n.Distinct, i);
                 BuildFactor(FactorTypeEnum.SequenceKey, n.SequenceKey, i);
+                BuildFactor(FactorTypeEnum.LeftDistinct, n.LeftDistinct, i);
+                BuildFactor(FactorTypeEnum.RightDistinct, n.RightDistinct, i);
+                BuildFactor(FactorTypeEnum.MiddleDistinct, n.MiddleDistinct, i);
                 BuildAwardFactor(n, i);
 
                 if (CurrentLottery.Length == 5)
@@ -206,21 +209,36 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSingleResult()
         {
-            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+            Dictionary<string, FactorTypeEnum> pairDic = new Dictionary<string, FactorTypeEnum>
             {
-                { "front", FactorTypeEnum.LeftAward},
-                { "middle", FactorTypeEnum.MiddleAward},
-                { "after", FactorTypeEnum.RightAward},
-                { "first", FactorTypeEnum.Award}
+                { "front", FactorTypeEnum.LeftDistinct},
+                { "middle", FactorTypeEnum.MiddleDistinct},
+                { "after", FactorTypeEnum.RightDistinct}
             };
-            FactorTypeEnum r = enumDic[InputOption.GameArgs];
+            FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
+            if (t.HasValue && FactorDic[t.Value][2].FailureCount <= 1 && FactorDic[t.Value][2].LastInterval <= 5)
+            {
+                return Build(new int[] { 2 }, t.Value);
+            }
+            else
+            {
+                Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+                {
+                    { "front", FactorTypeEnum.LeftAward},
+                    { "middle", FactorTypeEnum.MiddleAward},
+                    { "after", FactorTypeEnum.RightAward},
+                    { "first", FactorTypeEnum.Award}
+                };
 
-            var query = from p in FactorDic[r]
-                        where p.Value.FailureCount <= 1 && p.Value.LastInterval < InputOption.BetCycle
-                        orderby p.Value.FailureCount, p.Value.LastInterval descending, p.Value.OccurCount descending
-                        select p.Key;
+                FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
-            return Build(query, r);
+                var query = from p in FactorDic[r]
+                            where p.Value.FailureCount <= 1 && p.Value.LastInterval < InputOption.BetCycle
+                            orderby p.Value.FailureCount, p.Value.LastInterval descending, p.Value.OccurCount descending
+                            select p.Key;
+
+                return Build(query, r);
+            }
         }
 
         private LotteryResult[] GetSymmetricResult()
@@ -253,6 +271,7 @@ namespace Lottery.Core.Algorithm
                     LotteryName = InputOption.LotteryName,
                     LastInterval = factor.LastInterval,
                     MaxInterval = factor.MaxInterval,
+                    Type = type,
                     AnyFilters = new AnyFilter[]
                     {
                         new AnyFilter{  Values =values }
