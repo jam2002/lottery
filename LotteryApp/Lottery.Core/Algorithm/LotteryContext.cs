@@ -219,7 +219,11 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
             if (t.HasValue && FactorDic[t.Value][2].FailureCount <= 1 && FactorDic[t.Value][2].LastInterval < 5)
             {
-                return Build(new int[] { 2 }, t.Value);
+                if (FactorDic[t.Value][2].LastInterval >= 2)
+                {
+                    return Build(new int[] { 2 }, t.Value);
+                }
+                return new LotteryResult[] { };
             }
             else
             {
