@@ -127,7 +127,7 @@ namespace Lottery.Core.Algorithm
                 factor.LastInterval = LotteryNumbers.Length - factor.OccurPositions[factor.OccurCount - 1] - 1;
                 factor.MaxInterval = intervals.Max();
                 factor.HitIntervals = intervals;
-                factor.FailureCount = intervals.Select(t => (int)Math.Floor((decimal)t / InputOption.BetCycle)).Sum();
+                factor.FailureCount = intervals.Select(t => (int)Math.Floor((decimal)t / 5)).Sum();
             }
         }
 
@@ -202,7 +202,8 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetHistoryResult()
         {
             var query = from p in FactorDic[FactorTypeEnum.AllPairs]
-                        orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
+                        where p.Value.FailureCount <= 1
+                        orderby p.Value.FailureCount, p.Value.LastInterval descending, p.Value.OccurCount descending
                         select p.Key;
             return Build(query, FactorTypeEnum.AllPairs);
         }
@@ -234,7 +235,7 @@ namespace Lottery.Core.Algorithm
 
                 var query = from p in FactorDic[r]
                             where p.Value.FailureCount <= 1 && p.Value.LastInterval < InputOption.BetCycle
-                            orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
+                            orderby p.Value.FailureCount, p.Value.LastInterval descending, p.Value.OccurCount descending
                             select p.Key;
 
                 return Build(query, r);
@@ -252,7 +253,7 @@ namespace Lottery.Core.Algorithm
                         join q in FactorDic[s]
                            on p.Key equals q.Key
                         where p.Value.LastInterval <= q.Value.LastInterval && hotAwards.Contains(q.Key)
-                        orderby q.Value.FailureCount, q.Value.OccurCount descending, q.Value.LastInterval descending
+                        orderby p.Value.FailureCount, p.Value.LastInterval descending, p.Value.OccurCount descending
                         select q.Key;
             return Build(query, r);
         }
