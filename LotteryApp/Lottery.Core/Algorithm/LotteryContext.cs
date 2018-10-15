@@ -203,7 +203,7 @@ namespace Lottery.Core.Algorithm
         {
             var query = from p in FactorDic[FactorTypeEnum.AllPairs]
                         where p.Value.FailureCount <= 1 && p.Value.LastInterval >= 2
-                        orderby p.Value.FailureCount, p.Value.LastInterval descending, p.Value.OccurCount descending
+                        orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, FactorTypeEnum.AllPairs);
         }
@@ -219,11 +219,7 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
             if (t.HasValue && FactorDic[t.Value][2].FailureCount <= 1 && FactorDic[t.Value][2].LastInterval < 5)
             {
-                if (FactorDic[t.Value][2].LastInterval >= 2)
-                {
-                    return Build(new int[] { 2 }, t.Value);
-                }
-                return new LotteryResult[] { };
+                return Build(new int[] { 2 }, t.Value);
             }
             else
             {
@@ -239,7 +235,7 @@ namespace Lottery.Core.Algorithm
 
                 var query = from p in FactorDic[r]
                             where p.Value.FailureCount <= 1 && p.Value.LastInterval < InputOption.BetCycle && p.Value.LastInterval >= 2
-                            orderby p.Value.FailureCount, p.Value.LastInterval descending, p.Value.OccurCount descending
+                            orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
                             select p.Key;
 
                 return Build(query, r);
