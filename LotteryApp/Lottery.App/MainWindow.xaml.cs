@@ -23,7 +23,7 @@ namespace Lottery.App
             string[] gameArgs = new string[] { "front", "middle",  "after" };
             Dynamic13[] dynamics = gameArgs.Select(c => new Dynamic13
             {
-                BetCycle = 5,
+                BetCycle = 6,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,

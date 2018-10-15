@@ -202,7 +202,7 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetHistoryResult()
         {
             var query = from p in FactorDic[FactorTypeEnum.AllPairs]
-                        where p.Value.FailureCount <= 1
+                        where p.Value.FailureCount <= 1 && p.Value.LastInterval >= 2
                         orderby p.Value.FailureCount, p.Value.LastInterval descending, p.Value.OccurCount descending
                         select p.Key;
             return Build(query, FactorTypeEnum.AllPairs);
@@ -234,7 +234,7 @@ namespace Lottery.Core.Algorithm
                 FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
                 var query = from p in FactorDic[r]
-                            where p.Value.FailureCount <= 1 && p.Value.LastInterval < InputOption.BetCycle
+                            where p.Value.FailureCount <= 1 && p.Value.LastInterval < InputOption.BetCycle && p.Value.LastInterval >= 2
                             orderby p.Value.FailureCount, p.Value.LastInterval descending, p.Value.OccurCount descending
                             select p.Key;
 
