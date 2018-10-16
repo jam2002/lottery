@@ -127,7 +127,7 @@ namespace Lottery.Core.Algorithm
                 factor.LastInterval = LotteryNumbers.Length - factor.OccurPositions[factor.OccurCount - 1] - 1;
                 factor.MaxInterval = intervals.Max();
                 factor.HitIntervals = intervals;
-                factor.FailureCount = intervals.Select(t => (int)Math.Floor((decimal)t / (InputOption.BetCycle - 1))).Sum();
+                factor.FailureCount = intervals.Select(t => (int)Math.Floor((decimal)t / InputOption.BetCycle)).Sum();
             }
         }
 
