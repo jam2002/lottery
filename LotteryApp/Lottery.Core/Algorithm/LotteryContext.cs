@@ -216,30 +216,30 @@ namespace Lottery.Core.Algorithm
                 { "middle", FactorTypeEnum.MiddleDistinct},
                 { "after", FactorTypeEnum.RightDistinct}
             };
-            FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
-            if (t.HasValue && FactorDic[t.Value][2].FailureCount <= 1 && FactorDic[t.Value][2].LastInterval < 5)
+            //FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
+            //if (t.HasValue && FactorDic[t.Value][2].FailureCount <= 1 && FactorDic[t.Value][2].LastInterval < 5)
+            //{
+            //    return Build(new int[] { 2 }, t.Value);
+            //}
+            //else
+            //{
+            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
             {
-                return Build(new int[] { 2 }, t.Value);
-            }
-            else
-            {
-                Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
-                {
-                    { "front", FactorTypeEnum.LeftAward},
-                    { "middle", FactorTypeEnum.MiddleAward},
-                    { "after", FactorTypeEnum.RightAward},
-                    { "first", FactorTypeEnum.Award}
-                };
+                { "front", FactorTypeEnum.LeftAward},
+                { "middle", FactorTypeEnum.MiddleAward},
+                { "after", FactorTypeEnum.RightAward},
+                { "first", FactorTypeEnum.Award}
+            };
 
-                FactorTypeEnum r = enumDic[InputOption.GameArgs];
+            FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
-                var query = from p in FactorDic[r]
-                            where p.Value.FailureCount <= 1 && p.Value.LastInterval < InputOption.BetCycle && p.Value.LastInterval >= 2
-                            orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
-                            select p.Key;
+            var query = from p in FactorDic[r]
+                        where p.Value.LastInterval < InputOption.BetCycle && CheckInterval(p.Value.HitIntervals)
+                        orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
+                        select p.Key;
 
-                return Build(query, r);
-            }
+            return Build(query, r);
+            //}
         }
 
         private LotteryResult[] GetSymmetricResult()
