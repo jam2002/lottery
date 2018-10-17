@@ -202,8 +202,8 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetHistoryResult()
         {
             var query = from p in FactorDic[FactorTypeEnum.AllPairs]
-                        where p.Value.FailureCount <= 1 && p.Value.LastInterval >= 2 && new int[] { (p.Key - 100) / 10, p.Key % 10 }.All(c => CheckInterval(FactorDic[FactorTypeEnum.Award][c].HitIntervals))
-                        orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
+                        where CheckInterval(p.Value.HitIntervals) && new int[] { (p.Key - 100) / 10, p.Key % 10 }.All(c => CheckInterval(FactorDic[FactorTypeEnum.Award][c].HitIntervals))
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, FactorTypeEnum.AllPairs);
         }
@@ -234,8 +234,8 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
             var query = from p in FactorDic[r]
-                        where p.Value.LastInterval < InputOption.BetCycle && CheckInterval(p.Value.HitIntervals)
-                        orderby p.Value.FailureCount, p.Value.OccurCount descending, p.Value.LastInterval descending
+                        where CheckInterval(p.Value.HitIntervals)
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
 
             return Build(query, r);
