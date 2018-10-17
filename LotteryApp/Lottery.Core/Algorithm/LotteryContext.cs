@@ -234,7 +234,7 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
             var query = from p in FactorDic[r]
-                        where CheckInterval(p.Value.HitIntervals)
+                        where p.Value.LastInterval >= 2 && CheckInterval(p.Value.HitIntervals)
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
 
