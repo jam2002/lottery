@@ -202,7 +202,7 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetHistoryResult()
         {
             var query = from p in FactorDic[FactorTypeEnum.AllPairs]
-                        where p.Value.MaxInterval <= 15 && p.Value.LastInterval >= 2 && CheckInterval(p.Value.HitIntervals, 7) && new int[] { (p.Key - 100) / 10, p.Key % 10 }.All(c => CheckInterval(FactorDic[FactorTypeEnum.Award][c].HitIntervals))
+                        where p.Value.MaxInterval <= 15 && p.Value.LastInterval >= 2 && CheckInterval(p.Value.HitIntervals)
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, FactorTypeEnum.AllPairs);
