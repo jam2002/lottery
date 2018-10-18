@@ -25,5 +25,7 @@ namespace Lottery.Core.Plan
             }
             return base.GetBetAwards(output);
         }
+
+        public override bool ChangeBetOnceSuccess => false;
     }
 }

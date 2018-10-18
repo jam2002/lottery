@@ -44,9 +44,12 @@ namespace Lottery.Core.Plan
                 bool changed = currentBet.BetAward.Any() && (BetIndex == 0 || s == 3 || s == 1);
                 if (changed)
                 {
+                    if (s != 1 || ChangeBetOnceSuccess)
+                    {
+                        LastBet = currentBet;
+                    }
                     BetIndex = 1;
-                    LastBet = currentBet;
-                    Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, 2), GetBetString(currentBet));
+                    Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, 2), GetBetString(LastBet));
                 }
                 else
                 {
@@ -89,13 +92,15 @@ namespace Lottery.Core.Plan
             return null;
         }
 
+        public virtual bool ChangeBetOnceSuccess => true;
+
         public virtual int[] GetBetAwards(OutputResult output)
         {
             return output.Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
         }
 
         /// <summary>
-        /// 1: 已中奖；2：计划中；3：已失败
+        /// 1: 已中奖；2：计划中；3：已失败；4：等待中
         /// </summary>
         /// <param name="award"></param>
         /// <param name="betIndex"></param>
