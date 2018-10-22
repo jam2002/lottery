@@ -2,6 +2,7 @@
 using Lottery.Core.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Configuration;
 
 namespace Lottery.Core.Plan
 {
@@ -26,6 +27,6 @@ namespace Lottery.Core.Plan
             return base.GetBetAwards(output);
         }
 
-        public override bool ChangeBetOnceSuccess => false;
+        public override bool ChangeBetOnceSuccess => bool.Parse(ConfigurationManager.AppSettings["ChangeBetOnceSuccess"]);
     }
 }
