@@ -202,7 +202,7 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetHistoryResult()
         {
             var query = from p in FactorDic[FactorTypeEnum.AllPairs]
-                        where p.Value.OccurCount >= 4 && CheckInterval(p.Value.HitIntervals)
+                        where p.Value.OccurCount >= 12 && p.Value.LastInterval >= 2 && CheckInterval(p.Value.HitIntervals)
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, FactorTypeEnum.AllPairs);
@@ -223,22 +223,22 @@ namespace Lottery.Core.Algorithm
             //}
             //else
             //{
-                Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
-                {
-                    { "front", FactorTypeEnum.LeftAward},
-                    { "middle", FactorTypeEnum.MiddleAward},
-                    { "after", FactorTypeEnum.RightAward},
-                    { "first", FactorTypeEnum.Award}
-                };
+                    Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+                    {
+                        { "front", FactorTypeEnum.LeftAward},
+                        { "middle", FactorTypeEnum.MiddleAward},
+                        { "after", FactorTypeEnum.RightAward},
+                        { "first", FactorTypeEnum.Award}
+                    };
 
-                FactorTypeEnum r = enumDic[InputOption.GameArgs];
+                    FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
-                var query = from p in FactorDic[r]
-                            where p.Value.OccurCount >= 5 && CheckInterval(p.Value.HitIntervals)
-                            orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
-                            select p.Key;
+                    var query = from p in FactorDic[r]
+                                where p.Value.OccurCount >= 15 && p.Value.LastInterval >= 2 && CheckInterval(p.Value.HitIntervals)
+                                orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                                select p.Key;
 
-                return Build(query, r);
+                    return Build(query, r);
             //}
         }
 

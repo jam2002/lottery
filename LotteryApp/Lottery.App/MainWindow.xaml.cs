@@ -27,7 +27,6 @@ namespace Lottery.App
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
-                TakeNumber = 10,
                 GameName = "single",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
@@ -55,7 +54,6 @@ namespace Lottery.App
                 LastBet = null,
                 GameName = c,
                 GameArgs = "22",
-                TakeNumber = 10,
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Number = 2,
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
