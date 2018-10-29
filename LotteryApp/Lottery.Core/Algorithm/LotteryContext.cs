@@ -193,7 +193,7 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[FactorTypeEnum.AdjacentNumber]
                         join q in FactorDic[FactorTypeEnum.AllPairs]
                            on p.Key equals q.Key
-                        where p.Value.LastInterval <= q.Value.LastInterval && q.Value.LastInterval <= 9 && p.Value.LastInterval >= 2
+                        where p.Value.LastInterval <= q.Value.LastInterval && q.Value.LastInterval <= 7
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, FactorTypeEnum.AllPairs);
@@ -202,8 +202,8 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetHistoryResult()
         {
             var query = from p in FactorDic[FactorTypeEnum.AllPairs]
-                        where p.Value.OccurCount >= 12 && p.Value.LastInterval >= 2 && CheckInterval(p.Value.HitIntervals)
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                        where p.Value.OccurCount >= 4 && CheckInterval(p.Value.HitIntervals)
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
             return Build(query, FactorTypeEnum.AllPairs);
         }

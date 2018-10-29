@@ -56,6 +56,7 @@ namespace Lottery.App
                 GameArgs = "22",
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Number = 2,
+                TakeNumber = 15,
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
