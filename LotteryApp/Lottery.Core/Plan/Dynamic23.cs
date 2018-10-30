@@ -16,6 +16,14 @@ namespace Lottery.Core.Plan
             return $"【{string.Join(" ", list.Select(c => string.Join(string.Empty, c.Select(q => currentBet.BetAward[q]))))}】";
         }
 
+        public override bool IsHit(SimpleBet currentBet)
+        {
+            int number = GameArgs == "front" ? 0 : (GameArgs == "middle" ? 1 : 2);
+            int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).Skip(number).Take(3).ToArray();
+            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && LastBet.BetAward.Intersect(current).Count() >= Number;
+            return isHit;
+        }
+
         public override bool ChangeBetOnceSuccess => bool.Parse(ConfigurationManager.AppSettings["ChangeBetOnceSuccess"]);
     }
 }
