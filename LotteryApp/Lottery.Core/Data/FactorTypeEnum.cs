@@ -90,6 +90,17 @@
         /// </summary>
         AllPairs = 23,
 
+        /// <summary>
+        /// 任意三不同数的组合
+        /// </summary>
+        AllTuples = 30,
+
+        LeftTuple = 31,
+
+        MiddleTuple = 32,
+
+        RightTuple = 33,
+
         LeftDistinct = 27,
 
         MiddleDistinct = 28,

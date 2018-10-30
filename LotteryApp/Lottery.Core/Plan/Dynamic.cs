@@ -82,8 +82,7 @@ namespace Lottery.Core.Plan
         public virtual bool IsHit(SimpleBet currentBet)
         {
             int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
-            int[][] betValues = new int[][] { LastBet.BetAward };
-            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && betValues.Any(t => t.Intersect(current).Count() >= Number);
+            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && LastBet.BetAward.Intersect(current).Count() >= Number;
             return isHit;
         }
 

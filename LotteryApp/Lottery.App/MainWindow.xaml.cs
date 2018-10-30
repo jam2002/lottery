@@ -20,27 +20,27 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string[] gameArgs = new string[] { "front", "middle",  "after" };
-            Dynamic13[] dynamics = gameArgs.Select(c => new Dynamic13
+            string[] gameArgs = new string[] { "front", "middle", "after" };
+            Dynamic23[] dynamics = gameArgs.Select(c => new Dynamic23
             {
-                BetCycle = 7,
+                BetCycle = 9,
                 BetIndex = 0,
                 LastBet = null,
-                Number = 1,
-                GameName = "single",
+                Number = 2,
+                GameName = "tuple",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
             gameArgs = new string[] { "first" };
-            Dynamic15[] singles = gameArgs.Select(c => new Dynamic15
+            Dynamic23[] singles = gameArgs.Select(c => new Dynamic23
             {
                 BetCycle = 5,
                 BetIndex = 0,
                 LastBet = null,
-                Number = 1,
-                GameName = "single",
+                Number = 2,
+                GameName = "tuple",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
@@ -56,7 +56,6 @@ namespace Lottery.App
                 GameArgs = "22",
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Number = 2,
-                TakeNumber = 15,
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 

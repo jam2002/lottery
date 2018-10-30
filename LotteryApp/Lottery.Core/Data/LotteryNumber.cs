@@ -32,9 +32,34 @@
         /// </summary>
         public int Distinct { get; set; }
 
+        /// <summary>
+        /// 前三对子胆码
+        /// </summary>
+        public int[] LeftRepeats { get; set; }
+
+        public int[] LeftAwards { get; set; }
+
+        public int[] LeftTuples { get; set; }
+
         public int LeftDistinct { get; set; }
 
+
+        public int[] MiddleRepeats { get; set; }
+
+        public int[] MiddleAwards { get; set; }
+
+        public int[] MiddleTuples { get; set; }
+
         public int MiddleDistinct { get; set; }
+
+        /// <summary>
+        /// 后三对子胆码
+        /// </summary>
+        public int[] RightRepeats { get; set; }
+
+        public int[] RightAwards { get; set; }
+
+        public int[] RightTuples { get; set; }
 
         public int RightDistinct { get; set; }
 
@@ -46,24 +71,6 @@
         public int[] RepeatNumbers { get; set; }
 
         /// <summary>
-        /// 前三对子胆码
-        /// </summary>
-        public int[] LeftRepeats { get; set; }
-
-        /// <summary>
-        /// 后三对子胆码
-        /// </summary>
-        public int[] RightRepeats { get; set; }
-
-        public int[] MiddleRepeats { get; set; }
-
-        public int[] LeftAwards { get; set; }
-
-        public int[] RightAwards { get; set; }
-
-        public int[] MiddleAwards { get; set; }
-
-        /// <summary>
         /// 重号与相邻号组合
         /// </summary>
         public int[] AdjacentNumbers { get; set; }
@@ -72,6 +79,11 @@
         /// 任意两不同数组合
         /// </summary>
         public int[] AllPairs { get; set; }
+
+        /// <summary>
+        /// 任意三不同数组合
+        /// </summary>
+        public int[] AllTuples { get; set; }
 
         /// <summary>
         /// 按升序排列的胆码，比如 125，15

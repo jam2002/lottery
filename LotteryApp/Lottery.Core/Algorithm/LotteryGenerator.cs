@@ -108,7 +108,7 @@ namespace Lottery.Core.Algorithm
             number.OneCount = remainders.Where(t => t == 1).Count();
             number.TwoCount = remainders.Where(t => t == 2).Count();
             number.DistinctNumbers = array.Distinct().OrderBy(t => t).ToArray();
-            number.Distinct = number.DistinctNumbers.Length;       
+            number.Distinct = number.DistinctNumbers.Length;
             number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));
             number.BetKeyPairs = new int[][] { array };
 
@@ -137,32 +137,61 @@ namespace Lottery.Core.Algorithm
                 int[][] threeArrays = new int[][] { left, middle, right };
 
                 number.AdjacentNumbers = threeArrays.Select((c, i) => GetAdjacents(c, i)).Where(c => c > 100).Distinct().ToArray();
-                number.RepeatNumbers =threeArrays.Select(c => GetRepeats(c, null)).Where(c => c >= 0).Distinct().ToArray();
+                number.RepeatNumbers = threeArrays.Select(c => GetRepeats(c, null)).Where(c => c >= 0).Distinct().ToArray();
 
                 number.LeftRepeats = new int[] { GetRepeats(left, 1) }.Distinct().Where(c => c >= 0).ToArray();
                 number.LeftAwards = left.Distinct().OrderBy(c => c).ToArray();
                 number.LeftDistinct = number.LeftAwards.Length <= 2 ? 2 : 3;
+                number.LeftTuples = GetTuples(left);
 
                 number.MiddleRepeats = new int[] { GetRepeats(middle, 2) }.Distinct().Where(c => c >= 0).ToArray();
                 number.MiddleAwards = middle.Distinct().OrderBy(c => c).ToArray();
                 number.MiddleDistinct = number.MiddleAwards.Length <= 2 ? 2 : 3;
+                number.MiddleTuples = GetTuples(middle);
 
                 number.RightRepeats = new int[] { GetRepeats(right, 3) }.Distinct().Where(c => c >= 0).ToArray();
                 number.RightAwards = right.Distinct().OrderBy(c => c).ToArray();
                 number.RightDistinct = number.RightAwards.Length <= 2 ? 2 : 3;
-
-                Combination combine = new Combination(number.DistinctNumbers.Length);
-                var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);
-                number.AllPairs = tmp.Select(t => (from s in t select number.DistinctNumbers[s]).ToArray()).Select(t => 100 + t[0] * 10 + t[1]).ToArray();
+                number.RightTuples = GetTuples(right);
             }
             else
             {
-                number.LeftRepeats = number.RightRepeats = new int[][] { array }.Select(c => GetRepeats(c, null)).Where(c => c >= 0).Distinct().ToArray();
-                number.LeftAwards = number.RightAwards = array.Distinct().OrderBy(c => c).ToArray();
+                number.RepeatNumbers = number.LeftRepeats = number.RightRepeats = number.MiddleRepeats = new int[][] { array }.Select(c => GetRepeats(c, null)).Where(c => c >= 0).Distinct().ToArray();
+                number.LeftAwards = number.RightAwards = number.MiddleAwards = array.Distinct().OrderBy(c => c).ToArray();
+                number.LeftDistinct = number.RightDistinct = number.MiddleDistinct = number.LeftAwards.Length <= 2 ? 2 : 3;
+                number.LeftTuples = number.RightTuples = number.MiddleTuples = GetTuples(array);
                 number.AdjacentNumbers = new int[] { };
-                number.AllPairs = new int[] { };
             }
+
+            Combination combine = new Combination(number.DistinctNumbers.Length);
+            var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);
+            number.AllPairs = tmp.Select(t => (from s in t select number.DistinctNumbers[s]).ToArray()).Select(t => 100 + t[0] * 10 + t[1]).ToArray();
+            number.AllTuples = GetTuples(number.DistinctNumbers);
+
             return number;
+        }
+
+        private static int[] GetTuples(int[] array)
+        {
+            int[] sort = array.Distinct().OrderBy(c => c).ToArray();
+            Combination combine = new Combination(sort.Length);
+            int[] ret = null;
+
+            if (sort.Length >= 3)
+            {
+                int[][] awards = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select sort[s]).ToArray()).ToArray();
+
+                ret = Enumerable.Range(0, 10).SelectMany(c => awards.Where(t => !t.Contains(c)).Select(t =>
+                {
+                    int[] temp = t.Concat(new[] { c }).OrderBy(s => s).ToArray();
+                    return 1000 + temp[0] * 100 + temp[1] * 10 + temp[2];
+                })).Distinct().ToArray();
+            }
+            else
+            {
+                ret = new int[] { };
+            }
+            return ret;
         }
 
         private static int GetAdjacents(int[] array, int index)

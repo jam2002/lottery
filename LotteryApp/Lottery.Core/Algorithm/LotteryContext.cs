@@ -105,7 +105,11 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.MiddleRepeat, number.MiddleRepeats},
                 { FactorTypeEnum.RightRepeat, number.RightRepeats},
                 { FactorTypeEnum.AdjacentNumber, number.AdjacentNumbers},
-                { FactorTypeEnum.AllPairs, number.AllPairs}
+                { FactorTypeEnum.AllPairs, number.AllPairs},
+                { FactorTypeEnum.LeftTuple, number.LeftTuples},
+                { FactorTypeEnum.MiddleTuple, number.MiddleTuples},
+                { FactorTypeEnum.RightTuple, number.RightTuples},
+                { FactorTypeEnum.AllTuples, number.AllTuples}
             };
 
             foreach (var p in typeDic)
@@ -144,6 +148,9 @@ namespace Lottery.Core.Algorithm
                     break;
                 case "history":
                     ret = GetHistoryResult();
+                    break;
+                case "tuple":
+                    ret = GetTupleResult();
                     break;
                 case "symmetric":
                     ret = GetSymmetricResult();
@@ -208,6 +215,17 @@ namespace Lottery.Core.Algorithm
             return Build(query, FactorTypeEnum.AllPairs);
         }
 
+        private LotteryResult[] GetTupleResult()
+        {
+            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftTuple : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleTuple : (InputOption.GameArgs == "after" ? FactorTypeEnum.RightTuple : FactorTypeEnum.AllTuples));
+
+            var query = from p in FactorDic[r]
+                        where p.Value.LastInterval >= 2
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
+                        select p.Key;
+            return Build(query, r);
+        }
+
         private LotteryResult[] GetSingleResult()
         {
             Dictionary<string, FactorTypeEnum> pairDic = new Dictionary<string, FactorTypeEnum>
@@ -261,7 +279,23 @@ namespace Lottery.Core.Algorithm
             return awards.Take(3).Select(c =>
             {
                 ReferenceFactor factor = FactorDic[type][c];
-                int[] values = type == FactorTypeEnum.AllPairs || type == FactorTypeEnum.AdjacentNumber ? new int[] { (c - 100) / 10, (c - 100) % 10 } : new int[] { c };
+                int[] values = null;
+                switch (type)
+                {
+                    case FactorTypeEnum.LeftTuple:
+                    case FactorTypeEnum.MiddleTuple:
+                    case FactorTypeEnum.RightTuple:
+                    case FactorTypeEnum.AllTuples:
+                        values = new int[] { (c - 1000) / 100, (c / 10) % 10, c % 10 };
+                        break;
+                    case FactorTypeEnum.AllPairs:
+                    case FactorTypeEnum.AdjacentNumber:
+                        values = new int[] { (c - 100) / 10, c % 10 };
+                        break;
+                    default:
+                        values = new int[] { c };
+                        break;
+                }
                 return new LotteryResult
                 {
                     GameName = InputOption.GameName,
@@ -273,7 +307,7 @@ namespace Lottery.Core.Algorithm
                     Type = type,
                     AnyFilters = new AnyFilter[]
                     {
-                        new AnyFilter{  Values =values }
+                        new AnyFilter{  Values = values }
                     },
                     Filter = $"不定位：{string.Join(",", values)}"
                 };
