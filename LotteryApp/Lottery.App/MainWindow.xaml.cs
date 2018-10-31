@@ -27,7 +27,7 @@ namespace Lottery.App
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
-                TakeNumber = 15,
+                TakeNumber = 10,
                 GameName = "tuple",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
