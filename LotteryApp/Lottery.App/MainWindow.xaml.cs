@@ -34,7 +34,7 @@ namespace Lottery.App
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
-            gameArgs = new string[] { "first" };
+            gameArgs = new string[] { "all" };
             Dynamic23[] singles = gameArgs.Select(c => new Dynamic23
             {
                 BetCycle = 4,
@@ -47,16 +47,17 @@ namespace Lottery.App
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
-            string[] gameNames = new string[] { "adjacent", "history" };
-            Dynamic22[] adjacents = gameNames.Select(c => new Dynamic22
+            string[] gameNames = new string[] { "front4", "after4" };
+            Dynamic23[] adjacents = gameNames.Select(c => new Dynamic23
             {
-                BetCycle = 7,
+                BetCycle = 6,
                 BetIndex = 0,
                 LastBet = null,
-                GameName = c,
-                GameArgs = "22",
-                LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Number = 2,
+                TakeNumber = 15,
+                GameName = "tuple",
+                GameArgs = c,
+                LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
@@ -84,15 +85,15 @@ namespace Lottery.App
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "first":
+                    case "all":
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "adjacent":
+                    case "front4":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "history":
+                    case "after4":
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;

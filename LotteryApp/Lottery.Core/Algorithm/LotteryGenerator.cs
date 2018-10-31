@@ -143,6 +143,7 @@ namespace Lottery.Core.Algorithm
                 number.LeftAwards = left.Distinct().OrderBy(c => c).ToArray();
                 number.LeftDistinct = number.LeftAwards.Length <= 2 ? 2 : 3;
                 number.LeftTuples = GetTuples(left);
+                number.Left4Tuples = GetTuples(array.Take(4).ToArray());
 
                 number.MiddleRepeats = new int[] { GetRepeats(middle, 2) }.Distinct().Where(c => c >= 0).ToArray();
                 number.MiddleAwards = middle.Distinct().OrderBy(c => c).ToArray();
@@ -153,21 +154,23 @@ namespace Lottery.Core.Algorithm
                 number.RightAwards = right.Distinct().OrderBy(c => c).ToArray();
                 number.RightDistinct = number.RightAwards.Length <= 2 ? 2 : 3;
                 number.RightTuples = GetTuples(right);
+                number.Right4Tuples = GetTuples(array.Skip(1).ToArray());
+
+                number.AllTuples = GetTuples(array);
             }
             else
             {
                 number.RepeatNumbers = number.LeftRepeats = number.RightRepeats = number.MiddleRepeats = new int[][] { array }.Select(c => GetRepeats(c, null)).Where(c => c >= 0).Distinct().ToArray();
                 number.LeftAwards = number.RightAwards = number.MiddleAwards = array.Distinct().OrderBy(c => c).ToArray();
                 number.LeftDistinct = number.RightDistinct = number.MiddleDistinct = number.LeftAwards.Length <= 2 ? 2 : 3;
-                number.LeftTuples = number.RightTuples = number.MiddleTuples = GetTuples(array);
+                number.LeftTuples = number.RightTuples = number.MiddleTuples = number.Left4Tuples = number.Right4Tuples = number.AllTuples = GetTuples(array);
                 number.AdjacentNumbers = new int[] { };
             }
 
             Combination combine = new Combination(number.DistinctNumbers.Length);
             var tmp = combine.GetRowsForAllPicks().Where(t => t.Picks == 2);
             number.AllPairs = tmp.Select(t => (from s in t select number.DistinctNumbers[s]).ToArray()).Select(t => 100 + t[0] * 10 + t[1]).ToArray();
-            number.AllTuples = GetTuples(number.DistinctNumbers);
-
+          
             return number;
         }
 

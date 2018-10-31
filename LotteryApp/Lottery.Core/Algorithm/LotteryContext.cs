@@ -109,7 +109,9 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.LeftTuple, number.LeftTuples},
                 { FactorTypeEnum.MiddleTuple, number.MiddleTuples},
                 { FactorTypeEnum.RightTuple, number.RightTuples},
-                { FactorTypeEnum.AllTuples, number.AllTuples}
+                { FactorTypeEnum.AllTuples, number.AllTuples},
+                { FactorTypeEnum.Left4Tuple, number.Left4Tuples},
+                { FactorTypeEnum.Right4Tuple, number.Right4Tuples}
             };
 
             foreach (var p in typeDic)
@@ -217,9 +219,30 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetTupleResult()
         {
-            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftTuple : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleTuple : (InputOption.GameArgs == "after" ? FactorTypeEnum.RightTuple : FactorTypeEnum.AllTuples));
+            FactorTypeEnum r = FactorTypeEnum.AllTuples;
+            switch (InputOption.GameArgs)
+            {
+                case "front":
+                    r = FactorTypeEnum.LeftTuple;
+                    break;
+                case "middle":
+                    r = FactorTypeEnum.MiddleTuple;
+                    break;
+                case "after":
+                    r = FactorTypeEnum.RightTuple;
+                    break;
+                case "front4":
+                    r = FactorTypeEnum.Left4Tuple;
+                    break;
+                case "after4":
+                    r = FactorTypeEnum.Right4Tuple;
+                    break;
+                default:
+                    break;
+            }
 
             var query = from p in FactorDic[r]
+                        where p.Value.LastInterval >= 2
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
             return Build(query, r);
@@ -282,8 +305,10 @@ namespace Lottery.Core.Algorithm
                 switch (type)
                 {
                     case FactorTypeEnum.LeftTuple:
-                    case FactorTypeEnum.MiddleTuple:
+                    case FactorTypeEnum.Left4Tuple:
                     case FactorTypeEnum.RightTuple:
+                    case FactorTypeEnum.Right4Tuple:
+                    case FactorTypeEnum.MiddleTuple:
                     case FactorTypeEnum.AllTuples:
                         values = new int[] { (c - 1000) / 100, (c / 10) % 10, c % 10 };
                         break;

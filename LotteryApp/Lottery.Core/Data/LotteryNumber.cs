@@ -41,6 +41,8 @@
 
         public int[] LeftTuples { get; set; }
 
+        public int[] Left4Tuples { get; set; }
+
         public int LeftDistinct { get; set; }
 
 
@@ -60,6 +62,8 @@
         public int[] RightAwards { get; set; }
 
         public int[] RightTuples { get; set; }
+
+        public int[] Right4Tuples { get; set; }
 
         public int RightDistinct { get; set; }
 

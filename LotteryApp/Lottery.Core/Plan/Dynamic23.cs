@@ -18,8 +18,25 @@ namespace Lottery.Core.Plan
 
         public override bool IsHit(SimpleBet currentBet)
         {
-            int number = GameArgs == "front" ? 0 : (GameArgs == "middle" ? 1 : 2);
-            int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).Skip(number).Take(3).ToArray();
+            int skip = 0;
+            int take = 3;
+            switch (GameArgs)
+            {
+                case "front4":
+                    skip = 0;
+                    take = 4;
+                    break;
+                case "after4":
+                    skip = 1;
+                    take = 4;
+                    break;
+                default:
+                    skip = GameArgs == "front" ? 0 : (GameArgs == "middle" ? 1 : 2);
+                    take = 3;
+                    break;
+            }
+
+            int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).Skip(skip).Take(take).ToArray();
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && LastBet.BetAward.Intersect(current).Count() >= Number;
             return isHit;
         }

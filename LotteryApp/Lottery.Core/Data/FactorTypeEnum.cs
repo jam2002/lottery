@@ -97,9 +97,13 @@
 
         LeftTuple = 31,
 
+        Left4Tuple = 35,
+
         MiddleTuple = 32,
 
         RightTuple = 33,
+
+        Right4Tuple = 34,
 
         LeftDistinct = 27,
 
