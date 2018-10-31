@@ -220,7 +220,6 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftTuple : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleTuple : (InputOption.GameArgs == "after" ? FactorTypeEnum.RightTuple : FactorTypeEnum.AllTuples));
 
             var query = from p in FactorDic[r]
-                        where p.Value.LastInterval >= 5
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
             return Build(query, r);
