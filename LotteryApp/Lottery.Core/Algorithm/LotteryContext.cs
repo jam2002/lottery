@@ -296,7 +296,7 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] Build(IEnumerable<int> awards, FactorTypeEnum type)
         {
-            return awards.Take(3).Where(c => FactorDic[type][c].LastInterval >= 2).Select(c =>
+            return awards.Take(3).Select(c =>
               {
                   ReferenceFactor factor = FactorDic[type][c];
                   int[] values = null;
