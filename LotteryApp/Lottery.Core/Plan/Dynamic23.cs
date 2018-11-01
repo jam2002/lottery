@@ -12,8 +12,23 @@ namespace Lottery.Core.Plan
     {
         public override string GetBetString(SimpleBet currentBet)
         {
-            List<IEnumerable<int>> list = new List<IEnumerable<int>> { new[] { 0, 1 }, new int[] { 1, 0 }, new int[] { 0, 2 }, new int[] { 2, 0 }, new int[] { 1, 2 }, new int[] { 2, 1 } };
-            return $"【{string.Join(" ", list.Select(c => string.Join(string.Empty, c.Select(q => currentBet.BetAward[q]))))}】";
+            if (IsSinglePattern && (GameArgs == "front4" || GameArgs == "after4"))
+            {
+                int[] count = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                var query = from x in count
+                            from y in count
+                            from z in count
+                            from p in count
+                            let number = new[] { x, y, z, p }
+                            where number.Distinct().Intersect(currentBet.BetAward).Count() >= Number
+                            select string.Join(string.Empty, number);
+                return $"【{string.Join(" ", query)}】";
+            }
+            else
+            {
+                List<IEnumerable<int>> list = new List<IEnumerable<int>> { new[] { 0, 1 }, new int[] { 1, 0 }, new int[] { 0, 2 }, new int[] { 2, 0 }, new int[] { 1, 2 }, new int[] { 2, 1 } };
+                return $"【{string.Join(" ", list.Select(c => string.Join(string.Empty, c.Select(q => currentBet.BetAward[q]))))}】";
+            }
         }
 
         public override bool IsHit(SimpleBet currentBet)
@@ -42,5 +57,7 @@ namespace Lottery.Core.Plan
         }
 
         public override bool ChangeBetOnceSuccess => bool.Parse(ConfigurationManager.AppSettings["ChangeBetOnceSuccess"]);
+
+        public bool IsSinglePattern => bool.Parse(ConfigurationManager.AppSettings["IsSinglePattern"]);
     }
 }

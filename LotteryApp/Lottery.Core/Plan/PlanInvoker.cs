@@ -33,6 +33,7 @@ namespace Lottery.Core.Plan
 
             planDic = plans;
             takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
+            int interval = int.Parse(ConfigurationManager.AppSettings["GameInterval"]);
 
             scheduler = StdSchedulerFactory.GetDefaultScheduler();
             scheduler.Start();
@@ -40,7 +41,7 @@ namespace Lottery.Core.Plan
             IJobDetail job = JobBuilder.Create<SimpleJob>().WithIdentity("job1", "group1").Build();
             DateTime start = DateTime.Now;
             start = start.AddSeconds(start.Second < 15 ? (15 - start.Second) : (75 - start.Second));
-            ITrigger trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(1).RepeatForever()).Build();
+            ITrigger trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(interval).RepeatForever()).Build();
             scheduler.ScheduleJob(job, trigger);
         }
 
