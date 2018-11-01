@@ -35,13 +35,14 @@ namespace Lottery.App
             }).ToArray();
 
             gameArgs = new string[] { "all" };
-            Dynamic23[] singles = gameArgs.Select(c => new Dynamic23
+            Dynamic22[] singles = gameArgs.Select(c => new Dynamic22
             {
-                BetCycle = 4,
+                BetCycle = 7,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
-                GameName = "tuple",
+                TakeNumber = 15,
+                GameName = "history",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
