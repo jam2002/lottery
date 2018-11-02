@@ -36,7 +36,7 @@ namespace Lottery.App
             gameArgs = new string[] { "all" };
             Dynamic22[] singles = gameArgs.Select(c => new Dynamic22
             {
-                BetCycle = 9,
+                BetCycle = 7,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
