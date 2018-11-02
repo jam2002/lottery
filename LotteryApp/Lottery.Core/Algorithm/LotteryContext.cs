@@ -142,9 +142,6 @@ namespace Lottery.Core.Algorithm
             LotteryResult[] ret = null;
             switch (InputOption.GameName)
             {
-                case "dynamic":
-                    ret = GetDynamicPosResult();
-                    break;
                 case "adjacent":
                     ret = GetAdjacentResult();
                     break;
@@ -168,32 +165,6 @@ namespace Lottery.Core.Algorithm
                 default:
                     break;
             }
-            return ret;
-        }
-
-        private LotteryResult[] GetDynamicPosResult()
-        {
-            string[] arguments = (string.IsNullOrEmpty(InputOption.GameArgs) || InputOption.GameArgs.StartsWith("-") ? "22" : InputOption.GameArgs).Split(',');
-            int[] number = arguments[0].Select(x => int.Parse(x.ToString())).ToArray();
-            int keyCount = number[0];//码数，任选二，任选三，任选四
-            int betCount = number.Length > 1 ? number[1] : keyCount;//投注数，任选二选二码，任选三选三码，四码，任选四选四码，五码
-
-            int[] numbers = arguments.Length > 1 ? arguments[1].Select(x => int.Parse(x.ToString())).OrderBy(x => x).ToArray() : (CurrentLottery.Length <= 5 ? new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } : new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
-            IEnumerable<LotteryResult> list = null;
-
-            if (keyCount > 1)
-            {
-                Combination combine = new Combination(betCount);
-                Func<int[], int[][]> getBetPosKeys = p => combine.GetRowsForAllPicks().Where(t => t.Picks == keyCount).Select(t => (from s in t select p[s]).ToArray()).ToArray();
-
-                list = BetGroups[betCount].Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, getBetPosKeys(x))).ToArray();
-            }
-            else
-            {
-                list = numbers.Select(x => GetFilteredResult(null, null, null, null, null, null, null, null, null, null, null, null, null, new int[][] { new[] { x } })).ToArray();
-            }
-            LotteryResult[] ret = InferResults(list);
-
             return ret;
         }
 
