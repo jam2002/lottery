@@ -1,7 +1,7 @@
 ﻿using Lottery.Core.Data;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using Lottery.Core.Algorithm;
 
 namespace Lottery.Core.Plan
 {
@@ -12,6 +12,8 @@ namespace Lottery.Core.Plan
     {
         public override string GetBetString(SimpleBet currentBet)
         {
+            int[][] betArray = GetBetArray(currentBet.BetAward);
+
             if (IsSinglePattern && (GameArgs == "front4" || GameArgs == "after4"))
             {
                 int[] count = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -20,14 +22,13 @@ namespace Lottery.Core.Plan
                             from z in count
                             from p in count
                             let number = new[] { x, y, z, p }
-                            where number.Distinct().Intersect(currentBet.BetAward).Count() >= Number
+                            where betArray.Any(t => number.Distinct().Intersect(t).Count() >= Number)
                             select string.Join(string.Empty, number);
                 return $"【{string.Join(" ", query)}】";
             }
             else
             {
-                List<IEnumerable<int>> list = new List<IEnumerable<int>> { new[] { 0, 1 }, new int[] { 1, 0 }, new int[] { 0, 2 }, new int[] { 2, 0 }, new int[] { 1, 2 }, new int[] { 2, 1 } };
-                return $"【{string.Join(" ", list.Select(c => string.Join(string.Empty, c.Select(q => currentBet.BetAward[q]))))}】";
+                return $"【{string.Join(" ", betArray.Select(t => string.Join(string.Empty, t)))}】";
             }
         }
 
@@ -52,8 +53,26 @@ namespace Lottery.Core.Plan
             }
 
             int[] current = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).Skip(skip).Take(take).ToArray();
-            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && LastBet.BetAward.Intersect(current).Count() >= Number;
+            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && GetBetArray(LastBet.BetAward).Any(t => t.Intersect(current).Count() >= Number);
             return isHit;
+        }
+
+        public override int[] GetBetAwards(OutputResult output)
+        {
+            return output.Output.SelectMany(x => x.AnyFilters.SelectMany(t => t.Values)).ToArray();
+        }
+
+        private int[][] GetBetArray(int[] awards)
+        {
+            return new int[][]
+            {
+                new int[] { awards [0],awards[1]},
+                new int[] { awards [1],awards[0]},
+                new int[] { awards [2],awards[3]},
+                new int[] { awards [3],awards[2]},
+                new int[] { awards [4],awards[5]},
+                new int[] { awards [5],awards[4]}
+            };
         }
 
         public override bool ChangeBetOnceSuccess => bool.Parse(ConfigurationManager.AppSettings["ChangeBetOnceSuccess"]);

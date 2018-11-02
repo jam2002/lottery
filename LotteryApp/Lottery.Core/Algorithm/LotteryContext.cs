@@ -308,8 +308,6 @@ namespace Lottery.Core.Algorithm
                       case FactorTypeEnum.Right4Tuple:
                       case FactorTypeEnum.MiddleTuple:
                       case FactorTypeEnum.AllTuples:
-                          values = new int[] { (c - 1000) / 100, (c / 10) % 10, c % 10 };
-                          break;
                       case FactorTypeEnum.AllPairs:
                       case FactorTypeEnum.AdjacentNumber:
                           values = new int[] { (c - 100) / 10, c % 10 };

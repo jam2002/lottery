@@ -49,7 +49,7 @@ namespace Lottery.App
             string[] gameNames = new string[] { "front4", "after4" };
             Dynamic23[] adjacents = gameNames.Select(c => new Dynamic23
             {
-                BetCycle = 7,
+                BetCycle = 5,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
