@@ -23,7 +23,7 @@ namespace Lottery.App
             string[] gameArgs = new string[] { "front", "middle", "after" };
             Dynamic23[] dynamics = gameArgs.Select(c => new Dynamic23
             {
-                BetCycle = 7,
+                BetCycle = 9,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
@@ -36,10 +36,11 @@ namespace Lottery.App
             gameArgs = new string[] { "all" };
             Dynamic22[] singles = gameArgs.Select(c => new Dynamic22
             {
-                BetCycle = 7,
+                BetCycle = 9,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
+                TakeNumber = 10,
                 GameName = "history",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),

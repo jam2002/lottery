@@ -57,10 +57,10 @@ namespace Lottery.Core.Plan
             return isHit;
         }
 
-        public override int[] GetBetAwards(OutputResult output)
-        {
-            return output.Output.SelectMany(x => x.AnyFilters.SelectMany(t => t.Values)).ToArray();
-        }
+        //public override int[] GetBetAwards(OutputResult output)
+        //{
+        //    return output.Output.SelectMany(x => x.AnyFilters.SelectMany(t => t.Values)).ToArray();
+        //}
 
         private int[][] GetBetArray(int[] awards)
         {
@@ -68,10 +68,10 @@ namespace Lottery.Core.Plan
             {
                 new int[] { awards [0],awards[1]},
                 new int[] { awards [1],awards[0]},
-                new int[] { awards [2],awards[3]},
-                new int[] { awards [3],awards[2]},
-                new int[] { awards [4],awards[5]},
-                new int[] { awards [5],awards[4]}
+                new int[] { awards [0],awards[2]},
+                new int[] { awards [2],awards[0]},
+                new int[] { awards [1],awards[2]},
+                new int[] { awards [2],awards[1]}
             };
         }
 
