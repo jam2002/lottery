@@ -37,6 +37,8 @@
         /// </summary>
         public int LastInterval { get; set; }
 
+        public int SubInterval { get; set; }
+
         /// <summary>
         /// 实际中奖次数
         /// </summary>

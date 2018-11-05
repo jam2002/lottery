@@ -31,6 +31,11 @@
         public int LastInterval { get; set; }
 
         /// <summary>
+        /// 最近上次间隔次数
+        /// </summary>
+        public int SubInterval { get; set; }
+
+        /// <summary>
         /// 出现位置列表
         /// </summary>
         public int[] OccurPositions { get; set; }

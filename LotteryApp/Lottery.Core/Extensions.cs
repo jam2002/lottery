@@ -64,6 +64,7 @@ namespace Lottery.Core
             {
                 MaxInterval = factor.MaxInterval,
                 LastInterval = factor.LastInterval,
+                SubInterval = factor.SubInterval,
                 HitPositions = factor.OccurPositions,
                 HitIntervals = factor.HitIntervals,
                 HitCount = factor.OccurPositions.Length

@@ -130,7 +130,11 @@ namespace Lottery.Core.Algorithm
             {
                 int[] intervals = GetIntervals(factor.OccurPositions);
 
-                factor.LastInterval = LotteryNumbers.Length - factor.OccurPositions[factor.OccurCount - 1] - 1;
+                factor.LastInterval = intervals.Last();
+                if (intervals.Length >= 2)
+                {
+                    factor.SubInterval = intervals[intervals.Length - 2];
+                }
                 factor.MaxInterval = intervals.Max();
                 factor.HitIntervals = intervals;
                 factor.FailureCount = intervals.Select(t => (int)Math.Floor((decimal)t / 5)).Sum();
@@ -212,16 +216,11 @@ namespace Lottery.Core.Algorithm
                     break;
             }
 
-            int[] keys = (from p in FactorDic[FactorTypeEnum.AllTuples]
-                          where p.Value.LastInterval < 7
-                          orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
-                          select p.Key).ToArray();
-
             var query = from p in FactorDic[r]
-                        where p.Value.LastInterval < 7
+                        where p.Value.LastInterval < 7 && p.Value.LastInterval >= p.Value.SubInterval
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
-            return Build(query.Where(t => keys.Contains(t)), r);
+            return Build(query, r);
         }
 
         private LotteryResult[] GetSingleResult()
