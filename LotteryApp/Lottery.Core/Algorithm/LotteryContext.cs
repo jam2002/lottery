@@ -212,11 +212,16 @@ namespace Lottery.Core.Algorithm
                     break;
             }
 
+            int[] keys = (from p in FactorDic[FactorTypeEnum.AllTuples]
+                          where p.Value.LastInterval < 7
+                          orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
+                          select p.Key).ToArray();
+
             var query = from p in FactorDic[r]
-                        where p.Value.OccurCount >= 3 && p.Value.LastInterval < 7
+                        where p.Value.LastInterval < 7
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
-            return Build(query, r);
+            return Build(query.Where(t => keys.Contains(t)), r);
         }
 
         private LotteryResult[] GetSingleResult()
