@@ -47,7 +47,7 @@ namespace Lottery.Core.Plan
                     numbers = numbers.Take(3).ToArray();
                     break;
                 case "middle":
-                    numbers = numbers.Where(c => c % 2 == 0).ToArray();
+                    numbers = numbers.Where((c, i) => i % 2 == 0).ToArray();
                     break;
                 case "after":
                     numbers = numbers.Skip(2).ToArray();

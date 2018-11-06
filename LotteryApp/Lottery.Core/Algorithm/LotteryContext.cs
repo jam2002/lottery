@@ -219,11 +219,11 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[r]
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
-            query = query.Take(3).Where(c =>
-            {
-                int[] values = new int[] { (c - 1000) / 100, (c / 10) % 10, c % 10 };
-                return values[1] - values[0] == 1 || values[2] - values[1] == 1;
-            });
+            //query = query.Take(3).Where(c =>
+            //{
+            //    int[] values = new int[] { (c - 1000) / 100, (c / 10) % 10, c % 10 };
+            //    return values[1] - values[0] == 1 || values[2] - values[1] == 1;
+            //});
             return Build(query, r);
         }
 
