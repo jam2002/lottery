@@ -34,6 +34,10 @@ namespace Lottery.Core.Plan
             planDic = plans;
             takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
             int interval = int.Parse(ConfigurationManager.AppSettings["GameInterval"]);
+            if (plans.Any(t => t.Value.LotteryName == "cqssc") && (DateTime.Now.Hour >= 22 || DateTime.Now.Hour <= 2))
+            {
+                interval = 5;
+            }
 
             scheduler = StdSchedulerFactory.GetDefaultScheduler();
             scheduler.Start();
