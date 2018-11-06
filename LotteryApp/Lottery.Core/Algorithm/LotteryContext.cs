@@ -189,11 +189,6 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[r]
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
-            query = query.ToArray().Take(3).Where(c =>
-            {
-                ReferenceFactor f = FactorDic[r][c];
-                return f.LastInterval >= f.SubInterval;
-            }).ToArray();
             return Build(query, r);
         }
 
@@ -224,13 +219,6 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[r]
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
-            query = query.ToArray().Take(3).Where(c =>
-            {
-                ReferenceFactor f = FactorDic[r][c];
-                int[] values = new int[] { (c - 1000) / 100, (c / 10) % 10, c % 10 };
-                return values[1] - values[0] == 1 || values[2] - values[1] == 1;
-            }).ToArray();
-
             return Build(query, r);
         }
 
@@ -284,44 +272,44 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] Build(IEnumerable<int> awards, FactorTypeEnum type)
         {
-            return awards.Take(3).Select(c =>
-              {
-                  ReferenceFactor factor = FactorDic[type][c];
-                  int[] values = null;
-                  switch (type)
-                  {
-                      case FactorTypeEnum.LeftTuple:
-                      case FactorTypeEnum.Left4Tuple:
-                      case FactorTypeEnum.RightTuple:
-                      case FactorTypeEnum.Right4Tuple:
-                      case FactorTypeEnum.MiddleTuple:
-                      case FactorTypeEnum.AllTuples:
-                          values = new int[] { (c - 1000) / 100, (c / 10) % 10, c % 10 };
-                          break;
-                      case FactorTypeEnum.AllPairs:
-                      case FactorTypeEnum.AdjacentNumber:
-                          values = new int[] { (c - 100) / 10, c % 10 };
-                          break;
-                      default:
-                          values = new int[] { c };
-                          break;
-                  }
-                  return new LotteryResult
-                  {
-                      GameName = InputOption.GameName,
-                      HitIntervals = factor.HitIntervals,
-                      HitCount = factor.OccurCount,
-                      LotteryName = InputOption.LotteryName,
-                      LastInterval = factor.LastInterval,
-                      MaxInterval = factor.MaxInterval,
-                      Type = type,
-                      AnyFilters = new AnyFilter[]
-                      {
+            return awards.Take(3).Where(c => FactorDic[type][c].LastInterval >= FactorDic[type][c].SubInterval).Select(c =>
+                {
+                    ReferenceFactor factor = FactorDic[type][c];
+                    int[] values = null;
+                    switch (type)
+                    {
+                        case FactorTypeEnum.LeftTuple:
+                        case FactorTypeEnum.Left4Tuple:
+                        case FactorTypeEnum.RightTuple:
+                        case FactorTypeEnum.Right4Tuple:
+                        case FactorTypeEnum.MiddleTuple:
+                        case FactorTypeEnum.AllTuples:
+                            values = new int[] { (c - 1000) / 100, (c / 10) % 10, c % 10 };
+                            break;
+                        case FactorTypeEnum.AllPairs:
+                        case FactorTypeEnum.AdjacentNumber:
+                            values = new int[] { (c - 100) / 10, c % 10 };
+                            break;
+                        default:
+                            values = new int[] { c };
+                            break;
+                    }
+                    return new LotteryResult
+                    {
+                        GameName = InputOption.GameName,
+                        HitIntervals = factor.HitIntervals,
+                        HitCount = factor.OccurCount,
+                        LotteryName = InputOption.LotteryName,
+                        LastInterval = factor.LastInterval,
+                        MaxInterval = factor.MaxInterval,
+                        Type = type,
+                        AnyFilters = new AnyFilter[]
+                        {
                         new AnyFilter{  Values = values }
-                      },
-                      Filter = $"不定位：{string.Join(",", values)}"
-                  };
-              }).ToArray();
+                        },
+                        Filter = $"不定位：{string.Join(",", values)}"
+                    };
+                }).ToArray();
         }
 
         private bool CheckInterval(int[] intervals, int maxInterval = 5)
