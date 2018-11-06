@@ -132,7 +132,7 @@ namespace Lottery.Core.Algorithm
                 }
 
                 int[] left = array.Take(3).ToArray();
-                int[] middle = array.Skip(1).Take(3).ToArray();
+                int[] middle = new int[] { x, z, q };
                 int[] right = array.Skip(2).Take(3).ToArray();
                 int[][] threeArrays = new int[][] { left, middle, right };
 
