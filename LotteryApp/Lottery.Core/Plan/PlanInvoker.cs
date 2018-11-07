@@ -15,8 +15,10 @@ namespace Lottery.Core.Plan
     public class PlanInvoker
     {
         private IScheduler scheduler;
+        private ITrigger trigger;
         private Dictionary<string, IPlan> planDic;
         private int takeNumber;
+        private bool rescheduled;
 
         public static readonly PlanInvoker Current = new PlanInvoker();
 
@@ -34,10 +36,6 @@ namespace Lottery.Core.Plan
             planDic = plans;
             takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
             int interval = int.Parse(ConfigurationManager.AppSettings["GameInterval"]);
-            if (plans.Any(t => t.Value.LotteryName == "cqssc") && (DateTime.Now.Hour >= 22 || DateTime.Now.Hour <= 2))
-            {
-                interval = 5;
-            }
 
             scheduler = StdSchedulerFactory.GetDefaultScheduler();
             scheduler.Start();
@@ -45,7 +43,12 @@ namespace Lottery.Core.Plan
             IJobDetail job = JobBuilder.Create<SimpleJob>().WithIdentity("job1", "group1").Build();
             DateTime start = DateTime.Now;
             start = start.AddSeconds(start.Second < 15 ? (15 - start.Second) : (75 - start.Second));
-            ITrigger trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(interval).RepeatForever()).Build();
+            if (planDic.Any(t => t.Value.LotteryName == "cqssc") && start.Minute%10 !=1)
+            {
+                start = start.AddMinutes(11 - (start.Minute % 10));
+            }
+
+            trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(interval).RepeatForever()).Build();
             scheduler.ScheduleJob(job, trigger);
         }
 
@@ -98,6 +101,16 @@ namespace Lottery.Core.Plan
                     IPlan plan = planDic[key];
                     plan.Invoke(bet);
                 }
+            }
+        }
+
+        public void ChangeSchedule()
+        {
+            if (planDic.Any(t => t.Value.LotteryName == "cqssc") && (DateTime.Now.Hour >= 22 || DateTime.Now.Hour <= 2) && !rescheduled)
+            {
+                trigger = trigger.GetTriggerBuilder().WithSimpleSchedule(x => x.WithIntervalInMinutes(5).RepeatForever()).Build();
+                scheduler.RescheduleJob(trigger.Key, trigger);
+                rescheduled = true;
             }
         }
 
