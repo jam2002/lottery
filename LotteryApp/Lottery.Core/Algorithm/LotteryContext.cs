@@ -187,7 +187,7 @@ namespace Lottery.Core.Algorithm
         {
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
             var query = from p in FactorDic[r]
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
         }
@@ -195,29 +195,34 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetTupleResult()
         {
             FactorTypeEnum r = FactorTypeEnum.AllTuples;
-            //switch (InputOption.GameArgs)
-            //{
-            //    case "front":
-            //        r = FactorTypeEnum.Left4Tuple;
-            //        break;
-            //    case "middle":
-            //        r = FactorTypeEnum.Left4Tuple;
-            //        break;
-            //    case "after":
-            //        r = FactorTypeEnum.Right4Tuple;
-            //        break;
-            //    case "front4":
-            //        r = FactorTypeEnum.AllTuples;
-            //        break;
-            //    case "after4":
-            //        r = FactorTypeEnum.AllTuples;
-            //        break;
-            //    default:
-            //        break;
-            //}
+            bool isBetFour = false;
+            switch (InputOption.GameArgs)
+            {
+                case "front":
+                    r = FactorTypeEnum.LeftTuple;
+                    break;
+                case "middle":
+                    r = FactorTypeEnum.MiddleTuple;
+                    break;
+                case "after":
+                    r = FactorTypeEnum.RightTuple;
+                    break;
+                case "front4":
+                    isBetFour = true;
+                    r = FactorTypeEnum.Left4Tuple;
+                    break;
+                case "after4":
+                    isBetFour = true;
+                    r = FactorTypeEnum.Right4Tuple;
+                    break;
+                default:
+                    break;
+            }
 
             var query = from p in FactorDic[r]
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
+                        let values = new int[] { (p.Key - 1000) / 100, (p.Key / 10) % 10, p.Key % 10 }
+                        where isBetFour ? (values[2] - values[0] == 2 || p.Key == 1019 || p.Key == 1089) : true
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
         }

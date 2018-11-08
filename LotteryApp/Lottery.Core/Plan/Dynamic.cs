@@ -17,6 +17,8 @@ namespace Lottery.Core.Plan
 
         public int Number { get; set; }
 
+        public int FailureCount { get; set; }
+
         public int? TakeNumber { get; set; }
 
         public string GameName { get; set; }
@@ -115,10 +117,11 @@ namespace Lottery.Core.Plan
                     ret = $"{betTime}，当前计划投注号：{betAwards}，已中奖，中奖轮次：{betIndex}";
                     break;
                 case 2:
-                    ret = $"{betTime}，当前计划投注号：{betAwards}，轮次：{betIndex}，计划中...";
+                    ret = $"{betTime}，当前计划投注号：{betAwards}，失败次数：{FailureCount}，轮次：{betIndex}，计划中...";
                     break;
                 case 3:
-                    ret = $"{betTime}，当前计划投注号：{betAwards}，已失败";
+                    FailureCount++;
+                    ret = $"{betTime}，当前计划投注号：{betAwards}，失败次数：{FailureCount}，已失败";
                     break;
                 case 4:
                     ret = $"{betTime}，当前计划没有投注号，等待中";
