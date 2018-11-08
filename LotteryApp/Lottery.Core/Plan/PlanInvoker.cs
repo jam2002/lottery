@@ -18,7 +18,7 @@ namespace Lottery.Core.Plan
         private ITrigger trigger;
         private Dictionary<string, IPlan> planDic;
         private int takeNumber;
-        private bool rescheduled;
+        private int currentInterval;
 
         public static readonly PlanInvoker Current = new PlanInvoker();
 
@@ -35,7 +35,7 @@ namespace Lottery.Core.Plan
 
             planDic = plans;
             takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
-            int interval = int.Parse(ConfigurationManager.AppSettings["GameInterval"]);
+            currentInterval = int.Parse(ConfigurationManager.AppSettings["GameInterval"]);
 
             scheduler = StdSchedulerFactory.GetDefaultScheduler();
             scheduler.Start();
@@ -49,7 +49,7 @@ namespace Lottery.Core.Plan
                 start = start.AddMinutes(12 - (minute == 0 ? 10 : minute));
             }
 
-            trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(interval).RepeatForever()).Build();
+            trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(currentInterval).RepeatForever()).Build();
             scheduler.ScheduleJob(job, trigger);
         }
 
@@ -107,11 +107,12 @@ namespace Lottery.Core.Plan
 
         public void ChangeSchedule()
         {
-            if (planDic.Any(t => t.Value.LotteryName == "cqssc") && (DateTime.Now.Hour >= 22 || DateTime.Now.Hour <= 2) && !rescheduled)
+            int correctInterval = DateTime.Now.Hour >= 22 || DateTime.Now.Hour <= 2 ? 5 : 10;
+            if (planDic.Any(t => t.Value.LotteryName == "cqssc") && correctInterval != currentInterval)
             {
-                trigger = trigger.GetTriggerBuilder().WithSimpleSchedule(x => x.WithIntervalInMinutes(5).RepeatForever()).Build();
+                currentInterval = correctInterval;
+                trigger = trigger.GetTriggerBuilder().WithSimpleSchedule(x => x.WithIntervalInMinutes(currentInterval).RepeatForever()).Build();
                 scheduler.RescheduleJob(trigger.Key, trigger);
-                rescheduled = true;
             }
         }
 
