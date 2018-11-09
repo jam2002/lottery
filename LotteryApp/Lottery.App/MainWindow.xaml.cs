@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Configuration;
 
 namespace Lottery.App
 {
@@ -20,10 +21,11 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            int? betCycle = string.IsNullOrEmpty(ConfigurationManager.AppSettings["BetCycle"]) ? null : (int?)int.Parse(ConfigurationManager.AppSettings["BetCycle"]);
             string[] gameArgs = new string[] { "front", "middle", "after" };
             Dynamic23[] dynamics = gameArgs.Select(c => new Dynamic23
             {
-                BetCycle = 7,
+                BetCycle = betCycle ?? 7,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
@@ -36,7 +38,7 @@ namespace Lottery.App
             gameArgs = new string[] { "all" };
             Dynamic22[] singles = gameArgs.Select(c => new Dynamic22
             {
-                BetCycle = 7,
+                BetCycle = betCycle ?? 7,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
@@ -49,7 +51,7 @@ namespace Lottery.App
             string[] gameNames = new string[] { "front4", "after4" };
             Dynamic23[] adjacents = gameNames.Select(c => new Dynamic23
             {
-                BetCycle = 7,
+                BetCycle = betCycle ?? 7,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
