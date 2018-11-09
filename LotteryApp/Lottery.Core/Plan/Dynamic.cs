@@ -114,7 +114,7 @@ namespace Lottery.Core.Plan
             switch (status)
             {
                 case 1:
-                    ret = $"{betTime}，当前计划投注号：{betAwards}，已中奖，中奖轮次：{betIndex}";
+                    ret = $"{betTime}，当前计划投注号：{betAwards}，失败次数：{FailureCount}，已中奖，中奖轮次：{betIndex}";
                     break;
                 case 2:
                     ret = $"{betTime}，当前计划投注号：{betAwards}，失败次数：{FailureCount}，轮次：{betIndex}，计划中...";

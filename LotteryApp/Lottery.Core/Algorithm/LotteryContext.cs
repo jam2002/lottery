@@ -195,7 +195,6 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetTupleResult()
         {
             FactorTypeEnum r = FactorTypeEnum.AllTuples;
-            bool isBetFour = false;
             switch (InputOption.GameArgs)
             {
                 case "front":
@@ -208,11 +207,9 @@ namespace Lottery.Core.Algorithm
                     r = FactorTypeEnum.RightTuple;
                     break;
                 case "front4":
-                    isBetFour = true;
                     r = FactorTypeEnum.Left4Tuple;
                     break;
                 case "after4":
-                    isBetFour = true;
                     r = FactorTypeEnum.Right4Tuple;
                     break;
                 default:
@@ -220,8 +217,6 @@ namespace Lottery.Core.Algorithm
             }
 
             var query = from p in FactorDic[r]
-                        let values = new int[] { (p.Key - 1000) / 100, (p.Key / 10) % 10, p.Key % 10 }
-                        where isBetFour ? (values[2] - values[0] == 2 || p.Key == 1019 || p.Key == 1089) : true
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
@@ -289,11 +284,9 @@ namespace Lottery.Core.Algorithm
                         case FactorTypeEnum.Right4Tuple:
                         case FactorTypeEnum.MiddleTuple:
                         case FactorTypeEnum.AllTuples:
-                            values = new int[] { (c - 1000) / 100, (c / 10) % 10, c % 10 };
-                            break;
                         case FactorTypeEnum.AllPairs:
                         case FactorTypeEnum.AdjacentNumber:
-                            values = new int[] { (c - 100) / 10, c % 10 };
+                            values = c.ToString().Select(t => int.Parse(t.ToString())).Skip(1).ToArray();
                             break;
                         default:
                             values = new int[] { c };

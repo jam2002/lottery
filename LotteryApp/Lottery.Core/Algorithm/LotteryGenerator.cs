@@ -172,6 +172,11 @@ namespace Lottery.Core.Algorithm
             return number;
         }
 
+        private static int[][] Others = (from x in Enumerable.Range(0, 10)
+                                         from y in Enumerable.Range(0, 10)
+                                         where x != y
+                                         select new int[] { x, y }).ToArray();
+
         private static int[] GetPairs(int[] array)
         {
             int[] sort = array.Distinct().OrderBy(c => c).ToArray();
@@ -181,6 +186,7 @@ namespace Lottery.Core.Algorithm
 
         private static int[] GetTuples(int[] array)
         {
+            int tupleLength = array.Length == 3 ? 4 : 3;
             int[] sort = array.Distinct().OrderBy(c => c).ToArray();
             Combination combine = new Combination(sort.Length);
             int[] ret = null;
@@ -189,11 +195,22 @@ namespace Lottery.Core.Algorithm
             {
                 int[][] awards = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select sort[s]).ToArray()).ToArray();
 
-                ret = Enumerable.Range(0, 10).SelectMany(c => awards.Where(t => !t.Contains(c)).Select(t =>
+                if (tupleLength == 3)
                 {
-                    int[] temp = t.Concat(new[] { c }).OrderBy(s => s).ToArray();
-                    return 1000 + temp[0] * 100 + temp[1] * 10 + temp[2];
-                })).Distinct().ToArray();
+                    ret = Enumerable.Range(0, 10).SelectMany(c => awards.Where(t => !t.Contains(c)).Select(t =>
+                    {
+                        int[] temp = t.Concat(new[] { c }).OrderBy(s => s).ToArray();
+                        return 1000 + temp[0] * 100 + temp[1] * 10 + temp[2];
+                    })).Distinct().ToArray();
+                }
+                else
+                {
+                    ret = Others.SelectMany(c => awards.Where(t => !t.Intersect(c).Any()).Select(t =>
+                    {
+                        int[] temp = t.Concat(c).OrderBy(s => s).ToArray();
+                        return 10000 + temp[0] * 1000 + temp[1] * 100 + temp[2] * 10 + temp[3];
+                    })).Distinct().ToArray();
+                }
             }
             else
             {

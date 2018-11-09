@@ -1,7 +1,8 @@
-﻿using Lottery.Core.Data;
+﻿using Kw.Combinatorics;
+using Lottery.Core.Data;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using Lottery.Core.Algorithm;
 
 namespace Lottery.Core.Plan
 {
@@ -12,24 +13,36 @@ namespace Lottery.Core.Plan
     {
         public override string GetBetString(SimpleBet currentBet)
         {
+            IEnumerable<string> numbers;
             int[][] betArray = GetBetArray(currentBet.BetAward);
-
-            if (IsSinglePattern && (GameArgs == "front4" || GameArgs == "after4"))
+            if (IsSinglePattern)
             {
-                int[] count = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-                var query = from x in count
-                            from y in count
-                            from z in count
-                            from p in count
-                            let number = new[] { x, y, z, p }
-                            where betArray.Any(t => number.Distinct().Intersect(t).Count() >= Number)
-                            select string.Join(string.Empty, number);
-                return $"【{string.Join(" ", query)}】";
+                int[] count = Enumerable.Range(0, 10).ToArray();
+                if (GameArgs == "front4" || GameArgs == "after4")
+                {
+                    numbers = from x in count
+                              from y in count
+                              from z in count
+                              from p in count
+                              let number = new[] { x, y, z, p }
+                              where betArray.Any(t => number.Distinct().Intersect(t).Count() >= Number)
+                              select string.Join(string.Empty, number);
+                }
+                else
+                {
+                    numbers = from x in count
+                              from y in count
+                              from z in count
+                              let number = new[] { x, y, z }
+                              where betArray.Any(t => number.Distinct().Intersect(t).Count() >= Number)
+                              select string.Join(string.Empty, number);
+                }
             }
             else
             {
-                return $"【{string.Join(" ", betArray.Select(t => string.Join(string.Empty, t)))}】";
+                numbers = betArray.Select(t => string.Join(string.Empty, t));
             }
+            return $"【{string.Join(" ", numbers)}】";
         }
 
         public override bool IsHit(SimpleBet currentBet)
@@ -58,22 +71,11 @@ namespace Lottery.Core.Plan
             return isHit;
         }
 
-        //public override int[] GetBetAwards(OutputResult output)
-        //{
-        //    return output.Output.SelectMany(x => x.AnyFilters.SelectMany(t => t.Values)).ToArray();
-        //}
-
         private int[][] GetBetArray(int[] awards)
         {
-            return new int[][]
-            {
-                new int[] { awards [0],awards[1]},
-                new int[] { awards [1],awards[0]},
-                new int[] { awards [0],awards[2]},
-                new int[] { awards [2],awards[0]},
-                new int[] { awards [1],awards[2]},
-                new int[] { awards [2],awards[1]}
-            };
+            Combination combine = new Combination(awards.Length);
+            int[][] betAwards = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select awards[s]).ToArray()).ToArray();
+            return betAwards;
         }
 
         public override bool ChangeBetOnceSuccess => bool.Parse(ConfigurationManager.AppSettings["ChangeBetOnceSuccess"]);
