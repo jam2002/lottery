@@ -73,7 +73,7 @@ namespace Lottery.Core.Plan
 
         private int[][] GetBetArray(int[] awards)
         {
-            Combination combine = new Combination(awards.Length);
+            Permutation combine = new Permutation(awards.Length);
             int[][] betAwards = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select awards[s]).ToArray()).ToArray();
             return betAwards;
         }
