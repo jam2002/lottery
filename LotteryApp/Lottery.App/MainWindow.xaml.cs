@@ -56,7 +56,7 @@ namespace Lottery.App
                 LastBet = null,
                 Number = 2,
                 GameName = "tuple",
-                GameArgs = c == "front4" ? "middle" : "after",
+                GameArgs = c == "front4" ? "front" : "after",
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
