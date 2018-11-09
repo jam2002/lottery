@@ -217,6 +217,7 @@ namespace Lottery.Core.Algorithm
             }
 
             var query = from p in FactorDic[r]
+                        where CheckInterval(p.Value.HitIntervals)
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);

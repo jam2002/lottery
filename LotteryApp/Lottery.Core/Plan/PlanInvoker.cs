@@ -62,7 +62,8 @@ namespace Lottery.Core.Plan
                 LotteryName = c.LotteryName,
                 GameName = c.GameName,
                 GameArgs = c.GameArgs,
-                BetCycle = c.BetCycle
+                BetCycle = c.BetCycle,
+                EnableSinglePattern = c.EnableSinglePattern
             }).ToArray();
             OutputResult[] outputs = Calculator.GetResults(options, false);
 
@@ -118,7 +119,7 @@ namespace Lottery.Core.Plan
 
         private string GetKey(InputOptions input)
         {
-            return string.Concat(input.LotteryName, ".", input.GameName, ".", input.GameArgs ?? string.Empty);
+            return string.Concat(input.LotteryName, ".", input.GameName, ".", input.GameArgs ?? string.Empty, ".", input.EnableSinglePattern ? 1 : 0);
         }
     }
 }

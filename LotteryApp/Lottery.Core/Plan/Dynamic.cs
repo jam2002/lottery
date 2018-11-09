@@ -1,6 +1,7 @@
 ﻿using Lottery.Core.Algorithm;
 using Lottery.Core.Data;
 using System;
+using System.Configuration;
 using System.Linq;
 
 namespace Lottery.Core.Plan
@@ -31,7 +32,21 @@ namespace Lottery.Core.Plan
 
         public string GetKey()
         {
-            return string.Concat(LotteryName, ".", GameName, ".", GameArgs ?? string.Empty);
+            return string.Concat(LotteryName, ".", GameName, ".", GameArgs ?? string.Empty, ".", EnableSinglePattern ? 1 : 0);
+        }
+
+        private bool? enableSinglePattern;
+        public bool EnableSinglePattern
+        {
+            get
+            {
+                if (!enableSinglePattern.HasValue)
+                {
+                    enableSinglePattern = bool.Parse(ConfigurationManager.AppSettings["IsSinglePattern"]);
+                }
+                return enableSinglePattern.Value;
+            }
+            set { enableSinglePattern = value; }
         }
 
         public void Invoke(SimpleBet currentBet)

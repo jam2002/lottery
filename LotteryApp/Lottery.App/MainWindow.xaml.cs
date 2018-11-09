@@ -5,7 +5,6 @@ using System.Configuration;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Configuration;
 
 namespace Lottery.App
 {
@@ -51,12 +50,13 @@ namespace Lottery.App
             string[] gameNames = new string[] { "front4", "after4" };
             Dynamic23[] adjacents = gameNames.Select(c => new Dynamic23
             {
+                EnableSinglePattern = false,
                 BetCycle = betCycle ?? 7,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
                 GameName = "tuple",
-                GameArgs = c,
+                GameArgs = c == "front4" ? "middle" : "after",
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();

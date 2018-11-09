@@ -24,6 +24,8 @@ namespace Lottery.Core.Plan
 
         Action<string, string> Dispatcher { get; set; }
 
+        bool EnableSinglePattern { get; set; }
+
         void Invoke(SimpleBet currentBet);
 
         string GetKey();

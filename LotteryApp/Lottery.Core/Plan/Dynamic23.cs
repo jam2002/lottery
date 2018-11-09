@@ -15,7 +15,7 @@ namespace Lottery.Core.Plan
         {
             IEnumerable<string> numbers;
             int[][] betArray = GetBetArray(currentBet.BetAward);
-            if (IsSinglePattern)
+            if (EnableSinglePattern)
             {
                 int[] count = Enumerable.Range(0, 10).ToArray();
                 if (GameArgs == "front4" || GameArgs == "after4")
@@ -79,7 +79,5 @@ namespace Lottery.Core.Plan
         }
 
         public override bool ChangeBetOnceSuccess => bool.Parse(ConfigurationManager.AppSettings["ChangeBetOnceSuccess"]);
-
-        public bool IsSinglePattern => bool.Parse(ConfigurationManager.AppSettings["IsSinglePattern"]);
     }
 }
