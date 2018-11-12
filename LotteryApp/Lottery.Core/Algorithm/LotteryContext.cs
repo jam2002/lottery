@@ -319,7 +319,7 @@ namespace Lottery.Core.Algorithm
                 { "after", FactorTypeEnum.RightDistinct}
             };
             FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
-            if (t.HasValue && FactorDic[t.Value][2].FailureCount < 1 && FactorDic[t.Value][2].LastInterval <= 5)
+            if (t.HasValue && FactorDic[t.Value][2].MaxInterval <= 5 && FactorDic[t.Value][2].LastInterval <= 5)
             {
                 return Build(new int[] { 2 }, t.Value);
             }
