@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="计划软件" Loaded="Window_Loaded" Width="1100" Height="600" Closed="Window_Closed">
      <StackPanel CanVerticallyScroll="True">
-        <TextBlock Margin="0,10">前三二码</TextBlock>
+        <TextBlock Margin="0,10">前三复式</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
             <RichTextBox Name="txtFrontDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
@@ -19,7 +19,7 @@
             </WindowsFormsHost>
         </StackPanel>
 
-        <TextBlock Margin="0,10">中三二码</TextBlock>
+        <TextBlock Margin="0,10">中三复式</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
             <RichTextBox Name="txtMiddleDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
@@ -29,7 +29,7 @@
             </WindowsFormsHost>
         </StackPanel>
 
-        <TextBlock Margin="0,10">后三二码</TextBlock>
+        <TextBlock Margin="0,10">后三复式</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
             <RichTextBox Name="txtAfterDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
@@ -39,7 +39,7 @@
             </WindowsFormsHost>
         </StackPanel>
 
-        <TextBlock Margin="0,10">五星二码</TextBlock>
+        <TextBlock Margin="0,10">五星复式</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
             <RichTextBox Name="txtOneAwardDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
@@ -49,7 +49,7 @@
             </WindowsFormsHost>
         </StackPanel>
 
-        <TextBlock Margin="0,10">前三二码</TextBlock>
+        <TextBlock Margin="0,10">中三单式</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
             <RichTextBox Name="txtFiveDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
@@ -59,7 +59,7 @@
             </WindowsFormsHost>
         </StackPanel>
 
-        <TextBlock Margin="0,10">后三二码</TextBlock>
+        <TextBlock Margin="0,10">后三单式</TextBlock>
         <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
             <TextBlock Margin="0,10,10,10">统计</TextBlock>
             <RichTextBox Name="txtFiftyDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>

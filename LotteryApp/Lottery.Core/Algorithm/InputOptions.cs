@@ -16,7 +16,9 @@
 
         public int BetCycle { get; set; }
 
-        public bool EnableSinglePattern { get; set; }
+        public bool EnableSinglePattern { get; set; } 
+
+        public bool UseGeneralTrend { get; set; }
 
         public InputOptions()
         {

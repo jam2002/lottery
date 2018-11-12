@@ -195,25 +195,28 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetTupleResult()
         {
             FactorTypeEnum r = FactorTypeEnum.AllTuples;
-            switch (InputOption.GameArgs)
+            if (!InputOption.UseGeneralTrend)
             {
-                case "front":
-                    r = FactorTypeEnum.LeftTuple;
-                    break;
-                case "middle":
-                    r = FactorTypeEnum.MiddleTuple;
-                    break;
-                case "after":
-                    r = FactorTypeEnum.RightTuple;
-                    break;
-                case "front4":
-                    r = FactorTypeEnum.Left4Tuple;
-                    break;
-                case "after4":
-                    r = FactorTypeEnum.Right4Tuple;
-                    break;
-                default:
-                    break;
+                switch (InputOption.GameArgs)
+                {
+                    case "front":
+                        r = FactorTypeEnum.LeftTuple;
+                        break;
+                    case "middle":
+                        r = FactorTypeEnum.MiddleTuple;
+                        break;
+                    case "after":
+                        r = FactorTypeEnum.RightTuple;
+                        break;
+                    case "front4":
+                        r = FactorTypeEnum.Left4Tuple;
+                        break;
+                    case "after4":
+                        r = FactorTypeEnum.Right4Tuple;
+                        break;
+                    default:
+                        break;
+                }
             }
 
             var query = from p in FactorDic[r]

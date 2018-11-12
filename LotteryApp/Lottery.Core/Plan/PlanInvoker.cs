@@ -63,7 +63,8 @@ namespace Lottery.Core.Plan
                 GameName = c.GameName,
                 GameArgs = c.GameArgs,
                 BetCycle = c.BetCycle,
-                EnableSinglePattern = c.EnableSinglePattern
+                EnableSinglePattern = c.EnableSinglePattern,
+                UseGeneralTrend = c.UseGeneralTrend
             }).ToArray();
             OutputResult[] outputs = Calculator.GetResults(options, false);
 

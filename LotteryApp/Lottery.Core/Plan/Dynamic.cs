@@ -14,8 +14,6 @@ namespace Lottery.Core.Plan
 
         public int BetIndex { get; set; }
 
-        public int BetCycle { get; set; }
-
         public int Number { get; set; }
 
         public int FailureCount { get; set; }
@@ -42,11 +40,39 @@ namespace Lottery.Core.Plan
             {
                 if (!enableSinglePattern.HasValue)
                 {
-                    enableSinglePattern = bool.Parse(ConfigurationManager.AppSettings["IsSinglePattern"]);
+                    enableSinglePattern = bool.Parse(ConfigurationManager.AppSettings["EnableSinglePattern"]);
                 }
                 return enableSinglePattern.Value;
             }
             set { enableSinglePattern = value; }
+        }
+
+        private bool? useGeneralTrend;
+        public bool UseGeneralTrend
+        {
+            get
+            {
+                if (!useGeneralTrend.HasValue)
+                {
+                    useGeneralTrend = bool.Parse(ConfigurationManager.AppSettings["UseGeneralTrend"]);
+                }
+                return useGeneralTrend.Value;
+            }
+            set { useGeneralTrend = value; }
+        }
+
+        private int? betyCycle;
+        public int BetCycle
+        {
+            get
+            {
+                if (!betyCycle.HasValue)
+                {
+                    betyCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]);
+                }
+                return betyCycle.Value;
+            }
+            set { betyCycle = value; }
         }
 
         public void Invoke(SimpleBet currentBet)

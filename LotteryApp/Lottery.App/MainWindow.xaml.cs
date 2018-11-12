@@ -20,11 +20,10 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            int? betCycle = string.IsNullOrEmpty(ConfigurationManager.AppSettings["BetCycle"]) ? null : (int?)int.Parse(ConfigurationManager.AppSettings["BetCycle"]);
             string[] gameArgs = new string[] { "front", "middle", "after" };
             Dynamic23[] dynamics = gameArgs.Select(c => new Dynamic23
             {
-                BetCycle = betCycle ?? 7,
+                EnableSinglePattern = false,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
@@ -35,28 +34,27 @@ namespace Lottery.App
             }).ToArray();
 
             gameArgs = new string[] { "all" };
-            Dynamic22[] singles = gameArgs.Select(c => new Dynamic22
+            Dynamic23[] singles = gameArgs.Select(c => new Dynamic23
             {
-                BetCycle = betCycle ?? 7,
+                EnableSinglePattern = false,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
-                GameName = "history",
+                GameName = "tuple",
                 GameArgs = c,
                 LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
-            string[] gameNames = new string[] { "front4", "after4" };
+            string[] gameNames = new string[] { "middle4", "after4" };
             Dynamic23[] adjacents = gameNames.Select(c => new Dynamic23
             {
-                EnableSinglePattern = false,
-                BetCycle = betCycle ?? 7,
+                EnableSinglePattern = true,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
                 GameName = "tuple",
-                GameArgs = c == "front4" ? "front" : "after",
+                GameArgs = c == "middle4" ? "middle" : "after",
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
@@ -89,7 +87,7 @@ namespace Lottery.App
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "front4":
+                    case "middle4":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
@@ -97,6 +95,11 @@ namespace Lottery.App
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;
+                }
+
+                if (DateTime.Now.Minute == 30)
+                {
+                    descBox.Document.Blocks.Clear();
                 }
 
                 if (!string.IsNullOrEmpty(desc))

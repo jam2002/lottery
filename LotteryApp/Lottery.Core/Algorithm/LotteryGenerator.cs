@@ -186,7 +186,7 @@ namespace Lottery.Core.Algorithm
 
         private static int[] GetTuples(int[] array)
         {
-            int tupleLength = array.Length == 3 ? 4 : 3;
+            int tupleLength = array.Length == 4 ? 3 : 4;
             int[] sort = array.Distinct().OrderBy(c => c).ToArray();
             Combination combine = new Combination(sort.Length);
             int[] ret = null;
