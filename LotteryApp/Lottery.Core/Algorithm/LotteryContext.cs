@@ -194,6 +194,12 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetTupleResult()
         {
+            LotteryResult[] repeats = BuildRepeats();
+            if (repeats != null)
+            {
+                return repeats;
+            }
+
             FactorTypeEnum r = FactorTypeEnum.AllTuples;
             if (!InputOption.UseGeneralTrend)
             {
@@ -220,43 +226,34 @@ namespace Lottery.Core.Algorithm
             }
 
             var query = from p in FactorDic[r]
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
         }
 
         private LotteryResult[] GetSingleResult()
         {
-            Dictionary<string, FactorTypeEnum> pairDic = new Dictionary<string, FactorTypeEnum>
+            LotteryResult[] repeats = BuildRepeats();
+            if (repeats != null)
             {
-                { "front", FactorTypeEnum.LeftDistinct},
-                { "middle", FactorTypeEnum.MiddleDistinct},
-                { "after", FactorTypeEnum.RightDistinct}
+                return repeats;
+            }
+
+            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+            {
+                { "front", FactorTypeEnum.LeftAward},
+                { "middle", FactorTypeEnum.MiddleAward},
+                { "after", FactorTypeEnum.RightAward},
+                { "first", FactorTypeEnum.Award}
             };
-            FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
-            //if (t.HasValue && FactorDic[t.Value][2].FailureCount <= 1 && FactorDic[t.Value][2].LastInterval < 5)
-            //{
-            //    return FactorDic[t.Value][2].LastInterval >= 2 ? Build(new int[] { 2 }, t.Value) : new LotteryResult[] { };
-            //}
-            //else
-            //{
-                    Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
-                    {
-                        { "front", FactorTypeEnum.LeftAward},
-                        { "middle", FactorTypeEnum.MiddleAward},
-                        { "after", FactorTypeEnum.RightAward},
-                        { "first", FactorTypeEnum.Award}
-                    };
+            FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
-                    FactorTypeEnum r = enumDic[InputOption.GameArgs];
+            var query = from p in FactorDic[r]
+                        where p.Value.OccurCount >= 15 && p.Value.LastInterval >= 2 && CheckInterval(p.Value.HitIntervals)
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval descending
+                        select p.Key;
 
-                    var query = from p in FactorDic[r]
-                                where p.Value.OccurCount >= 15 && p.Value.LastInterval >= 2 && CheckInterval(p.Value.HitIntervals)
-                                orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
-                                select p.Key;
-
-                    return Build(query, r);
-            //}
+            return Build(query, r);
         }
 
         private LotteryResult[] GetSymmetricResult()
@@ -306,11 +303,27 @@ namespace Lottery.Core.Algorithm
                         Type = type,
                         AnyFilters = new AnyFilter[]
                         {
-                        new AnyFilter{  Values = values }
+                              new AnyFilter{  Values = values }
                         },
                         Filter = $"不定位：{string.Join(",", values)}"
                     };
                 }).ToArray();
+        }
+
+        private LotteryResult[] BuildRepeats()
+        {
+            Dictionary<string, FactorTypeEnum> pairDic = new Dictionary<string, FactorTypeEnum>
+            {
+                { "front", FactorTypeEnum.LeftDistinct},
+                { "middle", FactorTypeEnum.MiddleDistinct},
+                { "after", FactorTypeEnum.RightDistinct}
+            };
+            FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
+            if (t.HasValue && FactorDic[t.Value][2].FailureCount < 1 && FactorDic[t.Value][2].LastInterval <= 5)
+            {
+                return Build(new int[] { 2 }, t.Value);
+            }
+            return null;
         }
 
         private bool CheckInterval(int[] intervals, int maxInterval = 5)

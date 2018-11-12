@@ -11,10 +11,14 @@ namespace Lottery.Core.Plan
     /// </summary>
     public class Dynamic23 : Dynamic
     {
+        private bool isDistinct;
         public override string GetBetString(SimpleBet currentBet)
         {
             IEnumerable<string> numbers;
             int[][] betArray = GetBetArray(currentBet.BetAward);
+            FactorTypeEnum type = currentBet.Results[0].Output[0].Type;
+            isDistinct = type == FactorTypeEnum.LeftDistinct || type == FactorTypeEnum.MiddleDistinct || type == FactorTypeEnum.RightDistinct;
+
             if (EnableSinglePattern)
             {
                 int[] count = Enumerable.Range(0, 10).ToArray();
@@ -34,13 +38,13 @@ namespace Lottery.Core.Plan
                               from y in count
                               from z in count
                               let number = new[] { x, y, z }
-                              where betArray.Any(t => number.Distinct().Intersect(t).Count() >= Number)
+                              where isDistinct ? (x == y || x == z || y == z) : betArray.Any(t => number.Distinct().Intersect(t).Count() >= Number)
                               select string.Join(string.Empty, number);
                 }
             }
             else
             {
-                numbers = betArray.Select(t => string.Join(string.Empty, t));
+                numbers = isDistinct ? Enumerable.Range(0, 10).Select(c => $"{c}{c}") : betArray.Select(t => string.Join(string.Empty, t));
             }
             return $"【{string.Join(" ", numbers)}】";
         }
@@ -67,7 +71,7 @@ namespace Lottery.Core.Plan
                     break;
             }
 
-            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && GetBetArray(LastBet.BetAward).Any(t => t.Intersect(numbers).Count() >= Number);
+            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && isDistinct ? numbers.Distinct().Count() < 3 : GetBetArray(LastBet.BetAward).Any(t => t.Intersect(numbers).Count() >= Number);
             return isHit;
         }
 
