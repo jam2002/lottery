@@ -224,9 +224,11 @@ namespace Lottery.Core.Algorithm
                         break;
                 }
             }
+            int[] continus = new int[] { 10123, 11234, 12345, 13456, 14567, 15678, 16789, 17890, 18901, 10129 };
 
             var query = from p in FactorDic[r]
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval descending
+                        where continus.Contains(p.Key)
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval
                         select p.Key;
             return Build(query, r);
         }
@@ -250,7 +252,7 @@ namespace Lottery.Core.Algorithm
 
             var query = from p in FactorDic[r]
                         where p.Value.OccurCount >= 15 && p.Value.LastInterval >= 2 && CheckInterval(p.Value.HitIntervals)
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval descending
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval
                         select p.Key;
 
             return Build(query, r);
