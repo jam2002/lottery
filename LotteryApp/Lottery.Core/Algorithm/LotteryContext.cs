@@ -194,10 +194,14 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetTupleResult()
         {
-            LotteryResult[] repeats = BuildRepeats();
-            if (repeats != null)
+            bool requireRespectRepeats = InputOption.GameArgs == "front" || InputOption.GameArgs == "middle" || InputOption.GameArgs == "after";
+            if (requireRespectRepeats)
             {
-                return repeats;
+                LotteryResult[] repeats = BuildRepeats();
+                if (repeats != null)
+                {
+                    return repeats;
+                }
             }
 
             FactorTypeEnum r = FactorTypeEnum.AllTuples;
