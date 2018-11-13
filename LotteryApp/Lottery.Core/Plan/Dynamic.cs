@@ -47,6 +47,20 @@ namespace Lottery.Core.Plan
             set { enableSinglePattern = value; }
         }
 
+        private bool? enableContinuous;
+        public bool EnableContinuous
+        {
+            get
+            {
+                if (!enableContinuous.HasValue)
+                {
+                    enableContinuous = bool.Parse(ConfigurationManager.AppSettings["EnableContinuous"]);
+                }
+                return enableContinuous.Value;
+            }
+            set { enableContinuous = value; }
+        }
+
         private bool? useGeneralTrend;
         public bool UseGeneralTrend
         {

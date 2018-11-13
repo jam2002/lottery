@@ -26,6 +26,8 @@ namespace Lottery.Core.Plan
 
         bool EnableSinglePattern { get; set; }
 
+        bool EnableContinuous { get; set; }
+
         bool UseGeneralTrend { get; set; }
 
         void Invoke(SimpleBet currentBet);

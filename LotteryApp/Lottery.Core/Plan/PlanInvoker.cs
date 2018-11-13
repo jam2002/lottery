@@ -64,6 +64,7 @@ namespace Lottery.Core.Plan
                 GameArgs = c.GameArgs,
                 BetCycle = c.BetCycle,
                 EnableSinglePattern = c.EnableSinglePattern,
+                EnableContinuous = c.EnableContinuous,
                 UseGeneralTrend = c.UseGeneralTrend
             }).ToArray();
             OutputResult[] outputs = Calculator.GetResults(options, false);

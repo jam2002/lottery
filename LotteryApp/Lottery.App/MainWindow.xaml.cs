@@ -36,25 +36,24 @@ namespace Lottery.App
             gameArgs = new string[] { "all" };
             Dynamic23[] singles = gameArgs.Select(c => new Dynamic23
             {
-                EnableSinglePattern = false,
-                BetIndex = 0,
-                LastBet = null,
-                Number = 2,
-                GameName = "tuple",
-                GameArgs = c,
-                LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
-                Dispatcher = (u, v) => UpdateUI(c, u, v)
-            }).ToArray();
-
-            string[] gameNames = new string[] { "middle4", "after4" };
-            Dynamic23[] adjacents = gameNames.Select(c => new Dynamic23
-            {
                 EnableSinglePattern = true,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
                 GameName = "tuple",
-                GameArgs = c == "middle4" ? "middle" : "after",
+                GameArgs = "after",
+                LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
+                Dispatcher = (u, v) => UpdateUI(c, u, v)
+            }).ToArray();
+
+            string[] gameNames = new string[] { "front4", "after4" };
+            Dynamic23[] adjacents = gameNames.Select(c => new Dynamic23
+            {
+                BetIndex = 0,
+                LastBet = null,
+                Number = 2,
+                GameName = "tuple",
+                GameArgs = c,
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
@@ -87,7 +86,7 @@ namespace Lottery.App
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "middle4":
+                    case "front4":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;

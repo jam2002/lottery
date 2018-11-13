@@ -224,10 +224,13 @@ namespace Lottery.Core.Algorithm
                         break;
                 }
             }
-            int[] continus = new int[] { 10123, 11234, 12345, 13456, 14567, 15678, 16789, 17890, 18901, 10129 };
+
+            int[] c1 = new int[] { 10123, 11234, 12345, 13456, 14567, 15678, 16789, 10789, 10189, 10129 };
+            int[] c2 = new int[] { 1012, 1123, 1234, 1345, 1456, 1567, 1678, 1789, 1089, 1019 };
+            int[] continuous = r == FactorTypeEnum.Left4Tuple || r == FactorTypeEnum.Right4Tuple ? c2 : c1;
 
             var query = from p in FactorDic[r]
-                        where continus.Contains(p.Key)
+                        where InputOption.EnableContinuous ? continuous.Contains(p.Key) : true
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval
                         select p.Key;
             return Build(query, r);
