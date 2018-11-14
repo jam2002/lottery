@@ -12,12 +12,17 @@ namespace Lottery.Core.Plan
     public class Dynamic23 : Dynamic
     {
         private bool isDistinct;
+        private bool isAward;
+        private int? award;
+
         public override string GetBetString(SimpleBet currentBet)
         {
             IEnumerable<string> numbers;
-            int[][] betArray = GetBetArray(currentBet.BetAward);
             FactorTypeEnum type = currentBet.Results[0].Output[0].Type;
             isDistinct = type == FactorTypeEnum.LeftDistinct || type == FactorTypeEnum.MiddleDistinct || type == FactorTypeEnum.RightDistinct;
+            isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward;
+            award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
+            int[][] betArray = !isDistinct && !isAward && !award.HasValue ? GetBetArray(currentBet.BetAward) : new int[][] { };
 
             if (EnableSinglePattern)
             {
@@ -38,13 +43,13 @@ namespace Lottery.Core.Plan
                               from y in count
                               from z in count
                               let number = new[] { x, y, z }
-                              where isDistinct ? (x == y || x == z || y == z) : betArray.Any(t => number.Distinct().Intersect(t).Count() >= Number)
+                              where isDistinct ? (x == y || x == z || y == z) : (award.HasValue? number.Contains(award.Value) : betArray.Any(t => number.Distinct().Intersect(t).Count() >= Number))
                               select string.Join(string.Empty, number);
                 }
             }
             else
             {
-                numbers = isDistinct ? Enumerable.Range(0, 10).Select(c => $"{c}{c}") : betArray.Select(t => string.Join(string.Empty, t));
+                numbers = isDistinct ? Enumerable.Range(0, 10).Select(c => $"{c}{c}") : (award.HasValue ? Enumerable.Range(0, 10).Select(c => $"{c}{award.Value} {award.Value}{c}").Distinct() : betArray.Select(t => string.Join(string.Empty, t)));
             }
             return $"【{string.Join(" ", numbers)}】";
         }
@@ -71,7 +76,7 @@ namespace Lottery.Core.Plan
                     break;
             }
 
-            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && isDistinct ? numbers.Distinct().Count() < 3 : GetBetArray(LastBet.BetAward).Any(t => t.Intersect(numbers).Count() >= Number);
+            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && (isDistinct ? numbers.Distinct().Count() < 3 : (award.HasValue ? numbers.Contains(award.Value) : GetBetArray(LastBet.BetAward).Any(t => t.Intersect(numbers).Count() >= Number)));
             return isHit;
         }
 
