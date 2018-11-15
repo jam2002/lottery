@@ -46,14 +46,15 @@ namespace Lottery.App
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
 
-            string[] gameNames = new string[] { "front4", "after4" };
+            string[] gameNames = new string[] { "afterComposite", "afterSingle" };
             Dynamic23[] adjacents = gameNames.Select(c => new Dynamic23
             {
+                EnableSinglePattern = c == "afterSingle",
                 BetIndex = 0,
                 LastBet = null,
                 Number = 2,
-                GameName = "tuple",
-                GameArgs = c,
+                GameName = "tupleOnly",
+                GameArgs = c.Substring(0, 5),
                 LotteryName = ConfigurationManager.AppSettings["LotteryName"],
                 Dispatcher = (u, v) => UpdateUI(c, u, v)
             }).ToArray();
@@ -86,11 +87,11 @@ namespace Lottery.App
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "front4":
+                    case "afterComposite":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "after4":
+                    case "afterSingle":
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;

@@ -155,6 +155,9 @@ namespace Lottery.Core.Algorithm
                 case "tuple":
                     ret = GetTupleResult();
                     break;
+                case "tupleOnly":
+                    ret = GetTupleOnlyResult();
+                    break;
                 case "symmetric":
                     ret = GetSymmetricResult();
                     break;
@@ -195,14 +198,22 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] GetTupleResult()
         {
             bool requireRespectRepeats = InputOption.GameArgs == "front" || InputOption.GameArgs == "middle" || InputOption.GameArgs == "after";
+            LotteryResult[] repeats = null;
             if (requireRespectRepeats)
             {
-                LotteryResult[] repeats = GetSingleResult();
-                if (repeats != null && repeats.Any())
-                {
-                    return repeats;
-                }
+                repeats = GetSingleResult();
+
             }
+            if (repeats == null || !repeats.Any())
+            {
+                repeats = GetTupleOnlyResult();
+            }
+            return repeats;
+        }
+
+        private LotteryResult[] GetTupleOnlyResult()
+        {
+            bool requireRespectRepeats = InputOption.GameArgs == "front" || InputOption.GameArgs == "middle" || InputOption.GameArgs == "after";
 
             FactorTypeEnum r = FactorTypeEnum.AllTuples;
             if (!InputOption.UseGeneralTrend)
