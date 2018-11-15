@@ -49,7 +49,7 @@ namespace Lottery.Core.Plan
             }
             else
             {
-                numbers = isDistinct ? Enumerable.Range(0, 10).Select(c => $"{c}{c}") : (award.HasValue ? Enumerable.Range(0, 10).Select(c => $"{c}{award.Value} {award.Value}{c}").Distinct() : betArray.Select(t => string.Join(string.Empty, t)));
+                numbers = isDistinct ? Enumerable.Range(0, 10).Select(c => $"{c}{c}") : (award.HasValue ? Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct() : betArray.Select(t => string.Join(string.Empty, t)));
             }
             return $"【{string.Join(" ", numbers)}】";
         }
