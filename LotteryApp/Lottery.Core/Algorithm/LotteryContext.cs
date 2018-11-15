@@ -240,29 +240,27 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSingleResult()
         {
-            LotteryResult[] repeats = null;
-            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
-            {
-                { "front", FactorTypeEnum.LeftAward},
-                { "middle", FactorTypeEnum.MiddleAward},
-                { "after", FactorTypeEnum.RightAward},
-                { "first", FactorTypeEnum.Award}
-            };
-
-            FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
-            if (r.HasValue)
-            {
-                var query = from p in FactorDic[r.Value]
-                            where p.Value.MaxInterval <= 5 && p.Value.LastInterval <= 5
-                            orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
-                            select p.Key;
-
-                repeats = Build(query, r.Value);
-            }
-
+            LotteryResult[] repeats = BuildRepeats();
             if (repeats == null || !repeats.Any())
             {
-                repeats = BuildRepeats();
+                Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+                {
+                    { "front", FactorTypeEnum.LeftAward},
+                    { "middle", FactorTypeEnum.MiddleAward},
+                    { "after", FactorTypeEnum.RightAward},
+                    { "first", FactorTypeEnum.Award}
+                };
+
+                FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
+                if (r.HasValue)
+                {
+                    var query = from p in FactorDic[r.Value]
+                                where p.Value.MaxInterval <= 5 && p.Value.LastInterval <= 5 && p.Value.OccurCount >= 5
+                                orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                                select p.Key;
+
+                    repeats = Build(query, r.Value);
+                }
             }
             return repeats;
         }
@@ -330,7 +328,8 @@ namespace Lottery.Core.Algorithm
                 { "after", FactorTypeEnum.RightDistinct}
             };
             FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
-            if (t.HasValue && FactorDic[t.Value][2].MaxInterval <= 5 && FactorDic[t.Value][2].LastInterval <= 5)
+            ReferenceFactor factor = t.HasValue && FactorDic[t.Value].ContainsKey(2) ? FactorDic[t.Value][2] : null;
+            if (factor != null && factor.MaxInterval <= 5 && factor.LastInterval <= 5 && factor.OccurCount >= 4)
             {
                 return Build(new int[] { 2 }, t.Value);
             }
