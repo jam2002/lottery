@@ -201,8 +201,7 @@ namespace Lottery.Core.Algorithm
             LotteryResult[] repeats = null;
             if (requireRespectRepeats)
             {
-                repeats = GetSingleResult();
-
+                repeats = BuildRepeats();
             }
             if (repeats == null || !repeats.Any())
             {
@@ -213,40 +212,11 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetTupleOnlyResult()
         {
-            bool requireRespectRepeats = InputOption.GameArgs == "front" || InputOption.GameArgs == "middle" || InputOption.GameArgs == "after";
-
-            FactorTypeEnum r = FactorTypeEnum.AllTuples;
-            if (!InputOption.UseGeneralTrend)
-            {
-                switch (InputOption.GameArgs)
-                {
-                    case "front":
-                        r = FactorTypeEnum.LeftTuple;
-                        break;
-                    case "middle":
-                        r = FactorTypeEnum.MiddleTuple;
-                        break;
-                    case "after":
-                        r = FactorTypeEnum.RightTuple;
-                        break;
-                    case "front4":
-                        r = FactorTypeEnum.Left4Tuple;
-                        break;
-                    case "after4":
-                        r = FactorTypeEnum.Right4Tuple;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            int[] continuous = new int[] { 10123, 11234, 12345, 13456, 14567, 15678, 16789, 10789, 10189, 10129 };
-
-            var query = from p in FactorDic[r]
-                        where InputOption.EnableContinuous && requireRespectRepeats ? continuous.Contains(p.Key) : true
-                        orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
-                        select p.Key;
-            return Build(query, r);
+            IEnumerable<LotteryResult> results = (BuildSingles() ?? new LotteryResult[] { }).Concat(BuildTuples());
+            results = from p in results
+                      orderby p.MaxInterval, p.HitCount descending, p.FailureCount, p.LastInterval descending
+                      select p;
+            return results.Take(3).ToArray();
         }
 
         private LotteryResult[] GetSingleResult()
@@ -254,24 +224,7 @@ namespace Lottery.Core.Algorithm
             LotteryResult[] repeats = BuildRepeats();
             if (repeats == null || !repeats.Any())
             {
-                Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
-                {
-                    { "front", FactorTypeEnum.LeftAward},
-                    { "middle", FactorTypeEnum.MiddleAward},
-                    { "after", FactorTypeEnum.RightAward},
-                    { "first", FactorTypeEnum.Award}
-                };
-
-                FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
-                if (r.HasValue)
-                {
-                    var query = from p in FactorDic[r.Value]
-                                where p.Value.MaxInterval <= 5 && p.Value.LastInterval <= 5 && p.Value.OccurCount >= 5
-                                orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
-                                select p.Key;
-
-                    repeats = Build(query, r.Value);
-                }
+                repeats = BuildSingles();
             }
             return repeats;
         }
@@ -317,6 +270,7 @@ namespace Lottery.Core.Algorithm
                         GameName = InputOption.GameName,
                         HitIntervals = factor.HitIntervals,
                         HitCount = factor.OccurCount,
+                        FailureCount = factor.FailureCount,
                         LotteryName = InputOption.LotteryName,
                         LastInterval = factor.LastInterval,
                         MaxInterval = factor.MaxInterval,
@@ -345,6 +299,67 @@ namespace Lottery.Core.Algorithm
                 return Build(new int[] { 2 }, t.Value);
             }
             return null;
+        }
+
+        private LotteryResult[] BuildSingles()
+        {
+            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+            {
+                { "front", FactorTypeEnum.LeftAward},
+                { "middle", FactorTypeEnum.MiddleAward},
+                { "after", FactorTypeEnum.RightAward},
+                { "first", FactorTypeEnum.Award}
+            };
+
+            FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
+            if (r.HasValue)
+            {
+                var query = from p in FactorDic[r.Value]
+                            where p.Value.MaxInterval <= 5 && p.Value.LastInterval <= 5 && p.Value.OccurCount >= 5
+                            orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                            select p.Key;
+
+                return Build(query, r.Value);
+            }
+            return null;
+        }
+
+        private LotteryResult[] BuildTuples()
+        {
+            bool requireRespectRepeats = InputOption.GameArgs == "front" || InputOption.GameArgs == "middle" || InputOption.GameArgs == "after";
+
+            FactorTypeEnum r = FactorTypeEnum.AllTuples;
+            if (!InputOption.UseGeneralTrend)
+            {
+                switch (InputOption.GameArgs)
+                {
+                    case "front":
+                        r = FactorTypeEnum.LeftTuple;
+                        break;
+                    case "middle":
+                        r = FactorTypeEnum.MiddleTuple;
+                        break;
+                    case "after":
+                        r = FactorTypeEnum.RightTuple;
+                        break;
+                    case "front4":
+                        r = FactorTypeEnum.Left4Tuple;
+                        break;
+                    case "after4":
+                        r = FactorTypeEnum.Right4Tuple;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            int[] continuous = new int[] { 10123, 11234, 12345, 13456, 14567, 15678, 16789, 10789, 10189, 10129 };
+
+            var query = from p in FactorDic[r]
+                        where InputOption.EnableContinuous && requireRespectRepeats ? continuous.Contains(p.Key) : true
+                        orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                        select p.Key;
+            return Build(query, r);
         }
 
         private bool CheckInterval(int[] intervals, int maxInterval = 5)

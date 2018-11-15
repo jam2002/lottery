@@ -44,6 +44,8 @@
         /// </summary>
         public int WinCount { get; set; }
 
+        public int FailureCount { get; set; }
+
         /// <summary>
         /// 中奖位置列表
         /// </summary>
