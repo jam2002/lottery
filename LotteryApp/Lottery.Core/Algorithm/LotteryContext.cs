@@ -214,7 +214,7 @@ namespace Lottery.Core.Algorithm
         {
             IEnumerable<LotteryResult> results = (BuildSingles() ?? new LotteryResult[] { }).Concat(BuildTuples());
             results = from p in results
-                      orderby p.MaxInterval, p.HitCount descending, p.FailureCount, p.LastInterval descending
+                      orderby p.MaxInterval, p.HitCount descending, p.FailureCount, p.LastInterval descending, p.Type descending
                       select p;
             return results.Take(3).ToArray();
         }
