@@ -30,6 +30,8 @@ namespace Lottery.Core.Plan
 
         bool UseGeneralTrend { get; set; }
 
+        bool RespectRepeat { get; set; }
+
         void Invoke(SimpleBet currentBet);
 
         string GetKey();

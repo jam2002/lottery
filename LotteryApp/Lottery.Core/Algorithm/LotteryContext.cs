@@ -152,17 +152,20 @@ namespace Lottery.Core.Algorithm
                 case "history":
                     ret = GetHistoryResult();
                     break;
+                case "single":
+                    ret = GetSingleResult();
+                    break;
+                case "tripple":
+                    ret = GetTrippleResult();
+                    break;
                 case "tuple":
                     ret = GetTupleResult();
                     break;
-                case "tupleOnly":
-                    ret = GetTupleOnlyResult();
+                case "mix":
+                    ret = GetMixResult();
                     break;
                 case "symmetric":
                     ret = GetSymmetricResult();
-                    break;
-                case "single":
-                    ret = GetSingleResult();
                     break;
                 case "fivestar":
                     int[] fiveStarForms = new int[] { 3, 4, 5, 6 };
@@ -195,38 +198,46 @@ namespace Lottery.Core.Algorithm
             return Build(query, r);
         }
 
-        private LotteryResult[] GetTupleResult()
-        {
-            bool requireRespectRepeats = InputOption.GameArgs == "front" || InputOption.GameArgs == "middle" || InputOption.GameArgs == "after";
-            LotteryResult[] repeats = null;
-            if (requireRespectRepeats)
-            {
-                repeats = BuildRepeats();
-            }
-            if (repeats == null || !repeats.Any())
-            {
-                repeats = GetTupleOnlyResult();
-            }
-            return repeats;
-        }
-
-        private LotteryResult[] GetTupleOnlyResult()
-        {
-            IEnumerable<LotteryResult> results = (BuildSingles() ?? new LotteryResult[] { }).Concat(BuildTuples());
-            results = from p in results
-                      orderby p.MaxInterval, p.HitCount descending, p.FailureCount, p.LastInterval descending, p.Type descending
-                      select p;
-            return results.Take(3).ToArray();
-        }
-
         private LotteryResult[] GetSingleResult()
         {
-            LotteryResult[] repeats = BuildRepeats();
-            if (repeats == null || !repeats.Any())
+            LotteryResult[] results = InputOption.RespectRepeat ? BuildRepeats() : new LotteryResult[] { };
+            if (!results.Any())
             {
-                repeats = BuildSingles();
+                results = BuildSingles();
             }
-            return repeats;
+            return results;
+        }
+
+        private LotteryResult[] GetTrippleResult()
+        {
+            LotteryResult[] results = InputOption.RespectRepeat ? BuildRepeats() : new LotteryResult[] { };
+            if (!results.Any())
+            {
+                results = BuildTripples();
+            }
+            return results;
+        }
+
+        private LotteryResult[] GetTupleResult()
+        {
+            LotteryResult[] results = InputOption.RespectRepeat ? BuildRepeats() : new LotteryResult[] { };
+            if (!results.Any())
+            {
+                results = BuildTuples();
+            }
+            return results;
+        }
+
+        private LotteryResult[] GetMixResult()
+        {
+            IEnumerable<LotteryResult> results = InputOption.RespectRepeat ? BuildRepeats() : new LotteryResult[] { };
+            if (!results.Any())
+            {
+                results = from p in BuildSingles().Concat(BuildTuples()).Concat(BuildTripples())
+                          orderby p.MaxInterval, p.HitCount descending, p.FailureCount, p.LastInterval descending, p.Type descending
+                          select p;
+            }
+            return results.Take(3).ToArray();
         }
 
         private LotteryResult[] GetSymmetricResult()
@@ -294,11 +305,11 @@ namespace Lottery.Core.Algorithm
             };
             FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
             ReferenceFactor factor = t.HasValue && FactorDic[t.Value].ContainsKey(2) ? FactorDic[t.Value][2] : null;
-            if (factor != null && factor.MaxInterval <= 5 && factor.LastInterval <= 5 && factor.OccurCount >= (int)Math.Ceiling(InputOption.Number * 0.3))
+            if (factor != null && factor.MaxInterval <= 5 && factor.OccurCount >= (int)Math.Ceiling(InputOption.Number * 0.3) && CheckInterval(factor.HitIntervals))
             {
                 return Build(new int[] { 2 }, t.Value);
             }
-            return null;
+            return new LotteryResult[] { };
         }
 
         private LotteryResult[] BuildSingles()
@@ -315,13 +326,40 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            where p.Value.MaxInterval <= 5 && p.Value.LastInterval <= 5 && p.Value.OccurCount >= 5
+                            where p.Value.MaxInterval <= 5 && p.Value.OccurCount >= 5
                             orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                             select p.Key;
 
                 return Build(query, r.Value);
             }
-            return null;
+            return new LotteryResult[] { };
+        }
+
+        private LotteryResult[] BuildTripples()
+        {
+            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+            {
+                { "front", FactorTypeEnum.LeftAward},
+                { "middle", FactorTypeEnum.MiddleAward},
+                { "after", FactorTypeEnum.RightAward},
+                { "first", FactorTypeEnum.Award}
+            };
+
+            FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
+            if (r.HasValue)
+            {
+                var query = from p in FactorDic[r.Value]
+                            where CheckInterval(p.Value.HitIntervals)
+                            orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval
+                            select p.Key;
+                int[] keys = query.Take(4).OrderBy(c => c).ToArray();
+                if (keys.Length == 4)
+                {
+                    keys = new int[] { 10000 + keys[0] * 1000 + keys[1] * 100 + keys[2] * 10 + keys[3] };
+                }
+                return Build(keys, r.Value == FactorTypeEnum.LeftAward ? FactorTypeEnum.LeftTuple : (r.Value == FactorTypeEnum.MiddleAward ? FactorTypeEnum.MiddleTuple : FactorTypeEnum.RightTuple));
+            }
+            return new LotteryResult[] { };
         }
 
         private LotteryResult[] BuildTuples()
@@ -364,7 +402,7 @@ namespace Lottery.Core.Algorithm
 
         private bool CheckInterval(int[] intervals, int maxInterval = 5)
         {
-            return intervals.Skip(intervals.Length - 3).All(c => c <= maxInterval);
+            return intervals.Skip(intervals.Length - 2).All(c => c < maxInterval);
         }
 
         private int[] GetIntervals(int[] occurPostions, IEnumerable<LotteryNumber> lotteryNumbers = null)

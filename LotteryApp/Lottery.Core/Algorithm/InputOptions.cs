@@ -22,6 +22,8 @@
 
         public bool UseGeneralTrend { get; set; }
 
+        public bool RespectRepeat { get; set; }
+
         public InputOptions()
         {
             RetrieveNumber = 200;

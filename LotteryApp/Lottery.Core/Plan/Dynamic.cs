@@ -30,7 +30,7 @@ namespace Lottery.Core.Plan
 
         public string GetKey()
         {
-            return string.Concat(LotteryName, ".", GameName, ".", GameArgs ?? string.Empty, ".", EnableSinglePattern ? 1 : 0);
+            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat");
         }
 
         private bool? enableSinglePattern;
@@ -73,6 +73,20 @@ namespace Lottery.Core.Plan
                 return useGeneralTrend.Value;
             }
             set { useGeneralTrend = value; }
+        }
+
+        private bool? respectRepeat;
+        public bool RespectRepeat
+        {
+            get
+            {
+                if (!respectRepeat.HasValue)
+                {
+                    RespectRepeat = bool.Parse(ConfigurationManager.AppSettings["RespectRepeat"]);
+                }
+                return respectRepeat.Value;
+            }
+            set { respectRepeat = value; }
         }
 
         private int? betyCycle;

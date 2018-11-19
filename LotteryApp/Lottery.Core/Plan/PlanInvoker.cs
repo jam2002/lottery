@@ -44,7 +44,7 @@ namespace Lottery.Core.Plan
             DateTime start = DateTime.Now;
             start = start.AddSeconds(start.Second < 15 ? (15 - start.Second) : (75 - start.Second));
             int minute = start.Minute % 10;
-            if (planDic.Any(t => t.Value.LotteryName == "cqssc") && minute !=2)
+            if (planDic.Any(t => t.Value.LotteryName == "cqssc") && minute != 2)
             {
                 start = start.AddMinutes(12 - (minute == 0 ? 10 : minute));
             }
@@ -65,7 +65,8 @@ namespace Lottery.Core.Plan
                 BetCycle = c.BetCycle,
                 EnableSinglePattern = c.EnableSinglePattern,
                 EnableContinuous = c.EnableContinuous,
-                UseGeneralTrend = c.UseGeneralTrend
+                UseGeneralTrend = c.UseGeneralTrend,
+                RespectRepeat = c.RespectRepeat
             }).ToArray();
             OutputResult[] outputs = Calculator.GetResults(options, false);
 
@@ -121,7 +122,7 @@ namespace Lottery.Core.Plan
 
         private string GetKey(InputOptions input)
         {
-            return string.Concat(input.LotteryName, ".", input.GameName, ".", input.GameArgs ?? string.Empty, ".", input.EnableSinglePattern ? 1 : 0);
+            return string.Join(".", input.LotteryName, input.GameName, input.GameArgs ?? string.Empty, input.EnableSinglePattern ? "Single" : "Composite", input.RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat");
         }
     }
 }
