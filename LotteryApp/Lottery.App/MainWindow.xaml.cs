@@ -31,7 +31,7 @@ namespace Lottery.App
                     GameName = c,
                     GameArgs = "after",
                     LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
-                    Dispatcher = (u, v) => UpdateUI(string.Join(".", c, "RespectRepeat"), u, v)
+                    Dispatcher = (u, v) => UpdateUI(string.Join(".", c, "WithoutRespectRepeat"), u, v)
                 },
                 new Dynamic23
                 {
@@ -42,7 +42,7 @@ namespace Lottery.App
                     GameName = c,
                     GameArgs = "after",
                     LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
-                    Dispatcher = (u, v) => UpdateUI(string.Join(".", c, "WithoutRespectRepeat"), u, v)
+                    Dispatcher = (u, v) => UpdateUI(string.Join(".", c, "RespectRepeat"), u, v)
                 }
             }).ToArray();
 
