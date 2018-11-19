@@ -125,11 +125,12 @@ namespace Lottery.Core.Algorithm
                 {
                     try
                     {
-                        lotteries = GetTsNumbers("https://www.pp926.com/api/lastOpenedIssues.php?id=1&issueCount=100");
+                        //lotteries = GetTsNumbers("http://tx-ssc.com/api/getData");
+                        lotteries = GetTsNumbers("https://www.150106.com/api/lastOpenedIssues.php?id=1&issueCount=100");
                     }
                     catch
                     {
-                        lotteries = GetTsNumbers("http://tx-ssc.com/api/getData");
+                        lotteries = GetTsNumbers("https://www.pp926.com/api/lastOpenedIssues.php?id=1&issueCount=100");
                     }
                 }
                 else if (lottery.Source == 4)

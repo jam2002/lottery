@@ -78,7 +78,7 @@ namespace Lottery.App
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tupple.RespectRepeat":
+                    case "tuple.RespectRepeat":
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;
