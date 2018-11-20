@@ -305,7 +305,7 @@ namespace Lottery.Core.Algorithm
             };
             FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
             ReferenceFactor factor = t.HasValue && FactorDic[t.Value].ContainsKey(2) ? FactorDic[t.Value][2] : null;
-            if (factor != null && factor.MaxInterval <= 5 && factor.LastInterval <= 5 && factor.OccurCount >= (int)Math.Ceiling(InputOption.Number * 0.3))
+            if (factor != null && factor.MaxInterval <= 5 && factor.LastInterval <= 5 && factor.OccurCount >= 4)
             {
                 return Build(new int[] { 2 }, t.Value);
             }
@@ -349,8 +349,8 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            where p.Value.LastInterval <= 5
-                            orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                            where CheckInterval(p.Value.HitIntervals)
+                            orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.Take(4).OrderBy(c => c).ToArray();
                 if (keys.Length == 4)
