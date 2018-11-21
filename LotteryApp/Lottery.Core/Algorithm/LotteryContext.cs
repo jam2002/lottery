@@ -339,57 +339,50 @@ namespace Lottery.Core.Algorithm
         {
             Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
             {
-                { "front", FactorTypeEnum.LeftAward},
-                { "middle", FactorTypeEnum.MiddleAward},
-                { "after", FactorTypeEnum.RightAward},
-                { "first", FactorTypeEnum.Award}
+                { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
+                { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
+                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
+                { "all", FactorTypeEnum.Award}
             };
 
             FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
+                            where p.Value.LastInterval < 5
+                            orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.Take(4).OrderBy(c => c).ToArray();
                 if (keys.Length == 4)
                 {
                     keys = new int[] { 10000 + keys[0] * 1000 + keys[1] * 100 + keys[2] * 10 + keys[3] };
+                    Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
+                    {
+                        { "front",   FactorTypeEnum.LeftTuple},
+                        { "middle", FactorTypeEnum.MiddleTuple},
+                        { "after",  FactorTypeEnum.RightTuple},
+                        { "all", FactorTypeEnum.AllTuples}
+                    };
+                    return Build(keys, tupleDic[InputOption.GameArgs]);
                 }
-                return Build(keys, r.Value == FactorTypeEnum.LeftAward ? FactorTypeEnum.LeftTuple : (r.Value == FactorTypeEnum.MiddleAward ? FactorTypeEnum.MiddleTuple : FactorTypeEnum.RightTuple));
             }
             return new LotteryResult[] { };
         }
 
         private LotteryResult[] BuildTuples()
         {
-            bool requireRespectRepeats = InputOption.GameArgs == "front" || InputOption.GameArgs == "middle" || InputOption.GameArgs == "after";
-
-            FactorTypeEnum r = FactorTypeEnum.AllTuples;
-            if (!InputOption.UseGeneralTrend)
+            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
             {
-                switch (InputOption.GameArgs)
-                {
-                    case "front":
-                        r = FactorTypeEnum.LeftTuple;
-                        break;
-                    case "middle":
-                        r = FactorTypeEnum.MiddleTuple;
-                        break;
-                    case "after":
-                        r = FactorTypeEnum.RightTuple;
-                        break;
-                    case "front4":
-                        r = FactorTypeEnum.Left4Tuple;
-                        break;
-                    case "after4":
-                        r = FactorTypeEnum.Right4Tuple;
-                        break;
-                    default:
-                        break;
-                }
-            }
+                { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.LeftTuple},
+                { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.MiddleTuple},
+                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.RightTuple},
+                { "front4", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Left4Tuple},
+                { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Right4Tuple},
+                { "all", FactorTypeEnum.AllTuples}
+            };
+            FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
+            bool requireRespectRepeats = InputOption.GameArgs == "front" || InputOption.GameArgs == "middle" || InputOption.GameArgs == "after";
             int[] continuous = new int[] { 10123, 11234, 12345, 13456, 14567, 15678, 16789, 10789, 10189, 10129 };
 
             var query = from p in FactorDic[r]
@@ -397,6 +390,40 @@ namespace Lottery.Core.Algorithm
                         orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
+        }
+
+        private LotteryResult[] BuildDoubles()
+        {
+            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+            {
+                { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
+                { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
+                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
+                { "all", FactorTypeEnum.Award}
+            };
+            FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
+
+            if (r.HasValue)
+            { 
+                var query = from p in FactorDic[r.Value]
+                            where p.Value.LastInterval < 5
+                            orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
+                            select p.Key;
+                int[] keys = query.Take(4).OrderBy(c => c).ToArray();
+                if (keys.Length == 4)
+                {
+                    keys = new int[] { 10000 + keys[0] * 1000 + keys[1] * 100 + keys[2] * 10 + keys[3] };
+                    Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
+                    {
+                        { "front",   FactorTypeEnum.LeftTuple},
+                        { "middle", FactorTypeEnum.MiddleTuple},
+                        { "after",  FactorTypeEnum.RightTuple},
+                        { "all", FactorTypeEnum.AllTuples}
+                    };
+                    return Build(keys, tupleDic[InputOption.GameArgs]);
+                }
+            }
+            return new LotteryResult[] { };
         }
 
         private bool CheckInterval(int[] intervals, int maxInterval = 5)

@@ -20,33 +20,55 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string[] gameNames = new string[] { "single", "tripple", "tuple" };
-            Dynamic23[] dynamics = gameNames.SelectMany(c => new Dynamic23[] {
+            string[] gameArgs = new string[] { "front", "after" };
+            Dynamic23[] composites = gameArgs.SelectMany(c => new Dynamic23[]
+            {
                 new Dynamic23
                 {
+                    EnableSinglePattern = false,
+                    UseGeneralTrend = true,
                     RespectRepeat = false,
                     BetIndex = 0,
                     LastBet = null,
-                    Number = c == "single" ? 1 : 2,
-                    GameName = c,
-                    GameArgs = "after",
+                    Number = 2,
+                    TakeNumber = 50,
+                    GameName = "tripple",
+                    GameArgs = c,
                     LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
-                    Dispatcher = (u, v) => UpdateUI(string.Join(".", c, "WithoutRespectRepeat"), u, v)
+                    Dispatcher = (u, v) => UpdateUI(string.Join(".", "tripple", c), u, v)
                 },
                 new Dynamic23
                 {
-                    RespectRepeat = true,
+                    EnableSinglePattern = false,
+                    UseGeneralTrend = true,
+                    RespectRepeat = false,
                     BetIndex = 0,
                     LastBet = null,
-                    Number = c == "single" ? 1 : 2,
-                    GameName = c,
-                    GameArgs = "after",
+                    Number = 2,
+                    TakeNumber = 50,
+                    GameName = "tuple",
+                    GameArgs = c,
                     LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
-                    Dispatcher = (u, v) => UpdateUI(string.Join(".", c, "RespectRepeat"), u, v)
+                    Dispatcher = (u, v) => UpdateUI(string.Join(".", "tuple", c), u, v)
                 }
             }).ToArray();
 
-            Dictionary<string, IPlan> dic = dynamics.OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
+            string[] gameNames = new string[] { "front", "after" };
+            Dynamic23[] singles = gameNames.Select((c, i) => new Dynamic23
+            {
+                EnableSinglePattern = i == 1,
+                UseGeneralTrend = false,
+                RespectRepeat = true,
+                BetIndex = 0,
+                LastBet = null,
+                Number = 2,
+                GameName = "tuple",
+                GameArgs = c,
+                LotteryName = string.Concat(ConfigurationManager.AppSettings["LotteryName"]),
+                Dispatcher = (u, v) => UpdateUI(string.Join(".", "tuple", c, "respectRepeat"), u, v)
+            }).ToArray();
+
+            Dictionary<string, IPlan> dic = composites.Concat(singles).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
         }
 
@@ -58,27 +80,27 @@ namespace Lottery.App
                 System.Windows.Forms.RichTextBox valueBox = null;
                 switch (code)
                 {
-                    case "single.WithoutRespectRepeat":
+                    case "tripple.front":
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tripple.WithoutRespectRepeat":
+                    case "tuple.front":
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tuple.WithoutRespectRepeat":
+                    case "tripple.after":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.RespectRepeat":
+                    case "tuple.after":
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tripple.RespectRepeat":
+                    case "tuple.front.respectRepeat":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tuple.RespectRepeat":
+                    case "tuple.after.respectRepeat":
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;
