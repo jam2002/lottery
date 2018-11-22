@@ -32,7 +32,7 @@ namespace Lottery.App
                     BetIndex = 0,
                     LastBet = null,
                     Number = 2,
-                    TakeNumber = 30,
+                    TakeNumber = 50,
                     GameName = "tripple",
                     GameArgs = c,
                     LotteryName = lotteryName,
