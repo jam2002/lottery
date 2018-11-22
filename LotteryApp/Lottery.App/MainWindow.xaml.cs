@@ -42,8 +42,6 @@ namespace Lottery.App
                 {
                     RespectRepeat = false,
                     BetIndex = 0,
-                    BetCycle = 5,
-                    TakeNumber =30,
                     LastBet = null,
                     Number = 1,
                     GameName = "double",
