@@ -155,6 +155,9 @@ namespace Lottery.Core.Algorithm
                 case "single":
                     ret = GetSingleResult();
                     break;
+                case "double":
+                    ret = BuildDoubles();
+                    break;
                 case "tripple":
                     ret = GetTrippleResult();
                     break;
@@ -404,24 +407,33 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
 
             if (r.HasValue)
-            { 
+            {
                 var query = from p in FactorDic[r.Value]
-                            where p.Value.LastInterval < 5
-                            orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
+                            orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
-                int[] keys = query.Take(4).OrderBy(c => c).ToArray();
-                if (keys.Length == 4)
+                int[] keys = query.ToArray();
+                keys = keys.Take(2).Concat(new int[] { keys[keys.Length - 1] }).ToArray();
+                Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
-                    keys = new int[] { 10000 + keys[0] * 1000 + keys[1] * 100 + keys[2] * 10 + keys[3] };
-                    Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
+                    { "front",   FactorTypeEnum.LeftDouble},
+                    { "middle", FactorTypeEnum.MiddleDouble},
+                    { "after",  FactorTypeEnum.RightDouble}
+                };
+
+                LotteryResult ret = new LotteryResult
+                {
+                    GameName = InputOption.GameName,
+                    HitIntervals = new int[] { },
+                    LotteryName = InputOption.LotteryName,
+                    Type = awardDic[InputOption.GameArgs],
+                    AnyFilters = new AnyFilter[]
                     {
-                        { "front",   FactorTypeEnum.LeftTuple},
-                        { "middle", FactorTypeEnum.MiddleTuple},
-                        { "after",  FactorTypeEnum.RightTuple},
-                        { "all", FactorTypeEnum.AllTuples}
-                    };
-                    return Build(keys, tupleDic[InputOption.GameArgs]);
-                }
+                         new AnyFilter{  Values = keys }
+                    },
+                    Filter = $"双胆杀一码：{string.Join(",", keys)}"
+                };
+
+                return new LotteryResult[] { ret };
             }
             return new LotteryResult[] { };
         }

@@ -13,7 +13,11 @@ namespace Lottery.Core.Plan
     {
         private bool isDistinct;
         private bool isAward;
+        private bool isDouble;
         private int? award;
+        private int[] awards;
+        private int? excludeAward;
+        private int[][] betArray;
 
         public override string GetBetString(SimpleBet currentBet)
         {
@@ -21,8 +25,11 @@ namespace Lottery.Core.Plan
             FactorTypeEnum type = currentBet.Results[0].Output[0].Type;
             isDistinct = type == FactorTypeEnum.LeftDistinct || type == FactorTypeEnum.MiddleDistinct || type == FactorTypeEnum.RightDistinct;
             isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward;
+            isDouble = type == FactorTypeEnum.LeftDouble || type == FactorTypeEnum.MiddleDouble || type == FactorTypeEnum.RightDouble;
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
-            int[][] betArray = !isDistinct && !isAward && !award.HasValue ? GetBetArray(currentBet.BetAward) : new int[][] { };
+            awards = isDouble ? currentBet.BetAward.Take(2).ToArray() : new int[] { };
+            excludeAward = isDouble ? (int?)currentBet.BetAward.Last() : null;
+            betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet.BetAward) : new int[][] { };
 
             if (EnableSinglePattern)
             {
@@ -43,13 +50,13 @@ namespace Lottery.Core.Plan
                               from y in count
                               from z in count
                               let number = new[] { x, y, z }
-                              where isDistinct ? (x == y || x == z || y == z) : (award.HasValue? number.Contains(award.Value) : betArray.Any(t => number.Distinct().Intersect(t).Count() >= Number))
+                              where IsValid(number)
                               select string.Join(string.Empty, number);
                 }
             }
             else
             {
-                numbers = isDistinct ? Enumerable.Range(0, 10).Select(c => $"{c}{c}") : (award.HasValue ? Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct() : betArray.Select(t => string.Join(string.Empty, t)));
+                numbers = isDouble ? new string[] { } : (isDistinct ? Enumerable.Range(0, 10).Select(c => $"{c}{c}") : (award.HasValue ? Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct() : betArray.Select(t => string.Join(string.Empty, t))));
             }
             return $"【{string.Join(" ", numbers)}】";
         }
@@ -75,8 +82,7 @@ namespace Lottery.Core.Plan
                     numbers = numbers.Skip(2).ToArray();
                     break;
             }
-
-            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && (isDistinct ? numbers.Distinct().Count() < 3 : (award.HasValue ? numbers.Contains(award.Value) : GetBetArray(LastBet.BetAward).Any(t => t.Intersect(numbers).Count() >= Number)));
+            bool isHit = BetIndex > 0 && BetIndex <= BetCycle && IsValid(numbers);
             return isHit;
         }
 
@@ -88,5 +94,28 @@ namespace Lottery.Core.Plan
         }
 
         public override bool ChangeBetOnceSuccess => bool.Parse(ConfigurationManager.AppSettings["ChangeBetOnceSuccess"]);
+
+        private bool IsValid(int[] input)
+        {
+            bool ret = false;
+            int[] number = input.Distinct().OrderBy(c => c).ToArray();
+            if (isDistinct)
+            {
+                ret = number.Length <= 2;
+            }
+            else if (isAward && award.HasValue)
+            {
+                ret = number.Contains(award.Value);
+            }
+            else if (isDouble)
+            {
+                ret = number.Intersect(awards).Any() && !number.Contains(excludeAward.Value) && number.Length > 1 && (number.Length > 2 ? !(number[2] - number[1] == 1 && number[1] - number[0] == 1) : true);
+            }
+            else
+            {
+                ret = betArray.Any(t => number.Intersect(t).Count() >= Number);
+            }
+            return ret;
+        }
     }
 }

@@ -109,6 +109,12 @@
 
         MiddleDistinct = 28,
 
-        RightDistinct = 29
+        RightDistinct = 29,
+
+        LeftDouble = 36,
+
+        MiddleDouble = 37,
+
+        RightDouble = 38
     }
 }
