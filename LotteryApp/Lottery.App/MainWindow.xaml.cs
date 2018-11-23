@@ -26,7 +26,23 @@ namespace Lottery.App
             {
                 new Dynamic23
                 {
-                    UseGeneralTrend = false,
+                    UseGeneralTrend = true,
+                    RespectRepeat = false,
+                    EnableSinglePattern = false,
+                    BetCycle =9,
+                    TupleLength = 3,
+                    BetIndex = 0,
+                    LastBet = null,
+                    Number = 2,
+                    TakeNumber = 50,
+                    GameName = "tripple",
+                    GameArgs = c,
+                    LotteryName = lotteryName,
+                    Dispatcher = (u, v) => UpdateUI(string.Join(".", "tripple", c), u, v)
+                },
+                new Dynamic23
+                {
+                    EnableSinglePattern = i>0,
                     BetIndex = 0,
                     LastBet = null,
                     Number = 2,
@@ -34,18 +50,6 @@ namespace Lottery.App
                     GameArgs = c,
                     LotteryName = lotteryName,
                     Dispatcher = (u, v) => UpdateUI(string.Join(".", "tuple", c), u, v)
-                },
-                new Dynamic23
-                {
-                    UseGeneralTrend = true,
-                    BetIndex = 0,
-                    LastBet = null,
-                    Number = 2,
-                    TakeNumber = 50,
-                    GameName = "tuple",
-                    GameArgs = c,
-                    LotteryName = lotteryName,
-                    Dispatcher = (u, v) => UpdateUI(string.Join(".", "tuple", c, "general"), u, v)
                 }
             }).ToArray();
 
@@ -61,27 +65,27 @@ namespace Lottery.App
                 System.Windows.Forms.RichTextBox valueBox = null;
                 switch (code)
                 {
-                    case "tuple.front":
+                    case "tripple.front":
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tuple.middle":
+                    case "tripple.middle":
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tuple.after":
+                    case "tripple.after":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tuple.front.general":
+                    case "tuple.front":
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tuple.middle.general":
+                    case "tuple.middle":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tuple.after.general":
+                    case "tuple.after":
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;

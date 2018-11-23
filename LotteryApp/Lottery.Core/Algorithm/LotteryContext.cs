@@ -352,22 +352,19 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            where p.Value.LastInterval < 5
+                            where p.Value.LastInterval <= 5
                             orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
-                int[] keys = query.Take(4).OrderBy(c => c).ToArray();
-                if (keys.Length == 4)
+                int[] keys = query.Take(InputOption.TupleLength).OrderBy(c => c).ToArray();
+                keys = new int[] { int.Parse("1" + string.Join(string.Empty, keys)) };
+                Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
                 {
-                    keys = new int[] { 10000 + keys[0] * 1000 + keys[1] * 100 + keys[2] * 10 + keys[3] };
-                    Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
-                    {
-                        { "front",   FactorTypeEnum.LeftTuple},
-                        { "middle", FactorTypeEnum.MiddleTuple},
-                        { "after",  FactorTypeEnum.RightTuple},
-                        { "all", FactorTypeEnum.AllTuples}
-                    };
-                    return Build(keys, tupleDic[InputOption.GameArgs]);
-                }
+                    { "front",   FactorTypeEnum.LeftTuple},
+                    { "middle", FactorTypeEnum.MiddleTuple},
+                    { "after",  FactorTypeEnum.RightTuple},
+                    { "all", FactorTypeEnum.AllTuples}
+                };
+                return Build(keys, tupleDic[InputOption.GameArgs]);
             }
             return new LotteryResult[] { };
         }
@@ -390,7 +387,7 @@ namespace Lottery.Core.Algorithm
 
             var query = from p in FactorDic[r]
                         where InputOption.EnableContinuous && requireRespectRepeats ? continuous.Contains(p.Key) : true
-                        orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
         }
