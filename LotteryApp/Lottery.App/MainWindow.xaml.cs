@@ -49,7 +49,7 @@ namespace Lottery.App
                 Dispatcher = (u, v) => UpdateUI(string.Join(".", "tuple", c), u, v)
             }).ToArray();
 
-            Dictionary<string, IPlan> dic = tuples.OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
+            Dictionary<string, IPlan> dic = singles.Concat(tuples).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
         }
 

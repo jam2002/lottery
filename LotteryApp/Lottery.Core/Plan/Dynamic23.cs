@@ -11,6 +11,7 @@ namespace Lottery.Core.Plan
     /// </summary>
     public class Dynamic23 : Dynamic
     {
+        private FactorTypeEnum type;
         private bool isDistinct;
         private bool isAward;
         private bool isDouble;
@@ -22,9 +23,9 @@ namespace Lottery.Core.Plan
         public override string GetBetString(SimpleBet currentBet)
         {
             IEnumerable<string> numbers;
-            FactorTypeEnum type = currentBet.Results[0].Output[0].Type;
-            isDistinct = type == FactorTypeEnum.LeftDistinct || type == FactorTypeEnum.MiddleDistinct || type == FactorTypeEnum.RightDistinct;
-            isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward;
+            type = currentBet.Results[0].Output[0].Type;
+            isDistinct = type == FactorTypeEnum.LeftDistinct || type == FactorTypeEnum.MiddleDistinct || type == FactorTypeEnum.RightDistinct || type == FactorTypeEnum.Distinct;
+            isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward || type == FactorTypeEnum.Award;
             isDouble = type == FactorTypeEnum.LeftDouble || type == FactorTypeEnum.MiddleDouble || type == FactorTypeEnum.RightDouble;
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
             awards = isDouble ? currentBet.BetAward.Take(2).ToArray() : new int[] { };
@@ -56,7 +57,7 @@ namespace Lottery.Core.Plan
             }
             else
             {
-                numbers = isDouble ? new string[] { } : (isDistinct ? Enumerable.Range(0, 10).Select(c => $"{c}{c}") : (award.HasValue ? Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct() : betArray.Select(t => string.Join(string.Empty, t))));
+                numbers = GetComposites();
             }
             return $"【{string.Join(" ", numbers)}】";
         }
@@ -114,6 +115,24 @@ namespace Lottery.Core.Plan
             else
             {
                 ret = betArray.Any(t => number.Intersect(t).Count() >= Number);
+            }
+            return ret;
+        }
+
+        private IEnumerable<string> GetComposites()
+        {
+            IEnumerable<string> ret = new string[] { };
+            if (isDistinct)
+            {
+                ret = Enumerable.Range(0, 10).Select(c => $"{c}{c}");
+            }
+            else if (isAward && award.HasValue)
+            {
+                ret = type == FactorTypeEnum.Award ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
+            }
+            else if (betArray.Any())
+            {
+                betArray.Select(t => string.Join(string.Empty, t));
             }
             return ret;
         }
