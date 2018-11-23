@@ -41,6 +41,7 @@ namespace Lottery.App
                     BetIndex = 0,
                     LastBet = null,
                     Number = 2,
+                    TakeNumber = 50,
                     GameName = "tuple",
                     GameArgs = c,
                     LotteryName = lotteryName,
