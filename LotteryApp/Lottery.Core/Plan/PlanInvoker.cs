@@ -66,7 +66,8 @@ namespace Lottery.Core.Plan
                 EnableSinglePattern = c.EnableSinglePattern,
                 EnableContinuous = c.EnableContinuous,
                 UseGeneralTrend = c.UseGeneralTrend,
-                RespectRepeat = c.RespectRepeat
+                RespectRepeat = c.RespectRepeat,
+                TupleLength = c.TupleLength
             }).ToArray();
             OutputResult[] outputs = Calculator.GetResults(options, false);
 
@@ -122,7 +123,7 @@ namespace Lottery.Core.Plan
 
         private string GetKey(InputOptions input)
         {
-            return string.Join(".", input.LotteryName, input.GameName, input.GameArgs ?? string.Empty, input.EnableSinglePattern ? "Single" : "Composite", input.RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat");
+            return string.Join(".", input.LotteryName, input.GameName, input.GameArgs ?? string.Empty, input.EnableSinglePattern ? "Single" : "Composite", input.RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat", input.UseGeneralTrend ? "UseGeneralTrend" : "WithouUseGeneralTrend");
         }
     }
 }

@@ -28,6 +28,7 @@ namespace Lottery.Core.Algorithm
             config = LotteryGenerator.GetConfig();
             lottery = config.Lotteries.Where(x => x.Key == input.LotteryName).First();
             option = input;
+            LotteryGenerator.TupleLength = option.TupleLength;
         }
 
         public static OutputResult[] GetResults(InputOptions[] options, bool clearCache = true)

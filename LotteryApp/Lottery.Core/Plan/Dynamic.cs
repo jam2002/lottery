@@ -30,7 +30,7 @@ namespace Lottery.Core.Plan
 
         public string GetKey()
         {
-            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat");
+            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat", UseGeneralTrend ? "UseGeneralTrend" : "WithouUseGeneralTrend");
         }
 
         private bool? enableSinglePattern;
@@ -101,6 +101,20 @@ namespace Lottery.Core.Plan
                 return betyCycle.Value;
             }
             set { betyCycle = value; }
+        }
+
+        private int? tupleLength;
+        public int TupleLength
+        {
+            get
+            {
+                if (!tupleLength.HasValue)
+                {
+                    tupleLength = int.Parse(ConfigurationManager.AppSettings["TupleLength"]);
+                }
+                return tupleLength.Value;
+            }
+            set { tupleLength = value; }
         }
 
         public void Invoke(SimpleBet currentBet)

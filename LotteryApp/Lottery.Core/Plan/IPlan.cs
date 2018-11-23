@@ -32,6 +32,8 @@ namespace Lottery.Core.Plan
 
         bool RespectRepeat { get; set; }
 
+        int TupleLength { get; set; }
+
         void Invoke(SimpleBet currentBet);
 
         string GetKey();

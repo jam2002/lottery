@@ -24,6 +24,8 @@
 
         public bool RespectRepeat { get; set; }
 
+        public int TupleLength { get; set; }
+
         public InputOptions()
         {
             RetrieveNumber = 200;
