@@ -21,36 +21,32 @@ namespace Lottery.App
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             string lotteryName = ConfigurationManager.AppSettings["LotteryName"];
-            string[] gameNames = new string[] { "front", "middle", "after" };
-            Dynamic23[] tuples = gameNames.SelectMany((c, i) => new Dynamic23[]
+            string[] gameArgs = new string[] { "0", "1", "2" };
+            Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
             {
-                new Dynamic23
-                {
-                    UseGeneralTrend = true,
-                    RespectRepeat = false,
-                    EnableSinglePattern = false,
-                    BetCycle =9,
-                    TupleLength = 3,
-                    BetIndex = 0,
-                    LastBet = null,
-                    Number = 2,
-                    TakeNumber = 50,
-                    GameName = "tripple",
-                    GameArgs = c,
-                    LotteryName = lotteryName,
-                    Dispatcher = (u, v) => UpdateUI(string.Join(".", "tripple", c), u, v)
-                },
-                new Dynamic23
-                {
-                    EnableSinglePattern = i>0,
-                    BetIndex = 0,
-                    LastBet = null,
-                    Number = 2,
-                    GameName = "tuple",
-                    GameArgs = c,
-                    LotteryName = lotteryName,
-                    Dispatcher = (u, v) => UpdateUI(string.Join(".", "tuple", c), u, v)
-                }
+                UseGeneralTrend = true,
+                EnableSinglePattern = false,
+                RespectRepeat = false,
+                BetIndex = 0,
+                LastBet = null,
+                Number = 1,
+                GameName = "single",
+                GameArgs = string.Concat("all.", c),
+                LotteryName = lotteryName,
+                Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c), u, v)
+            }).ToArray();
+
+            string[] gameNames = new string[] { "front", "middle", "after" };
+            Dynamic23[] tuples = gameNames.Select((c, i) => new Dynamic23
+            {
+                EnableSinglePattern = i > 0,
+                BetIndex = 0,
+                LastBet = null,
+                Number = 2,
+                GameName = "tuple",
+                GameArgs = c,
+                LotteryName = lotteryName,
+                Dispatcher = (u, v) => UpdateUI(string.Join(".", "tuple", c), u, v)
             }).ToArray();
 
             Dictionary<string, IPlan> dic = tuples.OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
@@ -65,15 +61,15 @@ namespace Lottery.App
                 System.Windows.Forms.RichTextBox valueBox = null;
                 switch (code)
                 {
-                    case "tripple.front":
+                    case "single.0":
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tripple.middle":
+                    case "single.1":
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tripple.after":
+                    case "single.2":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;

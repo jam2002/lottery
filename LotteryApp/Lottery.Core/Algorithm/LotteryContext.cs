@@ -322,17 +322,20 @@ namespace Lottery.Core.Algorithm
                 { "front", FactorTypeEnum.LeftAward},
                 { "middle", FactorTypeEnum.MiddleAward},
                 { "after", FactorTypeEnum.RightAward},
-                { "first", FactorTypeEnum.Award}
+                { "all", FactorTypeEnum.Award}
             };
-
-            FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
+            string[] gameArgs = InputOption.GameArgs.Split('.').ToArray();
+            FactorTypeEnum? r = enumDic.ContainsKey(gameArgs[0]) ? (FactorTypeEnum?)enumDic[gameArgs[0]] : null;
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
                             where p.Value.LastInterval <= 5
                             orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                             select p.Key;
-
+                if (gameArgs.Length > 1)
+                {
+                    query = query.Skip(int.Parse(gameArgs[1]));
+                }
                 return Build(query, r.Value);
             }
             return new LotteryResult[] { };
