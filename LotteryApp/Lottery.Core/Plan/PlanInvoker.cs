@@ -67,7 +67,8 @@ namespace Lottery.Core.Plan
                 EnableContinuous = c.EnableContinuous,
                 UseGeneralTrend = c.UseGeneralTrend,
                 RespectRepeat = c.RespectRepeat,
-                TupleLength = c.TupleLength
+                TupleLength = c.TupleLength,
+                WaitInterval = c.WaitInterval
             }).ToArray();
             OutputResult[] outputs = Calculator.GetResults(options, false);
 

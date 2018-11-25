@@ -152,8 +152,11 @@ namespace Lottery.Core.Algorithm
                 case "history":
                     ret = GetHistoryResult();
                     break;
+                case "repeats":
+                    ret = BuildRepeats();
+                    break;
                 case "single":
-                    ret = GetSingleResult();
+                    ret = BuildSingles();
                     break;
                 case "double":
                     ret = BuildDoubles();
@@ -199,16 +202,6 @@ namespace Lottery.Core.Algorithm
                         orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
-        }
-
-        private LotteryResult[] GetSingleResult()
-        {
-            LotteryResult[] results = InputOption.RespectRepeat ? BuildRepeats() : new LotteryResult[] { };
-            if (!results.Any())
-            {
-                results = BuildSingles();
-            }
-            return results;
         }
 
         private LotteryResult[] GetTrippleResult()
@@ -308,7 +301,7 @@ namespace Lottery.Core.Algorithm
             };
             FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
             ReferenceFactor factor = t.HasValue && FactorDic[t.Value].ContainsKey(2) ? FactorDic[t.Value][2] : null;
-            if (factor != null && factor.MaxInterval <= 5 && factor.LastInterval <= 5 && factor.OccurCount >= 4)
+            if (factor != null && factor.MaxInterval <= 5 && factor.LastInterval <= 5 && factor.OccurCount >= 4 && factor.LastInterval >= InputOption.WaitInterval)
             {
                 return Build(new int[] { 2 }, t.Value);
             }
@@ -330,7 +323,7 @@ namespace Lottery.Core.Algorithm
             {
                 var query = from p in FactorDic[r.Value]
                             where p.Value.LastInterval <= 5
-                            orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                            orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 if (gameArgs.Length > 1)
                 {

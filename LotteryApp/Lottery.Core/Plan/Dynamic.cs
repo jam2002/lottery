@@ -117,6 +117,20 @@ namespace Lottery.Core.Plan
             set { tupleLength = value; }
         }
 
+        private int? waitInterval;
+        public int WaitInterval
+        {
+            get
+            {
+                if (!waitInterval.HasValue)
+                {
+                    waitInterval = int.Parse(ConfigurationManager.AppSettings["WaitInterval"]);
+                }
+                return waitInterval.Value;
+            }
+            set { waitInterval = value; }
+        }
+
         public void Invoke(SimpleBet currentBet)
         {
             foreach (var p in currentBet.Results)

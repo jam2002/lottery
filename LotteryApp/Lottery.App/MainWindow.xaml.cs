@@ -21,17 +21,15 @@ namespace Lottery.App
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             string lotteryName = ConfigurationManager.AppSettings["LotteryName"];
-            string[] gameArgs = new string[] { "0", "1", "2" };
+            string[] gameArgs = new string[] { "front", "middle", "after" };
             Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
             {
-                UseGeneralTrend = true,
-                EnableSinglePattern = false,
-                RespectRepeat = false,
+                EnableSinglePattern = true,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
                 GameName = "single",
-                GameArgs = string.Concat("all.", c),
+                GameArgs = string.Concat(c, ".1"),
                 LotteryName = lotteryName,
                 Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c), u, v)
             }).ToArray();
@@ -42,11 +40,11 @@ namespace Lottery.App
                 EnableSinglePattern = i > 0,
                 BetIndex = 0,
                 LastBet = null,
-                Number = 2,
-                GameName = "tuple",
+                Number = 1,
+                GameName = "repeats",
                 GameArgs = c,
                 LotteryName = lotteryName,
-                Dispatcher = (u, v) => UpdateUI(string.Join(".", "tuple", c), u, v)
+                Dispatcher = (u, v) => UpdateUI(string.Join(".", "repeats", c), u, v)
             }).ToArray();
 
             Dictionary<string, IPlan> dic = singles.Concat(tuples).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
@@ -61,27 +59,27 @@ namespace Lottery.App
                 System.Windows.Forms.RichTextBox valueBox = null;
                 switch (code)
                 {
-                    case "single.0":
+                    case "single.front":
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.1":
+                    case "single.middle":
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.2":
+                    case "single.after":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tuple.front":
+                    case "repeats.front":
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tuple.middle":
+                    case "repeats.middle":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "tuple.after":
+                    case "repeats.after":
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;

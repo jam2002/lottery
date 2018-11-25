@@ -34,6 +34,8 @@ namespace Lottery.Core.Plan
 
         int TupleLength { get; set; }
 
+        int WaitInterval { get; set; }
+
         void Invoke(SimpleBet currentBet);
 
         string GetKey();
