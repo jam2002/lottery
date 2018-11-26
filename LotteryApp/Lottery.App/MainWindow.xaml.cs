@@ -24,7 +24,6 @@ namespace Lottery.App
             string[] gameArgs = new string[] { "front", "middle", "after" };
             Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
             {
-                EnableSinglePattern = false,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
@@ -36,7 +35,6 @@ namespace Lottery.App
 
             Dynamic23[] tuples = gameArgs.Select((c, i) => new Dynamic23
             {
-                EnableSinglePattern = i > 0,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
