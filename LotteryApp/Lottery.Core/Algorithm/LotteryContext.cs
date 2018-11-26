@@ -156,7 +156,7 @@ namespace Lottery.Core.Algorithm
                     ret = BuildRepeats();
                     break;
                 case "single":
-                    ret = BuildSingles();
+                    ret = GetSingleResult();
                     break;
                 case "double":
                     ret = BuildDoubles();
@@ -222,6 +222,18 @@ namespace Lottery.Core.Algorithm
                 results = BuildTuples();
             }
             return results;
+        }
+
+        private LotteryResult[] GetSingleResult()
+        {
+            if (InputOption.RespectRepeat && BuildRepeats().Any())
+            {
+                return new LotteryResult[] { };
+            }
+            else
+            {
+                return BuildSingles();
+            }
         }
 
         private LotteryResult[] GetMixResult()
