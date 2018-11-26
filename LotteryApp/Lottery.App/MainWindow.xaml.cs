@@ -21,6 +21,7 @@ namespace Lottery.App
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             string lotteryName = ConfigurationManager.AppSettings["LotteryName"];
+            string skipNumber = ConfigurationManager.AppSettings["SkipNumber"];
             string[] gameArgs = new string[] { "front", "middle", "after" };
             Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
             {
@@ -28,7 +29,7 @@ namespace Lottery.App
                 LastBet = null,
                 Number = 1,
                 GameName = "single",
-                GameArgs = string.Concat(c, ".0"),
+                GameArgs = string.Join(".", c, skipNumber),
                 LotteryName = lotteryName,
                 Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c), u, v)
             }).ToArray();
