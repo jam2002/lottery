@@ -65,7 +65,8 @@ namespace Lottery.Core.Plan
         public override bool IsHit(SimpleBet currentBet)
         {
             int[] numbers = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
-            switch (GameArgs)
+            string gameArgs = GameArgs.Split('.')[0];
+            switch (gameArgs)
             {
                 case "front4":
                     numbers = numbers.Take(4).ToArray();
