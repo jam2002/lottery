@@ -311,7 +311,8 @@ namespace Lottery.Core.Algorithm
                 { "middle", FactorTypeEnum.MiddleDistinct},
                 { "after", FactorTypeEnum.RightDistinct}
             };
-            FactorTypeEnum? t = pairDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)pairDic[InputOption.GameArgs] : null;
+            string gameArgs = InputOption.GameArgs.Split('.')[0];
+            FactorTypeEnum? t = pairDic.ContainsKey(gameArgs) ? (FactorTypeEnum?)pairDic[gameArgs] : null;
             ReferenceFactor factor = t.HasValue && FactorDic[t.Value].ContainsKey(2) ? FactorDic[t.Value][2] : null;
             if (factor != null && factor.MaxInterval <= 5 && factor.LastInterval <= 5 && factor.OccurCount >= 4 && factor.LastInterval >= InputOption.WaitInterval)
             {

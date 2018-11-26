@@ -29,7 +29,7 @@ namespace Lottery.App
                 LastBet = null,
                 Number = 1,
                 GameName = "single",
-                GameArgs = string.Concat(c, ".1"),
+                GameArgs = string.Concat(c, ".0"),
                 LotteryName = lotteryName,
                 Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c), u, v)
             }).ToArray();
