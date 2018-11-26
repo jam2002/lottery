@@ -323,7 +323,7 @@ namespace Lottery.Core.Algorithm
             {
                 var query = from p in FactorDic[r.Value]
                             where p.Value.LastInterval <= 5
-                            orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
+                            orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 if (gameArgs.Length > 1)
                 {
