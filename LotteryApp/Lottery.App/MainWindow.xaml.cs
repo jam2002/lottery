@@ -22,31 +22,28 @@ namespace Lottery.App
         {
             int takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
             string lotteryName = ConfigurationManager.AppSettings["LotteryName"];
-            string skipNumber = ConfigurationManager.AppSettings["SkipNumber"];
-            string[] gameArgs = new string[] { "after" };
+            string[] gameArgs = new string[] { "0", "1" };
             Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
             {
-                EnableSinglePattern = true,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
                 TakeNumber = takeNumber,
                 GameName = "single",
-                GameArgs = string.Join(".", c, skipNumber),
+                GameArgs = string.Join("." , "all", c),
                 LotteryName = lotteryName,
                 Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c), u, v)
             }).ToArray();
 
-            gameArgs = new string[] { "middle", "after" };
+            gameArgs = new string[] { "0" };
             Dynamic23[] longSingles = gameArgs.Select((c, i) => new Dynamic23
             {
-                EnableSinglePattern = true,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
                 TakeNumber = 50,
                 GameName = "single",
-                GameArgs = string.Join(".", c, skipNumber),
+                GameArgs = string.Join(".", "all", c),
                 LotteryName = lotteryName,
                 Dispatcher = (u, v) => UpdateUI(string.Join(".", "longSingle", c), u, v)
             }).ToArray();
@@ -54,7 +51,6 @@ namespace Lottery.App
             gameArgs = new string[] { "front", "middle", "after" };
             Dynamic23[] tuples = gameArgs.Select((c, i) => new Dynamic23
             {
-                EnableSinglePattern = false,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
@@ -77,15 +73,15 @@ namespace Lottery.App
                 System.Windows.Forms.RichTextBox valueBox = null;
                 switch (code)
                 {
-                    case "single.after":
+                    case "single.0":
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "longSingle.middle":
+                    case "single.1":
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "longSingle.after":
+                    case "longSingle.0":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
