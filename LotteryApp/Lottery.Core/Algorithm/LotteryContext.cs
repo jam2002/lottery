@@ -342,6 +342,10 @@ namespace Lottery.Core.Algorithm
                 {
                     query = query.Skip(int.Parse(gameArgs[1]));
                 }
+                if (InputOption.WaitInterval > 0)
+                {
+                    query = query.ToArray().Take(3).Where(c => FactorDic[r.Value][c].LastInterval >= InputOption.WaitInterval);
+                }
                 return Build(query, r.Value);
             }
             return new LotteryResult[] { };

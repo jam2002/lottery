@@ -20,32 +20,52 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            int takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
             string lotteryName = ConfigurationManager.AppSettings["LotteryName"];
             string skipNumber = ConfigurationManager.AppSettings["SkipNumber"];
-            string[] gameArgs = new string[] { "front", "middle", "after" };
+            string[] gameArgs = new string[] { "after" };
             Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
             {
+                EnableSinglePattern = false,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
+                TakeNumber = takeNumber,
                 GameName = "single",
                 GameArgs = string.Join(".", c, skipNumber),
                 LotteryName = lotteryName,
                 Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c), u, v)
             }).ToArray();
 
-            Dynamic23[] tuples = gameArgs.Select((c, i) => new Dynamic23
+            gameArgs = new string[] { "middle", "after" };
+            Dynamic23[] longSingles = gameArgs.Select((c, i) => new Dynamic23
             {
+                EnableSinglePattern = false,
                 BetIndex = 0,
                 LastBet = null,
                 Number = 1,
+                TakeNumber = 50,
+                GameName = "single",
+                GameArgs = string.Join(".", c, skipNumber),
+                LotteryName = lotteryName,
+                Dispatcher = (u, v) => UpdateUI(string.Join(".", "longSingle", c), u, v)
+            }).ToArray();
+
+            gameArgs = new string[] { "front", "middle", "after" };
+            Dynamic23[] tuples = gameArgs.Select((c, i) => new Dynamic23
+            {
+                EnableSinglePattern = true,
+                BetIndex = 0,
+                LastBet = null,
+                Number = 1,
+                TakeNumber = takeNumber,
                 GameName = "repeats",
                 GameArgs = c,
                 LotteryName = lotteryName,
                 Dispatcher = (u, v) => UpdateUI(string.Join(".", "repeats", c), u, v)
             }).ToArray();
 
-            Dictionary<string, IPlan> dic = singles.Concat(tuples).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
+            Dictionary<string, IPlan> dic = singles.Concat(longSingles).Concat(tuples).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
         }
 
@@ -57,15 +77,15 @@ namespace Lottery.App
                 System.Windows.Forms.RichTextBox valueBox = null;
                 switch (code)
                 {
-                    case "single.front":
+                    case "single.after":
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.middle":
+                    case "longSingle.middle":
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.after":
+                    case "longSingle.after":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
