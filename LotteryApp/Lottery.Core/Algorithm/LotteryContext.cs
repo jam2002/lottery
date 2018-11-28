@@ -264,6 +264,16 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] Build(IEnumerable<int> awards, FactorTypeEnum type)
         {
+            string[] gameArgs = InputOption.GameArgs.Split('.').ToArray();
+            if (gameArgs.Length > 1)
+            {
+                awards = awards.Skip(int.Parse(gameArgs[1]));
+            }
+            if (InputOption.WaitInterval > 0)
+            {
+                awards = awards.ToArray().Take(3).Where(c => FactorDic[type][c].LastInterval >= InputOption.WaitInterval);
+            }
+
             return awards.Take(3).Select(c =>
                 {
                     ReferenceFactor factor = FactorDic[type][c];
@@ -338,14 +348,7 @@ namespace Lottery.Core.Algorithm
                             where p.Value.LastInterval <= 5
                             orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
-                if (gameArgs.Length > 1)
-                {
-                    query = query.Skip(int.Parse(gameArgs[1]));
-                }
-                if (InputOption.WaitInterval > 0)
-                {
-                    query = query.ToArray().Take(3).Where(c => FactorDic[r.Value][c].LastInterval >= InputOption.WaitInterval);
-                }
+    
                 return Build(query, r.Value);
             }
             return new LotteryResult[] { };
@@ -361,7 +364,8 @@ namespace Lottery.Core.Algorithm
                 { "all", FactorTypeEnum.Award}
             };
 
-            FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
+            string gameArgs = InputOption.GameArgs.Split('.').ToArray()[0];
+            FactorTypeEnum? r = enumDic.ContainsKey(gameArgs) ? (FactorTypeEnum?)enumDic[gameArgs] : null;
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
@@ -377,7 +381,7 @@ namespace Lottery.Core.Algorithm
                     { "after",  FactorTypeEnum.RightTuple},
                     { "all", FactorTypeEnum.AllTuples}
                 };
-                return Build(keys, tupleDic[InputOption.GameArgs]);
+                return Build(keys, tupleDic[gameArgs]);
             }
             return new LotteryResult[] { };
         }
@@ -393,15 +397,18 @@ namespace Lottery.Core.Algorithm
                 { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Right4Tuple},
                 { "all", FactorTypeEnum.AllTuples}
             };
-            FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
-            bool requireRespectRepeats = InputOption.GameArgs == "front" || InputOption.GameArgs == "middle" || InputOption.GameArgs == "after";
+            string gameArgs = InputOption.GameArgs.Split('.').ToArray()[0];
+            FactorTypeEnum r = enumDic[gameArgs];
+
+            bool requireRespectRepeats = gameArgs == "front" || gameArgs == "middle" || gameArgs == "after";
             int[] continuous = new int[] { 10123, 11234, 12345, 13456, 14567, 15678, 16789, 10789, 10189, 10129 };
 
             var query = from p in FactorDic[r]
                         where InputOption.EnableContinuous && requireRespectRepeats ? continuous.Contains(p.Key) : true
                         orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
+
             return Build(query, r);
         }
 
