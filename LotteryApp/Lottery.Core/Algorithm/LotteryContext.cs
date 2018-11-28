@@ -324,7 +324,7 @@ namespace Lottery.Core.Algorithm
             string gameArgs = InputOption.GameArgs.Split('.')[0];
             FactorTypeEnum? t = pairDic.ContainsKey(gameArgs) ? (FactorTypeEnum?)pairDic[gameArgs] : null;
             ReferenceFactor factor = t.HasValue && FactorDic[t.Value].ContainsKey(2) ? FactorDic[t.Value][2] : null;
-            if (factor != null && factor.MaxInterval <= 5 && factor.LastInterval <= 5 && factor.OccurCount >= 4 && factor.LastInterval >= InputOption.WaitInterval)
+            if (factor != null && factor.MaxInterval <= 5 && CheckInterval(factor.HitIntervals) && factor.OccurCount >= 4)
             {
                 return Build(new int[] { 2 }, t.Value);
             }
