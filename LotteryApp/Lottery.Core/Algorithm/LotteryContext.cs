@@ -299,7 +299,7 @@ namespace Lottery.Core.Algorithm
                     case FactorTypeEnum.RightSpan:
                     case FactorTypeEnum.Span:
                         isSpan = true;
-                        values = awards.Skip(i).Take(2).ToArray();
+                        values = awards.Skip(i).OrderBy(t => t).Take(2).ToArray();
                         break;
                     default:
                         values = new int[] { c };
