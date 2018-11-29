@@ -299,7 +299,7 @@ namespace Lottery.Core.Algorithm
                     case FactorTypeEnum.RightSpan:
                     case FactorTypeEnum.Span:
                         isSpan = true;
-                        values = awards.Skip(i).OrderBy(t => t).Take(2).ToArray();
+                        values = awards.Skip(i).Take(2).OrderBy(t => t).ToArray();
                         break;
                     default:
                         values = new int[] { c };
@@ -379,7 +379,7 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            where p.Value.LastInterval <= 10
+                            where p.Value.LastInterval <= 7
                             orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
 
