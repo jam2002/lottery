@@ -115,6 +115,12 @@
 
         MiddleDouble = 37,
 
-        RightDouble = 38
+        RightDouble = 38,
+
+        LeftSpan = 39,
+
+        MiddleSpan = 40,
+
+        RightSpan = 41
     }
 }

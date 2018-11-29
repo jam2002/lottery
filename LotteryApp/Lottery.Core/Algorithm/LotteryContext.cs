@@ -62,8 +62,11 @@ namespace Lottery.Core.Algorithm
                 BuildFactor(FactorTypeEnum.Distinct, n.Distinct, i);
                 BuildFactor(FactorTypeEnum.SequenceKey, n.SequenceKey, i);
                 BuildFactor(FactorTypeEnum.LeftDistinct, n.LeftDistinct, i);
+                BuildFactor(FactorTypeEnum.LeftSpan, n.LeftSpan, i);
                 BuildFactor(FactorTypeEnum.RightDistinct, n.RightDistinct, i);
+                BuildFactor(FactorTypeEnum.RightSpan, n.RightSpan, i);
                 BuildFactor(FactorTypeEnum.MiddleDistinct, n.MiddleDistinct, i);
+                BuildFactor(FactorTypeEnum.MiddleSpan, n.MiddleSpan, i);
                 BuildAwardFactor(n, i);
 
                 if (CurrentLottery.Length == 5)
@@ -156,6 +159,9 @@ namespace Lottery.Core.Algorithm
                     ret = BuildRepeats();
                     break;
                 case "single":
+                    ret = GetSingleResult();
+                    break;
+                case "span":
                     ret = GetSingleResult();
                     break;
                 case "double":
@@ -273,44 +279,51 @@ namespace Lottery.Core.Algorithm
             {
                 awards = awards.ToArray().Take(3).Where(c => FactorDic[type][c].LastInterval >= InputOption.WaitInterval);
             }
-
-            return awards.Take(3).Select(c =>
+            bool isSpan = false;
+            return awards.Select((c, i) =>
+            {
+                ReferenceFactor factor = FactorDic[type][c];
+                int[] values = null;
+                switch (type)
                 {
-                    ReferenceFactor factor = FactorDic[type][c];
-                    int[] values = null;
-                    switch (type)
+                    case FactorTypeEnum.LeftTuple:
+                    case FactorTypeEnum.Left4Tuple:
+                    case FactorTypeEnum.RightTuple:
+                    case FactorTypeEnum.Right4Tuple:
+                    case FactorTypeEnum.MiddleTuple:
+                    case FactorTypeEnum.AllTuples:
+                    case FactorTypeEnum.AllPairs:
+                    case FactorTypeEnum.AdjacentNumber:
+                        values = c.ToString().Select(t => int.Parse(t.ToString())).Skip(1).ToArray();
+                        break;
+                    case FactorTypeEnum.LeftSpan:
+                    case FactorTypeEnum.MiddleSpan:
+                    case FactorTypeEnum.RightSpan:
+                    case FactorTypeEnum.Span:
+                        isSpan = true;
+                        values = awards.Skip(i).Take(2).ToArray();
+                        break;
+                    default:
+                        values = new int[] { c };
+                        break;
+                }
+                return new LotteryResult
+                {
+                    GameName = InputOption.GameName,
+                    HitIntervals = factor.HitIntervals,
+                    HitCount = factor.OccurCount,
+                    FailureCount = factor.FailureCount,
+                    LotteryName = InputOption.LotteryName,
+                    LastInterval = factor.LastInterval,
+                    MaxInterval = factor.MaxInterval,
+                    Type = type,
+                    AnyFilters = new AnyFilter[]
                     {
-                        case FactorTypeEnum.LeftTuple:
-                        case FactorTypeEnum.Left4Tuple:
-                        case FactorTypeEnum.RightTuple:
-                        case FactorTypeEnum.Right4Tuple:
-                        case FactorTypeEnum.MiddleTuple:
-                        case FactorTypeEnum.AllTuples:
-                        case FactorTypeEnum.AllPairs:
-                        case FactorTypeEnum.AdjacentNumber:
-                            values = c.ToString().Select(t => int.Parse(t.ToString())).Skip(1).ToArray();
-                            break;
-                        default:
-                            values = new int[] { c };
-                            break;
-                    }
-                    return new LotteryResult
-                    {
-                        GameName = InputOption.GameName,
-                        HitIntervals = factor.HitIntervals,
-                        HitCount = factor.OccurCount,
-                        FailureCount = factor.FailureCount,
-                        LotteryName = InputOption.LotteryName,
-                        LastInterval = factor.LastInterval,
-                        MaxInterval = factor.MaxInterval,
-                        Type = type,
-                        AnyFilters = new AnyFilter[]
-                        {
-                              new AnyFilter{  Values = values }
-                        },
-                        Filter = $"不定位：{string.Join(",", values)}"
-                    };
-                }).ToArray();
+                            new AnyFilter{  Values = values }
+                    },
+                    Filter = $"{(isSpan ? "跨度" : "不定位")} ：{string.Join(",", values)}"
+                };
+            }).Take(3).ToArray();
         }
 
         private LotteryResult[] BuildRepeats()
@@ -349,6 +362,29 @@ namespace Lottery.Core.Algorithm
                             orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
     
+                return Build(query, r.Value);
+            }
+            return new LotteryResult[] { };
+        }
+
+        private LotteryResult[] BuildSpans()
+        {
+            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+            {
+                { "front", FactorTypeEnum.LeftSpan},
+                { "middle", FactorTypeEnum.MiddleSpan},
+                { "after", FactorTypeEnum.RightSpan},
+                { "all", FactorTypeEnum.Span}
+            };
+            string[] gameArgs = InputOption.GameArgs.Split('.').ToArray();
+            FactorTypeEnum? r = enumDic.ContainsKey(gameArgs[0]) ? (FactorTypeEnum?)enumDic[gameArgs[0]] : null;
+            if (r.HasValue)
+            {
+                var query = from p in FactorDic[r.Value]
+                            where p.Value.LastInterval <= 10
+                            orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                            select p.Key;
+
                 return Build(query, r.Value);
             }
             return new LotteryResult[] { };

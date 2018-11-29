@@ -22,38 +22,43 @@ namespace Lottery.App
         {
             int takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
             string lotteryName = ConfigurationManager.AppSettings["LotteryName"];
-            string[] gameArgs = new string[] { "all", "front", "after" };
+            string[] gameArgs = new string[] { "front", "after" };
 
             Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
             {
-                EnableSinglePattern = i == 2,
-                BetCycle = i == 0 ? 5 : 10,
-                TakeNumber = i == 0 ? 15 : 50,
-                RespectRepeat = false,
-                BetIndex = 0,
-                LastBet = null,
+                EnableSinglePattern = i > 0,
                 Number = 1,
+                TakeNumber = 50,
                 GameName = "single",
-                GameArgs = i == 0 ? "all.1" : c,
+                GameArgs = c,
                 LotteryName = lotteryName,
                 Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c), u, v)
             }).ToArray();
 
-            gameArgs = new string[] { "front", "after", "after" };
             Dynamic23[] repeats = gameArgs.Select((c, i) => new Dynamic23
             {
-                EnableSinglePattern = i == 2,
-                RespectRepeat = true,
-                BetIndex = 0,
-                LastBet = null,
+                EnableSinglePattern = false,
                 Number = 1,
+                TakeNumber = takeNumber,
                 GameName = "repeats",
                 GameArgs = c,
                 LotteryName = lotteryName,
-                Dispatcher = (u, v) => UpdateUI(string.Join(".", "repeats", c, i), u, v)
+                Dispatcher = (u, v) => UpdateUI(string.Join(".", "repeats", c), u, v)
             }).ToArray();
 
-            Dictionary<string, IPlan> dic = singles.Concat(repeats).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
+            gameArgs = new string[] { "middle", "after" };
+            Dynamic23[] spans = gameArgs.Select((c, i) => new Dynamic23
+            {
+                EnableSinglePattern = true,
+                Number = 1,
+                TakeNumber = takeNumber,
+                GameName = "span",
+                GameArgs = c,
+                LotteryName = lotteryName,
+                Dispatcher = (u, v) => UpdateUI(string.Join(".", "span", c), u, v)
+            }).ToArray();
+
+            Dictionary<string, IPlan> dic = singles.Concat(repeats).Concat(spans).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
         }
 
@@ -65,27 +70,27 @@ namespace Lottery.App
                 System.Windows.Forms.RichTextBox valueBox = null;
                 switch (code)
                 {
-                    case "single.all":
+                    case "single.front":
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.front":
+                    case "repeats.front":
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.after":
+                    case "span.middle":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "repeats.front.0":
+                    case "single.after":
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "repeats.after.1":
+                    case "repeats.after":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "repeats.after.2":
+                    case "span.after":
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;

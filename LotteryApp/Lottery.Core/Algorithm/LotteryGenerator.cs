@@ -144,17 +144,20 @@ namespace Lottery.Core.Algorithm
                 number.LeftDistinct = number.LeftAwards.Length <= 2 ? 2 : 3;
                 number.LeftTuples = GetTuples(left);
                 number.Left4Tuples = GetTuples(array.Take(4).ToArray());
+                number.LeftSpan = number.LeftAwards[number.LeftAwards.Length - 1] - number.LeftAwards[0];
 
                 number.MiddleRepeats = new int[] { GetRepeats(middle, 2) }.Distinct().Where(c => c >= 0).ToArray();
                 number.MiddleAwards = middle.Distinct().OrderBy(c => c).ToArray();
                 number.MiddleDistinct = number.MiddleAwards.Length <= 2 ? 2 : 3;
                 number.MiddleTuples = GetTuples(middle);
+                number.MiddleSpan = number.MiddleAwards[number.MiddleAwards.Length - 1] - number.MiddleAwards[0];
 
                 number.RightRepeats = new int[] { GetRepeats(right, 3) }.Distinct().Where(c => c >= 0).ToArray();
                 number.RightAwards = right.Distinct().OrderBy(c => c).ToArray();
                 number.RightDistinct = number.RightAwards.Length <= 2 ? 2 : 3;
                 number.RightTuples = GetTuples(right);
                 number.Right4Tuples = GetTuples(array.Skip(1).ToArray());
+                number.RightSpan = number.RightAwards[number.RightAwards.Length - 1] - number.RightAwards[0];
 
                 number.AllTuples = GetTuples(array);
             }
@@ -164,6 +167,7 @@ namespace Lottery.Core.Algorithm
                 number.LeftAwards = number.RightAwards = number.MiddleAwards = array.Distinct().OrderBy(c => c).ToArray();
                 number.LeftDistinct = number.RightDistinct = number.MiddleDistinct = number.LeftAwards.Length <= 2 ? 2 : 3;
                 number.LeftTuples = number.RightTuples = number.MiddleTuples = number.Left4Tuples = number.Right4Tuples = number.AllTuples = GetTuples(array);
+                number.LeftSpan = number.RightSpan = number.MiddleSpan = number.Span;
                 number.AdjacentNumbers = new int[] { };
             }
 

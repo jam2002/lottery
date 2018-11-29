@@ -44,6 +44,7 @@
         public int[] Left4Tuples { get; set; }
 
         public int LeftDistinct { get; set; }
+        public int LeftSpan { get; set; }
 
 
         public int[] MiddleRepeats { get; set; }
@@ -53,6 +54,8 @@
         public int[] MiddleTuples { get; set; }
 
         public int MiddleDistinct { get; set; }
+
+        public int MiddleSpan { get; set; }
 
         /// <summary>
         /// 后三对子胆码
@@ -66,6 +69,8 @@
         public int[] Right4Tuples { get; set; }
 
         public int RightDistinct { get; set; }
+
+        public int RightSpan { get; set; }
 
         /// <summary>
         /// 去重之后按升序排列的胆码

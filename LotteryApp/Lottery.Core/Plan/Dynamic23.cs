@@ -15,8 +15,10 @@ namespace Lottery.Core.Plan
         private bool isDistinct;
         private bool isAward;
         private bool isDouble;
+        private bool isSpan;
         private int? award;
         private int[] awards;
+        private int[] spans;
         private int? excludeAward;
         private int[][] betArray;
 
@@ -27,6 +29,8 @@ namespace Lottery.Core.Plan
             isDistinct = type == FactorTypeEnum.LeftDistinct || type == FactorTypeEnum.MiddleDistinct || type == FactorTypeEnum.RightDistinct || type == FactorTypeEnum.Distinct;
             isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward || type == FactorTypeEnum.Award;
             isDouble = type == FactorTypeEnum.LeftDouble || type == FactorTypeEnum.MiddleDouble || type == FactorTypeEnum.RightDouble;
+            isSpan = type == FactorTypeEnum.LeftSpan || type == FactorTypeEnum.MiddleSpan || type == FactorTypeEnum.RightSpan || type == FactorTypeEnum.Span;
+            spans = isSpan && currentBet.BetAward.Any() ? currentBet.BetAward : new int[] { };
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
             awards = isDouble ? currentBet.BetAward.Take(2).ToArray() : new int[] { };
             excludeAward = isDouble ? (int?)currentBet.BetAward.Last() : null;
@@ -108,6 +112,10 @@ namespace Lottery.Core.Plan
             else if (isAward && award.HasValue)
             {
                 ret = number.Contains(award.Value);
+            }
+            else if (isSpan && spans.Any())
+            {
+                ret = spans.Contains(number[number.Length - 1] - number[0]);
             }
             else if (isDouble)
             {
