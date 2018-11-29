@@ -159,10 +159,8 @@ namespace Lottery.Core.Algorithm
                     ret = BuildRepeats();
                     break;
                 case "single":
-                    ret = GetSingleResult();
-                    break;
                 case "span":
-                    ret = GetSingleResult();
+                    ret = GetSingleOrSpanResult();
                     break;
                 case "double":
                     ret = BuildDoubles();
@@ -230,7 +228,7 @@ namespace Lottery.Core.Algorithm
             return results;
         }
 
-        private LotteryResult[] GetSingleResult()
+        private LotteryResult[] GetSingleOrSpanResult()
         {
             if (InputOption.RespectRepeat && BuildRepeats().Any())
             {
@@ -238,7 +236,7 @@ namespace Lottery.Core.Algorithm
             }
             else
             {
-                return BuildSingles();
+                return InputOption.GameName == "single" ? BuildSingles() : BuildSpans();
             }
         }
 
