@@ -26,39 +26,37 @@ namespace Lottery.App
 
             Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
             {
-                EnableSinglePattern = i > 0,
                 Number = 1,
                 TakeNumber = 50,
+                BetCycle = 3,
                 GameName = "single",
                 GameArgs = c,
                 LotteryName = lotteryName,
                 Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c), u, v)
             }).ToArray();
 
+            Dynamic23[] shotSingles = gameArgs.Select((c, i) => new Dynamic23
+            {
+                Number = 1,
+                TakeNumber = takeNumber,
+                GameName = "single",
+                GameArgs = c,
+                LotteryName = lotteryName,
+                Dispatcher = (u, v) => UpdateUI(string.Join(".", "single.withoutRepeat", c), u, v)
+            }).ToArray();
+
             Dynamic23[] repeats = gameArgs.Select((c, i) => new Dynamic23
             {
-                EnableSinglePattern = false,
+                RespectRepeat = true,
                 Number = 1,
                 TakeNumber = takeNumber,
-                GameName = "repeats",
+                GameName = "single",
                 GameArgs = c,
                 LotteryName = lotteryName,
-                Dispatcher = (u, v) => UpdateUI(string.Join(".", "repeats", c), u, v)
+                Dispatcher = (u, v) => UpdateUI(string.Join(".", "single.withRepeat", c), u, v)
             }).ToArray();
 
-            gameArgs = new string[] { "middle", "after" };
-            Dynamic23[] spans = gameArgs.Select((c, i) => new Dynamic23
-            {
-                EnableSinglePattern = true,
-                Number = 1,
-                TakeNumber = takeNumber,
-                GameName = "span",
-                GameArgs = c,
-                LotteryName = lotteryName,
-                Dispatcher = (u, v) => UpdateUI(string.Join(".", "span", c), u, v)
-            }).ToArray();
-
-            Dictionary<string, IPlan> dic = singles.Concat(repeats).Concat(spans).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
+            Dictionary<string, IPlan> dic = singles.Concat(repeats).Concat(shotSingles).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
         }
 
@@ -74,11 +72,11 @@ namespace Lottery.App
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "repeats.front":
+                    case "single.withoutRepeat.front":
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "span.middle":
+                    case "single.withRepeat.front":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
@@ -86,11 +84,11 @@ namespace Lottery.App
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "repeats.after":
+                    case "single.withoutRepeat.after":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "span.after":
+                    case "single.withRepeat.after":
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;
