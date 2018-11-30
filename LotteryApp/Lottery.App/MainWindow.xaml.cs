@@ -21,13 +21,15 @@ namespace Lottery.App
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             int takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
+            int betCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]);
             string lotteryName = ConfigurationManager.AppSettings["LotteryName"];
-            string[] gameArgs = new string[] { "front", "after" };
+            string[] gameArgs = new string[] { "front", "middle", "after" };
 
             Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
             {
                 Number = 1,
-                TakeNumber = 30,
+                TakeNumber = takeNumber,
+                BetCycle = betCycle,
                 GameName = "single",
                 GameArgs = c,
                 LotteryName = lotteryName,
@@ -38,24 +40,14 @@ namespace Lottery.App
             {
                 Number = 1,
                 TakeNumber = takeNumber,
+                BetCycle = 4,
                 GameName = "single",
                 GameArgs = c,
                 LotteryName = lotteryName,
-                Dispatcher = (u, v) => UpdateUI(string.Join(".", "single.withoutRepeat", c), u, v)
+                Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c, "4"), u, v)
             }).ToArray();
 
-            Dynamic23[] repeats = gameArgs.Select((c, i) => new Dynamic23
-            {
-                RespectRepeat = true,
-                Number = 1,
-                TakeNumber = takeNumber,
-                GameName = "single",
-                GameArgs = c,
-                LotteryName = lotteryName,
-                Dispatcher = (u, v) => UpdateUI(string.Join(".", "single.withRepeat", c), u, v)
-            }).ToArray();
-
-            Dictionary<string, IPlan> dic = singles.Concat(repeats).Concat(shotSingles).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
+            Dictionary<string, IPlan> dic = singles.Concat(shotSingles).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
         }
 
@@ -71,23 +63,23 @@ namespace Lottery.App
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.withoutRepeat.front":
+                    case "single.front.4":
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.withRepeat.front":
+                    case "single.middle":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.after":
+                    case "single.middle.4":
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.withoutRepeat.after":
+                    case "single.after":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.withRepeat.after":
+                    case "single.after.4":
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;

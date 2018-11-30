@@ -32,7 +32,7 @@ namespace Lottery.Core.Plan
 
         public string GetKey()
         {
-            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat", UseGeneralTrend ? "UseGeneralTrend" : "WithouUseGeneralTrend", TakeNumber, WaitInterval);
+            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat", UseGeneralTrend ? "UseGeneralTrend" : "WithouUseGeneralTrend", TakeNumber, WaitInterval, BetCycle);
         }
 
         private bool? enableSinglePattern;

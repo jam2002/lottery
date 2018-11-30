@@ -124,7 +124,7 @@ namespace Lottery.Core.Plan
 
         private string GetKey(InputOptions input)
         {
-            return string.Join(".", input.LotteryName, input.GameName, input.GameArgs ?? string.Empty, input.EnableSinglePattern ? "Single" : "Composite", input.RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat", input.UseGeneralTrend ? "UseGeneralTrend" : "WithouUseGeneralTrend", input.Number, input.WaitInterval);
+            return string.Join(".", input.LotteryName, input.GameName, input.GameArgs ?? string.Empty, input.EnableSinglePattern ? "Single" : "Composite", input.RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat", input.UseGeneralTrend ? "UseGeneralTrend" : "WithouUseGeneralTrend", input.Number, input.WaitInterval, input.BetCycle);
         }
     }
 }
