@@ -230,14 +230,17 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSingleOrSpanResult()
         {
-            if (InputOption.RespectRepeat && BuildRepeats().Any())
+            LotteryResult[] ret = new LotteryResult[] { };
+            if (InputOption.RespectRepeat)
             {
-                return new LotteryResult[] { };
+                ret = BuildRepeats();
             }
-            else
+
+            if (!ret.Any())
             {
-                return InputOption.GameName == "single" ? BuildSingles() : BuildSpans();
+                ret = InputOption.GameName == "single" ? BuildSingles() : BuildSpans();
             }
+            return ret;
         }
 
         private LotteryResult[] GetMixResult()
@@ -335,7 +338,7 @@ namespace Lottery.Core.Algorithm
             string gameArgs = InputOption.GameArgs.Split('.')[0];
             FactorTypeEnum? t = pairDic.ContainsKey(gameArgs) ? (FactorTypeEnum?)pairDic[gameArgs] : null;
             ReferenceFactor factor = t.HasValue && FactorDic[t.Value].ContainsKey(2) ? FactorDic[t.Value][2] : null;
-            if (factor != null && factor.MaxInterval <= 5 && CheckInterval(factor.HitIntervals) && factor.OccurCount >= 4)
+            if (factor != null && factor.MaxInterval <= 5 && CheckInterval(factor.HitIntervals) && factor.OccurCount >= 4 && factor.HitIntervals.Where(q => q >= 4).Count() < 2)
             {
                 return Build(new int[] { 2 }, t.Value);
             }

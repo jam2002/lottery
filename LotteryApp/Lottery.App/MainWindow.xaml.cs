@@ -27,8 +27,7 @@ namespace Lottery.App
             Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
             {
                 Number = 1,
-                TakeNumber = 50,
-                BetCycle = 3,
+                TakeNumber = 30,
                 GameName = "single",
                 GameArgs = c,
                 LotteryName = lotteryName,
