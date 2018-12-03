@@ -99,8 +99,6 @@ namespace Lottery.Core.Plan
             return betAwards;
         }
 
-        public override bool ChangeBetOnceSuccess => bool.Parse(ConfigurationManager.AppSettings["ChangeBetOnceSuccess"]);
-
         private bool IsValid(int[] input)
         {
             bool ret = false;
