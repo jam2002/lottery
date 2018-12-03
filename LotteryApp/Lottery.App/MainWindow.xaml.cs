@@ -31,7 +31,8 @@ namespace Lottery.App
 
             for (int i = 0; i < config.Common.Length; i++)
             {
-                config.Common[i].Dispatcher = (u, v) => UpdateUI($"plan_{i}", u, v);
+                int c = i;
+                config.Common[i].Dispatcher = (u, v) => UpdateUI($"plan.{c}", u, v);
             }
 
             Dictionary<string, IPlan> dic = config.Common.OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
