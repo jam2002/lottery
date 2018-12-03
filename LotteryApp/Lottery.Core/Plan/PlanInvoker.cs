@@ -4,7 +4,6 @@ using Quartz;
 using Quartz.Impl;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
@@ -17,7 +16,6 @@ namespace Lottery.Core.Plan
         private IScheduler scheduler;
         private ITrigger trigger;
         private Dictionary<string, IPlan> planDic;
-        private int takeNumber;
         private int currentInterval;
 
         public static readonly PlanInvoker Current = new PlanInvoker();
@@ -34,8 +32,7 @@ namespace Lottery.Core.Plan
             sp.ConnectionLimit = 10;
 
             planDic = plans;
-            takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
-            currentInterval = int.Parse(ConfigurationManager.AppSettings["GameInterval"]);
+            currentInterval = plans.Values.First().GameInterval;
 
             scheduler = StdSchedulerFactory.GetDefaultScheduler();
             scheduler.Start();
@@ -58,7 +55,7 @@ namespace Lottery.Core.Plan
             Calculator.ClearCache();
             InputOptions[] options = planDic.Values.Select(c => new InputOptions
             {
-                Number = c.TakeNumber ?? takeNumber,
+                Number = c.TakeNumber,
                 LotteryName = c.LotteryName,
                 GameName = c.GameName,
                 GameArgs = c.GameArgs,

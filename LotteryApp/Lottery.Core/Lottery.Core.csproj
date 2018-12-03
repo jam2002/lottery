@@ -91,6 +91,7 @@
     <Compile Include="Plan\Dynamic135.cs" />
     <Compile Include="Plan\Dynamic17.cs" />
     <Compile Include="Plan\Dynamic23.cs" />
+    <Compile Include="Plan\PlanConfig.cs" />
     <Compile Include="Plan\PlanInvoker.cs" />
     <Compile Include="Algorithm\ValidationResult.cs" />
     <Compile Include="Algorithm\Validator.cs" />

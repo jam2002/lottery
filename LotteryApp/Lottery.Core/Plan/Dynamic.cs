@@ -1,7 +1,6 @@
 ﻿using Lottery.Core.Algorithm;
 using Lottery.Core.Data;
 using System;
-using System.Configuration;
 using System.Linq;
 
 namespace Lottery.Core.Plan
@@ -20,11 +19,13 @@ namespace Lottery.Core.Plan
 
         public int SuccessCount { get; set; }
 
-        public int? TakeNumber { get; set; }
+        public int TakeNumber { get; set; }
 
         public string GameName { get; set; }
 
         public string GameArgs { get; set; }
+
+        public int GameInterval { get; set; }
 
         public Action<string, string> Dispatcher { get; set; }
 
@@ -35,103 +36,13 @@ namespace Lottery.Core.Plan
             return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "RespectRepeat" : "WithouRespectRepeat", UseGeneralTrend ? "UseGeneralTrend" : "WithouUseGeneralTrend", TakeNumber, WaitInterval, BetCycle);
         }
 
-        private bool? enableSinglePattern;
-        public bool EnableSinglePattern
-        {
-            get
-            {
-                if (!enableSinglePattern.HasValue)
-                {
-                    enableSinglePattern = bool.Parse(ConfigurationManager.AppSettings["EnableSinglePattern"]);
-                }
-                return enableSinglePattern.Value;
-            }
-            set { enableSinglePattern = value; }
-        }
-
-        private bool? enableContinuous;
-        public bool EnableContinuous
-        {
-            get
-            {
-                if (!enableContinuous.HasValue)
-                {
-                    enableContinuous = bool.Parse(ConfigurationManager.AppSettings["EnableContinuous"]);
-                }
-                return enableContinuous.Value;
-            }
-            set { enableContinuous = value; }
-        }
-
-        private bool? useGeneralTrend;
-        public bool UseGeneralTrend
-        {
-            get
-            {
-                if (!useGeneralTrend.HasValue)
-                {
-                    useGeneralTrend = bool.Parse(ConfigurationManager.AppSettings["UseGeneralTrend"]);
-                }
-                return useGeneralTrend.Value;
-            }
-            set { useGeneralTrend = value; }
-        }
-
-        private bool? respectRepeat;
-        public bool RespectRepeat
-        {
-            get
-            {
-                if (!respectRepeat.HasValue)
-                {
-                    RespectRepeat = bool.Parse(ConfigurationManager.AppSettings["RespectRepeat"]);
-                }
-                return respectRepeat.Value;
-            }
-            set { respectRepeat = value; }
-        }
-
-        private int? betyCycle;
-        public int BetCycle
-        {
-            get
-            {
-                if (!betyCycle.HasValue)
-                {
-                    betyCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]);
-                }
-                return betyCycle.Value;
-            }
-            set { betyCycle = value; }
-        }
-
-        private int? tupleLength;
-        public int TupleLength
-        {
-            get
-            {
-                if (!tupleLength.HasValue)
-                {
-                    tupleLength = int.Parse(ConfigurationManager.AppSettings["TupleLength"]);
-                }
-                return tupleLength.Value;
-            }
-            set { tupleLength = value; }
-        }
-
-        private int? waitInterval;
-        public int WaitInterval
-        {
-            get
-            {
-                if (!waitInterval.HasValue)
-                {
-                    waitInterval = int.Parse(ConfigurationManager.AppSettings["WaitInterval"]);
-                }
-                return waitInterval.Value;
-            }
-            set { waitInterval = value; }
-        }
+        public bool EnableSinglePattern { get; set; }
+        public bool EnableContinuous { get; set; }
+        public bool UseGeneralTrend { get; set; }
+        public bool RespectRepeat { get; set; }
+        public int BetCycle { get; set; }
+        public int TupleLength { get; set; }
+        public int WaitInterval { get; set; }
 
         public void Invoke(SimpleBet currentBet)
         {

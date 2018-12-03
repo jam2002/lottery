@@ -14,13 +14,15 @@ namespace Lottery.Core.Plan
 
         string GameArgs { get; set; }
 
+        int GameInterval { get; set; }
+
         int BetIndex { get; set; }
 
         int BetCycle { get; set; }
 
         int Number { get; set; }
 
-        int? TakeNumber { get; set; }
+        int TakeNumber { get; set; }
 
         Action<string, string> Dispatcher { get; set; }
 

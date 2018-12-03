@@ -1,7 +1,8 @@
 ﻿using Lottery.Core.Plan;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,34 +21,20 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            int takeNumber = int.Parse(ConfigurationManager.AppSettings["GameNumber"]);
-            int betCycle = int.Parse(ConfigurationManager.AppSettings["BetCycle"]);
-            string lotteryName = ConfigurationManager.AppSettings["LotteryName"];
-            string[] gameArgs = new string[] { "front", "middle", "after" };
-
-            Dynamic23[] singles = gameArgs.Select((c, i) => new Dynamic23
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plans.json");
+            PlanConfig config = null;
+            using (StreamReader sr = new StreamReader(path))
             {
-                Number = 1,
-                TakeNumber = takeNumber,
-                BetCycle = betCycle,
-                GameName = "single",
-                GameArgs = c,
-                LotteryName = lotteryName,
-                Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c), u, v)
-            }).ToArray();
+                string content = sr.ReadToEnd();
+                config = JsonConvert.DeserializeObject<PlanConfig>(content);
+            }
 
-            Dynamic23[] shotSingles = gameArgs.Select((c, i) => new Dynamic23
+            for (int i = 0; i < config.Common.Length; i++)
             {
-                Number = 1,
-                TakeNumber = takeNumber,
-                BetCycle = 4,
-                GameName = "single",
-                GameArgs = c,
-                LotteryName = lotteryName,
-                Dispatcher = (u, v) => UpdateUI(string.Join(".", "single", c, "4"), u, v)
-            }).ToArray();
+                config.Common[i].Dispatcher = (u, v) => UpdateUI($"plan_{i}", u, v);
+            }
 
-            Dictionary<string, IPlan> dic = singles.Concat(shotSingles).OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
+            Dictionary<string, IPlan> dic = config.Common.OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
         }
 
@@ -59,27 +46,27 @@ namespace Lottery.App
                 System.Windows.Forms.RichTextBox valueBox = null;
                 switch (code)
                 {
-                    case "single.front":
+                    case "plan.0":
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.front.4":
+                    case "plan.1":
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.middle":
+                    case "plan.2":
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.middle.4":
+                    case "plan.3":
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.after":
+                    case "plan.4":
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
-                    case "single.after.4":
+                    case "plan.5":
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;
