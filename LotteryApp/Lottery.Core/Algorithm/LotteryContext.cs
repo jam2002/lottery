@@ -443,7 +443,7 @@ namespace Lottery.Core.Algorithm
 
             var query = from p in FactorDic[r]
                         where InputOption.EnableContinuous && requireRespectRepeats ? continuous.Contains(p.Key) : true
-                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval descending
+                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
 
             return Build(query, r);

@@ -141,7 +141,7 @@ namespace Lottery.Core.Plan
             }
             else if (betArray.Any())
             {
-                betArray.Select(t => string.Join(string.Empty, t));
+                ret = betArray.Select(t => string.Join(string.Empty, t));
             }
             return ret;
         }
