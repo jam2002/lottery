@@ -283,7 +283,11 @@ namespace Lottery.Core.Algorithm
             bool isSpan = false;
             return awards.Select((c, i) =>
             {
-                ReferenceFactor factor = FactorDic[type][c];
+                ReferenceFactor factor = FactorDic[type].ContainsKey(c) ? FactorDic[type][c] : null;
+                if (factor == null)
+                {
+                    return null;
+                }
                 int[] values = null;
                 switch (type)
                 {
@@ -324,7 +328,7 @@ namespace Lottery.Core.Algorithm
                     },
                     Filter = $"{(isSpan ? "跨度" : "不定位")} ：{string.Join(",", values)}"
                 };
-            }).Take(3).ToArray();
+            }).Where(c => c != null).Take(3).ToArray();
         }
 
         private LotteryResult[] BuildRepeats()
