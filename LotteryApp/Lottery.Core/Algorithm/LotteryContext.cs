@@ -434,6 +434,15 @@ namespace Lottery.Core.Algorithm
                 { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Right4Tuple},
                 { "all", FactorTypeEnum.AllTuples}
             };
+            Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
+            {
+                { "front4", FactorTypeEnum.Left4Tuple},
+                { "after4", FactorTypeEnum.Right4Tuple},
+                { "front",   FactorTypeEnum.LeftTuple},
+                { "middle", FactorTypeEnum.MiddleTuple},
+                { "after",  FactorTypeEnum.RightTuple},
+                { "all", FactorTypeEnum.AllTuples}
+            };
 
             string gameArgs = InputOption.GameArgs.Split('.').ToArray()[0];
             FactorTypeEnum r = enumDic[gameArgs];
@@ -446,7 +455,7 @@ namespace Lottery.Core.Algorithm
                         orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
 
-            return Build(query, r);
+            return Build(query, tupleDic[gameArgs]);
         }
 
         private LotteryResult[] BuildDoubles()
