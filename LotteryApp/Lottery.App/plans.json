@@ -37,7 +37,7 @@
     {
       "Number": 2,
       "TakeNumber": 10,
-      "BetCycle": 9,
+      "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "tuple",
       "GameArgs": "front",
@@ -49,12 +49,12 @@
       "RespectRepeat": false,
       "WaitInterval": 0,
       "SkipNumber": 0,
-      "TupleLength": 3
+      "TupleLength": 4
     },
     {
       "Number": 2,
       "TakeNumber": 10,
-      "BetCycle": 9,
+      "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "tuple",
       "GameArgs": "middle",
@@ -66,12 +66,12 @@
       "RespectRepeat": false,
       "WaitInterval": 0,
       "SkipNumber": 0,
-      "TupleLength": 3
+      "TupleLength": 4
     },
     {
       "Number": 2,
       "TakeNumber": 10,
-      "BetCycle": 9,
+      "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "tuple",
       "GameArgs": "after",
@@ -83,7 +83,7 @@
       "RespectRepeat": false,
       "WaitInterval": 0,
       "SkipNumber": 0,
-      "TupleLength": 3
+      "TupleLength": 4
     },
     {
       "Number": 1,
