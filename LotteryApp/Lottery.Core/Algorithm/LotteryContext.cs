@@ -476,10 +476,10 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.ToArray();
-                keys = keys.Take(2).Concat(new int[] { keys[keys.Length - 1] }).ToArray();
+                keys = keys.Take(2).Concat(new int[] { keys[keys.Length - 2] }).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
                     { "front",   FactorTypeEnum.LeftDouble},

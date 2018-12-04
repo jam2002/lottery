@@ -19,7 +19,7 @@ namespace Lottery.Core.Plan
         private int? award;
         private int[] awards;
         private int[] spans;
-        private int? excludeAward;
+        private int[] excludeAwards;
         private int[][] betArray;
 
         public override string GetBetString(SimpleBet currentBet)
@@ -33,7 +33,7 @@ namespace Lottery.Core.Plan
             spans = isSpan && currentBet.BetAward.Any() ? currentBet.BetAward : new int[] { };
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
             awards = isDouble ? currentBet.BetAward.Take(2).ToArray() : new int[] { };
-            excludeAward = isDouble ? (int?)currentBet.BetAward.Last() : null;
+            excludeAwards = isDouble ? currentBet.BetAward.Skip(2).ToArray() : new int[] { };
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet.BetAward) : new int[][] { };
 
             if (EnableSinglePattern)
@@ -117,7 +117,7 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                ret = number.Intersect(awards).Any() && !number.Contains(excludeAward.Value) && (number.Length > 2 ? !(number[2] - number[1] == 1 && number[1] - number[0] == 1) : true);
+                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && (number.Length > 2 ? !(number[2] - number[1] == 1 && number[1] - number[0] == 1) : true);
             }
             else
             {
