@@ -479,7 +479,7 @@ namespace Lottery.Core.Algorithm
                             orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.ToArray();
-                keys = keys.Take(2).Concat(new int[] { keys[keys.Length - 2] }).ToArray();
+                keys = keys.Take(2).Concat(keys.Skip(keys.Length - 2)).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
                     { "front",   FactorTypeEnum.LeftDouble},
@@ -497,7 +497,7 @@ namespace Lottery.Core.Algorithm
                     {
                          new AnyFilter{  Values = keys }
                     },
-                    Filter = $"双胆杀一码：{string.Join(",", keys)}"
+                    Filter = $"双胆杀二码：{string.Join(",", keys)}"
                 };
 
                 return new LotteryResult[] { ret };
