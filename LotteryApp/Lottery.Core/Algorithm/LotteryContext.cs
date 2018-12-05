@@ -156,23 +156,13 @@ namespace Lottery.Core.Algorithm
                     ret = GetHistoryResult();
                     break;
                 case "repeats":
-                    ret = BuildRepeats();
-                    break;
                 case "single":
                 case "span":
-                    ret = GetSingleOrSpanResult();
-                    break;
                 case "double":
-                    ret = BuildDoubles();
-                    break;
                 case "tripple":
-                    ret = GetTrippleResult();
-                    break;
                 case "tuple":
-                    ret = GetTupleResult();
-                    break;
                 case "mix":
-                    ret = GetMixResult();
+                    ret = GetDynamicResult();
                     break;
                 case "symmetric":
                     ret = GetSymmetricResult();
@@ -208,51 +198,37 @@ namespace Lottery.Core.Algorithm
             return Build(query, r);
         }
 
-        private LotteryResult[] GetTrippleResult()
+        private LotteryResult[] GetDynamicResult()
         {
-            LotteryResult[] results = InputOption.RespectRepeat ? BuildRepeats() : new LotteryResult[] { };
-            if (!results.Any())
+            bool isRepeat = false;
+            LotteryResult[] results = InputOption.RespectRepeat ? BuildRepeats(out isRepeat) : new LotteryResult[] { };
+            if (!results.Any() && !isRepeat)
             {
-                results = BuildTripples();
+                switch (InputOption.GameName)
+                {
+                    case "single":
+                        results = BuildSingles();
+                        break;
+                    case "span":
+                        results = BuildSpans();
+                        break;
+                    case "double":
+                        results = BuildDoubles();
+                        break;
+                    case "tripple":
+                        results = BuildTripples();
+                        break;
+                    case "tuple":
+                        results = BuildTuples();
+                        break;
+                    case "mix":
+                        results = (from p in BuildSingles().Concat(BuildSpans()).Concat(BuildTuples()).Concat(BuildTripples())
+                                   orderby p.MaxInterval, p.HitCount descending, p.FailureCount, p.LastInterval descending, p.Type descending
+                                   select p).Take(3).ToArray();
+                        break;
+                }
             }
             return results;
-        }
-
-        private LotteryResult[] GetTupleResult()
-        {
-            LotteryResult[] results = InputOption.RespectRepeat ? BuildRepeats() : new LotteryResult[] { };
-            if (!results.Any())
-            {
-                results = BuildTuples();
-            }
-            return results;
-        }
-
-        private LotteryResult[] GetSingleOrSpanResult()
-        {
-            LotteryResult[] ret = new LotteryResult[] { };
-            if (InputOption.RespectRepeat)
-            {
-                ret = BuildRepeats();
-            }
-
-            if (!ret.Any())
-            {
-                ret = InputOption.GameName == "single" ? BuildSingles() : BuildSpans();
-            }
-            return ret;
-        }
-
-        private LotteryResult[] GetMixResult()
-        {
-            IEnumerable<LotteryResult> results = InputOption.RespectRepeat ? BuildRepeats() : new LotteryResult[] { };
-            if (!results.Any())
-            {
-                results = from p in BuildSingles().Concat(BuildTuples()).Concat(BuildTripples())
-                          orderby p.MaxInterval, p.HitCount descending, p.FailureCount, p.LastInterval descending, p.Type descending
-                          select p;
-            }
-            return results.Take(3).ToArray();
         }
 
         private LotteryResult[] GetSymmetricResult()
@@ -331,8 +307,9 @@ namespace Lottery.Core.Algorithm
             }).Where(c => c != null).Take(3).ToArray();
         }
 
-        private LotteryResult[] BuildRepeats()
+        private LotteryResult[] BuildRepeats(out bool isRepeat)
         {
+            isRepeat = false;
             Dictionary<string, FactorTypeEnum> pairDic = new Dictionary<string, FactorTypeEnum>
             {
                 { "front", FactorTypeEnum.LeftDistinct},
@@ -342,9 +319,10 @@ namespace Lottery.Core.Algorithm
             string gameArgs = InputOption.GameArgs.Split('.')[0];
             FactorTypeEnum? t = pairDic.ContainsKey(gameArgs) ? (FactorTypeEnum?)pairDic[gameArgs] : null;
             ReferenceFactor factor = t.HasValue && FactorDic[t.Value].ContainsKey(2) ? FactorDic[t.Value][2] : null;
-            if (factor != null && factor.MaxInterval <= 5 && CheckInterval(factor.HitIntervals) && factor.OccurCount >= 4 && factor.HitIntervals.Where(q => q >= 4).Count() < 2)
+            if (factor != null && factor.MaxInterval <= 5 && CheckInterval(factor.HitIntervals) && factor.OccurCount >= 4)
             {
-                return Build(new int[] { 2 }, t.Value);
+                isRepeat = true;
+                return factor.LastInterval >= 1 ? Build(new int[] { 2 }, t.Value) : new LotteryResult[] { };
             }
             return new LotteryResult[] { };
         }
@@ -366,7 +344,7 @@ namespace Lottery.Core.Algorithm
                             where p.Value.LastInterval <= 5
                             orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
-    
+
                 return Build(query, r.Value);
             }
             return new LotteryResult[] { };
