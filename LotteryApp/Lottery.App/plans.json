@@ -19,9 +19,9 @@
       "TupleLength": 4
     },
     {
-      "Title": "后三二码(30)",
+      "Title": "后三二码R(15)",
       "Number": 2,
-      "TakeNumber": 30,
+      "TakeNumber": 15,
       "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "tuple",
@@ -31,15 +31,15 @@
       "EnableSinglePattern": false,
       "EnableContinuous": false,
       "UseGeneralTrend": false,
-      "RespectRepeat": false,
+      "RespectRepeat": true,
       "WaitInterval": 0,
       "SkipNumber": 0,
       "TupleLength": 4
     },
     {
-      "Title": "后三二码(50)",
+      "Title": "后三二码(30)",
       "Number": 2,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "tuple",
@@ -73,9 +73,9 @@
       "TupleLength": 3
     },
     {
-      "Title": "后三二胆(30)",
+      "Title": "后三二胆R(15)",
       "Number": 1,
-      "TakeNumber": 30,
+      "TakeNumber": 15,
       "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "double",
@@ -85,15 +85,15 @@
       "EnableSinglePattern": true,
       "EnableContinuous": false,
       "UseGeneralTrend": false,
-      "RespectRepeat": false,
+      "RespectRepeat": true,
       "WaitInterval": 0,
       "SkipNumber": 0,
       "TupleLength": 3
     },
     {
-      "Title": "后三二胆(50)",
+      "Title": "后三二胆(30)",
       "Number": 1,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "double",
