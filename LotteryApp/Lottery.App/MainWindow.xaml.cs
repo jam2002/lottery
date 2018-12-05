@@ -32,46 +32,55 @@ namespace Lottery.App
             for (int i = 0; i < config.Common.Length; i++)
             {
                 int c = i;
-                config.Common[i].Dispatcher = (u, v) => UpdateUI($"plan.{c}", u, v);
+                string title = config.Common[i].Title;
+                config.Common[i].Dispatcher = (u, v) => UpdateUI($"plan.{c}", title, u, v);
             }
 
             Dictionary<string, IPlan> dic = config.Common.OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
         }
 
-        private void UpdateUI(string code, string desc, string value)
+        private void UpdateUI(string code, string title, string desc, string value)
         {
             this.Dispatcher.Invoke(() =>
             {
+                TextBlock titleBlock = null;
                 RichTextBox descBox = null;
                 System.Windows.Forms.RichTextBox valueBox = null;
                 switch (code)
                 {
                     case "plan.0":
+                        titleBlock = this.txtFrontTitle;
                         descBox = this.txtFrontDesc;
                         valueBox = this.txtFrontHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "plan.1":
+                        titleBlock = this.txtMiddleTitle;
                         descBox = this.txtMiddleDesc;
                         valueBox = this.txtMiddleHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "plan.2":
+                        titleBlock = this.txtAfterTitle;
                         descBox = this.txtAfterDesc;
                         valueBox = this.txtAfterHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "plan.3":
+                        titleBlock = this.txtOneAwardTitle;
                         descBox = this.txtOneAwardDesc;
                         valueBox = this.txtOneAwardHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "plan.4":
+                        titleBlock = this.txtFiveTitle;
                         descBox = this.txtFiveDesc;
                         valueBox = this.txtFiveHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                     case "plan.5":
+                        titleBlock = this.txtFiftyTitle;
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;
                 }
+                titleBlock.Text = title;
 
                 if (DateTime.Now.Minute == 30)
                 {

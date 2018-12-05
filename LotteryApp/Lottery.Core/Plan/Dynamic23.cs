@@ -1,7 +1,6 @@
 ﻿using Kw.Combinatorics;
 using Lottery.Core.Data;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 
 namespace Lottery.Core.Plan
@@ -13,13 +12,18 @@ namespace Lottery.Core.Plan
     {
         private FactorTypeEnum type;
         private bool isDistinct;
+
         private bool isAward;
-        private bool isDouble;
-        private bool isSpan;
         private int? award;
-        private int[] awards;
+
+        private bool isSpan;
         private int[] spans;
+
+        private bool isDouble;
+        private int[] awards;
         private int[] excludeAwards;
+        private int[] doubleSpans = new int[] { 3, 4, 5, 6, 7 };
+
         private int[][] betArray;
 
         public override string GetBetString(SimpleBet currentBet)
@@ -103,6 +107,7 @@ namespace Lottery.Core.Plan
         {
             bool ret = false;
             int[] number = input.Distinct().OrderBy(c => c).ToArray();
+            int span = number[number.Length - 1] - number[0];
             if (isDistinct)
             {
                 ret = number.Length <= 2;
@@ -113,11 +118,11 @@ namespace Lottery.Core.Plan
             }
             else if (isSpan && spans.Any())
             {
-                ret = spans.Contains(number[number.Length - 1] - number[0]);
+                ret = spans.Contains(span);
             }
             else if (isDouble)
             {
-                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && (number.Length > 2 ? !(number[2] - number[1] == 1 && number[1] - number[0] == 1) : true);
+                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span);
             }
             else
             {
