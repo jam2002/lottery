@@ -22,7 +22,7 @@ namespace Lottery.Core.Plan
         private bool isDouble;
         private int[] awards;
         private int[] excludeAwards;
-        private int[] doubleSpans = new int[] { 3, 4, 5, 6, 7 };
+        private int[] doubleSpans = new int[] { 3, 4, 5, 6, 7, 8 };
 
         private int[][] betArray;
 
@@ -122,8 +122,7 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && number.Any(c => c >= 5) && number.Select(c => c % 3).Distinct().Count() >= 2
-                                       && (number.Length <= 2 || span != 2);
+                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && spans.Contains(span);
             }
             else
             {
