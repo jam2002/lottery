@@ -34,6 +34,10 @@ namespace Lottery.Core.Plan
 
         bool RespectRepeat { get; set; }
 
+        bool ChangeBetPerTime { get; set; }
+
+        int SpanLength { get; set; }
+
         int TupleLength { get; set; }
 
         int WaitInterval { get; set; }
