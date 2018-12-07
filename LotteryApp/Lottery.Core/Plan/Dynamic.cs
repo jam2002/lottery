@@ -56,14 +56,29 @@ namespace Lottery.Core.Plan
 
             Action<int> Reset = (s) =>
             {
-                bool changed = currentBet.BetAward.Any() && (BetIndex == 0 || s == 3 || s == 1);
+                bool changed = currentBet.BetAward.Any();
                 if (changed)
                 {
-                    if (s != 1)
+                    switch (s)
                     {
-                        LastBet = currentBet;
+                        case 1:
+                        case 3:
+                        case 4:
+                            if (s == 1 || s == 3)
+                            {
+                                Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, s), null);
+                            }
+                            LastBet = currentBet;
+                            BetIndex = 1;
+                            break;
+                        case 2:
+                            BetIndex++;
+                            if (ChangeBetPerTime)
+                            {
+                                LastBet = currentBet;
+                            }
+                            break;
                     }
-                    BetIndex = 1;
                     Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, 2), GetBetString(LastBet));
                 }
                 else
@@ -82,16 +97,7 @@ namespace Lottery.Core.Plan
 
             bool isHit = IsHit(currentBet);
             int status = isHit ? 1 : (BetIndex == BetCycle ? 3 : 2);
-            if (BetIndex > 0)
-            {
-                string bet = GetChangedBetString(currentBet, status);
-                Dispatcher(BuildInfo(LastBet.BetAward, status == 1 || status == 3 ? BetIndex : ++BetIndex, status), bet);
-            }
-
-            if (status == 1 || status == 3)
-            {
-                Reset(status);
-            }
+            Reset(status);
         }
 
         public virtual bool IsHit(SimpleBet currentBet)

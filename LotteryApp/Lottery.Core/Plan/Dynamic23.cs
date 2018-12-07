@@ -10,7 +10,7 @@ namespace Lottery.Core.Plan
     /// </summary>
     public class Dynamic23 : Dynamic
     {
-        private FactorTypeEnum type;
+        private FactorTypeEnum? type;
         private bool isDistinct;
 
         private bool isAward;
@@ -29,7 +29,7 @@ namespace Lottery.Core.Plan
         public override string GetBetString(SimpleBet currentBet)
         {
             IEnumerable<string> numbers;
-            type = currentBet.Results[0].Output[0].Type;
+            type = currentBet.Results[0].Output.Any() ? (FactorTypeEnum?)currentBet.Results[0].Output[0].Type : null;
             isDistinct = type == FactorTypeEnum.LeftDistinct || type == FactorTypeEnum.MiddleDistinct || type == FactorTypeEnum.RightDistinct || type == FactorTypeEnum.Distinct;
             isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward || type == FactorTypeEnum.Award;
             isDouble = type == FactorTypeEnum.LeftDouble || type == FactorTypeEnum.MiddleDouble || type == FactorTypeEnum.RightDouble;
