@@ -22,7 +22,7 @@ namespace Lottery.Core.Plan
         private bool isDouble;
         private int[] awards;
         private int[] excludeAwards;
-        private int[] doubleSpans = new int[] { 3, 4, 5, 6, 7 };
+        private int[] doubleSpans;
 
         private int[][] betArray;
 
@@ -38,6 +38,7 @@ namespace Lottery.Core.Plan
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
             awards = isDouble ? currentBet.BetAward.Take(2).ToArray() : new int[] { };
             excludeAwards = isDouble ? currentBet.BetAward.Skip(2).ToArray() : new int[] { };
+            doubleSpans = Enumerable.Range(3, SpanLength).ToArray();
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet.BetAward) : new int[][] { };
 
             if (EnableSinglePattern)

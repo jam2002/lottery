@@ -46,6 +46,7 @@ namespace Lottery.Core.Plan
         public int BetCycle { get; set; }
         public int TupleLength { get; set; }
         public int WaitInterval { get; set; }
+        public int SpanLength { get; set; }
 
         public void Invoke(SimpleBet currentBet)
         {
