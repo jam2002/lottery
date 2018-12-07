@@ -22,7 +22,7 @@ namespace Lottery.Core.Plan
         private bool isDouble;
         private int[] awards;
         private int[] excludeAwards;
-        private int[] doubleSpans = new int[] { 3, 4, 5, 6, 7, 8 };
+        private int[] doubleSpans = new int[] { 3, 4, 5, 6, 7 };
 
         private int[][] betArray;
 
