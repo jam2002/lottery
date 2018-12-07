@@ -24,9 +24,13 @@
 
         public bool RespectRepeat { get; set; }
 
+        public bool ChangeBetPerTime { get; set; }
+
         public int WaitInterval { get; set; }
 
         public int TupleLength { get; set; }
+
+        public int SpanLength { get; set; }
 
         public InputOptions()
         {
