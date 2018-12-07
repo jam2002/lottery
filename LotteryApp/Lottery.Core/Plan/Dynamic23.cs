@@ -70,6 +70,11 @@ namespace Lottery.Core.Plan
             return $"【{string.Join(" ", numbers)}】";
         }
 
+        public override string GetChangedBetString(SimpleBet currentBet, int status)
+        {
+            return GetBetString(currentBet);
+        }
+
         public override bool IsHit(SimpleBet currentBet)
         {
             int[] numbers = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
@@ -122,7 +127,7 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                ret = number.Intersect(awards).Any() && !number.All(c => c >= 5) && !number.All(c => c < 5) && doubleSpans.Contains(span) && number.Select(c => c % 3).Distinct().Count() > 1;
+                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span);
             }
             else
             {

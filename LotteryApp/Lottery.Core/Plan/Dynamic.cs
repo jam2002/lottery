@@ -42,6 +42,7 @@ namespace Lottery.Core.Plan
         public bool EnableContinuous { get; set; }
         public bool UseGeneralTrend { get; set; }
         public bool RespectRepeat { get; set; }
+        public bool ChangeBetPerTime { get; set; }
         public int BetCycle { get; set; }
         public int TupleLength { get; set; }
         public int WaitInterval { get; set; }
@@ -58,7 +59,7 @@ namespace Lottery.Core.Plan
                 bool changed = currentBet.BetAward.Any() && (BetIndex == 0 || s == 3 || s == 1);
                 if (changed)
                 {
-                    if (s != 1 || ChangeBetOnceSuccess)
+                    if (s != 1)
                     {
                         LastBet = currentBet;
                     }
@@ -104,8 +105,6 @@ namespace Lottery.Core.Plan
         {
             return null;
         }
-
-        public virtual bool ChangeBetOnceSuccess => true;
 
         public virtual int[] GetBetAwards(OutputResult output)
         {
