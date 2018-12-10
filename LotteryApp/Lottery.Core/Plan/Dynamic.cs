@@ -2,6 +2,7 @@
 using Lottery.Core.Data;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Lottery.Core.Plan
 {
@@ -48,8 +49,14 @@ namespace Lottery.Core.Plan
         public int WaitInterval { get; set; }
         public int SpanLength { get; set; }
 
+        private Dictionary<int, int> betCounters;
+
         public void Invoke(SimpleBet currentBet)
         {
+            if (betCounters == null)
+            {
+                betCounters = Enumerable.Range(1, BetCycle).ToDictionary(c => c, c => 0);
+            }
             foreach (var p in currentBet.Results)
             {
                 Dispatcher(p.ToReadString(), null);
@@ -100,6 +107,7 @@ namespace Lottery.Core.Plan
             int status = isHit ? 1 : (BetIndex == BetCycle ? 3 : 2);
             if (status == 1)
             {
+                betCounters[BetIndex] = betCounters[BetIndex] + 1;
                 SuccessCount++;
             }
             if (status == 3)
@@ -137,19 +145,20 @@ namespace Lottery.Core.Plan
             string ret = null;
             string betTime = DateTime.Now.ToString("HH:mm:ss");
             string betAwards = string.Join(",", award);
+            string hitCounter = string.Join(",", betCounters.Select(c => $"{c.Key}={c.Value}"));
             switch (status)
             {
                 case 1:
-                    ret = $"{betTime}，当前计划投注号：{betAwards}，失败：{FailureCount}，中奖：{SuccessCount}，已中奖，中奖轮次：{betIndex}";
+                    ret = $"{betTime}，当前计划投注号：{betAwards}，{hitCounter}，失败：{FailureCount}，中奖：{SuccessCount}，已中奖，中奖轮次：{betIndex}";
                     break;
                 case 2:
-                    ret = $"{betTime}，当前计划投注号：{betAwards}，失败：{FailureCount}，中奖：{SuccessCount}，轮次：{betIndex}，计划中...";
+                    ret = $"{betTime}，当前计划投注号：{betAwards}，{hitCounter}，失败：{FailureCount}，中奖：{SuccessCount}，轮次：{betIndex}，计划中...";
                     break;
                 case 3:
-                    ret = $"{betTime}，当前计划投注号：{betAwards}，失败：{FailureCount}，中奖：{SuccessCount}，已失败";
+                    ret = $"{betTime}，当前计划投注号：{betAwards}，{hitCounter}，失败：{FailureCount}，中奖：{SuccessCount}，已失败";
                     break;
                 case 4:
-                    ret = $"{betTime}，当前计划没有投注号，失败：{FailureCount}，中奖：{SuccessCount}，等待中";
+                    ret = $"{betTime}，当前计划没有投注号，失败：{FailureCount}，{hitCounter}，中奖：{SuccessCount}，等待中";
                     break;
             }
             return ret;
