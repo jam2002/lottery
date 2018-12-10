@@ -128,7 +128,7 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && number.Any(c => c >= 5) && number.Select(c => c % 3).Distinct().Count() >= 2;
+                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && number.Select(c => c % 3).Distinct().Count() >= 2;
             }
             else
             {
