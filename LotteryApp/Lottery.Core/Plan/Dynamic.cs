@@ -15,9 +15,9 @@ namespace Lottery.Core.Plan
 
         public int Number { get; set; }
 
-        public int FailureCount { get; set; }
+        public int FailureCount = 0;
 
-        public int SuccessCount { get; set; }
+        public int SuccessCount = 0;
 
         public int TakeNumber { get; set; }
 
@@ -98,6 +98,14 @@ namespace Lottery.Core.Plan
 
             bool isHit = IsHit(currentBet);
             int status = isHit ? 1 : (BetIndex == BetCycle ? 3 : 2);
+            if (status == 1)
+            {
+                SuccessCount++;
+            }
+            if (status == 3)
+            {
+                FailureCount++;
+            }
             Reset(status);
         }
 
@@ -132,14 +140,12 @@ namespace Lottery.Core.Plan
             switch (status)
             {
                 case 1:
-                    SuccessCount++;
                     ret = $"{betTime}，当前计划投注号：{betAwards}，失败：{FailureCount}，中奖：{SuccessCount}，已中奖，中奖轮次：{betIndex}";
                     break;
                 case 2:
                     ret = $"{betTime}，当前计划投注号：{betAwards}，失败：{FailureCount}，中奖：{SuccessCount}，轮次：{betIndex}，计划中...";
                     break;
                 case 3:
-                    FailureCount++;
                     ret = $"{betTime}，当前计划投注号：{betAwards}，失败：{FailureCount}，中奖：{SuccessCount}，已失败";
                     break;
                 case 4:
