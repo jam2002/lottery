@@ -149,16 +149,16 @@ namespace Lottery.Core.Plan
             switch (status)
             {
                 case 1:
-                    ret = $"{betTime}，当前计划投注号：{betAwards}，{hitCounter}，失败：{FailureCount}，中奖：{SuccessCount}，已中奖，中奖轮次：{betIndex}";
+                    ret = $"{betTime}，投注：{betAwards}，{hitCounter}，失败：{FailureCount}，中奖：{SuccessCount}，轮次：{betIndex}，已中奖";
                     break;
                 case 2:
-                    ret = $"{betTime}，当前计划投注号：{betAwards}，{hitCounter}，失败：{FailureCount}，中奖：{SuccessCount}，轮次：{betIndex}，计划中...";
+                    ret = $"{betTime}，投注：{betAwards}，{hitCounter}，失败：{FailureCount}，中奖：{SuccessCount}，轮次：{betIndex}，计划中...";
                     break;
                 case 3:
-                    ret = $"{betTime}，当前计划投注号：{betAwards}，{hitCounter}，失败：{FailureCount}，中奖：{SuccessCount}，已失败";
+                    ret = $"{betTime}，投注：{betAwards}，{hitCounter}，失败：{FailureCount}，中奖：{SuccessCount}，已失败";
                     break;
                 case 4:
-                    ret = $"{betTime}，当前计划没有投注号，失败：{FailureCount}，{hitCounter}，中奖：{SuccessCount}，等待中";
+                    ret = $"{betTime}，没有投注，{hitCounter}，失败：{FailureCount}，中奖：{SuccessCount}，等待中";
                     break;
             }
             return ret;
