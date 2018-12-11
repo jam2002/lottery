@@ -50,6 +50,7 @@ namespace Lottery.Core.Plan
         public int SpanLength { get; set; }
 
         private Dictionary<int, int> betCounters;
+        protected bool isDistinct;
 
         public void Invoke(SimpleBet currentBet)
         {
@@ -81,7 +82,7 @@ namespace Lottery.Core.Plan
                             break;
                         case 2:
                             BetIndex++;
-                            if (ChangeBetPerTime)
+                            if (ChangeBetPerTime && !isDistinct)
                             {
                                 LastBet = currentBet;
                             }

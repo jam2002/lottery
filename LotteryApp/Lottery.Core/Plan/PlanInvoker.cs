@@ -60,6 +60,7 @@ namespace Lottery.Core.Plan
                 GameName = c.GameName,
                 GameArgs = c.GameArgs,
                 BetCycle = c.BetCycle,
+                BetIndex = c.BetIndex,
                 EnableSinglePattern = c.EnableSinglePattern,
                 EnableContinuous = c.EnableContinuous,
                 UseGeneralTrend = c.UseGeneralTrend,

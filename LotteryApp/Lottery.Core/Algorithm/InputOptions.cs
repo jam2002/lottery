@@ -1,4 +1,6 @@
-﻿namespace Lottery.Core.Algorithm
+﻿using Lottery.Core.Data;
+
+namespace Lottery.Core.Algorithm
 {
     public class InputOptions
     {
@@ -15,6 +17,8 @@
         public string GameArgs { get; set; }
 
         public int BetCycle { get; set; }
+
+        public int BetIndex { get; set; }
 
         public bool EnableSinglePattern { get; set; } 
 

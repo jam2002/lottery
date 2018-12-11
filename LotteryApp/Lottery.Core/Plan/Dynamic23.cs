@@ -11,7 +11,6 @@ namespace Lottery.Core.Plan
     public class Dynamic23 : Dynamic
     {
         private FactorTypeEnum? type;
-        private bool isDistinct;
 
         private bool isAward;
         private int? award;
