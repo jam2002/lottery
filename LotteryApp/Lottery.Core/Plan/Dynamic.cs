@@ -65,36 +65,38 @@ namespace Lottery.Core.Plan
 
             Action<int> Reset = (s) =>
             {
-                bool changed = currentBet.BetAward.Any();
-                if (changed)
+                bool hasBet = currentBet.BetAward.Any();
+                switch (s)
                 {
-                    switch (s)
-                    {
-                        case 1:
-                        case 3:
-                        case 4:
-                            if (s == 1 || s == 3)
-                            {
-                                Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, s), null);
-                            }
+                    case 1:
+                    case 3:
+                    case 4:
+                        if (s == 1 || s == 3)
+                        {
+                            Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, s), null);
+                        }
+
+                        if (hasBet)
+                        {
                             LastBet = currentBet;
                             BetIndex = 1;
-                            break;
-                        case 2:
-                            BetIndex++;
-                            if (ChangeBetPerTime && !isDistinct)
-                            {
-                                LastBet = currentBet;
-                            }
-                            break;
-                    }
-                    Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, 2), GetBetString(LastBet));
-                }
-                else
-                {
-                    int[] betAwards = LastBet?.BetAward ?? new int[] { };
-                    BetIndex = 0;
-                    Dispatcher(BuildInfo(betAwards, BetIndex, 4), string.Empty);
+                            Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, 2), GetBetString(LastBet));
+                        }
+                        else
+                        {
+                            int[] betAwards = LastBet?.BetAward ?? new int[] { };
+                            BetIndex = 0;
+                            Dispatcher(BuildInfo(betAwards, BetIndex, 4), string.Empty);
+                        }
+                        break;
+                    case 2:
+                        BetIndex++;
+                        if (ChangeBetPerTime && !isDistinct)
+                        {
+                            LastBet = currentBet;
+                        }
+                        Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, 2), GetBetString(LastBet));
+                        break;
                 }
             };
 
