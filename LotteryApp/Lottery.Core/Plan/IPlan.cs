@@ -36,6 +36,8 @@ namespace Lottery.Core.Plan
 
         bool ChangeBetPerTime { get; set; }
 
+        int StartSpan { get; set; }
+
         int SpanLength { get; set; }
 
         int TupleLength { get; set; }

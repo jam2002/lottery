@@ -37,7 +37,7 @@ namespace Lottery.Core.Plan
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
             awards = isDouble ? currentBet.BetAward.Take(2).ToArray() : new int[] { };
             excludeAwards = isDouble ? currentBet.BetAward.Skip(2).ToArray() : new int[] { };
-            doubleSpans = Enumerable.Range(3, SpanLength).ToArray();
+            doubleSpans = Enumerable.Range(StartSpan, SpanLength).ToArray();
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet.BetAward) : new int[][] { };
 
             if (EnableSinglePattern)
@@ -127,7 +127,7 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && number.Select(c => c % 3).Distinct().Count() >= 2;
+                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && number.Select(c => c % 3).Distinct().Count() >= 2 && (number.Length > 2 ? number[2] - number[1] != 1 || number[1] - number[0] != 1 : true);
             }
             else
             {

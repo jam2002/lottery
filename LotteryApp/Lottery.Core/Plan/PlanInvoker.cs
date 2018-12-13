@@ -68,6 +68,7 @@ namespace Lottery.Core.Plan
                 ChangeBetPerTime = c.ChangeBetPerTime,
                 TupleLength = c.TupleLength,
                 WaitInterval = c.WaitInterval,
+                StartSpan = c.StartSpan,
                 SpanLength = c.SpanLength
             }).ToArray();
             OutputResult[] outputs = Calculator.GetResults(options, false);

@@ -34,6 +34,8 @@ namespace Lottery.Core.Algorithm
 
         public int TupleLength { get; set; }
 
+        public int StartSpan { get; set; }
+
         public int SpanLength { get; set; }
 
         public InputOptions()
