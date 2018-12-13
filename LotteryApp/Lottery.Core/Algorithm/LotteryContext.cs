@@ -325,9 +325,17 @@ namespace Lottery.Core.Algorithm
             string gameArgs = InputOption.GameArgs.Split('.')[0];
             FactorTypeEnum? t = pairDic.ContainsKey(gameArgs) ? (FactorTypeEnum?)pairDic[gameArgs] : null;
             ReferenceFactor factor = t.HasValue && FactorDic[t.Value].ContainsKey(2) ? FactorDic[t.Value][2] : null;
-            if (factor != null && factor.MaxInterval <= 5 && factor.LastInterval <= 5 && factor.OccurCount >= 4)
+            if (factor != null)
             {
-                isRepeat = true;
+                int[] occurPositions = factor.OccurPositions;
+                int[] intervals = factor.HitIntervals;
+
+                if (InputOption.Number > 15)
+                {
+                    occurPositions = factor.OccurPositions.SkipWhile(c => c + 1 <= InputOption.Number - 15).Select(c => c - (InputOption.Number - 15)).ToArray();
+                    intervals = GetIntervals(occurPositions, 15);
+                }
+                isRepeat = intervals.Any() && occurPositions.Any() && intervals.Max() <= 5 && intervals.Last() <= 5 && occurPositions.Count() >= 4;
                 return factor.LastInterval >= InputOption.WaitInterval ? Build(new int[] { 2 }, t.Value) : new LotteryResult[] { };
             }
             return new LotteryResult[] { };
@@ -494,11 +502,11 @@ namespace Lottery.Core.Algorithm
             return intervals.Skip(intervals.Length - 2).All(c => c < maxInterval);
         }
 
-        private int[] GetIntervals(int[] occurPostions, IEnumerable<LotteryNumber> lotteryNumbers = null)
+        private int[] GetIntervals(int[] occurPostions, int? number = null)
         {
-            lotteryNumbers = lotteryNumbers != null ? lotteryNumbers : LotteryNumbers;
+            number = number ?? InputOption.Number;
             int[] intervals = occurPostions.Select((x, i) => i == 0 ? x : x - occurPostions[i - 1] - 1).ToArray();
-            intervals = intervals.Concat(new[] { lotteryNumbers.Count() - 1 - occurPostions[occurPostions.Length - 1] }).ToArray();
+            intervals = intervals.Concat(new[] { number.Value - 1 - occurPostions[occurPostions.Length - 1] }).ToArray();
             return intervals;
         }
     }

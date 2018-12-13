@@ -4,7 +4,7 @@
       "Title": "中三组三(15)",
       "Number": 1,
       "TakeNumber": 15,
-      "BetCycle": 7,
+      "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "repeats",
       "GameArgs": "middle",
@@ -18,7 +18,7 @@
       "SkipNumber": 0,
       "TupleLength": 4,
       "StartSpan": 2,
-      "SpanLength": 7
+      "SpanLength": 8
     },
     {
       "Title": "中三二胆C(50)",
@@ -38,33 +38,33 @@
       "SkipNumber": 0,
       "TupleLength": 4,
       "StartSpan": 2,
-      "SpanLength": 7
+      "SpanLength": 8
     },
     {
-      "Title": "中三二码C(50)",
-      "Number": 2,
+      "Title": "中三二胆RC(50)",
+      "Number": 1,
       "TakeNumber": 50,
       "BetCycle": 6,
       "GameInterval": 1,
-      "GameName": "tuple",
+      "GameName": "double",
       "GameArgs": "middle",
       "LotteryName": "tsssc",
       "ChangeBetPerTime": true,
       "EnableSinglePattern": true,
       "EnableContinuous": false,
       "UseGeneralTrend": false,
-      "RespectRepeat": false,
+      "RespectRepeat": true,
       "WaitInterval": 0,
       "SkipNumber": 0,
       "TupleLength": 4,
       "StartSpan": 2,
-      "SpanLength": 7
+      "SpanLength": 8
     },
     {
       "Title": "后三组三(15)",
       "Number": 1,
       "TakeNumber": 15,
-      "BetCycle": 7,
+      "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "repeats",
       "GameArgs": "after",
@@ -78,7 +78,7 @@
       "SkipNumber": 0,
       "TupleLength": 4,
       "StartSpan": 2,
-      "SpanLength": 7
+      "SpanLength": 8
     },
     {
       "Title": "后三二胆C(50)",
@@ -98,27 +98,27 @@
       "SkipNumber": 0,
       "TupleLength": 4,
       "StartSpan": 2,
-      "SpanLength": 7
+      "SpanLength": 8
     },
     {
-      "Title": "后三二码C(50)",
-      "Number": 2,
+      "Title": "后三二胆RC(50)",
+      "Number": 1,
       "TakeNumber": 50,
       "BetCycle": 6,
       "GameInterval": 1,
-      "GameName": "tuple",
+      "GameName": "double",
       "GameArgs": "after",
       "LotteryName": "tsssc",
       "ChangeBetPerTime": true,
       "EnableSinglePattern": true,
       "EnableContinuous": false,
       "UseGeneralTrend": false,
-      "RespectRepeat": false,
+      "RespectRepeat": true,
       "WaitInterval": 0,
       "SkipNumber": 0,
       "TupleLength": 4,
       "StartSpan": 2,
-      "SpanLength": 7
+      "SpanLength": 8
     }
   ]
 }
