@@ -138,7 +138,7 @@ namespace Lottery.Core.Plan
 
         public void RemoveBetKey(string key)
         {
-            currentBetKeys.Remove(key);
+            currentBetKeys.RemoveAll(c => c == key);
         }
 
         public bool HasInBet(string key)

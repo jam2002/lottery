@@ -263,7 +263,7 @@ namespace Lottery.Core.Algorithm
                 }
                 else
                 {
-                    awards = awards.Where(c => !PlanInvoker.Current.HasInBet(string.Join(".", type, c)));
+                    awards = awards.Where(c => !PlanInvoker.Current.HasInBet(string.Join(".", type, c))).Skip(InputOption.Rank + 1 - count <= 0 ? 0 : InputOption.Rank + 1 - count);
                 }
             }
             if (InputOption.WaitInterval > 0)
