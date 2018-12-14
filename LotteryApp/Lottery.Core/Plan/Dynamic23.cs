@@ -87,6 +87,15 @@ namespace Lottery.Core.Plan
                 case "after4":
                     numbers = numbers.Skip(1).ToArray();
                     break;
+                case "after2":
+                    numbers = numbers.Skip(3).ToArray();
+                    break;
+                case "middle2":
+                    numbers = numbers.Skip(2).Take(2).ToArray();
+                    break;
+                case "front2":
+                    numbers = numbers.Take(2).ToArray();
+                    break;
                 case "front":
                     numbers = numbers.Take(3).ToArray();
                     break;
@@ -127,7 +136,8 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && number.Select(c => c % 3).Distinct().Count() >= 2 && (number.Length > 2 ? number[2] - number[1] != 1 || number[1] - number[0] != 1 : true);
+                //ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && number.Select(c => c % 3).Distinct().Count() >= 2 && (number.Length > 2 ? number[2] - number[1] != 1 || number[1] - number[0] != 1 : true);
+                ret = number.Intersect(awards).Any();
             }
             else
             {
@@ -146,6 +156,10 @@ namespace Lottery.Core.Plan
             else if (isAward && award.HasValue)
             {
                 ret = type == FactorTypeEnum.Award ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
+            }
+            else if (isDouble)
+            {
+                ret = awards.SelectMany(c => Enumerable.Range(0, 10).Select(t => $"{c}{t}").Concat(Enumerable.Range(0, 10).Select(t => $"{t}{c}"))).Distinct().ToArray();
             }
             else if (betArray.Any())
             {

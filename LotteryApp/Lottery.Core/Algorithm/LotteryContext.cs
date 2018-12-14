@@ -257,13 +257,13 @@ namespace Lottery.Core.Algorithm
             if (InputOption.Rank > 0)
             {
                 int count = PlanInvoker.Current.GetBetCountByType(type);
-                if (count == 0)
+                if (count == 0 || count == 3)
                 {
                     awards = awards.Skip(InputOption.Rank);
                 }
                 else
                 {
-                    awards = awards.Where(c => !PlanInvoker.Current.HasInBet(string.Join(".", type, c))).Skip(InputOption.Rank + 1 - count <= 0 ? 0 : InputOption.Rank + 1 - count);
+                    awards = awards.Where(c => !PlanInvoker.Current.HasInBet(string.Join(".", type, c))).Skip(Math.Abs(count - InputOption.Rank));
                 }
             }
             if (InputOption.WaitInterval > 0)
@@ -467,6 +467,9 @@ namespace Lottery.Core.Algorithm
         {
             Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
             {
+                { "front2",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
+                { "middle2", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
+                { "after2",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
                 { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
                 { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
@@ -483,6 +486,9 @@ namespace Lottery.Core.Algorithm
                 keys = keys.Take(2).OrderBy(c => c).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
+                    { "front2",   FactorTypeEnum.LeftDouble},
+                    { "middle2", FactorTypeEnum.RightDouble},
+                    { "after2",  FactorTypeEnum.RightDouble},
                     { "front",   FactorTypeEnum.LeftDouble},
                     { "middle", FactorTypeEnum.MiddleDouble},
                     { "after",  FactorTypeEnum.RightDouble}
