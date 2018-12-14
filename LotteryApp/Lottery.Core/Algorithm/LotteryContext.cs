@@ -257,7 +257,7 @@ namespace Lottery.Core.Algorithm
             if (InputOption.Rank > 0)
             {
                 int count = PlanInvoker.Current.GetBetCountByType(type);
-                if (count == 0 || count == 3)
+                if (count == 0)
                 {
                     awards = awards.Skip(InputOption.Rank);
                 }
