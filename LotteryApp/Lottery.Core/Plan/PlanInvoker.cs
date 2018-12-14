@@ -16,6 +16,7 @@ namespace Lottery.Core.Plan
         private IScheduler scheduler;
         private ITrigger trigger;
         private Dictionary<string, IPlan> planDic;
+        private List<string> currentBetKeys;
         private int currentInterval;
 
         public static readonly PlanInvoker Current = new PlanInvoker();
@@ -33,6 +34,7 @@ namespace Lottery.Core.Plan
 
             planDic = plans;
             currentInterval = plans.Values.First().GameInterval;
+            currentBetKeys = new List<string> { };
 
             scheduler = StdSchedulerFactory.GetDefaultScheduler();
             scheduler.Start();
@@ -69,7 +71,8 @@ namespace Lottery.Core.Plan
                 TupleLength = c.TupleLength,
                 WaitInterval = c.WaitInterval,
                 StartSpan = c.StartSpan,
-                SpanLength = c.SpanLength
+                SpanLength = c.SpanLength,
+                Rank = c.Rank
             }).ToArray();
             OutputResult[] outputs = Calculator.GetResults(options, false);
 
@@ -125,7 +128,27 @@ namespace Lottery.Core.Plan
 
         private string GetKey(InputOptions input)
         {
-            return string.Join(".", input.LotteryName, input.GameName, input.GameArgs ?? string.Empty, input.EnableSinglePattern ? "Single" : "Composite", input.RespectRepeat ? "R" : "WR", input.UseGeneralTrend ? "G" : "WG", input.ChangeBetPerTime ? "C" : "WC", input.Number, input.WaitInterval, input.BetCycle, input.SpanLength);
+            return string.Join(".", input.LotteryName, input.GameName, input.GameArgs ?? string.Empty, input.EnableSinglePattern ? "Single" : "Composite", input.RespectRepeat ? "R" : "WR", input.UseGeneralTrend ? "G" : "WG", input.ChangeBetPerTime ? "C" : "WC", input.Number, input.WaitInterval, input.BetCycle, input.SpanLength, input.Rank);
+        }
+
+        public void AddBetKey(string key)
+        {
+            currentBetKeys.Add(key);
+        }
+
+        public void RemoveBetKey(string key)
+        {
+            currentBetKeys.Remove(key);
+        }
+
+        public bool HasInBet(string key)
+        {
+            return !string.IsNullOrWhiteSpace(key) && currentBetKeys.Contains(key);
+        }
+
+        public int GetBetCountByType(FactorTypeEnum type)
+        {
+            return currentBetKeys.Where(c => c.StartsWith(type.ToString())).Count();
         }
     }
 }

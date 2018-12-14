@@ -79,5 +79,7 @@
         public string GameName { get; set; }
 
         public FactorTypeEnum Type { get; set; }
+
+        public int BetKey { get; set; }
     }
 }

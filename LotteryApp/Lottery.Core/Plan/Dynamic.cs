@@ -36,7 +36,7 @@ namespace Lottery.Core.Plan
 
         public string GetKey()
         {
-            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "R" : "WR", UseGeneralTrend ? "G" : "WG", ChangeBetPerTime ? "C" : "WC", TakeNumber, WaitInterval, BetCycle, SpanLength);
+            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "R" : "WR", UseGeneralTrend ? "G" : "WG", ChangeBetPerTime ? "C" : "WC", TakeNumber, WaitInterval, BetCycle, SpanLength, Rank);
         }
 
         public bool EnableSinglePattern { get; set; }
@@ -50,6 +50,7 @@ namespace Lottery.Core.Plan
 
         public int StartSpan { get; set; }
         public int SpanLength { get; set; }
+        public int Rank { get; set; }
 
         private Dictionary<int, int> betCounters;
         protected bool isDistinct;
@@ -76,6 +77,7 @@ namespace Lottery.Core.Plan
                         if (s == 1 || s == 3)
                         {
                             Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, s), null);
+                            PlanInvoker.Current.RemoveBetKey(LastBet.GetBetKey());
                         }
 
                         if (hasBet)
@@ -83,6 +85,7 @@ namespace Lottery.Core.Plan
                             LastBet = currentBet;
                             BetIndex = 1;
                             Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, 2), GetBetString(LastBet));
+                            PlanInvoker.Current.AddBetKey(LastBet.GetBetKey());
                         }
                         else
                         {
@@ -95,7 +98,9 @@ namespace Lottery.Core.Plan
                         BetIndex++;
                         if (ChangeBetPerTime && !isDistinct)
                         {
+                            PlanInvoker.Current.RemoveBetKey(LastBet.GetBetKey());
                             LastBet = currentBet;
+                            PlanInvoker.Current.AddBetKey(LastBet.GetBetKey());
                         }
                         Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, 2), GetBetString(LastBet));
                         break;

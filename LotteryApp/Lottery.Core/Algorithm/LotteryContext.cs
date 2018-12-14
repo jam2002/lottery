@@ -1,5 +1,6 @@
 ﻿using Kw.Combinatorics;
 using Lottery.Core.Data;
+using Lottery.Core.Plan;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -193,7 +194,7 @@ namespace Lottery.Core.Algorithm
         {
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
             var query = from p in FactorDic[r]
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                        orderby CheckInterval(p.Value.HitIntervals, 7) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
             return Build(query, r);
         }
@@ -253,10 +254,17 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] Build(IEnumerable<int> awards, FactorTypeEnum type)
         {
-            string[] gameArgs = InputOption.GameArgs.Split('.').ToArray();
-            if (gameArgs.Length > 1)
+            if (InputOption.Rank > 0)
             {
-                awards = awards.Skip(int.Parse(gameArgs[1]));
+                int count = PlanInvoker.Current.GetBetCountByType(type);
+                if (count == 0)
+                {
+                    awards = awards.Skip(InputOption.Rank);
+                }
+                else
+                {
+                    awards = awards.Where(c => !PlanInvoker.Current.HasInBet(string.Join(".", type, c)));
+                }
             }
             if (InputOption.WaitInterval > 0)
             {
@@ -304,6 +312,7 @@ namespace Lottery.Core.Algorithm
                     LastInterval = factor.LastInterval,
                     MaxInterval = factor.MaxInterval,
                     Type = type,
+                    BetKey = c,
                     AnyFilters = new AnyFilter[]
                     {
                             new AnyFilter{  Values = values }
@@ -471,7 +480,7 @@ namespace Lottery.Core.Algorithm
                             orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.ToArray();
-                keys = keys.Take(2).Concat(keys.Skip(keys.Length - 1)).ToArray();
+                keys = keys.Take(2).OrderBy(c => c).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
                     { "front",   FactorTypeEnum.LeftDouble},

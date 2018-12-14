@@ -30,6 +30,8 @@ namespace Lottery.Core.Algorithm
 
         public bool ChangeBetPerTime { get; set; }
 
+        public int Rank { get; set; }
+
         public int WaitInterval { get; set; }
 
         public int TupleLength { get; set; }

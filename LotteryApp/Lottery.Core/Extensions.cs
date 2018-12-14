@@ -1,8 +1,8 @@
 ﻿using Lottery.Core.Algorithm;
 using Lottery.Core.Data;
+using System;
 using System.Linq;
 using System.Text;
-using System;
 
 namespace Lottery.Core
 {
@@ -29,7 +29,7 @@ namespace Lottery.Core
             {
                 AddNewLine(builder, isHtml);
 
-                for (int i=0;i< output.Output.Length;i++)
+                for (int i = 0; i < output.Output.Length; i++)
                 {
                     LotteryResult r = output.Output[i];
                     builder.Append($"{r.Filter}：最大中奖次数：{ r.HitCount} ，最大间隔：{r.MaxInterval}，最近间隔：{r.LastInterval}，间隔列表：{string.Join(",", r.HitIntervals)}");
@@ -69,6 +69,15 @@ namespace Lottery.Core
                 HitIntervals = factor.HitIntervals,
                 HitCount = factor.OccurPositions.Length
             };
+        }
+
+        public static string GetBetKey(this SimpleBet bet)
+        {
+            if (bet != null && bet.Results.Any() && bet.Results[0].Output.Any())
+            {
+                return string.Join(".", bet.Results[0].Output[0].Type, bet.Results[0].Output[0].BetKey);
+            }
+            return string.Empty;
         }
     }
 }
