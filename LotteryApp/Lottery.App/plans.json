@@ -107,7 +107,7 @@
       "Title": "后三二码R(15.3)",
       "Number": 2,
       "TakeNumber": 15,
-      "BetCycle": 6,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "tuple",
       "GameArgs": "after",
