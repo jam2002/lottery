@@ -36,7 +36,7 @@ namespace Lottery.Core.Plan
 
         public string GetKey()
         {
-            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "R" : "WR", UseGeneralTrend ? "G" : "WG", ChangeBetPerTime ? "C" : "WC", TakeNumber, WaitInterval, BetCycle, SpanLength, Rank);
+            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "R" : "WR", UseGeneralTrend ? "G" : "WG", ChangeBetPerTime ? "C" : "WC", TakeNumber, WaitInterval, BetCycle, TupleLength, SpanLength, Rank);
         }
 
         public bool EnableSinglePattern { get; set; }
