@@ -483,7 +483,7 @@ namespace Lottery.Core.Algorithm
                             orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.ToArray();
-                keys = keys.Take(2).Concat(keys.Skip(keys.Length - 1)).OrderBy(c => c).ToArray();
+                keys = keys.Take(2).OrderBy(c => c).Concat(keys.Skip(keys.Length - 1)).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
                     { "front2",   FactorTypeEnum.LeftDouble},
