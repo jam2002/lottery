@@ -433,8 +433,8 @@ namespace Lottery.Core.Algorithm
             Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
             {
                 { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.LeftTuple},
-                { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.MiddleTuple},
-                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.RightTuple},
+                { "middle", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples: FactorTypeEnum.MiddleTuple},
+                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:  FactorTypeEnum.RightTuple},
                 { "front4", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Left4Tuple},
                 { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Right4Tuple},
                 { "all", FactorTypeEnum.AllTuples}
