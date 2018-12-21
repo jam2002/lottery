@@ -194,7 +194,8 @@ namespace Lottery.Core.Algorithm
         {
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
             var query = from p in FactorDic[r]
-                        orderby CheckInterval(p.Value.HitIntervals, 7) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                        where p.Value.MaxInterval <= 6 && p.Value.OccurCount >= 4
+                        orderby CheckInterval(p.Value.HitIntervals, 5) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
             return Build(query, r);
         }
@@ -268,7 +269,7 @@ namespace Lottery.Core.Algorithm
             }
             if (InputOption.WaitInterval > 0)
             {
-                awards = awards.ToArray().Take(3).Where(c => FactorDic[type][c].LastInterval >= InputOption.WaitInterval);
+                awards = awards.ToArray().Take(1).Where(c => FactorDic[type][c].LastInterval >= InputOption.WaitInterval);
             }
             bool isSpan = false;
             return awards.Select((c, i) =>
