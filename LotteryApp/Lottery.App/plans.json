@@ -54,7 +54,7 @@
       "RespectRepeat": false,
       "WaitInterval": 0,
       "TupleLength": 4,
-      "StartSpan": 3,
+      "StartSpan": 2,
       "SpanLength": 8
     },
     {
@@ -73,7 +73,7 @@
       "RespectRepeat": false,
       "WaitInterval": 0,
       "TupleLength": 4,
-      "StartSpan": 3,
+      "StartSpan": 2,
       "SpanLength": 8
     },
     {
@@ -92,7 +92,7 @@
       "RespectRepeat": true,
       "WaitInterval": 0,
       "TupleLength": 4,
-      "StartSpan": 3,
+      "StartSpan": 2,
       "SpanLength": 8
     },
     {
@@ -111,7 +111,7 @@
       "RespectRepeat": true,
       "WaitInterval": 0,
       "TupleLength": 4,
-      "StartSpan": 3,
+      "StartSpan": 2,
       "SpanLength": 8
     }
   ]
