@@ -105,6 +105,36 @@
 
         Right4Tuple = 34,
 
+        /// <summary>
+        /// 万千十
+        /// </summary>
+        TupleA = 51,
+        /// <summary>
+        /// 万千个
+        /// </summary>
+        TupleB = 52,
+        /// <summary>
+        /// 万百十
+        /// </summary>
+        TupleC = 53,
+        /// <summary>
+        /// 万百个
+        /// </summary>
+        TupleD = 54,
+        /// <summary>
+        /// 万十个
+        /// </summary>
+        TupleE = 55,
+        /// <summary>
+        /// 千百个
+        /// </summary>
+        TupleF = 56,
+        /// <summary>
+        /// 千十个
+        /// </summary>
+        TupleG = 57,
+
+
         LeftDistinct = 27,
 
         MiddleDistinct = 28,

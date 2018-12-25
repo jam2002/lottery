@@ -124,5 +124,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ProjectExtensions />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties plans_1json__JSONSchema="http://json.schemastore.org/apple-app-site-association" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

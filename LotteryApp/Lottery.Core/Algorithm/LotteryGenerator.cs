@@ -160,6 +160,13 @@ namespace Lottery.Core.Algorithm
                 number.RightSpan = number.RightAwards[number.RightAwards.Length - 1] - number.RightAwards[0];
 
                 number.AllTuples = GetTuples(array);
+                number.ATuples = GetTuples(new int[] { array[0], array[1], array[3] });
+                number.BTuples = GetTuples(new int[] { array[0], array[1], array[4] });
+                number.CTuples = GetTuples(new int[] { array[0], array[2], array[3] });
+                number.DTuples = GetTuples(new int[] { array[0], array[2], array[4] });
+                number.ETuples = GetTuples(new int[] { array[0], array[3], array[4] });
+                number.FTuples = GetTuples(new int[] { array[1], array[2], array[4] });
+                number.GTuples = GetTuples(new int[] { array[1], array[3], array[4] });
             }
             else
             {

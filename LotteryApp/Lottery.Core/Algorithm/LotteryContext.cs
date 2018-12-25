@@ -115,7 +115,15 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.RightTuple, number.RightTuples},
                 { FactorTypeEnum.AllTuples, number.AllTuples},
                 { FactorTypeEnum.Left4Tuple, number.Left4Tuples},
-                { FactorTypeEnum.Right4Tuple, number.Right4Tuples}
+                { FactorTypeEnum.Right4Tuple, number.Right4Tuples},
+
+                { FactorTypeEnum.TupleA, number.ATuples},
+                { FactorTypeEnum.TupleB, number.BTuples},
+                { FactorTypeEnum.TupleC, number.CTuples},
+                { FactorTypeEnum.TupleD, number.DTuples},
+                { FactorTypeEnum.TupleE, number.ETuples},
+                { FactorTypeEnum.TupleF, number.FTuples},
+                { FactorTypeEnum.TupleG, number.GTuples}
             };
 
             foreach (var p in typeDic)
@@ -155,6 +163,9 @@ namespace Lottery.Core.Algorithm
                     break;
                 case "history":
                     ret = GetHistoryResult();
+                    break;
+                case "anytuple":
+                    ret = GetAnyTupleResult();
                     break;
                 case "repeats":
                 case "single":
@@ -198,6 +209,36 @@ namespace Lottery.Core.Algorithm
                         orderby CheckInterval(p.Value.HitIntervals, 5) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
             return Build(query, r);
+        }
+
+        private LotteryResult[] GetAnyTupleResult()
+        {
+            FactorTypeEnum r = FactorTypeEnum.AllTuples;
+            var query = from p in FactorDic[r]
+                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                        select p.Key;
+            int key = query.ToArray()[0];
+
+            Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
+            {
+                { "tuplea", FactorTypeEnum.TupleA},
+                { "tupleb", FactorTypeEnum.TupleB},
+                { "tuplec", FactorTypeEnum.TupleC},
+                { "tupled", FactorTypeEnum.TupleD},
+                { "tuplee", FactorTypeEnum.TupleE},
+                { "tuplef", FactorTypeEnum.TupleF},
+                { "tupleg", FactorTypeEnum.TupleG},
+                { "front",   FactorTypeEnum.LeftTuple},
+                { "middle", FactorTypeEnum.MiddleTuple},
+                { "after",  FactorTypeEnum.RightTuple}
+            };
+            var q = from c in tupleDic
+                    let p = FactorDic[c.Value].ContainsKey(key) ? FactorDic[c.Value][key] : null
+                    where p != null
+                    orderby p.OccurCount descending, p.MaxInterval, p.FailureCount, p.LastInterval
+                    select Build(new int[] { key }, c.Value);
+
+            return q.Take(3).SelectMany(c => c).Where(c => tupleDic[InputOption.GameArgs] == c.Type).ToArray();
         }
 
         private LotteryResult[] GetDynamicResult()
@@ -282,6 +323,13 @@ namespace Lottery.Core.Algorithm
                 int[] values = null;
                 switch (type)
                 {
+                    case FactorTypeEnum.TupleA:
+                    case FactorTypeEnum.TupleB:
+                    case FactorTypeEnum.TupleC:
+                    case FactorTypeEnum.TupleD:
+                    case FactorTypeEnum.TupleE:
+                    case FactorTypeEnum.TupleF:
+                    case FactorTypeEnum.TupleG:
                     case FactorTypeEnum.LeftTuple:
                     case FactorTypeEnum.Left4Tuple:
                     case FactorTypeEnum.RightTuple:

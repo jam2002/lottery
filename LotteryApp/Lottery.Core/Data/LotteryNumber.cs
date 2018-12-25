@@ -46,6 +46,13 @@
         public int LeftDistinct { get; set; }
         public int LeftSpan { get; set; }
 
+        public int[] ATuples { get; set; }
+        public int[] BTuples { get; set; }
+        public int[] CTuples { get; set; }
+        public int[] DTuples { get; set; }
+        public int[] ETuples { get; set; }
+        public int[] FTuples { get; set; }
+        public int[] GTuples { get; set; }
 
         public int[] MiddleRepeats { get; set; }
 
