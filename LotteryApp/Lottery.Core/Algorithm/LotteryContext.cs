@@ -238,7 +238,7 @@ namespace Lottery.Core.Algorithm
                     orderby p.OccurCount descending, p.MaxInterval, p.FailureCount, p.LastInterval
                     select Build(new int[] { key }, c.Value);
 
-            return q.Take(3).SelectMany(c => c).Where(c => tupleDic[InputOption.GameArgs] == c.Type).ToArray();
+            return q.Take(2).SelectMany(c => c).Where(c => tupleDic[InputOption.GameArgs] == c.Type).ToArray();
         }
 
         private LotteryResult[] GetDynamicResult()

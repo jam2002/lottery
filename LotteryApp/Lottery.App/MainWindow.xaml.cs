@@ -79,6 +79,26 @@ namespace Lottery.App
                         descBox = this.txtFiftyDesc;
                         valueBox = this.txtFiftyHost.Child as System.Windows.Forms.RichTextBox;
                         break;
+                    case "plan.6":
+                        titleBlock = this.txtSixTitle;
+                        descBox = this.txtSixDesc;
+                        valueBox = this.txtSixHost.Child as System.Windows.Forms.RichTextBox;
+                        break;
+                    case "plan.7":
+                        titleBlock = this.txtSevenTitle;
+                        descBox = this.txtSevenDesc;
+                        valueBox = this.txtSevenHost.Child as System.Windows.Forms.RichTextBox;
+                        break;
+                    case "plan.8":
+                        titleBlock = this.txtEightTitle;
+                        descBox = this.txtEightDesc;
+                        valueBox = this.txtEightHost.Child as System.Windows.Forms.RichTextBox;
+                        break;
+                    case "plan.9":
+                        titleBlock = this.txtNineTitle;
+                        descBox = this.txtNineDesc;
+                        valueBox = this.txtNineHost.Child as System.Windows.Forms.RichTextBox;
+                        break;
                 }
                 titleBlock.Text = title;
 
