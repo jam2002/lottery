@@ -105,6 +105,27 @@ namespace Lottery.Core.Plan
                 case "after":
                     numbers = numbers.Skip(2).ToArray();
                     break;
+                case "tuplea":
+                    numbers = new int[] { numbers[0], numbers[1], numbers[3] };
+                    break;
+                case "tupleb":
+                    numbers = new int[] { numbers[0], numbers[1], numbers[4] };
+                    break;
+                case "tuplec":
+                    numbers = new int[] { numbers[0], numbers[2], numbers[3] };
+                    break;
+                case "tupled":
+                    numbers = new int[] { numbers[0], numbers[2], numbers[4] };
+                    break;
+                case "tuplee":
+                    numbers = new int[] { numbers[0], numbers[3], numbers[4] };
+                    break;
+                case "tuplef":
+                    numbers = new int[] { numbers[1], numbers[2], numbers[4] };
+                    break;
+                case "tupleg":
+                    numbers = new int[] { numbers[1], numbers[3], numbers[4] };
+                    break;
             }
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && IsValid(numbers);
             return isHit;
