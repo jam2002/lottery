@@ -70,46 +70,6 @@
                         <WinFormControls:RichTextBox Name="txtFiftyValue"></WinFormControls:RichTextBox>
                     </WindowsFormsHost>
                 </StackPanel>
-
-                <TextBlock Margin="0,10" Name="txtSixTitle"></TextBlock>
-                <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                    <TextBlock Margin="0,10,10,10">统计</TextBlock>
-                    <RichTextBox Name="txtSixDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
-                    <TextBlock Margin="10">投注</TextBlock>
-                    <WindowsFormsHost Height="50" Width="500" Name="txtSixHost">
-                        <WinFormControls:RichTextBox Name="txtSixValue"></WinFormControls:RichTextBox>
-                    </WindowsFormsHost>
-                </StackPanel>
-
-                <TextBlock Margin="0,10" Name="txtSevenTitle"></TextBlock>
-                <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                    <TextBlock Margin="0,10,10,10">统计</TextBlock>
-                    <RichTextBox Name="txtSevenDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
-                    <TextBlock Margin="10">投注</TextBlock>
-                    <WindowsFormsHost Height="50" Width="500" Name="txtSevenHost">
-                        <WinFormControls:RichTextBox Name="txtSevenValue"></WinFormControls:RichTextBox>
-                    </WindowsFormsHost>
-                </StackPanel>
-
-                <TextBlock Margin="0,10" Name="txtEightTitle"></TextBlock>
-                <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                    <TextBlock Margin="0,10,10,10">统计</TextBlock>
-                    <RichTextBox Name="txtEightDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
-                    <TextBlock Margin="10">投注</TextBlock>
-                    <WindowsFormsHost Height="50" Width="500" Name="txtEightHost">
-                        <WinFormControls:RichTextBox Name="txtEightValue"></WinFormControls:RichTextBox>
-                    </WindowsFormsHost>
-                </StackPanel>
-
-                <TextBlock Margin="0,10" Name="txtNineTitle"></TextBlock>
-                <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" Margin="0,0,0,10">
-                    <TextBlock Margin="0,10,10,10">统计</TextBlock>
-                    <RichTextBox Name="txtNineDesc" Height="50" Width="500" VerticalScrollBarVisibility="Auto"/>
-                    <TextBlock Margin="10">投注</TextBlock>
-                    <WindowsFormsHost Height="50" Width="500" Name="txtNineHost">
-                        <WinFormControls:RichTextBox Name="txtNineValue"></WinFormControls:RichTextBox>
-                    </WindowsFormsHost>
-                </StackPanel>
             </StackPanel>
         </ScrollViewer.Content>
     </ScrollViewer>
