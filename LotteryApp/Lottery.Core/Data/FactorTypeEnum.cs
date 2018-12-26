@@ -134,6 +134,20 @@
         /// </summary>
         TupleG = 57,
 
+        /// <summary>
+        /// 万千百个
+        /// </summary>
+        Tuple4A = 61,
+
+        /// <summary>
+        /// 万千十个
+        /// </summary>
+        Tuple4B = 62,
+
+        /// <summary>
+        /// 万百十个
+        /// </summary>
+        Tuple4C = 63,
 
         LeftDistinct = 27,
 

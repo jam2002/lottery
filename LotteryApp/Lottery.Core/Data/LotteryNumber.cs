@@ -54,6 +54,10 @@
         public int[] FTuples { get; set; }
         public int[] GTuples { get; set; }
 
+        public int[] Tuple4As { get; set; }
+        public int[] Tuple4Bs { get; set; }
+        public int[] Tuple4Cs { get; set; }
+
         public int[] MiddleRepeats { get; set; }
 
         public int[] MiddleAwards { get; set; }

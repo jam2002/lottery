@@ -123,7 +123,11 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.TupleD, number.DTuples},
                 { FactorTypeEnum.TupleE, number.ETuples},
                 { FactorTypeEnum.TupleF, number.FTuples},
-                { FactorTypeEnum.TupleG, number.GTuples}
+                { FactorTypeEnum.TupleG, number.GTuples},
+
+                { FactorTypeEnum.Tuple4A, number.Tuple4As},
+                { FactorTypeEnum.Tuple4B, number.Tuple4Bs},
+                { FactorTypeEnum.Tuple4C, number.Tuple4Cs},
             };
 
             foreach (var p in typeDic)
@@ -330,6 +334,9 @@ namespace Lottery.Core.Algorithm
                     case FactorTypeEnum.TupleE:
                     case FactorTypeEnum.TupleF:
                     case FactorTypeEnum.TupleG:
+                    case FactorTypeEnum.Tuple4A:
+                    case FactorTypeEnum.Tuple4B:
+                    case FactorTypeEnum.Tuple4C:
                     case FactorTypeEnum.LeftTuple:
                     case FactorTypeEnum.Left4Tuple:
                     case FactorTypeEnum.RightTuple:
@@ -486,10 +493,16 @@ namespace Lottery.Core.Algorithm
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:  FactorTypeEnum.RightTuple},
                 { "front4", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Left4Tuple},
                 { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Right4Tuple},
+                { "tuple4a", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Tuple4A},
+                { "tuple4b", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Tuple4B},
+                { "tuple4c", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Tuple4C},
                 { "all", FactorTypeEnum.AllTuples}
             };
             Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
             {
+                { "tuple4a", FactorTypeEnum.Tuple4A},
+                { "tuple4b", FactorTypeEnum.Tuple4B},
+                { "tuple4c", FactorTypeEnum.Tuple4C},
                 { "front4", FactorTypeEnum.Left4Tuple},
                 { "after4", FactorTypeEnum.Right4Tuple},
                 { "front",   FactorTypeEnum.LeftTuple},

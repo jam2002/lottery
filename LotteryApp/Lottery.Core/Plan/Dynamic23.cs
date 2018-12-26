@@ -126,6 +126,15 @@ namespace Lottery.Core.Plan
                 case "tupleg":
                     numbers = new int[] { numbers[1], numbers[3], numbers[4] };
                     break;
+                case "tuple4a":
+                    numbers = new int[] { numbers[0], numbers[1], numbers[2], numbers[4] };
+                    break;
+                case "tuple4b":
+                    numbers = new int[] { numbers[0], numbers[1], numbers[3], numbers[4] };
+                    break;
+                case "tuple4c":
+                    numbers = new int[] { numbers[0], numbers[2], numbers[3], numbers[4] };
+                    break;
             }
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && IsValid(numbers);
             return isHit;

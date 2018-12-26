@@ -167,6 +167,10 @@ namespace Lottery.Core.Algorithm
                 number.ETuples = GetTuples(new int[] { array[0], array[3], array[4] });
                 number.FTuples = GetTuples(new int[] { array[1], array[2], array[4] });
                 number.GTuples = GetTuples(new int[] { array[1], array[3], array[4] });
+
+                number.Tuple4As = GetTuples(new int[] { array[0], array[1], array[2], array[4] });
+                number.Tuple4Bs = GetTuples(new int[] { array[0], array[1], array[3], array[4] });
+                number.Tuple4Cs = GetTuples(new int[] { array[0], array[2], array[3], array[4] });
             }
             else
             {
