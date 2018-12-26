@@ -7,7 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lottery.App"
         mc:Ignorable="d"
-        Title="计划软件" Loaded="Window_Loaded" Width="1100" Height="600" Closed="Window_Closed">
+        Title="计划软件" Loaded="Window_Loaded" Width="1100" Height="580" Closed="Window_Closed">
     <ScrollViewer x:Name="scrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <ScrollViewer.Content>
             <StackPanel CanVerticallyScroll="True" CanHorizontallyScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
