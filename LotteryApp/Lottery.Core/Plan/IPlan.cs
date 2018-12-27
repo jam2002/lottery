@@ -46,6 +46,8 @@ namespace Lottery.Core.Plan
 
         int WaitInterval { get; set; }
 
+        int GeneralTrendInterval { get; set; }
+
         void Invoke(SimpleBet currentBet);
 
         string GetKey();

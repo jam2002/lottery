@@ -1,6 +1,4 @@
-﻿using Lottery.Core.Data;
-
-namespace Lottery.Core.Algorithm
+﻿namespace Lottery.Core.Algorithm
 {
     public class InputOptions
     {
@@ -8,7 +6,7 @@ namespace Lottery.Core.Algorithm
 
         public int RetrieveNumber { get; set; }
 
-        public int? SkipCount { get; set;}
+        public int? SkipCount { get; set; }
 
         public string LotteryName { get; set; }
 
@@ -20,7 +18,7 @@ namespace Lottery.Core.Algorithm
 
         public int BetIndex { get; set; }
 
-        public bool EnableSinglePattern { get; set; } 
+        public bool EnableSinglePattern { get; set; }
 
         public bool EnableContinuous { get; set; }
 
@@ -35,6 +33,8 @@ namespace Lottery.Core.Algorithm
         public int WaitInterval { get; set; }
 
         public int TupleLength { get; set; }
+
+        public int GeneralTrendInterval { get; set; }
 
         public int StartSpan { get; set; }
 

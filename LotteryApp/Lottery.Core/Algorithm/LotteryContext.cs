@@ -314,7 +314,7 @@ namespace Lottery.Core.Algorithm
             }
             if (InputOption.WaitInterval > 0)
             {
-                awards = awards.ToArray().Take(3).Where(c => FactorDic[type][c].LastInterval >= InputOption.WaitInterval);
+                awards = awards.ToArray().Take(2).Where(c => FactorDic[type][c].LastInterval >= InputOption.WaitInterval);
             }
             bool isSpan = false;
             return awards.Select((c, i) =>
@@ -530,6 +530,10 @@ namespace Lottery.Core.Algorithm
                         orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
 
+            if (InputOption.UseGeneralTrend && InputOption.GeneralTrendInterval > 0)
+            {
+                query = query.ToArray().Take(2).Where(c => FactorDic[r][c].LastInterval >= InputOption.GeneralTrendInterval);
+            }
             return Build(query, tupleDic[gameArgs]);
         }
 
