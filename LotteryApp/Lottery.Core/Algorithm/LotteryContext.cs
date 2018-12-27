@@ -210,7 +210,7 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
             var query = from p in FactorDic[r]
                         where p.Value.MaxInterval <= 6 && p.Value.OccurCount >= 4
-                        orderby CheckInterval(p.Value.HitIntervals, 5) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                        orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
             return Build(query, r);
         }
@@ -459,6 +459,11 @@ namespace Lottery.Core.Algorithm
                 { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
                 { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
+                { "front4", FactorTypeEnum.Award},
+                { "after4", FactorTypeEnum.Award},
+                { "tuple4a", FactorTypeEnum.Award},
+                { "tuple4b", FactorTypeEnum.Award},
+                { "tuple4c", FactorTypeEnum.Award},
                 { "all", FactorTypeEnum.Award}
             };
 
@@ -467,13 +472,17 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            where p.Value.LastInterval <= 5
-                            orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.Take(InputOption.TupleLength).OrderBy(c => c).ToArray();
                 keys = new int[] { int.Parse("1" + string.Join(string.Empty, keys)) };
                 Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
                 {
+                    { "tuple4a", FactorTypeEnum.Tuple4A},
+                    { "tuple4b", FactorTypeEnum.Tuple4B},
+                    { "tuple4c", FactorTypeEnum.Tuple4C},
+                    { "front4", FactorTypeEnum.Left4Tuple},
+                    { "after4", FactorTypeEnum.Right4Tuple},
                     { "front",   FactorTypeEnum.LeftTuple},
                     { "middle", FactorTypeEnum.MiddleTuple},
                     { "after",  FactorTypeEnum.RightTuple},
@@ -518,7 +527,7 @@ namespace Lottery.Core.Algorithm
 
             var query = from p in FactorDic[r]
                         where InputOption.EnableContinuous ? continuous.Contains(p.Key) : true
-                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                        orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
 
             return Build(query, tupleDic[gameArgs]);

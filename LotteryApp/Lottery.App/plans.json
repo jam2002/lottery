@@ -20,9 +20,9 @@
       "SpanLength": 8
     },
     {
-      "Title": "前四二码(15)",
+      "Title": "前四二码(50)",
       "Number": 2,
-      "TakeNumber": 15,
+      "TakeNumber": 50,
       "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "tuple",
@@ -39,9 +39,9 @@
       "SpanLength": 8
     },
     {
-      "Title": "后四二码(15)",
+      "Title": "后四二码(50)",
       "Number": 2,
-      "TakeNumber": 15,
+      "TakeNumber": 50,
       "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "tuple",
@@ -58,9 +58,9 @@
       "SpanLength": 8
     },
     {
-      "Title": "万千百个(15)",
+      "Title": "万千百个(50)",
       "Number": 2,
-      "TakeNumber": 15,
+      "TakeNumber": 50,
       "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "tuple",
@@ -77,9 +77,9 @@
       "SpanLength": 8
     },
     {
-      "Title": "万千十个(15)",
+      "Title": "万千十个(50)",
       "Number": 2,
-      "TakeNumber": 15,
+      "TakeNumber": 50,
       "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "tuple",
@@ -96,9 +96,9 @@
       "SpanLength": 8
     },
     {
-      "Title": "万百十个(15)",
+      "Title": "万百十个(50)",
       "Number": 2,
-      "TakeNumber": 15,
+      "TakeNumber": 50,
       "BetCycle": 6,
       "GameInterval": 1,
       "GameName": "tuple",
