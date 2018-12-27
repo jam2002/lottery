@@ -527,12 +527,12 @@ namespace Lottery.Core.Algorithm
 
             var query = from p in FactorDic[r]
                         where InputOption.EnableContinuous ? continuous.Contains(p.Key) : true
-                        orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
 
             if (InputOption.UseGeneralTrend && InputOption.GeneralTrendInterval > 0)
             {
-                query = query.ToArray().Take(2).Where(c => FactorDic[r][c].LastInterval >= InputOption.GeneralTrendInterval);
+                query = query.ToArray().Take(1).Where(c => FactorDic[r][c].LastInterval >= InputOption.GeneralTrendInterval);
             }
             return Build(query, tupleDic[gameArgs]);
         }
