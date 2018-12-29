@@ -210,7 +210,7 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
             var query = from p in FactorDic[r]
                         where p.Value.MaxInterval <= 6 && p.Value.OccurCount >= 4
-                        orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                        orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
             return Build(query, r);
         }
@@ -524,9 +524,11 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = enumDic[gameArgs];
 
             int[] continuous = InputOption.TupleLength == 4 ? new int[] { 10123, 11234, 12345, 13456, 14567, 15678, 16789, 10789, 10189, 10129 } : new int[] { 1012, 1123, 1234, 1345, 1456, 1567, 1678, 1789, 1089, 1019 };
+            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals)).Select(c => c.Key).ToArray();
 
             var query = from p in FactorDic[r]
-                        where InputOption.EnableContinuous ? continuous.Contains(p.Key) : true
+                        let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
+                        where (InputOption.EnableContinuous ? continuous.Contains(p.Key) : true) && validAwards.Intersect(values).Count() == values.Length
                         orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
 
