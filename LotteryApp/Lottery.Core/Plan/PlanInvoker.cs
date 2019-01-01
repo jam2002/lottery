@@ -41,7 +41,7 @@ namespace Lottery.Core.Plan
 
             IJobDetail job = JobBuilder.Create<SimpleJob>().WithIdentity("job1", "group1").Build();
             DateTime start = DateTime.Now;
-            start = start.AddSeconds(start.Second < 45 ? (45 - start.Second) : (105 - start.Second));
+            start = start.AddSeconds(start.Second < 15 ? (15 - start.Second) : (75 - start.Second));
             int minute = start.Minute % 10;
             if (planDic.Any(t => t.Value.LotteryName == "cqssc") && minute != 2)
             {
