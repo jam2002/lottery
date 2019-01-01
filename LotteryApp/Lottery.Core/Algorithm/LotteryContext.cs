@@ -305,15 +305,7 @@ namespace Lottery.Core.Algorithm
         {
             if (InputOption.Rank > 0)
             {
-                int count = PlanInvoker.Current.GetBetCountByType(type);
-                if (count == 0)
-                {
-                    awards = awards.Skip(InputOption.Rank);
-                }
-                else
-                {
-                    awards = awards.Where(c => !PlanInvoker.Current.HasInBet(string.Join(".", type, c))).Skip(Math.Abs(count - InputOption.Rank));
-                }
+                awards = awards.Skip(InputOption.Rank);
             }
             if (InputOption.WaitInterval > 0)
             {
@@ -423,8 +415,7 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            where p.Value.LastInterval <= 5
-                            orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
 
                 return Build(query, r.Value);
