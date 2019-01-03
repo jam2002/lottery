@@ -213,7 +213,7 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-                        where p.Value.LastInterval <= 6 && p.Value.OccurCount >= 4 && validAwards.Intersect(values).Count() == values.Length
+                        where p.Value.MaxInterval <= 5 && p.Value.OccurCount >= 4 && validAwards.Intersect(values).Count() == values.Length
                         orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                         select p.Key;
             return Build(query, r);
@@ -562,7 +562,8 @@ namespace Lottery.Core.Algorithm
                     { "after2",  FactorTypeEnum.RightDouble},
                     { "front",   FactorTypeEnum.LeftDouble},
                     { "middle", FactorTypeEnum.MiddleDouble},
-                    { "after",  FactorTypeEnum.RightDouble}
+                    { "after",  FactorTypeEnum.RightDouble},
+                    { "all",  FactorTypeEnum.Double}
                 };
 
                 LotteryResult ret = new LotteryResult
@@ -575,7 +576,7 @@ namespace Lottery.Core.Algorithm
                     {
                          new AnyFilter{  Values = keys }
                     },
-                    Filter = $"双胆杀一码：{string.Join(",", keys)}"
+                    Filter = $"双胆：{string.Join(",", keys)}"
                 };
 
                 return new LotteryResult[] { ret };

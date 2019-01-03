@@ -31,7 +31,7 @@ namespace Lottery.Core.Plan
             type = currentBet.Results[0].Output.Any() ? (FactorTypeEnum?)currentBet.Results[0].Output[0].Type : null;
             isDistinct = type == FactorTypeEnum.LeftDistinct || type == FactorTypeEnum.MiddleDistinct || type == FactorTypeEnum.RightDistinct || type == FactorTypeEnum.Distinct;
             isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward || type == FactorTypeEnum.Award;
-            isDouble = type == FactorTypeEnum.LeftDouble || type == FactorTypeEnum.MiddleDouble || type == FactorTypeEnum.RightDouble;
+            isDouble = type == FactorTypeEnum.LeftDouble || type == FactorTypeEnum.MiddleDouble || type == FactorTypeEnum.RightDouble || type == FactorTypeEnum.Double;
             isSpan = type == FactorTypeEnum.LeftSpan || type == FactorTypeEnum.MiddleSpan || type == FactorTypeEnum.RightSpan || type == FactorTypeEnum.Span;
             spans = isSpan && currentBet.BetAward.Any() ? currentBet.BetAward : new int[] { };
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
@@ -43,14 +43,25 @@ namespace Lottery.Core.Plan
             if (EnableSinglePattern)
             {
                 int[] count = Enumerable.Range(0, 10).ToArray();
-                if (GameArgs == "front4" || GameArgs == "after4")
+                if (GameArgs == "all")
+                {
+                    numbers = from x in count
+                              from y in count
+                              from z in count
+                              from p in count
+                              from q in count
+                              let number = new[] { x, y, z, p, q }
+                              where IsValid(number)
+                              select string.Join(string.Empty, number);
+                }
+                else if (GameArgs == "front4" || GameArgs == "after4")
                 {
                     numbers = from x in count
                               from y in count
                               from z in count
                               from p in count
                               let number = new[] { x, y, z, p }
-                              where betArray.Any(t => number.Distinct().Intersect(t).Count() >= Number)
+                              where IsValid(number)
                               select string.Join(string.Empty, number);
                 }
                 else
@@ -166,7 +177,7 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && (span != 2 || number.Length == 2);
+                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
             }
             else
             {

@@ -155,6 +155,8 @@
 
         RightDistinct = 29,
 
+        Double = 45,
+
         LeftDouble = 36,
 
         MiddleDouble = 37,
