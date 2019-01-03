@@ -158,6 +158,7 @@ namespace Lottery.Core.Algorithm
                 number.RightTuples = GetTuples(right);
                 number.Right4Tuples = GetTuples(array.Skip(1).ToArray());
                 number.RightSpan = number.RightAwards[number.RightAwards.Length - 1] - number.RightAwards[0];
+                number.Right4Awards = array.Skip(1).Distinct().OrderBy(c => c).ToArray();
 
                 number.AllTuples = GetTuples(array);
                 number.ATuples = GetTuples(new int[] { array[0], array[1], array[3] });

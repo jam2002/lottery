@@ -165,6 +165,8 @@
 
         MiddleSpan = 40,
 
-        RightSpan = 41
+        RightSpan = 41,
+
+        Right4Award = 64
     }
 }

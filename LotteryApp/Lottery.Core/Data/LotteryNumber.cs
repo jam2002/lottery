@@ -75,6 +75,8 @@
 
         public int[] RightAwards { get; set; }
 
+        public int[] Right4Awards { get; set; }
+
         public int[] RightTuples { get; set; }
 
         public int[] Right4Tuples { get; set; }

@@ -104,6 +104,7 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.LeftAward, number.LeftAwards},
                 { FactorTypeEnum.MiddleAward, number.MiddleAwards},
                 { FactorTypeEnum.RightAward, number.RightAwards},
+                { FactorTypeEnum.Right4Award, number.Right4Awards},
                 { FactorTypeEnum.RepeatNumber, number.RepeatNumbers},
                 { FactorTypeEnum.LeftRepeat, number.LeftRepeats},
                 { FactorTypeEnum.MiddleRepeat, number.MiddleRepeats},
@@ -396,7 +397,7 @@ namespace Lottery.Core.Algorithm
                     intervals = GetIntervals(occurPositions, 15);
                 }
                 isRepeat = intervals.Any() && occurPositions.Any() && intervals.Max() <= 5 && intervals.Last() <= 5 && occurPositions.Count() >= 4;
-                return factor.LastInterval >= InputOption.WaitInterval ? Build(new int[] { 2 }, t.Value) : new LotteryResult[] { };
+                return isRepeat && factor.LastInterval >= InputOption.WaitInterval ? Build(new int[] { 2 }, t.Value) : new LotteryResult[] { };
             }
             return new LotteryResult[] { };
         }
@@ -541,8 +542,8 @@ namespace Lottery.Core.Algorithm
                 { "middle2", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
                 { "after2",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
                 { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
-                { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
-                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
+                { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Right4Award: FactorTypeEnum.MiddleAward},
+                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Right4Award: FactorTypeEnum.RightAward},
                 { "all", FactorTypeEnum.Award}
             };
             FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
