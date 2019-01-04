@@ -10,7 +10,7 @@
       "GameArgs": "after",
       "LotteryName": "tsssc",
       "ChangeBetPerTime": false,
-      "EnableSinglePattern": false,
+      "EnableSinglePattern": true,
       "EnableContinuous": false,
       "UseGeneralTrend": true,
       "RespectRepeat": false,
