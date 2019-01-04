@@ -542,8 +542,8 @@ namespace Lottery.Core.Algorithm
                 { "middle2", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
                 { "after2",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
                 { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
-                { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Right4Award: FactorTypeEnum.MiddleAward},
-                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Right4Award: FactorTypeEnum.RightAward},
+                { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
+                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
                 { "all", FactorTypeEnum.Award}
             };
             FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
