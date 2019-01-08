@@ -26,6 +26,8 @@
 
         public bool RespectRepeat { get; set; }
 
+        public bool DisableRepeat { get; set; }
+
         public bool ChangeBetPerTime { get; set; }
 
         public int Rank { get; set; }

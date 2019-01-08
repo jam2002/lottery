@@ -43,6 +43,7 @@ namespace Lottery.Core.Plan
         public bool EnableContinuous { get; set; }
         public bool UseGeneralTrend { get; set; }
         public bool RespectRepeat { get; set; }
+        public bool DisableRepeat { get; set; }
         public bool ChangeBetPerTime { get; set; }
         public int BetCycle { get; set; }
         public int TupleLength { get; set; }

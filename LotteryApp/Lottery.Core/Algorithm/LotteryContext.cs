@@ -255,9 +255,9 @@ namespace Lottery.Core.Algorithm
             bool respectRepeat = InputOption.RespectRepeat || InputOption.GameName == "repeats";
             LotteryResult[] results = respectRepeat ? BuildRepeats(out isRepeatTrend) : new LotteryResult[] { };
 
-            if (InputOption.GameName == "repeats" || isRepeatTrend)
+            if (isRepeatTrend)
             {
-                return results;
+                return respectRepeat && !InputOption.DisableRepeat ? results : new LotteryResult[] { };
             }
             else
             {

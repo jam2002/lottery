@@ -34,6 +34,8 @@ namespace Lottery.Core.Plan
 
         bool RespectRepeat { get; set; }
 
+        bool DisableRepeat { get; set; }
+
         bool ChangeBetPerTime { get; set; }
 
         int Rank { get; set; }

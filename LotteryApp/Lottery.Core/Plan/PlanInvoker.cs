@@ -67,6 +67,7 @@ namespace Lottery.Core.Plan
                 EnableContinuous = c.EnableContinuous,
                 UseGeneralTrend = c.UseGeneralTrend,
                 RespectRepeat = c.RespectRepeat,
+                DisableRepeat = c.DisableRepeat,
                 ChangeBetPerTime = c.ChangeBetPerTime,
                 TupleLength = c.TupleLength,
                 WaitInterval = c.WaitInterval,
