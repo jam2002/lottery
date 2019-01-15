@@ -406,9 +406,9 @@ namespace Lottery.Core.Algorithm
         {
             Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
             {
-                { "front", FactorTypeEnum.LeftAward},
-                { "middle", FactorTypeEnum.MiddleAward},
-                { "after", FactorTypeEnum.RightAward},
+                { "front",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.LeftAward},
+                { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.MiddleAward},
+                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.RightAward},
                 { "all", FactorTypeEnum.Award}
             };
             string[] gameArgs = InputOption.GameArgs.Split('.').ToArray();
