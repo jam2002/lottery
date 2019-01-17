@@ -317,7 +317,7 @@ namespace Lottery.Core.Algorithm
             }
             if (InputOption.WaitInterval > 0)
             {
-                awards = awards.ToArray().Take(2).Where(c => FactorDic[type][c].LastInterval >= InputOption.WaitInterval);
+                awards = awards.ToArray().Take(1).Where(c => FactorDic[type][c].LastInterval >= InputOption.WaitInterval);
             }
             bool isSpan = false;
             return awards.Select((c, i) =>
