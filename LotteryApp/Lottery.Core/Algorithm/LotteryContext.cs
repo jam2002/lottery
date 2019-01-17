@@ -215,15 +215,15 @@ namespace Lottery.Core.Algorithm
                                                                                             .Select(c => c.Key).ToArray();
 
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
-            //var query = from p in FactorDic[r]
-            //            let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-            //            where p.Value.MaxInterval <= 5 && p.Value.OccurCount >= 4 && validAwards.Intersect(values).Count() == values.Length
-            //            orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
-            //            select p.Key;
-            //return Build(query, r);
-            int[] keys = validAwards.Take(2).OrderBy(c => c).ToArray();
-            int key = 100 + keys[0] * 10 + keys[1];
-            return Build(new int[] { key }, r);
+            var query = from p in FactorDic[r]
+                        let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
+                        where validAwards.Intersect(values).Count() == values.Length
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval descending
+                        select p.Key;
+            return Build(query, r);
+            //int[] keys = validAwards.Take(2).OrderBy(c => c).ToArray();
+            //int key = 100 + keys[0] * 10 + keys[1];
+            //return Build(new int[] { key }, r);
         }
 
         private LotteryResult[] GetAnyTupleResult()
