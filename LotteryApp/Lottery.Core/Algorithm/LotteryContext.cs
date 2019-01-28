@@ -372,6 +372,7 @@ namespace Lottery.Core.Algorithm
                     MaxInterval = factor.MaxInterval,
                     Type = type,
                     BetKey = c,
+                    NumberLength = InputOption.NumberLength,
                     AnyFilters = new AnyFilter[]
                     {
                             new AnyFilter{  Values = values }

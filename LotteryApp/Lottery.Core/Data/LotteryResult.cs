@@ -80,6 +80,8 @@
 
         public FactorTypeEnum Type { get; set; }
 
+        public int NumberLength { get; set; }
+
         public int BetKey { get; set; }
     }
 }

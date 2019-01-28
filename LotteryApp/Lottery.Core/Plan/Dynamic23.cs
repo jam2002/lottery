@@ -43,7 +43,7 @@ namespace Lottery.Core.Plan
             if (EnableSinglePattern)
             {
                 int[] count = Enumerable.Range(0, 10).ToArray();
-                if (GameArgs == "all")
+                if (NumberLength == 5)
                 {
                     numbers = from x in count
                               from y in count
@@ -54,7 +54,7 @@ namespace Lottery.Core.Plan
                               where IsValid(number)
                               select string.Join(string.Empty, number);
                 }
-                else if (GameArgs == "front4" || GameArgs == "after4")
+                else if (NumberLength == 4)
                 {
                     numbers = from x in count
                               from y in count

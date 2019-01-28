@@ -42,6 +42,8 @@
 
         public int SpanLength { get; set; }
 
+        public int NumberLength { get; set; }
+
         public InputOptions()
         {
             RetrieveNumber = 200;

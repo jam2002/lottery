@@ -36,7 +36,7 @@ namespace Lottery.Core.Plan
 
         public string GetKey()
         {
-            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "R" : "WR", UseGeneralTrend ? "G" : "WG", ChangeBetPerTime ? "C" : "WC", TakeNumber, WaitInterval, BetCycle, TupleLength, SpanLength, Rank, GeneralTrendInterval);
+            return string.Join(".", LotteryName, GameName, GameArgs ?? string.Empty, EnableSinglePattern ? "Single" : "Composite", RespectRepeat ? "R" : "WR", UseGeneralTrend ? "G" : "WG", ChangeBetPerTime ? "C" : "WC", TakeNumber, WaitInterval, BetCycle, TupleLength, SpanLength, Rank, GeneralTrendInterval, NumberLength);
         }
 
         public bool EnableSinglePattern { get; set; }
@@ -53,6 +53,7 @@ namespace Lottery.Core.Plan
         public int StartSpan { get; set; }
         public int SpanLength { get; set; }
         public int Rank { get; set; }
+        public int NumberLength { get; set; }
 
         private Dictionary<int, int> betCounters;
         protected bool isDistinct;
