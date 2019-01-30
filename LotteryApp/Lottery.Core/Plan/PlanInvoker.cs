@@ -42,10 +42,10 @@ namespace Lottery.Core.Plan
             IJobDetail job = JobBuilder.Create<SimpleJob>().WithIdentity("job1", "group1").Build();
             DateTime start = DateTime.Now;
             start = start.AddSeconds(start.Second < 15 ? (15 - start.Second) : (75 - start.Second));
-            int minute = start.Minute % 10;
+            int minute = start.Minute / 10;
             if (planDic.Any(t => t.Value.LotteryName == "cqssc") && minute != 2)
             {
-                start = start.AddMinutes(12 - (minute == 0 ? 10 : minute));
+                start = start.AddMinutes((minute + 1) * 10 + 2 - start.Minute);
             }
 
             trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(currentInterval).RepeatForever()).Build();
