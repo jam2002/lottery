@@ -195,18 +195,7 @@ namespace Lottery.Core.Plan
             }
             else if (isAward && award.HasValue)
             {
-                if (type == FactorTypeEnum.Right4Award)
-                {
-                    ret = new string[] { $",{award.Value},{award.Value},{award.Value},{award.Value}" };
-                }
-                else if (type == FactorTypeEnum.Left4Award)
-                {
-                    ret = new string[] { $"{award.Value},{award.Value},{award.Value},{award.Value}," };
-                }
-                else
-                {
-                    ret = type == FactorTypeEnum.Award && GameArgs == "all" ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
-                }
+                ret = type == FactorTypeEnum.Award && GameArgs == "all" ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
             }
             else if (isDouble)
             {
