@@ -30,7 +30,7 @@ namespace Lottery.Core.Plan
             IEnumerable<string> numbers;
             type = currentBet.Results[0].Output.Any() ? (FactorTypeEnum?)currentBet.Results[0].Output[0].Type : null;
             isDistinct = type == FactorTypeEnum.LeftDistinct || type == FactorTypeEnum.MiddleDistinct || type == FactorTypeEnum.RightDistinct || type == FactorTypeEnum.Distinct;
-            isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward || type == FactorTypeEnum.Award;
+            isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward  || type == FactorTypeEnum.Right4Award|| type == FactorTypeEnum.Award;
             isDouble = type == FactorTypeEnum.LeftDouble || type == FactorTypeEnum.MiddleDouble || type == FactorTypeEnum.RightDouble || type == FactorTypeEnum.Double;
             isSpan = type == FactorTypeEnum.LeftSpan || type == FactorTypeEnum.MiddleSpan || type == FactorTypeEnum.RightSpan || type == FactorTypeEnum.Span;
             spans = isSpan && currentBet.BetAward.Any() ? currentBet.BetAward : new int[] { };

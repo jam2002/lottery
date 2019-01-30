@@ -218,7 +218,7 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
                         where validAwards.Intersect(values).Count() == values.Length && p.Value.OccurCount >= 4
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.MaxInterval, p.Value.LastInterval descending
+                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
             //int[] keys = validAwards.Take(2).OrderBy(c => c).ToArray();
@@ -417,6 +417,7 @@ namespace Lottery.Core.Algorithm
                 { "front",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.LeftAward},
                 { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.MiddleAward},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.RightAward},
+                { "after4",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Right4Award},
                 { "all", FactorTypeEnum.Award}
             };
             string[] gameArgs = InputOption.GameArgs.Split('.').ToArray();
@@ -532,7 +533,7 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
                         where (InputOption.EnableContinuous ? continuous.Contains(p.Key) : true) && validAwards.Intersect(values).Count() == values.Length
-                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
 
             if (InputOption.UseGeneralTrend && InputOption.GeneralTrendInterval > 0)
