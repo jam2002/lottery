@@ -102,6 +102,7 @@ namespace Lottery.Core.Algorithm
             {
                 { FactorTypeEnum.Award, number.DistinctNumbers},
                 { FactorTypeEnum.LeftAward, number.LeftAwards},
+                { FactorTypeEnum.Left4Award, number.Left4Awards},
                 { FactorTypeEnum.MiddleAward, number.MiddleAwards},
                 { FactorTypeEnum.RightAward, number.RightAwards},
                 { FactorTypeEnum.Right4Award, number.Right4Awards},
@@ -418,6 +419,7 @@ namespace Lottery.Core.Algorithm
                 { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.MiddleAward},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.RightAward},
                 { "after4",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Right4Award},
+                { "front4",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Left4Award},
                 { "all", FactorTypeEnum.Award}
             };
             string[] gameArgs = InputOption.GameArgs.Split('.').ToArray();

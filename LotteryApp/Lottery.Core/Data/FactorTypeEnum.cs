@@ -169,6 +169,8 @@
 
         RightSpan = 41,
 
-        Right4Award = 64
+        Right4Award = 64,
+
+        Left4Award = 65
     }
 }

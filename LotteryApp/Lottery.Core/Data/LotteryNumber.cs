@@ -39,6 +39,8 @@
 
         public int[] LeftAwards { get; set; }
 
+        public int[] Left4Awards { get; set; }
+
         public int[] LeftTuples { get; set; }
 
         public int[] Left4Tuples { get; set; }

@@ -30,7 +30,7 @@ namespace Lottery.Core.Plan
             IEnumerable<string> numbers;
             type = currentBet.Results[0].Output.Any() ? (FactorTypeEnum?)currentBet.Results[0].Output[0].Type : null;
             isDistinct = type == FactorTypeEnum.LeftDistinct || type == FactorTypeEnum.MiddleDistinct || type == FactorTypeEnum.RightDistinct || type == FactorTypeEnum.Distinct;
-            isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward  || type == FactorTypeEnum.Right4Award|| type == FactorTypeEnum.Award;
+            isAward = type == FactorTypeEnum.LeftAward || type == FactorTypeEnum.MiddleAward || type == FactorTypeEnum.RightAward  || type == FactorTypeEnum.Right4Award || type == FactorTypeEnum.Left4Award|| type == FactorTypeEnum.Award;
             isDouble = type == FactorTypeEnum.LeftDouble || type == FactorTypeEnum.MiddleDouble || type == FactorTypeEnum.RightDouble || type == FactorTypeEnum.Double;
             isSpan = type == FactorTypeEnum.LeftSpan || type == FactorTypeEnum.MiddleSpan || type == FactorTypeEnum.RightSpan || type == FactorTypeEnum.Span;
             spans = isSpan && currentBet.BetAward.Any() ? currentBet.BetAward : new int[] { };
@@ -195,7 +195,18 @@ namespace Lottery.Core.Plan
             }
             else if (isAward && award.HasValue)
             {
-                ret = type == FactorTypeEnum.Award && GameArgs == "all" ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
+                if (type == FactorTypeEnum.Right4Award)
+                {
+                    ret = new string[] { $",{award.Value},{award.Value},{award.Value},{award.Value}" };
+                }
+                else if (type == FactorTypeEnum.Left4Award)
+                {
+                    ret = new string[] { $"{award.Value},{award.Value},{award.Value},{award.Value}," };
+                }
+                else
+                {
+                    ret = type == FactorTypeEnum.Award && GameArgs == "all" ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
+                }
             }
             else if (isDouble)
             {
