@@ -165,8 +165,9 @@ namespace Lottery.Core.Plan
 
         private int[][] GetBetArray(int[] awards)
         {
-            Permutation combine = new Permutation(awards.Length);
-            int[][] betAwards = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select awards[s]).ToArray()).ToArray();
+            Combination combine = new Combination(awards.Length);
+            int number = TupleLength == 4 && Number == 3 ? 3 : 2;
+            int[][] betAwards = combine.GetRowsForAllPicks().Where(t => t.Picks == number).Select(t => (from s in t select awards[s]).ToArray()).ToArray();
             return betAwards;
         }
 
