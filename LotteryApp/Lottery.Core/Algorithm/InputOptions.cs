@@ -4,6 +4,8 @@
     {
         public int Number { get; set; }
 
+        public int TakeNumber { get; set; }
+
         public int RetrieveNumber { get; set; }
 
         public int? SkipCount { get; set; }

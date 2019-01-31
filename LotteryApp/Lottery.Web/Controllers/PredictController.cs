@@ -26,8 +26,8 @@ namespace Lottery.Web.Controllers
         {
             InputOptions[] options = new InputOptions[]
             {
-                new InputOptions {  Number =30, LotteryName = name, GameName = "dynamic",  GameArgs = "22" },
-                new InputOptions {  Number =60, LotteryName = name, GameName = "dynamic",  GameArgs = "33" },
+                new InputOptions {  TakeNumber =30, LotteryName = name, GameName = "dynamic",  GameArgs = "22" },
+                new InputOptions {  TakeNumber =60, LotteryName = name, GameName = "dynamic",  GameArgs = "33" },
             };
             OutputResult[] outputs = Calculator.GetResults(options);
             StringBuilder builer = new StringBuilder();
@@ -46,7 +46,7 @@ namespace Lottery.Web.Controllers
             string args = type == 1 ? "22" : "34";
             InputOptions[] options = new InputOptions[]
             {
-                 new InputOptions {  Number =number.Value, LotteryName = name, GameName = "dynamic",  GameArgs = args, RetrieveNumber =10000 }
+                 new InputOptions {  TakeNumber =number.Value, LotteryName = name, GameName = "dynamic",  GameArgs = args, RetrieveNumber =10000 }
             };
             ValidationResult r = Validator.Validate(options);
             StringBuilder builer = new StringBuilder();

@@ -10,7 +10,7 @@ namespace Lottery.Core.Algorithm
         public static ValidationResult Validate(InputOptions[] options)
         {
             int count = options[0].RetrieveNumber;
-            int skipCount = options[0].Number;
+            int skipCount = options[0].TakeNumber;
             int betCycle = 0;
             int failureCount = 0;
             double minAmount = 0;

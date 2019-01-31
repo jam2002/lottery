@@ -29,6 +29,7 @@ namespace Lottery.Core.Algorithm
             lottery = config.Lotteries.Where(x => x.Key == input.LotteryName).First();
             option = input;
             LotteryGenerator.TupleLength = option.TupleLength;
+            LotteryGenerator.Number = option.Number;
         }
 
         public static OutputResult[] GetResults(InputOptions[] options, bool clearCache = true)
@@ -58,7 +59,7 @@ namespace Lottery.Core.Algorithm
         public OutputResult Start()
         {
             string[] lotteries = GetLotteries();
-            lotteries = lotteries.Skip((option.SkipCount.HasValue ? option.SkipCount.Value : lotteries.Length) - option.Number).Take(option.Number).ToArray();
+            lotteries = lotteries.Skip((option.SkipCount.HasValue ? option.SkipCount.Value : lotteries.Length) - option.TakeNumber).Take(option.TakeNumber).ToArray();
 
             LotteryNumber[] selectedLottery = null;
             if (lottery.Length >= 5)
@@ -78,7 +79,7 @@ namespace Lottery.Core.Algorithm
             {
                 DisplayName = lottery.DisplayName,
                 LastLotteryNumber = lotteries[lotteries.Length - 1],
-                Number = option.Number,
+                Number = option.TakeNumber,
                 Output = result,
                 Input = option
             };

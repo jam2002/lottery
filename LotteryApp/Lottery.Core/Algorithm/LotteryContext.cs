@@ -403,9 +403,9 @@ namespace Lottery.Core.Algorithm
                 int[] occurPositions = factor.OccurPositions;
                 int[] intervals = factor.HitIntervals;
 
-                if (InputOption.Number > 15)
+                if (InputOption.TakeNumber > 15)
                 {
-                    occurPositions = factor.OccurPositions.SkipWhile(c => c + 1 <= InputOption.Number - 15).Select(c => c - (InputOption.Number - 15)).ToArray();
+                    occurPositions = factor.OccurPositions.SkipWhile(c => c + 1 <= InputOption.TakeNumber - 15).Select(c => c - (InputOption.TakeNumber - 15)).ToArray();
                     intervals = GetIntervals(occurPositions, 15);
                 }
                 isRepeat = intervals.Any() && occurPositions.Any() && intervals.Max() <= 5 && intervals.Last() <= 5 && occurPositions.Count() >= 4;
@@ -608,7 +608,7 @@ namespace Lottery.Core.Algorithm
 
         private int[] GetIntervals(int[] occurPostions, int? number = null)
         {
-            number = number ?? InputOption.Number;
+            number = number ?? InputOption.TakeNumber;
             int[] intervals = occurPostions.Select((x, i) => i == 0 ? x : x - occurPostions[i - 1] - 1).ToArray();
             intervals = intervals.Concat(new[] { number.Value - 1 - occurPostions[occurPostions.Length - 1] }).ToArray();
             return intervals;

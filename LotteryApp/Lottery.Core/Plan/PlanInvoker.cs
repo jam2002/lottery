@@ -57,7 +57,8 @@ namespace Lottery.Core.Plan
             Calculator.ClearCache();
             InputOptions[] options = planDic.Values.Select(c => new InputOptions
             {
-                Number = c.TakeNumber,
+                Number = c.Number,
+                TakeNumber = c.TakeNumber,
                 LotteryName = c.LotteryName,
                 GameName = c.GameName,
                 GameArgs = c.GameArgs,
@@ -131,7 +132,7 @@ namespace Lottery.Core.Plan
 
         private string GetKey(InputOptions input)
         {
-            return string.Join(".", input.LotteryName, input.GameName, input.GameArgs ?? string.Empty, input.EnableSinglePattern ? "Single" : "Composite", input.RespectRepeat ? "R" : "WR", input.UseGeneralTrend ? "G" : "WG", input.ChangeBetPerTime ? "C" : "WC", input.Number, input.WaitInterval, input.BetCycle, input.TupleLength, input.SpanLength, input.Rank, input.GeneralTrendInterval, input.NumberLength);
+            return string.Join(".", input.LotteryName, input.GameName, input.GameArgs ?? string.Empty, input.EnableSinglePattern ? "Single" : "Composite", input.RespectRepeat ? "R" : "WR", input.UseGeneralTrend ? "G" : "WG", input.ChangeBetPerTime ? "C" : "WC", input.TakeNumber, input.WaitInterval, input.BetCycle, input.TupleLength, input.SpanLength, input.Rank, input.GeneralTrendInterval, input.NumberLength);
         }
 
         public void AddBetKey(string key)

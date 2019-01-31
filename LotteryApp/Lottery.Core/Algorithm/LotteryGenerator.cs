@@ -211,32 +211,40 @@ namespace Lottery.Core.Algorithm
         {
             int[] sort = array.Distinct().OrderBy(c => c).ToArray();
             Combination combine = new Combination(sort.Length);
-            int[] ret = null;
+            int[] ret = new int[] { };
 
             if (sort.Length >= 3)
             {
-                int[][] awards = combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select sort[s]).ToArray()).ToArray();
+                int number = TupleLength == 4 && Number == 3 ? 3 : 2;
+                int[][] awards = combine.GetRowsForAllPicks().Where(t => t.Picks == number).Select(t => (from s in t select sort[s]).ToArray()).ToArray();
 
-                if (TupleLength == 3)
+                if (number == 2)
+                {
+                    if (TupleLength == 3)
+                    {
+                        ret = Enumerable.Range(0, 10).SelectMany(c => awards.Where(t => !t.Contains(c)).Select(t =>
+                        {
+                            int[] temp = t.Concat(new[] { c }).OrderBy(s => s).ToArray();
+                            return 1000 + temp[0] * 100 + temp[1] * 10 + temp[2];
+                        })).Distinct().ToArray();
+                    }
+                    else
+                    {
+                        ret = Others.SelectMany(c => awards.Where(t => !t.Intersect(c).Any()).Select(t =>
+                        {
+                            int[] temp = t.Concat(c).OrderBy(s => s).ToArray();
+                            return 10000 + temp[0] * 1000 + temp[1] * 100 + temp[2] * 10 + temp[3];
+                        })).Distinct().ToArray();
+                    }
+                }
+                else
                 {
                     ret = Enumerable.Range(0, 10).SelectMany(c => awards.Where(t => !t.Contains(c)).Select(t =>
                     {
                         int[] temp = t.Concat(new[] { c }).OrderBy(s => s).ToArray();
-                        return 1000 + temp[0] * 100 + temp[1] * 10 + temp[2];
-                    })).Distinct().ToArray();
-                }
-                else
-                {
-                    ret = Others.SelectMany(c => awards.Where(t => !t.Intersect(c).Any()).Select(t =>
-                    {
-                        int[] temp = t.Concat(c).OrderBy(s => s).ToArray();
                         return 10000 + temp[0] * 1000 + temp[1] * 100 + temp[2] * 10 + temp[3];
                     })).Distinct().ToArray();
                 }
-            }
-            else
-            {
-                ret = new int[] { };
             }
             return ret;
         }
@@ -299,5 +307,7 @@ namespace Lottery.Core.Algorithm
         }
 
         public static int TupleLength { get; set; }
+
+        public static int Number { get; set; }
     }
 }
