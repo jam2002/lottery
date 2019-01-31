@@ -106,6 +106,9 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.MiddleAward, number.MiddleAwards},
                 { FactorTypeEnum.RightAward, number.RightAwards},
                 { FactorTypeEnum.Right4Award, number.Right4Awards},
+                { FactorTypeEnum.Tuple4AAward, number.Tuple4AAwards},
+                { FactorTypeEnum.Tuple4BAward, number.Tuple4BAwards},
+                { FactorTypeEnum.Tuple4CAward, number.Tuple4CAwards},
                 { FactorTypeEnum.RepeatNumber, number.RepeatNumbers},
                 { FactorTypeEnum.LeftRepeat, number.LeftRepeats},
                 { FactorTypeEnum.MiddleRepeat, number.MiddleRepeats},
@@ -420,6 +423,9 @@ namespace Lottery.Core.Algorithm
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.RightAward},
                 { "after4",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Right4Award},
                 { "front4",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Left4Award},
+                { "tuple4a",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4AAward},
+                { "tuple4b",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4BAward},
+                { "tuple4c",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4CAward},
                 { "all", FactorTypeEnum.Award}
             };
             string[] gameArgs = InputOption.GameArgs.Split('.').ToArray();

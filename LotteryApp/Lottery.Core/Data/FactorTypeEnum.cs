@@ -171,6 +171,12 @@
 
         Right4Award = 64,
 
-        Left4Award = 65
+        Left4Award = 65,
+
+        Tuple4AAward = 66,
+
+        Tuple4BAward = 67,
+
+        Tuple4CAward = 68
     }
 }
