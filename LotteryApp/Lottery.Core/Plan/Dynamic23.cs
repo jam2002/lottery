@@ -190,7 +190,9 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
+                int zeroCount = number.Select(c => c % 3).Distinct().Count();
+                int sumRemain = input.Sum() % 10;
+                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && zeroCount > 1 && sumRemain > 0;
             }
             else
             {
