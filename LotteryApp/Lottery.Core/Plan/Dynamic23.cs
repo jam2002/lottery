@@ -191,8 +191,7 @@ namespace Lottery.Core.Plan
             else if (isDouble)
             {
                 int zeroCount = number.Select(c => c % 3).Distinct().Count();
-                int evenCount = number.Where(c => c % 2 == 0).Count();
-                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && zeroCount > 1 && evenCount > 0;
+                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && zeroCount > 1;
             }
             else
             {
