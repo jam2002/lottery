@@ -135,7 +135,7 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.Tuple4C, number.Tuple4Cs},
             };
 
-            foreach (var p in typeDic)
+            foreach (var p in typeDic.Where(t => t.Value != null))
             {
                 foreach (int key in p.Value)
                 {
@@ -301,14 +301,14 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSymmetricResult()
         {
-            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftRepeat : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleRepeat : FactorTypeEnum.RightRepeat);
-            FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleAward : FactorTypeEnum.RightAward);
+            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftRepeat : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleRepeat : (InputOption.GameArgs == "after" ? FactorTypeEnum.RightRepeat : FactorTypeEnum.RepeatNumber));
+            FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleAward : (InputOption.GameArgs == "after" ? FactorTypeEnum.RightAward : FactorTypeEnum.Award));
 
             var query = from p in FactorDic[r]
                         join q in FactorDic[s]
                            on p.Key equals q.Key
                         where p.Value.LastInterval <= q.Value.LastInterval
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
                         select q.Key;
             return Build(query, r);
         }

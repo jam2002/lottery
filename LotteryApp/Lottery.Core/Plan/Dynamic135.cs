@@ -16,7 +16,7 @@ namespace Lottery.Core.Plan
 
         public override string GetBetString(SimpleBet currentBet)
         {
-            string[] keys = LotteryGenerator.GetConfig().Numbers.Where(c => c.DistinctNumbers.Intersect(currentBet.BetAward).Count() >= Number).Select(c => c.Key).ToArray();
+            string[] keys = LotteryGenerator.GetConfig().ThreeNumbers.Where(c => c.DistinctNumbers.Intersect(currentBet.BetAward).Count() >= Number).Select(c => c.Key).ToArray();
             return $"【{string.Join(" ", keys)}】";
         }
 

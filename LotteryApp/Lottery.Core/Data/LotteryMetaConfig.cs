@@ -9,7 +9,10 @@ namespace Lottery.Core.Data
         [JsonProperty("lotteries")]
         public IEnumerable<Lottery> Lotteries { get; set; }
 
-        [JsonProperty("numbers")]
-        public IEnumerable<LotteryNumber> Numbers { get; set; }
+        [JsonProperty("threeNumbers")]
+        public IEnumerable<LotteryNumber> ThreeNumbers { get; set; }
+
+        [JsonProperty("twoNumbers")]
+        public IEnumerable<LotteryNumber> TwoNumbers { get; set; }
     }
 }
