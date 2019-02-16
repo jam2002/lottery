@@ -408,7 +408,7 @@ namespace Lottery.Core.Algorithm
                     occurPositions = factor.OccurPositions.SkipWhile(c => c + 1 <= InputOption.TakeNumber - 15).Select(c => c - (InputOption.TakeNumber - 15)).ToArray();
                     intervals = GetIntervals(occurPositions, 15);
                 }
-                isRepeat = intervals.Any() && occurPositions.Any() && intervals.Max() <= 5 && intervals.Last() <= 5 && occurPositions.Count() >= 4;
+                isRepeat = intervals.Any() && occurPositions.Any() && intervals.Max() < 5 && intervals.Last() < 5 && occurPositions.Count() >= 4;
                 return isRepeat && factor.LastInterval >= InputOption.WaitInterval ? Build(new int[] { 2 }, t.Value) : new LotteryResult[] { };
             }
             return new LotteryResult[] { };
@@ -571,7 +571,7 @@ namespace Lottery.Core.Algorithm
                             orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.ToArray();
-                keys = keys.Take(2).OrderBy(c => c).ToArray();
+                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - 2).OrderBy(c => c).ToArray() : keys.Take(2).OrderBy(c => c).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
                     { "front2",   FactorTypeEnum.LeftDouble},

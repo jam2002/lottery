@@ -52,11 +52,6 @@ namespace Lottery.Core.Plan
             doubleSpans = Enumerable.Range(StartSpan, SpanLength).ToArray();
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet.BetAward) : new int[][] { };
 
-            if (awards.All(c => c == 0 || c == 1 || c == 8 || c == 9))
-            {
-                doubleSpans = new int[] { 4, 5, 6, 7, 8, 9 };
-            }
-
             if (EnableSinglePattern)
             {
                 int[] count = Enumerable.Range(0, 10).ToArray();
@@ -195,9 +190,16 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                int zeroCount = number.Select(c => c % 3).Distinct().Count();
-                int sumRemain = input.Sum() % 10;
-                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && zeroCount > 1 && sumRemain > 0;
+                if (StartSpan > 10)
+                {
+                    ret = number.Length > 2 && !number.Intersect(awards).Any();
+                }
+                else
+                {
+                    int zeroCount = number.Select(c => c % 3).Distinct().Count();
+                    int sumRemain = input.Sum() % 10;
+                    ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && zeroCount > 1 && sumRemain > 0;
+                }
             }
             else
             {
