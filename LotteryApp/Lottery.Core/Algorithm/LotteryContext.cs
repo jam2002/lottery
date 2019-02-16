@@ -307,8 +307,8 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[r]
                         join q in FactorDic[s]
                            on p.Key equals q.Key
-                        where p.Value.LastInterval <= q.Value.LastInterval
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval
+                        where q.Value.LastInterval < 6 && p.Value.LastInterval <= q.Value.LastInterval
+                        orderby q.Value.LastInterval
                         select q.Key;
             return Build(query, r);
         }
