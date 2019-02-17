@@ -403,12 +403,12 @@ namespace Lottery.Core.Algorithm
                 int[] occurPositions = factor.OccurPositions;
                 int[] intervals = factor.HitIntervals;
 
-                if (InputOption.TakeNumber > 15)
+                if (InputOption.TakeNumber > 20)
                 {
                     occurPositions = factor.OccurPositions.SkipWhile(c => c + 1 <= InputOption.TakeNumber - 15).Select(c => c - (InputOption.TakeNumber - 15)).ToArray();
-                    intervals = GetIntervals(occurPositions, 15);
+                    intervals = GetIntervals(occurPositions, 20);
                 }
-                isRepeat = intervals.Any() && occurPositions.Any() && intervals.Max() <= 5 && intervals.Last() <= 5 && occurPositions.Count() >= 4;
+                isRepeat = intervals.Any() && occurPositions.Any() && intervals.Max() <= 5 && intervals.Last() <= 5 && occurPositions.Count() >= 6;
                 return isRepeat && factor.LastInterval >= InputOption.WaitInterval ? Build(new int[] { 2 }, t.Value) : new LotteryResult[] { };
             }
             return new LotteryResult[] { };
