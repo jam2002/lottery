@@ -541,7 +541,7 @@ namespace Lottery.Core.Algorithm
 
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-                        where (InputOption.EnableContinuous ? continuous.Contains(p.Key) : true) && validAwards.Intersect(values).Count() == values.Length
+                        where (InputOption.EnableContinuous ? continuous.Contains(p.Key) : true) 
                         orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
 
