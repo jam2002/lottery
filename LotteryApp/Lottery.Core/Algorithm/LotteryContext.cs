@@ -135,7 +135,7 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.Tuple4C, number.Tuple4Cs},
             };
 
-            foreach (var p in typeDic)
+            foreach (var p in typeDic.Where(t => t.Value != null))
             {
                 foreach (int key in p.Value)
                 {
@@ -301,14 +301,14 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetSymmetricResult()
         {
-            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftRepeat : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleRepeat : FactorTypeEnum.RightRepeat);
-            FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleAward : FactorTypeEnum.RightAward);
+            FactorTypeEnum r = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftRepeat : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleRepeat : (InputOption.GameArgs == "after" ? FactorTypeEnum.RightRepeat : FactorTypeEnum.RepeatNumber));
+            FactorTypeEnum s = InputOption.GameArgs == "front" ? FactorTypeEnum.LeftAward : (InputOption.GameArgs == "middle" ? FactorTypeEnum.MiddleAward : (InputOption.GameArgs == "after" ? FactorTypeEnum.RightAward : FactorTypeEnum.Award));
 
             var query = from p in FactorDic[r]
                         join q in FactorDic[s]
                            on p.Key equals q.Key
-                        where p.Value.LastInterval <= q.Value.LastInterval
-                        orderby p.Value.OccurCount descending, p.Value.FailureCount, p.Value.LastInterval descending
+                        where q.Value.LastInterval < 6 && p.Value.LastInterval <= q.Value.LastInterval
+                        orderby q.Value.LastInterval
                         select q.Key;
             return Build(query, r);
         }
@@ -403,12 +403,13 @@ namespace Lottery.Core.Algorithm
                 int[] occurPositions = factor.OccurPositions;
                 int[] intervals = factor.HitIntervals;
 
-                if (InputOption.TakeNumber > 15)
+                int considerCount = 20;
+                if (InputOption.TakeNumber > considerCount)
                 {
-                    occurPositions = factor.OccurPositions.SkipWhile(c => c + 1 <= InputOption.TakeNumber - 15).Select(c => c - (InputOption.TakeNumber - 15)).ToArray();
-                    intervals = GetIntervals(occurPositions, 15);
+                    occurPositions = factor.OccurPositions.SkipWhile(c => c + 1 <= InputOption.TakeNumber - considerCount).Select(c => c - (InputOption.TakeNumber - considerCount)).ToArray();
+                    intervals = GetIntervals(occurPositions, considerCount);
                 }
-                isRepeat = intervals.Any() && occurPositions.Any() && intervals.Max() <= 5 && intervals.Last() <= 5 && occurPositions.Count() >= 4;
+                isRepeat = intervals.Any() && occurPositions.Any() && intervals.Max() <= 5 && intervals.Last() <= 5 && occurPositions.Count() >= 6;
                 return isRepeat && factor.LastInterval >= InputOption.WaitInterval ? Build(new int[] { 2 }, t.Value) : new LotteryResult[] { };
             }
             return new LotteryResult[] { };
@@ -433,7 +434,7 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
                             select p.Key;
 
                 return Build(query, r.Value);
@@ -540,7 +541,7 @@ namespace Lottery.Core.Algorithm
 
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-                        where (InputOption.EnableContinuous ? continuous.Contains(p.Key) : true) && validAwards.Intersect(values).Count() == values.Length
+                        where (InputOption.EnableContinuous ? continuous.Contains(p.Key) : true) 
                         orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
 
@@ -568,10 +569,10 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.ToArray();
-                keys = keys.Take(2).OrderBy(c => c).ToArray();
+                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - 2).OrderBy(c => c).ToArray() : keys.Take(2).OrderBy(c => c).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
                     { "front2",   FactorTypeEnum.LeftDouble},

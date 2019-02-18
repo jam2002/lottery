@@ -68,7 +68,7 @@ namespace Lottery.Core.Algorithm
             }
             else
             {
-                Dictionary<string, LotteryNumber> lotteryDic = config.Numbers.ToDictionary(x => x.Key, x => x);
+                Dictionary<string, LotteryNumber> lotteryDic = lottery.Length == 3 ? config.ThreeNumbers.ToDictionary(x => x.Key, x => x) : config.TwoNumbers.ToDictionary(x => x.Key, x => x);
                 selectedLottery = lotteries.Select(x => lotteryDic[x]).ToArray();
             }
 

@@ -34,7 +34,11 @@ namespace Lottery.Core.Plan
             FactorTypeEnum.Tuple4AAward,
             FactorTypeEnum.Tuple4BAward,
             FactorTypeEnum.Tuple4CAward,
-            FactorTypeEnum.Award
+            FactorTypeEnum.Award,
+            FactorTypeEnum.LeftRepeat,
+            FactorTypeEnum.MiddleRepeat,
+            FactorTypeEnum.RightRepeat,
+            FactorTypeEnum.RepeatNumber
         };
 
         public override string GetBetString(SimpleBet currentBet)
@@ -51,11 +55,6 @@ namespace Lottery.Core.Plan
             excludeAwards = isDouble ? currentBet.BetAward.Skip(2).ToArray() : new int[] { };
             doubleSpans = Enumerable.Range(StartSpan, SpanLength).ToArray();
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet.BetAward) : new int[][] { };
-
-            if (awards.All(c => c == 0 || c == 1 || c == 8 || c == 9))
-            {
-                doubleSpans = new int[] { 4, 5, 6, 7, 8, 9 };
-            }
 
             if (EnableSinglePattern)
             {
@@ -106,6 +105,8 @@ namespace Lottery.Core.Plan
         public override bool IsHit(SimpleBet currentBet)
         {
             int[] numbers = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
+            if (!LotteryName.Contains("|"))
+            {
             string gameArgs = GameArgs.Split('.')[0];
             switch (gameArgs)
             {
@@ -114,15 +115,6 @@ namespace Lottery.Core.Plan
                     break;
                 case "after4":
                     numbers = numbers.Skip(1).ToArray();
-                    break;
-                case "after2":
-                    numbers = numbers.Skip(3).ToArray();
-                    break;
-                case "middle2":
-                    numbers = numbers.Skip(2).Take(2).ToArray();
-                    break;
-                case "front2":
-                    numbers = numbers.Take(2).ToArray();
                     break;
                 case "front":
                     numbers = numbers.Take(3).ToArray();
@@ -164,6 +156,7 @@ namespace Lottery.Core.Plan
                     numbers = new int[] { numbers[0], numbers[2], numbers[3], numbers[4] };
                     break;
             }
+            }
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && IsValid(numbers);
             return isHit;
         }
@@ -195,10 +188,17 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
+                if (StartSpan > 10)
+                {
+                    ret = number.Length > 2 && !number.Intersect(awards).Any();
+                }
+                else
+                {
                 int zeroCount = number.Select(c => c % 3).Distinct().Count();
                 int sumRemain = input.Sum() % 10;
                 //ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && zeroCount > 1 && sumRemain > 0;
                 ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
+            }
             }
             else
             {

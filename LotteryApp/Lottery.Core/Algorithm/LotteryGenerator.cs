@@ -34,6 +34,11 @@ namespace Lottery.Core.Algorithm
                     new CD.Lottery {  Key = "tsssc|middle", DisplayName="腾讯分分彩 中三",Source=3, StartIndex = 1, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                     new CD.Lottery {  Key = "tsssc|after", DisplayName="腾讯分分彩 后三",Source=3, StartIndex = 2, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
 
+                    new CD.Lottery {  Key = "tsssc|front2", DisplayName="腾讯分分彩 前二",Source=3, StartIndex = 0, Length =2, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
+                    new CD.Lottery {  Key = "tsssc|after2", DisplayName="腾讯分分彩 后二",Source=3, StartIndex = 3, Length =2, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
+                    new CD.Lottery {  Key = "tsssc|tuplea2", DisplayName="腾讯分分彩 千百",Source=3, StartIndex = 1, Length =2, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
+                    new CD.Lottery {  Key = "tsssc|tupleb2", DisplayName="腾讯分分彩  百十",Source=3, StartIndex = 2, Length =2, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
+
                     new CD.Lottery {  Key = "cqssc", DisplayName="重庆时时彩",Source=1, RegexPattern = @"(?<=\d{11}\s)(\d\s){4}\d", StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                     new CD.Lottery {  Key = "cqssc|front", DisplayName="重庆时时彩 前三",Source=1, RegexPattern = @"(?<=\d{11}\s)(\d\s){4}\d", StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                     new CD.Lottery {  Key = "cqssc|middle", DisplayName="重庆时时彩 中三",Source=1, RegexPattern = @"(?<=\d{11}\s)(\d\s){4}\d", StartIndex = 1, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
@@ -61,7 +66,7 @@ namespace Lottery.Core.Algorithm
                     new CD.Lottery {  Key = "gd115",  DisplayName="广东11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
                     new CD.Lottery {  Key = "gs115",  DisplayName="甘肃11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}}
                 };
-                config = new LotteryMetaConfig { Lotteries = lotteries, Numbers = GetAllNumbers(3) };
+                config = new LotteryMetaConfig { Lotteries = lotteries, ThreeNumbers = GetAllNumbers(3), TwoNumbers = GetAllNumbers(2) };
                 string str = JsonConvert.SerializeObject(config);
                 using (StreamWriter sw = File.CreateText(path))
                 {
@@ -86,19 +91,19 @@ namespace Lottery.Core.Algorithm
             Type sizeType = typeof(SizeEnum);
             Type primeType = typeof(PrimeEnum);
 
-            int[] array = type == 3 ? new int[] { x, y, z } : new int[] { x, y, z, p, q };
-            int[] remainders = type == 3 ? new int[] { x % 3, y % 3, z % 3 } : new int[] { x % 3, y % 3, z % 3, p % 3, q % 3 };
+            int[] array = type == 2 ? new int[] { x, y } : (type == 3 ? new int[] { x, y, z } : new int[] { x, y, z, p, q });
+            int[] remainders = type == 2 ? new int[] { x % 3, y % 3 } : (type == 3 ? new int[] { x % 3, y % 3, z % 3 } : new int[] { x % 3, y % 3, z % 3, p % 3, q % 3 });
             LotteryNumber number = new LotteryNumber
             {
                 Key = string.Join(string.Empty, array),
                 Max = array.Max(),
                 Min = array.Min(),
                 Sum = array.Sum(),
-                Wan = type == 3 ? 0 : x,
-                Thousand = type == 3 ? 0 : y,
-                Hundred = type == 3 ? x : z,
-                Decade = type == 3 ? y : p,
-                Unit = type == 3 ? z : q,
+                Wan = type == 5 ? x : 0,
+                Thousand = type == 5 ? y : 0,
+                Hundred = type == 2 ? 0 : (type == 3 ? x : z),
+                Decade = type == 2 ? x : (type == 3 ? y : p),
+                Unit = type == 2 ? y : (type == 3 ? z : q),
                 Odd = (OddEnum)Enum.Parse(oddType, string.Concat(odd.Contains(x) ? "Odd" : "Even", odd.Contains(y) ? "Odd" : "Even", odd.Contains(z) ? "Odd" : "Even")),
                 Size = (SizeEnum)Enum.Parse(sizeType, string.Concat(large.Contains(x) ? "Large" : "Small", large.Contains(y) ? "Large" : "Small", large.Contains(z) ? "Large" : "Small")),
                 Prime = (PrimeEnum)Enum.Parse(primeType, string.Concat(prime.Contains(x) ? "Prime" : "Composite", prime.Contains(y) ? "Prime" : "Composite", prime.Contains(z) ? "Prime" : "Composite"))
@@ -170,7 +175,7 @@ namespace Lottery.Core.Algorithm
                 number.FTuples = GetTuples(new int[] { array[1], array[2], array[4] });
                 number.GTuples = GetTuples(new int[] { array[1], array[3], array[4] });
 
-                int[] a4= new int[] { array[0], array[1], array[2], array[4] };
+                int[] a4 = new int[] { array[0], array[1], array[2], array[4] };
                 int[] b4 = new int[] { array[0], array[1], array[3], array[4] };
                 int[] c4 = new int[] { array[0], array[2], array[3], array[4] };
                 number.Tuple4As = GetTuples(a4);
@@ -191,7 +196,7 @@ namespace Lottery.Core.Algorithm
             }
 
             number.AllPairs = GetPairs(number.DistinctNumbers);
-          
+
             return number;
         }
 
@@ -273,7 +278,13 @@ namespace Lottery.Core.Algorithm
         {
             IEnumerable<LotteryNumber> query = null;
             int[] count = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            if (type == 3)
+            if (type == 2)
+            {
+                query = from x in count
+                        from y in count
+                        select Build(x, y, 0, 0, 0, 2);
+            }
+            else if (type == 3)
             {
                 query = from x in count
                         from y in count
