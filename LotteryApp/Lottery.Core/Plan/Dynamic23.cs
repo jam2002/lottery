@@ -107,55 +107,55 @@ namespace Lottery.Core.Plan
             int[] numbers = currentBet.LastLotteryNumber.Select(t => int.Parse(t.ToString())).ToArray();
             if (!LotteryName.Contains("|"))
             {
-            string gameArgs = GameArgs.Split('.')[0];
-            switch (gameArgs)
-            {
-                case "front4":
-                    numbers = numbers.Take(4).ToArray();
-                    break;
-                case "after4":
-                    numbers = numbers.Skip(1).ToArray();
-                    break;
-                case "front":
-                    numbers = numbers.Take(3).ToArray();
-                    break;
-                case "middle":
-                    numbers = numbers.Skip(1).Take(3).ToArray();
-                    break;
-                case "after":
-                    numbers = numbers.Skip(2).ToArray();
-                    break;
-                case "tuplea":
-                    numbers = new int[] { numbers[0], numbers[1], numbers[3] };
-                    break;
-                case "tupleb":
-                    numbers = new int[] { numbers[0], numbers[1], numbers[4] };
-                    break;
-                case "tuplec":
-                    numbers = new int[] { numbers[0], numbers[2], numbers[3] };
-                    break;
-                case "tupled":
-                    numbers = new int[] { numbers[0], numbers[2], numbers[4] };
-                    break;
-                case "tuplee":
-                    numbers = new int[] { numbers[0], numbers[3], numbers[4] };
-                    break;
-                case "tuplef":
-                    numbers = new int[] { numbers[1], numbers[2], numbers[4] };
-                    break;
-                case "tupleg":
-                    numbers = new int[] { numbers[1], numbers[3], numbers[4] };
-                    break;
-                case "tuple4a":
-                    numbers = new int[] { numbers[0], numbers[1], numbers[2], numbers[4] };
-                    break;
-                case "tuple4b":
-                    numbers = new int[] { numbers[0], numbers[1], numbers[3], numbers[4] };
-                    break;
-                case "tuple4c":
-                    numbers = new int[] { numbers[0], numbers[2], numbers[3], numbers[4] };
-                    break;
-            }
+                string gameArgs = GameArgs.Split('.')[0];
+                switch (gameArgs)
+                {
+                    case "front4":
+                        numbers = numbers.Take(4).ToArray();
+                        break;
+                    case "after4":
+                        numbers = numbers.Skip(1).ToArray();
+                        break;
+                    case "front":
+                        numbers = numbers.Take(3).ToArray();
+                        break;
+                    case "middle":
+                        numbers = numbers.Skip(1).Take(3).ToArray();
+                        break;
+                    case "after":
+                        numbers = numbers.Skip(2).ToArray();
+                        break;
+                    case "tuplea":
+                        numbers = new int[] { numbers[0], numbers[1], numbers[3] };
+                        break;
+                    case "tupleb":
+                        numbers = new int[] { numbers[0], numbers[1], numbers[4] };
+                        break;
+                    case "tuplec":
+                        numbers = new int[] { numbers[0], numbers[2], numbers[3] };
+                        break;
+                    case "tupled":
+                        numbers = new int[] { numbers[0], numbers[2], numbers[4] };
+                        break;
+                    case "tuplee":
+                        numbers = new int[] { numbers[0], numbers[3], numbers[4] };
+                        break;
+                    case "tuplef":
+                        numbers = new int[] { numbers[1], numbers[2], numbers[4] };
+                        break;
+                    case "tupleg":
+                        numbers = new int[] { numbers[1], numbers[3], numbers[4] };
+                        break;
+                    case "tuple4a":
+                        numbers = new int[] { numbers[0], numbers[1], numbers[2], numbers[4] };
+                        break;
+                    case "tuple4b":
+                        numbers = new int[] { numbers[0], numbers[1], numbers[3], numbers[4] };
+                        break;
+                    case "tuple4c":
+                        numbers = new int[] { numbers[0], numbers[2], numbers[3], numbers[4] };
+                        break;
+                }
             }
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && IsValid(numbers);
             return isHit;
@@ -194,11 +194,11 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                int zeroCount = number.Select(c => c % 3).Distinct().Count();
-                int sumRemain = input.Sum() % 10;
-                //ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && zeroCount > 1 && sumRemain > 0;
-                ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
-            }
+                    int zeroCount = number.Select(c => c % 3).Distinct().Count();
+                    int sumRemain = input.Sum() % 10;
+                    //ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && zeroCount > 1 && sumRemain > 0;
+                    ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
+                }
             }
             else
             {
