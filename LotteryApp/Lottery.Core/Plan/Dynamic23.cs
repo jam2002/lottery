@@ -54,7 +54,7 @@ namespace Lottery.Core.Plan
             awards = isDouble ? currentBet.BetAward.Take(2).ToArray() : new int[] { };
             excludeAwards = isDouble ? currentBet.BetAward.Skip(2).ToArray() : new int[] { };
             doubleSpans = Enumerable.Range(StartSpan, SpanLength).ToArray();
-            betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet.BetAward) : new int[][] { };
+            betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet) : new int[][] { };
 
             if (EnableSinglePattern)
             {
@@ -161,12 +161,16 @@ namespace Lottery.Core.Plan
             return isHit;
         }
 
-        private int[][] GetBetArray(int[] awards)
+        private int[][] GetBetArray(SimpleBet bet)
         {
-            Permutation combine = new Permutation(awards.Length);
             int number = TupleLength == 4 && Number == 3 ? 3 : 2;
-            int[][] betAwards = combine.GetRowsForAllPicks().Where(t => t.Picks == number).Select(t => (from s in t select awards[s]).ToArray()).ToArray();
-            return betAwards;
+            int[][] bets = GameName == "twopairs" ? bet.Results.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.Select(s => s.Values))).Take(2).ToArray() : new int[][] { bet.BetAward };
+
+            return bets.SelectMany(c =>
+            {
+                Permutation combine = new Permutation(c.Length);
+                return combine.GetRowsForAllPicks().Where(t => t.Picks == number).Select(t => (from s in t select c[s]).ToArray()).ToArray();
+            }).ToArray();
         }
 
         private bool IsValid(int[] input)

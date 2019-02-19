@@ -170,6 +170,7 @@ namespace Lottery.Core.Algorithm
                 case "adjacent":
                     ret = GetAdjacentResult();
                     break;
+                case "twopairs":
                 case "history":
                     ret = GetHistoryResult();
                     break;
@@ -212,7 +213,7 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetHistoryResult()
         {
-            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals))
+            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals, 6))
                                                                                             .OrderByDescending(c => c.Value.OccurCount)
                                                                                             .ThenBy(c => c.Value.MaxInterval)
                                                                                             .ThenBy(c => c.Value.FailureCount)
@@ -225,9 +226,6 @@ namespace Lottery.Core.Algorithm
                         orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
-            //int[] keys = validAwards.Take(2).OrderBy(c => c).ToArray();
-            //int key = 100 + keys[0] * 10 + keys[1];
-            //return Build(new int[] { key }, r);
         }
 
         private LotteryResult[] GetAnyTupleResult()
