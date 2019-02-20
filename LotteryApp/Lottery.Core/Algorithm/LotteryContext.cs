@@ -432,10 +432,10 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
                             select p.Key;
 
-                query = query.Take(3).Where(c => FactorDic[r.Value][c].LastInterval >= 2).ToArray();
+                query = query.Take(2).Where(c => FactorDic[r.Value][c].LastInterval >= 2).ToArray();
 
                 return Build(query, r.Value);
             }
