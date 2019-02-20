@@ -435,6 +435,8 @@ namespace Lottery.Core.Algorithm
                             orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
                             select p.Key;
 
+                query = query.Take(3).Where(c => FactorDic[r.Value][c].LastInterval >= 2).ToArray();
+
                 return Build(query, r.Value);
             }
             return new LotteryResult[] { };

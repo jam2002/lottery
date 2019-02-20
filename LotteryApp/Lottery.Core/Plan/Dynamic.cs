@@ -99,7 +99,7 @@ namespace Lottery.Core.Plan
                         break;
                     case 2:
                         BetIndex++;
-                        if (ChangeBetPerTime && !isDistinct)
+                        if (ChangeBetPerTime && !isDistinct && currentBet.BetAward.Any() && currentBet.Results.SelectMany(c => c.Output).Any())
                         {
                             PlanInvoker.Current.RemoveBetKey(LastBet.GetBetKey());
                             LastBet = currentBet;
