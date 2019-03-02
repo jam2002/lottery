@@ -572,7 +572,8 @@ namespace Lottery.Core.Algorithm
                             orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.ToArray();
-                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - 2).OrderBy(c => c).ToArray() : keys.Take(2).OrderBy(c => c).ToArray();
+                int k= InputOption.StartSpan % 10;
+                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
                     { "front2",   FactorTypeEnum.LeftDouble},
