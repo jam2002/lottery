@@ -51,7 +51,8 @@ namespace Lottery.Core.Plan
             isSpan = type == FactorTypeEnum.LeftSpan || type == FactorTypeEnum.MiddleSpan || type == FactorTypeEnum.RightSpan || type == FactorTypeEnum.Span;
             spans = isSpan && currentBet.BetAward.Any() ? currentBet.BetAward : new int[] { };
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
-            awards = isDouble ? currentBet.BetAward.Take(2).ToArray() : new int[] { };
+            int k = StartSpan % 10;
+            awards = isDouble ? currentBet.BetAward.Take(k).ToArray() : new int[] { };
             excludeAwards = isDouble ? currentBet.BetAward.Skip(2).ToArray() : new int[] { };
             doubleSpans = Enumerable.Range(StartSpan, SpanLength).ToArray();
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet) : new int[][] { };
