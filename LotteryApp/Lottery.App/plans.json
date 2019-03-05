@@ -2,7 +2,7 @@
   "Common": [
     {
       "Title": "前三组三(20)",
-      "Number": 2,
+      "Number": 1,
       "TakeNumber": 20,
       "BetCycle": 6,
       "GameInterval": 1,
@@ -23,7 +23,7 @@
     },
     {
       "Title": "中三组三(20)",
-      "Number": 2,
+      "Number": 1,
       "TakeNumber": 20,
       "BetCycle": 6,
       "GameInterval": 1,
@@ -42,8 +42,8 @@
       "StartSpan": 0,
       "SpanLength": 10
     },
-	{
-      "Title": "中三组六(50)",
+    {
+      "Title": "中三组六C(30)",
       "Number": 1,
       "TakeNumber": 30,
       "BetCycle": 9,
@@ -51,7 +51,7 @@
       "GameName": "double",
       "GameArgs": "middle",
       "LotteryName": "tsssc",
-      "ChangeBetPerTime": false,
+      "ChangeBetPerTime": true,
       "EnableSinglePattern": true,
       "EnableContinuous": false,
       "UseGeneralTrend": false,
@@ -65,7 +65,7 @@
     },
     {
       "Title": "后三组三(20)",
-      "Number": 2,
+      "Number": 1,
       "TakeNumber": 20,
       "BetCycle": 6,
       "GameInterval": 1,
@@ -85,28 +85,7 @@
       "SpanLength": 10
     },
     {
-      "Title": "后三组六(50)",
-      "Number": 1,
-      "TakeNumber": 30,
-      "BetCycle": 9,
-      "GameInterval": 1,
-      "GameName": "double",
-      "GameArgs": "after",
-      "LotteryName": "tsssc",
-      "ChangeBetPerTime": false,
-      "EnableSinglePattern": true,
-      "EnableContinuous": false,
-      "UseGeneralTrend": false,
-      "RespectRepeat": true,
-      "DisableRepeat": true,
-      "WaitInterval": 0,
-      "TupleLength": 4,
-      "NumberLength": 3,
-      "StartSpan": 13,
-      "SpanLength": 8
-    },
-    {
-      "Title": "后三组六(50)",
+      "Title": "后三组六C(30)",
       "Number": 1,
       "TakeNumber": 30,
       "BetCycle": 9,
@@ -125,6 +104,27 @@
       "NumberLength": 3,
       "StartSpan": 13,
       "SpanLength": 8
+    },
+    {
+      "Title": "五星一码(50)",
+      "Number": 1,
+      "TakeNumber": 50,
+      "BetCycle": 3,
+      "GameInterval": 1,
+      "GameName": "symmetric",
+      "GameArgs": "all",
+      "LotteryName": "tsssc",
+      "ChangeBetPerTime": false,
+      "EnableSinglePattern": false,
+      "EnableContinuous": false,
+      "UseGeneralTrend": false,
+      "RespectRepeat": false,
+      "DisableRepeat": false,
+      "WaitInterval": 0,
+      "TupleLength": 3,
+      "NumberLength": 3,
+      "StartSpan": 0,
+      "SpanLength": 10
     }
   ]
 }
