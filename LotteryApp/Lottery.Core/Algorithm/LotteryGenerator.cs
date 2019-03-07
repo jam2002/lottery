@@ -175,15 +175,24 @@ namespace Lottery.Core.Algorithm
                 number.FTuples = GetTuples(new int[] { array[1], array[2], array[4] });
                 number.GTuples = GetTuples(new int[] { array[1], array[3], array[4] });
 
+                number.AAwards = GetAwards(new int[] { array[0], array[1], array[3] });
+                number.BAwards = GetAwards(new int[] { array[0], array[1], array[4] });
+                number.CAwards = GetAwards(new int[] { array[0], array[2], array[3] });
+                number.DAwards = GetAwards(new int[] { array[0], array[2], array[4] });
+                number.EAwards = GetAwards(new int[] { array[0], array[3], array[4] });
+                number.FAwards = GetAwards(new int[] { array[1], array[2], array[4] });
+                number.GAwards = GetAwards(new int[] { array[1], array[3], array[4] });
+
                 int[] a4 = new int[] { array[0], array[1], array[2], array[4] };
                 int[] b4 = new int[] { array[0], array[1], array[3], array[4] };
                 int[] c4 = new int[] { array[0], array[2], array[3], array[4] };
                 number.Tuple4As = GetTuples(a4);
                 number.Tuple4Bs = GetTuples(b4);
                 number.Tuple4Cs = GetTuples(c4);
-                number.Tuple4AAwards = a4.Distinct().OrderBy(c => c).ToArray();
-                number.Tuple4BAwards = b4.Distinct().OrderBy(c => c).ToArray();
-                number.Tuple4CAwards = c4.Distinct().OrderBy(c => c).ToArray();
+                number.Tuple4AAwards = GetAwards(a4);
+                number.Tuple4BAwards = GetAwards(b4);
+                number.Tuple4CAwards = GetAwards(c4);
+
             }
             else
             {
@@ -252,6 +261,11 @@ namespace Lottery.Core.Algorithm
                 }
             }
             return ret;
+        }
+
+        private static int[] GetAwards(int[] array)
+        {
+            return array.Distinct().OrderBy(c => c).ToArray();
         }
 
         private static int GetAdjacents(int[] array, int index)

@@ -60,6 +60,20 @@
         public int[] Tuple4Bs { get; set; }
         public int[] Tuple4Cs { get; set; }
 
+        public int[] AAwards { get; set; }
+
+        public int[] BAwards { get; set; }
+
+        public int[] CAwards { get; set; }
+
+        public int[] DAwards { get; set; }
+
+        public int[] EAwards { get; set; }
+
+        public int[] FAwards { get; set; }
+
+        public int[] GAwards { get; set; }
+
         public int[] Tuple4AAwards { get; set; }
 
         public int[] Tuple4BAwards { get; set; }

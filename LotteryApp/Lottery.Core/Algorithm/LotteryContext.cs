@@ -133,6 +133,14 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.Tuple4A, number.Tuple4As},
                 { FactorTypeEnum.Tuple4B, number.Tuple4Bs},
                 { FactorTypeEnum.Tuple4C, number.Tuple4Cs},
+
+                { FactorTypeEnum.AAward, number.AAwards},
+                { FactorTypeEnum.BAward, number.BAwards},
+                { FactorTypeEnum.CAward, number.CAwards},
+                { FactorTypeEnum.DAward, number.DAwards},
+                { FactorTypeEnum.EAward, number.EAwards},
+                { FactorTypeEnum.FAward, number.FAwards},
+                { FactorTypeEnum.GAward, number.GAwards},
             };
 
             foreach (var p in typeDic.Where(t => t.Value != null))
@@ -420,6 +428,13 @@ namespace Lottery.Core.Algorithm
                 { "front",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.LeftAward},
                 { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.MiddleAward},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.RightAward},
+                { "tuplea", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.AAward},
+                { "tupleb", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.BAward},
+                { "tuplec", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.CAward},
+                { "tupled", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.DAward},
+                { "tuplee", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.EAward},
+                { "tuplef", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.FAward},
+                { "tupleg", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.GAward},
                 { "after4",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Right4Award},
                 { "front4",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Left4Award},
                 { "tuple4a",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4AAward},

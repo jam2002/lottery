@@ -177,6 +177,20 @@
 
         Tuple4BAward = 67,
 
-        Tuple4CAward = 68
+        Tuple4CAward = 68,
+
+        AAward,
+
+        BAward,
+
+        CAward,
+
+        DAward,
+
+        EAward,
+
+        FAward,
+
+        GAward
     }
 }

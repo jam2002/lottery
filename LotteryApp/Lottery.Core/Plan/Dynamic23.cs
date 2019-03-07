@@ -34,6 +34,13 @@ namespace Lottery.Core.Plan
             FactorTypeEnum.Tuple4AAward,
             FactorTypeEnum.Tuple4BAward,
             FactorTypeEnum.Tuple4CAward,
+            FactorTypeEnum.AAward,
+            FactorTypeEnum.BAward,
+            FactorTypeEnum.CAward,
+            FactorTypeEnum.DAward,
+            FactorTypeEnum.EAward,
+            FactorTypeEnum.FAward,
+            FactorTypeEnum.GAward,
             FactorTypeEnum.Award,
             FactorTypeEnum.LeftRepeat,
             FactorTypeEnum.MiddleRepeat,
@@ -202,7 +209,6 @@ namespace Lottery.Core.Plan
                     int zeroCount = number.Select(c => c % 3).Distinct().Count();
                     int sumRemain = input.Sum() % 10;
                     ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && doubleSpans.Contains(span) && zeroCount > 1 && sumRemain > 0;
-                    //ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
                 }
             }
             else
