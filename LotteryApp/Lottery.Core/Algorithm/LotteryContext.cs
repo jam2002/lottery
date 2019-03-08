@@ -442,8 +442,10 @@ namespace Lottery.Core.Algorithm
                 { "tuple4c",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4CAward},
                 { "all", FactorTypeEnum.Award}
             };
+
             string[] gameArgs = InputOption.GameArgs.Split('.').ToArray();
-            FactorTypeEnum? r = enumDic.ContainsKey(gameArgs[0]) ? (FactorTypeEnum?)enumDic[gameArgs[0]] : null;
+            string key = gameArgs.Length > 1 ? gameArgs[1] : gameArgs[0];
+            FactorTypeEnum? r = enumDic.ContainsKey(key) ? (FactorTypeEnum?)enumDic[key] : null;
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
