@@ -1,9 +1,9 @@
 ﻿using Lottery.Core.Algorithm;
 using Lottery.Core.Data;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace Lottery.Core.Plan
 {
