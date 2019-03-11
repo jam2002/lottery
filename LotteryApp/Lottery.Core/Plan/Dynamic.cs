@@ -3,10 +3,11 @@ using Lottery.Core.Data;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Lottery.Core.Plan
 {
-    public abstract class Dynamic : IPlan
+    public abstract class Dynamic : IPlan, INotifyPropertyChanged
     {
         public SimpleBet LastBet { get; set; }
 
@@ -27,6 +28,12 @@ namespace Lottery.Core.Plan
         public string GameArgs { get; set; }
 
         public string Title { get; set; }
+
+        private string _desc;
+        public string Desc { get => _desc; set { _desc = value; OnPropertyChanged("Desc"); } }
+
+        private string _value;
+        public string Value { get => _value; set { _value = value; OnPropertyChanged("Value"); } }
 
         public int GameInterval { get; set; }
 
@@ -57,6 +64,12 @@ namespace Lottery.Core.Plan
 
         private Dictionary<int, int> betCounters;
         protected bool isDistinct;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected internal virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public void Invoke(SimpleBet currentBet)
         {
