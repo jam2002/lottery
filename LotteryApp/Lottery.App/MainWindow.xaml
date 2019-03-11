@@ -20,7 +20,9 @@
                                     <TextBlock Margin="0,2,2,2">统计</TextBlock>
                                     <TextBox Height="40" Width="500" Text="{Binding Path=Desc, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"></TextBox>
                                     <TextBlock Margin="2">投注</TextBlock>
-                                    <TextBox Height="40" Width="500" Text="{Binding Path=Value, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"></TextBox>
+                                    <WindowsFormsHost Height="40" Width="500" Name="valueHost">
+                                        <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                    </WindowsFormsHost>
                                 </StackPanel>
                             </StackPanel>
                         </DataTemplate>

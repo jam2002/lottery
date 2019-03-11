@@ -6,6 +6,9 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms.Integration;
+using System.Windows.Media;
 
 namespace Lottery.App
 {
@@ -49,6 +52,12 @@ namespace Lottery.App
                 var c = config.Common[index];
                 c.Value = value ?? string.Empty;
 
+                ListBoxItem item = listView.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
+                ContentPresenter cp = FindVisualChild<ContentPresenter>(item);
+                WindowsFormsHost host = cp.ContentTemplate.FindName("valueHost", cp) as WindowsFormsHost;
+                System.Windows.Forms.TextBox txtBox = host.Child as System.Windows.Forms.TextBox;
+                txtBox.Text = c.Value;
+
                 if (DateTime.Now.Minute == 30)
                 {
                     c.Desc = desc;
@@ -58,6 +67,23 @@ namespace Lottery.App
                     c.Desc += desc + Environment.NewLine;
                 }
             });
+        }
+
+        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is childItem)
+                    return (childItem)child;
+                else
+                {
+                    childItem childOfChild = FindVisualChild<childItem>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
         }
 
         private void Window_Closed(object sender, EventArgs e)
