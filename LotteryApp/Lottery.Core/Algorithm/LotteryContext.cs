@@ -530,6 +530,13 @@ namespace Lottery.Core.Algorithm
                 { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.LeftTuple},
                 { "middle", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples: FactorTypeEnum.MiddleTuple},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:  FactorTypeEnum.RightTuple},
+                { "tuplea", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.TupleA},
+                { "tupleb", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.TupleB},
+                { "tuplec", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.TupleC},
+                { "tupled", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.TupleD},
+                { "tuplee", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.TupleE},
+                { "tuplef", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.TupleF},
+                { "tupleg", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.TupleG},
                 { "front4", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Left4Tuple},
                 { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Right4Tuple},
                 { "tuple4a", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Tuple4A},
@@ -547,7 +554,14 @@ namespace Lottery.Core.Algorithm
                 { "front",   FactorTypeEnum.LeftTuple},
                 { "middle", FactorTypeEnum.MiddleTuple},
                 { "after",  FactorTypeEnum.RightTuple},
-                { "all", FactorTypeEnum.AllTuples}
+                { "all", FactorTypeEnum.AllTuples},
+                { "tuplea", FactorTypeEnum.TupleA},
+                { "tupleb", FactorTypeEnum.TupleB},
+                { "tuplec", FactorTypeEnum.TupleC},
+                { "tupled", FactorTypeEnum.TupleD},
+                { "tuplee", FactorTypeEnum.TupleE},
+                { "tuplef", FactorTypeEnum.TupleF},
+                { "tupleg", FactorTypeEnum.TupleG}
             };
 
             string gameArgs = InputOption.GameArgs.Split('.').ToArray()[0];
