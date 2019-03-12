@@ -74,6 +74,26 @@
 
         public int[] GAwards { get; set; }
 
+        public int[] LeftPairs { get; set; }
+
+        public int[] RightPairs { get; set; }
+
+        public int[] APairs { get; set; }
+
+        public int[] BPairs { get; set; }
+
+        public int[] CPairs { get; set; }
+
+        public int[] DPairs { get; set; }
+
+        public int[] EPairs { get; set; }
+
+        public int[] FPairs { get; set; }
+
+        public int[] GPairs { get; set; }
+
+        public int[] HPairs { get; set; }
+
         public int[] Tuple4AAwards { get; set; }
 
         public int[] Tuple4BAwards { get; set; }

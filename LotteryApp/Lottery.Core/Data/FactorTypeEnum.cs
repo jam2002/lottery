@@ -191,6 +191,47 @@
 
         FAward,
 
-        GAward
+        GAward,
+
+        /// <summary>
+        /// 前二
+        /// </summary>
+        LeftPair,
+        /// <summary>
+        /// 后二
+        /// </summary>
+        RightPair,
+        /// <summary>
+        /// 万百
+        /// </summary>
+        APair,
+        /// <summary>
+        /// 万十
+        /// </summary>
+        BPair,
+        /// <summary>
+        /// 万个
+        /// </summary>
+        CPair,
+        /// <summary>
+        /// 千百
+        /// </summary>
+        DPair,
+        /// <summary>
+        /// 千十
+        /// </summary>
+        EPair,
+        /// <summary>
+        /// 千个
+        /// </summary>
+        FPair,
+        /// <summary>
+        /// 百十
+        /// </summary>
+        GPair,
+        /// <summary>
+        /// 百个
+        /// </summary>
+        HPair
     }
 }

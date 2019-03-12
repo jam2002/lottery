@@ -45,7 +45,17 @@ namespace Lottery.Core.Plan
             FactorTypeEnum.LeftRepeat,
             FactorTypeEnum.MiddleRepeat,
             FactorTypeEnum.RightRepeat,
-            FactorTypeEnum.RepeatNumber
+            FactorTypeEnum.RepeatNumber,
+            FactorTypeEnum.LeftPair,
+            FactorTypeEnum.RightPair,
+            FactorTypeEnum.APair,
+            FactorTypeEnum.BPair,
+            FactorTypeEnum.CPair,
+            FactorTypeEnum.DPair,
+            FactorTypeEnum.EPair,
+            FactorTypeEnum.FPair,
+            FactorTypeEnum.GPair,
+            FactorTypeEnum.HPair
         };
 
         public override string GetBetString(SimpleBet currentBet)
@@ -162,6 +172,37 @@ namespace Lottery.Core.Plan
                         break;
                     case "tuple4c":
                         numbers = new int[] { numbers[0], numbers[2], numbers[3], numbers[4] };
+                        break;
+
+                    case "leftpair":
+                        numbers = new int[] { numbers[0], numbers[1] };
+                        break;
+                    case "rightpair":
+                        numbers = new int[] { numbers[3], numbers[4] };
+                        break;
+                    case "paira":
+                        numbers = new int[] { numbers[0], numbers[2] };
+                        break;
+                    case "pairb":
+                        numbers = new int[] { numbers[0], numbers[3] };
+                        break;
+                    case "pairc":
+                        numbers = new int[] { numbers[0], numbers[4] };
+                        break;
+                    case "paird":
+                        numbers = new int[] { numbers[1], numbers[2] };
+                        break;
+                    case "paire":
+                        numbers = new int[] { numbers[1], numbers[3] };
+                        break;
+                    case "pairf":
+                        numbers = new int[] { numbers[1], numbers[4] };
+                        break;
+                    case "pairg":
+                        numbers = new int[] { numbers[2], numbers[3] };
+                        break;
+                    case "pairh":
+                        numbers = new int[] { numbers[2], numbers[4] };
                         break;
                 }
             }

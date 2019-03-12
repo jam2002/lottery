@@ -193,6 +193,16 @@ namespace Lottery.Core.Algorithm
                 number.Tuple4BAwards = GetAwards(b4);
                 number.Tuple4CAwards = GetAwards(c4);
 
+                number.LeftPairs = GetAwards(new int[] { array[0], array[1] });
+                number.RightPairs = GetAwards(new int[] { array[3], array[4] });
+                number.APairs = GetAwards(new int[] { array[0], array[2] });
+                number.BPairs = GetAwards(new int[] { array[0], array[3] });
+                number.CPairs = GetAwards(new int[] { array[0], array[4] });
+                number.DPairs = GetAwards(new int[] { array[1], array[2] });
+                number.EPairs = GetAwards(new int[] { array[1], array[3] });
+                number.FPairs = GetAwards(new int[] { array[1], array[4] });
+                number.GPairs = GetAwards(new int[] { array[2], array[3] });
+                number.HPairs = GetAwards(new int[] { array[2], array[4] });
             }
             else
             {
