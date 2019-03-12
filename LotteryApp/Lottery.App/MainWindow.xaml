@@ -7,7 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lottery.App"
         mc:Ignorable="d"
-        Title="计划软件" Loaded="Window_Loaded" Width="1100" Height="680" Closed="Window_Closed">
+        Title="计划软件" Loaded="Window_Loaded" Width="1100" Height="680" Closed="Window_Closed" ResizeMode="NoResize">
     <ScrollViewer x:Name="scrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <ScrollViewer.Content>
             <StackPanel CanVerticallyScroll="True" CanHorizontallyScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -18,7 +18,7 @@
                                 <TextBlock Margin="0,2" Text="{Binding Path=Title, Mode=OneTime}"></TextBlock>
                                 <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
                                     <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                    <TextBox Height="40" Width="500" Text="{Binding Path=Desc, Mode=OneWay}" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"></TextBox>
+                                    <TextBox Height="40" Width="500" Name="txtDesc" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
                                     <TextBlock Margin="6,2,2,2">投注</TextBlock>
                                     <WindowsFormsHost Height="40" Width="500" Name="valueHost">
                                         <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>

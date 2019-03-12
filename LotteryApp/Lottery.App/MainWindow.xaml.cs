@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -40,7 +39,7 @@ namespace Lottery.App
                 config.Common[i].Dispatcher = (u, v) => UpdateUI(c, u, v);
             }
 
-            listView.ItemsSource = new ObservableCollection<Dynamic23>(config.Common);
+            listView.ItemsSource = config.Common;
 
             Dictionary<string, IPlan> dic = config.Common.OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
@@ -50,25 +49,27 @@ namespace Lottery.App
         {
             this.Dispatcher.Invoke(() =>
             {
+                ListBoxItem item = listView.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
+                ContentPresenter cp = FindVisualChild<ContentPresenter>(item);
+                WindowsFormsHost host = cp.ContentTemplate.FindName("valueHost", cp) as WindowsFormsHost;
+                System.Windows.Forms.TextBox valueBox = host.Child as System.Windows.Forms.TextBox;
+                TextBox descBox = cp.ContentTemplate.FindName("txtDesc", cp) as TextBox;
+
                 var c = config.Common[index];
                 if (value != null)
                 {
-                    c.Value = value;
-
-                    ListBoxItem item = listView.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
-                    ContentPresenter cp = FindVisualChild<ContentPresenter>(item);
-                    WindowsFormsHost host = cp.ContentTemplate.FindName("valueHost", cp) as WindowsFormsHost;
-                    System.Windows.Forms.TextBox txtBox = host.Child as System.Windows.Forms.TextBox;
-                    txtBox.Text = c.Value;
+                    valueBox.Text = value;
                 }
 
                 if (clearMinutes.Contains(DateTime.Now.Minute))
                 {
-                    c.Desc = desc;
+                    descBox.Clear();
                 }
-                else
+
+                if (!string.IsNullOrEmpty(desc))
                 {
-                    c.Desc += desc + Environment.NewLine;
+                    descBox.AppendText(desc);
+                    descBox.AppendText(Environment.NewLine);
                 }
             });
         }

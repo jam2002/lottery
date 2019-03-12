@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Lottery.Core.Plan
 {
-    public abstract class Dynamic : IPlan, INotifyPropertyChanged
+    public abstract class Dynamic : IPlan
     {
         public SimpleBet LastBet { get; set; }
 
@@ -28,11 +28,6 @@ namespace Lottery.Core.Plan
         public string GameArgs { get; set; }
 
         public string Title { get; set; }
-
-        private string _desc;
-        public string Desc { get => _desc; set { _desc = value; OnPropertyChanged("Desc"); } }
-
-        public string Value { get; set; }
 
         public int GameInterval { get; set; }
 
