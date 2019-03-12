@@ -18,6 +18,7 @@ namespace Lottery.App
     public partial class MainWindow : Window
     {
         private PlanConfig config;
+        private int[] clearMinutes = new int[] { 0, 20, 40 };
 
         public MainWindow()
         {
@@ -61,7 +62,7 @@ namespace Lottery.App
                     txtBox.Text = c.Value;
                 }
 
-                if (DateTime.Now.Minute == 30)
+                if (clearMinutes.Contains(DateTime.Now.Minute))
                 {
                     c.Desc = desc;
                 }
