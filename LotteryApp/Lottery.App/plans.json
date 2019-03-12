@@ -211,6 +211,28 @@
       "NumberLength": 3,
       "StartSpan": 0,
       "SpanLength": 10
+    },
+
+    {
+      "Title": "五星二码(30)",
+      "Number": 2,
+      "TakeNumber": 30,
+      "BetCycle": 7,
+      "GameInterval": 1,
+      "GameName": "history",
+      "GameArgs": "all",
+      "LotteryName": "tsssc",
+      "ChangeBetPerTime": false,
+      "EnableSinglePattern": false,
+      "EnableContinuous": false,
+      "UseGeneralTrend": true,
+      "RespectRepeat": false,
+      "DisableRepeat": false,
+      "WaitInterval": 0,
+      "TupleLength": 4,
+      "NumberLength": 3,
+      "StartSpan": 0,
+      "SpanLength": 10
     }
   ]
 }
