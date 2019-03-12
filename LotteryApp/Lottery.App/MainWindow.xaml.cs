@@ -50,13 +50,16 @@ namespace Lottery.App
             this.Dispatcher.Invoke(() =>
             {
                 var c = config.Common[index];
-                c.Value = value ?? string.Empty;
+                if (value != null)
+                {
+                    c.Value = value;
 
-                ListBoxItem item = listView.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
-                ContentPresenter cp = FindVisualChild<ContentPresenter>(item);
-                WindowsFormsHost host = cp.ContentTemplate.FindName("valueHost", cp) as WindowsFormsHost;
-                System.Windows.Forms.TextBox txtBox = host.Child as System.Windows.Forms.TextBox;
-                txtBox.Text = c.Value;
+                    ListBoxItem item = listView.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
+                    ContentPresenter cp = FindVisualChild<ContentPresenter>(item);
+                    WindowsFormsHost host = cp.ContentTemplate.FindName("valueHost", cp) as WindowsFormsHost;
+                    System.Windows.Forms.TextBox txtBox = host.Child as System.Windows.Forms.TextBox;
+                    txtBox.Text = c.Value;
+                }
 
                 if (DateTime.Now.Minute == 30)
                 {

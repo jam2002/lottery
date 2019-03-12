@@ -32,8 +32,7 @@ namespace Lottery.Core.Plan
         private string _desc;
         public string Desc { get => _desc; set { _desc = value; OnPropertyChanged("Desc"); } }
 
-        private string _value;
-        public string Value { get => _value; set { _value = value; OnPropertyChanged("Value"); } }
+        public string Value { get; set; }
 
         public int GameInterval { get; set; }
 
