@@ -19,7 +19,7 @@
                                 <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
                                     <TextBlock Margin="0,2,2,2">统计</TextBlock>
                                     <TextBox Height="40" Width="500" Text="{Binding Path=Desc, Mode=OneWay}" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"></TextBox>
-                                    <TextBlock Margin="2">投注</TextBlock>
+                                    <TextBlock Margin="6,2,2,2">投注</TextBlock>
                                     <WindowsFormsHost Height="40" Width="500" Name="valueHost">
                                         <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
                                     </WindowsFormsHost>

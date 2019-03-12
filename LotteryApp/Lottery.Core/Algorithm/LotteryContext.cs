@@ -423,38 +423,38 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] BuildSingles()
         {
-            Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
+            Dictionary<string, Tuple<FactorTypeEnum, FactorTypeEnum>> enumDic = new Dictionary<string, Tuple<FactorTypeEnum, FactorTypeEnum>>
             {
-                { "front",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.LeftAward},
-                { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.MiddleAward},
-                { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.RightAward},
-                { "tuplea", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.AAward},
-                { "tupleb", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.BAward},
-                { "tuplec", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.CAward},
-                { "tupled", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.DAward},
-                { "tuplee", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.EAward},
-                { "tuplef", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.FAward},
-                { "tupleg", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.GAward},
-                { "after4",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Right4Award},
-                { "front4",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Left4Award},
-                { "tuple4a",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4AAward},
-                { "tuple4b",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4BAward},
-                { "tuple4c",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4CAward},
-                { "all", FactorTypeEnum.Award}
+                { "front",    new Tuple<FactorTypeEnum, FactorTypeEnum>(InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.LeftAward, FactorTypeEnum.LeftAward)},
+                { "middle",  new Tuple<FactorTypeEnum, FactorTypeEnum>(InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.MiddleAward, FactorTypeEnum.MiddleAward)},
+                { "after",   new Tuple<FactorTypeEnum, FactorTypeEnum>(InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.RightAward, FactorTypeEnum.RightAward)},
+                { "tuplea",  new Tuple<FactorTypeEnum, FactorTypeEnum>(InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.AAward, FactorTypeEnum.AAward)},
+                { "tupleb",  new Tuple<FactorTypeEnum, FactorTypeEnum>(InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.BAward, FactorTypeEnum.BAward)},
+                { "tuplec",  new Tuple<FactorTypeEnum, FactorTypeEnum>( InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.CAward, FactorTypeEnum.CAward)},
+                { "tupled",  new Tuple<FactorTypeEnum, FactorTypeEnum>( InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.DAward, FactorTypeEnum.DAward)},
+                { "tuplee",  new Tuple<FactorTypeEnum, FactorTypeEnum>( InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.EAward, FactorTypeEnum.EAward)},
+                { "tuplef",  new Tuple<FactorTypeEnum, FactorTypeEnum>( InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.FAward, FactorTypeEnum.FAward)},
+                { "tupleg",  new Tuple<FactorTypeEnum, FactorTypeEnum>(  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.GAward, FactorTypeEnum.GAward)},
+                { "after4", new Tuple<FactorTypeEnum, FactorTypeEnum>(  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Right4Award, FactorTypeEnum.Right4Award)},
+                { "front4", new Tuple<FactorTypeEnum, FactorTypeEnum>(  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Left4Award, FactorTypeEnum.Left4Award)},
+                { "tuple4a",  new Tuple<FactorTypeEnum, FactorTypeEnum>(  InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4AAward, FactorTypeEnum.Tuple4AAward)},
+                { "tuple4b",  new Tuple<FactorTypeEnum, FactorTypeEnum>( InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4BAward, FactorTypeEnum.Tuple4BAward)},
+                { "tuple4c",  new Tuple<FactorTypeEnum, FactorTypeEnum>( InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Tuple4CAward, FactorTypeEnum.Tuple4CAward)},
+                { "all",new Tuple<FactorTypeEnum, FactorTypeEnum>(  FactorTypeEnum.Award,FactorTypeEnum.Award)}
             };
 
             string[] gameArgs = InputOption.GameArgs.Split('.').ToArray();
             string key = gameArgs.Length > 1 ? gameArgs[1] : gameArgs[0];
-            FactorTypeEnum? r = enumDic.ContainsKey(key) ? (FactorTypeEnum?)enumDic[key] : null;
-            if (r.HasValue)
+            Tuple<FactorTypeEnum, FactorTypeEnum> r = enumDic.ContainsKey(key) ? enumDic[key] : null;
+            if (r != null)
             {
-                var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
+                var query = from p in FactorDic[r.Item1]
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.LastInterval
                             select p.Key;
 
-                query = query.Take(2).Where(c => FactorDic[r.Value][c].LastInterval >= InputOption.StartSpan).ToArray();
+                query = query.Take(2).Where(c => FactorDic[r.Item1][c].LastInterval >= InputOption.StartSpan).ToArray();
 
-                return Build(query, r.Value);
+                return Build(query, r.Item2);
             }
             return new LotteryResult[] { };
         }
