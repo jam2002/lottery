@@ -197,7 +197,7 @@
       "TakeNumber": 30,
       "BetCycle": 2,
       "GameInterval": 1,
-      "GameName": "tuple",
+      "GameName": "tripple",
       "GameArgs": "all",
       "LotteryName": "tsssc",
       "ChangeBetPerTime": false,
