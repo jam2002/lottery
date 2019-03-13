@@ -235,13 +235,15 @@ namespace Lottery.Core.Algorithm
             int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals, 6))
                                                                                             .OrderByDescending(c => c.Value.OccurCount)
                                                                                             .ThenBy(c => c.Value.MaxInterval)
-                                                                                            .ThenBy(c => c.Value.FailureCount)
-                                                                                            .Select(c => c.Key).ToArray();
+                                                                                            .ThenBy(c => c.Value.LastInterval)
+                                                                                            .Select(c => c.Key)
+                                                                                            .Take(3)
+                                                                                            .ToArray();
 
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-                        where validAwards.Intersect(values).Count() == values.Length && p.Value.OccurCount >= 8 && p.Value.LastInterval < 7
+                        where validAwards.Intersect(values).Count() == values.Length && p.Value.OccurCount >= 7 && p.Value.LastInterval < 7
                         orderby p.Value.LastInterval descending, p.Value.OccurCount descending, p.Value.MaxInterval
                         select p.Key;
             return Build(query, r);
