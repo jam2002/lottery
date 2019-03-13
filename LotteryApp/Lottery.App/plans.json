@@ -192,12 +192,12 @@
     },
 
     {
-      "Title": "五星二码(30)",
+      "Title": "五星三码(30)",
       "Number": 2,
       "TakeNumber": 30,
-      "BetCycle": 7,
+      "BetCycle": 2,
       "GameInterval": 1,
-      "GameName": "history",
+      "GameName": "tuple",
       "GameArgs": "all",
       "LotteryName": "tsssc",
       "ChangeBetPerTime": false,
@@ -207,7 +207,7 @@
       "RespectRepeat": false,
       "DisableRepeat": false,
       "WaitInterval": 0,
-      "TupleLength": 2,
+      "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 0,
       "SpanLength": 10
