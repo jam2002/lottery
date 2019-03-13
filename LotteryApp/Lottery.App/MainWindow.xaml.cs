@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.Integration;
-using System.Windows.Media;
 
 namespace Lottery.App
 {
@@ -39,57 +38,43 @@ namespace Lottery.App
                 config.Common[i].Dispatcher = (u, v) => UpdateUI(c, u, v);
             }
 
-            listView.ItemsSource = config.Common;
-
             Dictionary<string, IPlan> dic = config.Common.OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
         }
 
         private void UpdateUI(int index, string desc, string value)
         {
-            this.Dispatcher.Invoke(() =>
+            if (index < 10)
             {
-                ListBoxItem item = listView.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
-                ContentPresenter cp = FindVisualChild<ContentPresenter>(item);
-                WindowsFormsHost host = cp.ContentTemplate.FindName("valueHost", cp) as WindowsFormsHost;
-                System.Windows.Forms.TextBox valueBox = host.Child as System.Windows.Forms.TextBox;
-                TextBox descBox = cp.ContentTemplate.FindName("txtDesc", cp) as TextBox;
-
-                var c = config.Common[index];
-                if (value != null)
+                this.Dispatcher.Invoke(() =>
                 {
-                    valueBox.Text = value;
-                }
+                    TextBlock txtTitle = listView.FindName($"txtTitle{index + 1}") as TextBlock;
+                    TextBox descBox = listView.FindName($"txtDesc{index + 1}") as TextBox;
+                    WindowsFormsHost host = listView.FindName($"valueHost{index + 1}") as WindowsFormsHost;
+                    System.Windows.Forms.TextBox valueBox = host.Child as System.Windows.Forms.TextBox;
 
-                if (clearMinutes.Contains(DateTime.Now.Minute))
-                {
-                    descBox.Clear();
-                }
+                    var c = config.Common[index];
+                    txtTitle.Text = c.Title;
 
-                if (!string.IsNullOrEmpty(desc))
-                {
-                    descBox.AppendText(desc);
-                    descBox.AppendText(Environment.NewLine);
-                }
-            });
-        }
+                    if (value != null)
+                    {
+                        valueBox.Text = value;
+                    }
 
-        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
-                if (child != null && child is childItem)
-                    return (childItem)child;
-                else
-                {
-                    childItem childOfChild = FindVisualChild<childItem>(child);
-                    if (childOfChild != null)
-                        return childOfChild;
-                }
+                    if (clearMinutes.Contains(DateTime.Now.Minute))
+                    {
+                        descBox.Clear();
+                    }
+
+                    if (!string.IsNullOrEmpty(desc))
+                    {
+                        descBox.AppendText(desc);
+                        descBox.AppendText(Environment.NewLine);
+                    }
+                });
             }
-            return null;
         }
+
 
         private void Window_Closed(object sender, EventArgs e)
         {
