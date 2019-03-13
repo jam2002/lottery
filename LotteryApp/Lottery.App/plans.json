@@ -1,9 +1,9 @@
 ﻿{
   "Common": [
     {
-      "Title": "前三一码(50)",
+      "Title": "前三一码(30)",
       "Number": 1,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 5,
       "GameInterval": 1,
       "GameName": "single",
@@ -22,9 +22,9 @@
       "SpanLength": 10
     },
     {
-      "Title": "后三一码(50)",
+      "Title": "后三一码(30)",
       "Number": 1,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 5,
       "GameInterval": 1,
       "GameName": "single",
@@ -43,9 +43,9 @@
       "SpanLength": 10
     },
     {
-      "Title": "万千十(50)",
+      "Title": "万千十(30)",
       "Number": 1,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 5,
       "GameInterval": 1,
       "GameName": "single",
@@ -64,9 +64,9 @@
       "SpanLength": 10
     },
     {
-      "Title": "万千个(50)",
+      "Title": "万千个(30)",
       "Number": 1,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 5,
       "GameInterval": 1,
       "GameName": "single",
@@ -85,9 +85,9 @@
       "SpanLength": 10
     },
     {
-      "Title": "万百十(50)",
+      "Title": "万百十(30)",
       "Number": 1,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 5,
       "GameInterval": 1,
       "GameName": "single",
@@ -107,9 +107,9 @@
     },
 
     {
-      "Title": "万百个(50)",
+      "Title": "万百个(30)",
       "Number": 1,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 5,
       "GameInterval": 1,
       "GameName": "single",
@@ -128,9 +128,9 @@
       "SpanLength": 10
     },
     {
-      "Title": "万十个(50)",
+      "Title": "万十个(30)",
       "Number": 1,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 5,
       "GameInterval": 1,
       "GameName": "single",
@@ -149,9 +149,9 @@
       "SpanLength": 10
     },
     {
-      "Title": "千百个(50)",
+      "Title": "千百个(30)",
       "Number": 1,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 5,
       "GameInterval": 1,
       "GameName": "single",
@@ -171,9 +171,9 @@
     },
 
     {
-      "Title": "千十个(50)",
+      "Title": "千十个(30)",
       "Number": 1,
-      "TakeNumber": 50,
+      "TakeNumber": 30,
       "BetCycle": 5,
       "GameInterval": 1,
       "GameName": "single",
