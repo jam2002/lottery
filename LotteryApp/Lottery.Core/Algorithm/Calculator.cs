@@ -1,7 +1,5 @@
-﻿using HtmlAgilityPack;
-using Lottery.Core.Data;
+﻿using Lottery.Core.Data;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -127,8 +125,8 @@ namespace Lottery.Core.Algorithm
                 {
                     try
                     {
-                        //lotteries = GetTsNumbers("https://www.150106.com/api/lastOpenedIssues.php?id=1&issueCount=100");
-                        lotteries = GetTsNumbers("https://www.pp926.com/api/lastOpenedIssues.php?id=1&issueCount=100");
+                        //lotteries = GetTsNumbers("https://www.150106.com/api/lastOpenedIssues.php?id=1&issueCount=200");
+                        lotteries = GetTsNumbers("https://www.pp926.com/api/lastOpenedIssues.php?id=1&issueCount=200");
                     }
                     catch
                     {

@@ -425,7 +425,8 @@ namespace Lottery.Core.Algorithm
                 int considerCount = 15;
                 if (InputOption.TakeNumber > considerCount)
                 {
-                    occurPositions = factor.OccurPositions.SkipWhile(c => c + 1 <= InputOption.TakeNumber - considerCount).Select(c => c - (InputOption.TakeNumber - considerCount)).ToArray();
+                    int stopPoint = InputOption.TakeNumber - considerCount;
+                    occurPositions = factor.OccurPositions.SkipWhile(c => c == stopPoint || c + 1 <= stopPoint).Select(c => Math.Abs(c - stopPoint)).ToArray();
                     intervals = GetIntervals(occurPositions, considerCount);
                 }
                 isRepeat = intervals.Any() && occurPositions.Any() && intervals.Last() <= 5 && occurPositions.Count() >= 4;
@@ -474,7 +475,7 @@ namespace Lottery.Core.Algorithm
             if (r != null)
             {
                 var query = from p in FactorDic[r.Item1]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.LastInterval descending, p.Value.FailureCount
                             select p.Key;
 
                 query = query.Take(2).Where(c => FactorDic[r.Item1][c].LastInterval >= InputOption.StartSpan).ToArray();
