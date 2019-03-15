@@ -242,8 +242,8 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-                        where validAwards.Intersect(values).Count() == values.Length && p.Value.OccurCount >= 5 && p.Value.LastInterval < 7
-                        orderby p.Value.LastInterval descending, p.Value.OccurCount descending, p.Value.MaxInterval
+                        where validAwards.Intersect(values).Count() == values.Length && p.Value.OccurCount >= 6 && p.Value.LastInterval < 7
+                        orderby p.Value.LastInterval, p.Value.OccurCount descending, p.Value.MaxInterval
                         select p.Key;
             return Build(query, r);
         }
