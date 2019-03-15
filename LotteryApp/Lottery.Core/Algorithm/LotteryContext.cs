@@ -596,12 +596,12 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = enumDic[gameArgs];
 
             int[] continuous = InputOption.TupleLength == 4 ? new int[] { 10123, 11234, 12345, 13456, 14567, 15678, 16789, 10789, 10189, 10129 } : new int[] { 1012, 1123, 1234, 1345, 1456, 1567, 1678, 1789, 1089, 1019 };
-            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals)).Select(c => c.Key).ToArray();
+            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals, 6)).Select(c => c.Key).ToArray();
 
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-                        where (InputOption.EnableContinuous ? continuous.Contains(p.Key) : true) 
-                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval descending
+                        where (InputOption.EnableContinuous ? continuous.Contains(p.Key) : true) && (InputOption.TakeNumber == 15 ? p.Value.OccurCount >= 7 : true)
+                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
                         select p.Key;
 
             if (InputOption.UseGeneralTrend && InputOption.GeneralTrendInterval > 0)
