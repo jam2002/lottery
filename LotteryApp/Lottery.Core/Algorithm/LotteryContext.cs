@@ -517,11 +517,18 @@ namespace Lottery.Core.Algorithm
                 { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
                 { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
-                { "front4", FactorTypeEnum.Award},
-                { "after4", FactorTypeEnum.Award},
-                { "tuple4a", FactorTypeEnum.Award},
-                { "tuple4b", FactorTypeEnum.Award},
-                { "tuple4c", FactorTypeEnum.Award},
+                { "tuplea", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.AAward},
+                { "tupleb", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.BAward},
+                { "tuplec", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.CAward},
+                { "tupled", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.DAward},
+                { "tuplee", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.EAward},
+                { "tuplef", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.FAward},
+                { "tupleg", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.GAward},
+                { "front4", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Left4Award},
+                { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Right4Award},
+                { "tuple4a", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Tuple4AAward},
+                { "tuple4b", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Tuple4AAward},
+                { "tuple4c", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Tuple4CAward},
                 { "all", FactorTypeEnum.Award}
             };
 
@@ -530,7 +537,7 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                             select p.Key;
                 int[] keys = query.Take(InputOption.TupleLength).OrderBy(c => c).ToArray();
                 keys = new int[] { int.Parse("1" + string.Join(string.Empty, keys)) };
@@ -544,7 +551,14 @@ namespace Lottery.Core.Algorithm
                     { "front",   FactorTypeEnum.LeftTuple},
                     { "middle", FactorTypeEnum.MiddleTuple},
                     { "after",  FactorTypeEnum.RightTuple},
-                    { "all", FactorTypeEnum.AllTuples}
+                    { "all", FactorTypeEnum.AllTuples},
+                    { "tuplea", FactorTypeEnum.TupleA},
+                    { "tupleb", FactorTypeEnum.TupleB},
+                    { "tuplec", FactorTypeEnum.TupleC},
+                    { "tupled", FactorTypeEnum.TupleD},
+                    { "tuplee", FactorTypeEnum.TupleE},
+                    { "tuplef", FactorTypeEnum.TupleF},
+                    { "tupleg", FactorTypeEnum.TupleG}
                 };
                 return Build(keys, tupleDic[gameArgs]);
             }
