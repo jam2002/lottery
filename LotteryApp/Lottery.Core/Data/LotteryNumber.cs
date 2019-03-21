@@ -179,5 +179,25 @@
         public PrimeEnum Prime { get; set; }
 
         public SizeEnum Size { get; set; }
+
+        public int[] LeftPairTuples { get; set; }
+
+        public int[] RightPairTuples { get; set; }
+
+        public int[] APairTuples { get; set; }
+
+        public int[] BPairTuples { get; set; }
+
+        public int[] CPairTuples { get; set; }
+
+        public int[] DPairTuples { get; set; }
+
+        public int[] EPairTuples { get; set; }
+
+        public int[] FPairTuples { get; set; }
+
+        public int[] GPairTuples { get; set; }
+
+        public int[] HPairTuples { get; set; }
     }
 }

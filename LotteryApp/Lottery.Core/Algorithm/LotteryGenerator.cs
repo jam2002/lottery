@@ -203,6 +203,17 @@ namespace Lottery.Core.Algorithm
                 number.FPairs = GetAwards(new int[] { array[1], array[4] });
                 number.GPairs = GetAwards(new int[] { array[2], array[3] });
                 number.HPairs = GetAwards(new int[] { array[2], array[4] });
+
+                number.LeftPairTuples = GetTuples(new int[] { array[0], array[1] });
+                number.RightPairTuples = GetTuples(new int[] { array[3], array[4] });
+                number.APairTuples = GetTuples(new int[] { array[0], array[2] });
+                number.BPairTuples = GetTuples(new int[] { array[0], array[3] });
+                number.CPairTuples = GetTuples(new int[] { array[0], array[4] });
+                number.DPairTuples = GetTuples(new int[] { array[1], array[2] });
+                number.EPairTuples = GetTuples(new int[] { array[1], array[3] });
+                number.FPairTuples = GetTuples(new int[] { array[1], array[4] });
+                number.GPairTuples = GetTuples(new int[] { array[2], array[3] });
+                number.HPairTuples = GetTuples(new int[] { array[2], array[4] });
             }
             else
             {

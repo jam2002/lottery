@@ -151,7 +151,18 @@ namespace Lottery.Core.Algorithm
                 { FactorTypeEnum.EPair, number.EPairs},
                 { FactorTypeEnum.FPair, number.FPairs},
                 { FactorTypeEnum.GPair, number.GPairs},
-                { FactorTypeEnum.HPair, number.HPairs}
+                { FactorTypeEnum.HPair, number.HPairs},
+
+                { FactorTypeEnum.LeftPTuple, number.LeftPairTuples},
+                { FactorTypeEnum.RightPTuple, number.RightPairTuples},
+                { FactorTypeEnum.APairTuple, number.APairTuples},
+                { FactorTypeEnum.BPairTuple, number.BPairTuples},
+                { FactorTypeEnum.CPairTuple, number.CPairTuples},
+                { FactorTypeEnum.DPairTuple, number.DPairTuples},
+                { FactorTypeEnum.EPairTuple, number.EPairTuples},
+                { FactorTypeEnum.FPairTuple, number.FPairTuples},
+                { FactorTypeEnum.GPairTuple, number.GPairTuples},
+                { FactorTypeEnum.HPairTuple, number.HPairTuples}
             };
 
             foreach (var p in typeDic.Where(t => t.Value != null))
@@ -524,6 +535,18 @@ namespace Lottery.Core.Algorithm
                 { "tuplee", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.EAward},
                 { "tuplef", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.FAward},
                 { "tupleg", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.GAward},
+
+                { "leftpair", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftPair},
+                { "rightpair", InputOption.UseGeneralTrend? FactorTypeEnum.Award: FactorTypeEnum.RightPair},
+                { "paira",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:  FactorTypeEnum.APair},
+                { "pairb", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.BPair},
+                { "pairc", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.CPair},
+                { "paird", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.DPair},
+                { "paire", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.EPair},
+                { "pairf", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.FPair},
+                { "pairg", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.GPair},
+                { "pairh", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.HPair},
+
                 { "front4", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Left4Award},
                 { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Right4Award},
                 { "tuple4a", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Tuple4AAward},
@@ -558,7 +581,18 @@ namespace Lottery.Core.Algorithm
                     { "tupled", FactorTypeEnum.TupleD},
                     { "tuplee", FactorTypeEnum.TupleE},
                     { "tuplef", FactorTypeEnum.TupleF},
-                    { "tupleg", FactorTypeEnum.TupleG}
+                    { "tupleg", FactorTypeEnum.TupleG},
+
+                    { "leftpair",  FactorTypeEnum.LeftPTuple},
+                    { "rightpair", FactorTypeEnum.RightPTuple},
+                    { "paira",  FactorTypeEnum.APairTuple},
+                    { "pairb", FactorTypeEnum.BPairTuple},
+                    { "pairc", FactorTypeEnum.CPairTuple},
+                    { "paird", FactorTypeEnum.DPairTuple},
+                    { "paire", FactorTypeEnum.EPairTuple},
+                    { "pairf", FactorTypeEnum.FPairTuple},
+                    { "pairg", FactorTypeEnum.GPairTuple},
+                    { "pairh", FactorTypeEnum.HPairTuple}
                 };
                 return Build(keys, tupleDic[gameArgs]);
             }
@@ -584,6 +618,18 @@ namespace Lottery.Core.Algorithm
                 { "tuple4a", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Tuple4A},
                 { "tuple4b", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Tuple4B},
                 { "tuple4c", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.Tuple4C},
+
+                { "leftpair",  InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples: FactorTypeEnum.LeftPTuple},
+                { "rightpair", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples: FactorTypeEnum.RightPTuple},
+                { "paira",  InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:  FactorTypeEnum.APairTuple},
+                { "pairb", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.BPairTuple},
+                { "pairc", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.CPairTuple},
+                { "paird", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.DPairTuple},
+                { "paire", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.EPairTuple},
+                { "pairf", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.FPairTuple},
+                { "pairg", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.GPairTuple},
+                { "pairh", InputOption.UseGeneralTrend?FactorTypeEnum.AllTuples:FactorTypeEnum.HPairTuple},
+
                 { "all", FactorTypeEnum.AllTuples}
             };
             Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
@@ -603,7 +649,18 @@ namespace Lottery.Core.Algorithm
                 { "tupled", FactorTypeEnum.TupleD},
                 { "tuplee", FactorTypeEnum.TupleE},
                 { "tuplef", FactorTypeEnum.TupleF},
-                { "tupleg", FactorTypeEnum.TupleG}
+                { "tupleg", FactorTypeEnum.TupleG},
+
+                { "leftpair",  FactorTypeEnum.LeftPTuple},
+                { "rightpair", FactorTypeEnum.RightPTuple},
+                { "paira",  FactorTypeEnum.APairTuple},
+                { "pairb", FactorTypeEnum.BPairTuple},
+                { "pairc", FactorTypeEnum.CPairTuple},
+                { "paird", FactorTypeEnum.DPairTuple},
+                { "paire", FactorTypeEnum.EPairTuple},
+                { "pairf", FactorTypeEnum.FPairTuple},
+                { "pairg", FactorTypeEnum.GPairTuple},
+                { "pairh", FactorTypeEnum.HPairTuple}
             };
 
             string gameArgs = InputOption.GameArgs.Split('.').ToArray()[0];

@@ -232,6 +232,47 @@
         /// <summary>
         /// 百个
         /// </summary>
-        HPair
+        HPair,
+
+        /// <summary>
+        /// 前二
+        /// </summary>
+        LeftPTuple,
+        /// <summary>
+        /// 后二
+        /// </summary>
+        RightPTuple,
+        /// <summary>
+        /// 万百
+        /// </summary>
+        APairTuple,
+        /// <summary>
+        /// 万十
+        /// </summary>
+        BPairTuple,
+        /// <summary>
+        /// 万个
+        /// </summary>
+        CPairTuple,
+        /// <summary>
+        /// 千百
+        /// </summary>
+        DPairTuple,
+        /// <summary>
+        /// 千十
+        /// </summary>
+        EPairTuple,
+        /// <summary>
+        /// 千个
+        /// </summary>
+        FPairTuple,
+        /// <summary>
+        /// 百十
+        /// </summary>
+        GPairTuple,
+        /// <summary>
+        /// 百个
+        /// </summary>
+        HPairTuple
     }
 }
