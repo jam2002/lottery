@@ -366,6 +366,16 @@ namespace Lottery.Core.Algorithm
                 int[] values = null;
                 switch (type)
                 {
+                    case FactorTypeEnum.LeftPTuple:
+                    case FactorTypeEnum.RightPTuple:
+                    case FactorTypeEnum.APairTuple:
+                    case FactorTypeEnum.BPairTuple:
+                    case FactorTypeEnum.CPairTuple:
+                    case FactorTypeEnum.DPairTuple:
+                    case FactorTypeEnum.EPairTuple:
+                    case FactorTypeEnum.FPairTuple:
+                    case FactorTypeEnum.GPairTuple:
+                    case FactorTypeEnum.HPairTuple:
                     case FactorTypeEnum.TupleA:
                     case FactorTypeEnum.TupleB:
                     case FactorTypeEnum.TupleC:
