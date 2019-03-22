@@ -33,7 +33,6 @@ namespace Lottery.Core.Plan
             sp.ConnectionLimit = 10;
 
             planDic = plans;
-            currentInterval = plans.Values.First().GameInterval;
             currentBetKeys = new List<string> { };
 
             scheduler = StdSchedulerFactory.GetDefaultScheduler();
@@ -42,10 +41,15 @@ namespace Lottery.Core.Plan
             IJobDetail job = JobBuilder.Create<SimpleJob>().WithIdentity("job1", "group1").Build();
             DateTime start = DateTime.Now;
             start = start.AddSeconds(start.Second < 15 ? (15 - start.Second) : (75 - start.Second));
-            int minute = start.Minute / 10;
-            if (planDic.Any(t => t.Value.LotteryName == "cqssc") && minute != 2)
+
+            string lotteryName = planDic.First().Value.LotteryName;
+            currentInterval = planDic.First().Value.GameInterval;
+            if (currentInterval > 1)
             {
-                start = start.AddMinutes((minute + 1) * 10 + 2 - start.Minute);
+                int minute = start.Minute / 10;
+                int remainder = minute % 2;
+                int nextPoint = minute * 10 + (lotteryName == "xjssc" ? (remainder == 1 ? currentInterval - 10 : currentInterval) : (remainder == 0 ? currentInterval - 10 : currentInterval));
+                start = start.AddMinutes(nextPoint + 2 - start.Minute);
             }
 
             trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(currentInterval).RepeatForever()).Build();
@@ -116,17 +120,6 @@ namespace Lottery.Core.Plan
                     IPlan plan = planDic[key];
                     plan.Invoke(bet);
                 }
-            }
-        }
-
-        public void ChangeSchedule()
-        {
-            int correctInterval = DateTime.Now.Hour >= 22 || DateTime.Now.Hour <= 2 ? 5 : 10;
-            if (planDic.Any(t => t.Value.LotteryName == "cqssc") && correctInterval != currentInterval)
-            {
-                currentInterval = correctInterval;
-                trigger = trigger.GetTriggerBuilder().WithSimpleSchedule(x => x.WithIntervalInMinutes(currentInterval).RepeatForever()).Build();
-                scheduler.RescheduleJob(trigger.Key, trigger);
             }
         }
 

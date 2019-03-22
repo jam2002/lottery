@@ -7,7 +7,6 @@ namespace Lottery.Core.Plan
         public void Execute(IJobExecutionContext context)
         {
             PlanInvoker.Current.StartBet();
-            PlanInvoker.Current.ChangeSchedule();
         }
     }
 }
