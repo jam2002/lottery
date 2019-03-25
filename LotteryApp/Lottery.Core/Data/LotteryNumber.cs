@@ -127,6 +127,8 @@
 
         public int RightSpan { get; set; }
 
+        public int[] RawNumbers { get; set; }
+
         /// <summary>
         /// 去重之后按升序排列的胆码
         /// </summary>

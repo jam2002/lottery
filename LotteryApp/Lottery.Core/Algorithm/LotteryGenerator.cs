@@ -112,6 +112,7 @@ namespace Lottery.Core.Algorithm
             number.ZeroCount = remainders.Where(t => t == 0).Count();
             number.OneCount = remainders.Where(t => t == 1).Count();
             number.TwoCount = remainders.Where(t => t == 2).Count();
+            number.RawNumbers = array;
             number.DistinctNumbers = array.Distinct().OrderBy(t => t).ToArray();
             number.Distinct = number.DistinctNumbers.Length;
             number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));

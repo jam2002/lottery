@@ -53,6 +53,7 @@ namespace Lottery.Core.Plan
             }
 
             trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(currentInterval).RepeatForever()).Build();
+            //trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(DateTime.Now).Build();
             scheduler.ScheduleJob(job, trigger);
         }
 
