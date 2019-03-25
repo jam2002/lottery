@@ -106,6 +106,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="plans.any2.json" />
     <None Include="plans.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
