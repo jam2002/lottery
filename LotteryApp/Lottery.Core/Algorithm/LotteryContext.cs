@@ -257,7 +257,7 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
                         where validAwards.Intersect(values).Count() == values.Length && p.Value.OccurCount >= pairOccurCount && p.Value.LastInterval < 7
-                        orderby p.Value.OccurCount descending, p.Value.LastInterval descending, p.Value.MaxInterval
+                        orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                         select p.Key;
             return Build(query, r);
         }
