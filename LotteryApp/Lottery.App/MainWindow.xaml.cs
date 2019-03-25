@@ -16,7 +16,7 @@ namespace Lottery.App
     public partial class MainWindow : Window
     {
         private PlanConfig config;
-        private int[] clearMinutes = new int[] { 32, 42 };
+        private int[] clearMinutes = new int[] { 35, 45 };
 
         public MainWindow()
         {
@@ -48,10 +48,10 @@ namespace Lottery.App
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    bool isSecView = index >= 11;
-                    string prefix = isSecView ? "sec" : string.Empty;
-                    int realIndex = isSecView ? index - 10 : index + 1;
-                    ListView view = isSecView ? seclistView : listView;
+                    int uiIndex = index / 10;
+                    string prefix = uiIndex == 0 ? string.Empty : (uiIndex == 1 ? "sec" : "oth");
+                    int realIndex = index - uiIndex * 10 + 1;
+                    ListView view = uiIndex == 0 ? listView : (uiIndex == 1 ? seclistView : othlistView);
 
                     TextBlock txtTitle = view.FindName($"{prefix}txtTitle{realIndex}") as TextBlock;
                     TextBox descBox = view.FindName($"{prefix}txtDesc{realIndex}") as TextBox;

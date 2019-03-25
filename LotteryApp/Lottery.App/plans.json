@@ -1,28 +1,6 @@
 ﻿{
   "Common": [
     {
-      "Title": "五星二码(30)",
-      "Number": 2,
-      "TakeNumber": 30,
-      "BetCycle": 8,
-      "GameInterval": 20,
-      "GameName": "history",
-      "GameArgs": "all",
-      "LotteryName": "xjssc",
-      "ChangeBetPerTime": false,
-      "EnableSinglePattern": false,
-      "EnableContinuous": false,
-      "UseGeneralTrend": true,
-      "RespectRepeat": false,
-      "DisableRepeat": false,
-      "WaitInterval": 0,
-      "TupleLength": 3,
-      "NumberLength": 5,
-      "StartSpan": 0,
-      "SpanLength": 10
-    },
-
-    {
       "Title": "前三二码(30)",
       "Number": 2,
       "TakeNumber": 30,
@@ -430,6 +408,28 @@
       "GameInterval": 20,
       "GameName": "single",
       "GameArgs": "pairh",
+      "LotteryName": "xjssc",
+      "ChangeBetPerTime": false,
+      "EnableSinglePattern": false,
+      "EnableContinuous": false,
+      "UseGeneralTrend": true,
+      "RespectRepeat": false,
+      "DisableRepeat": false,
+      "WaitInterval": 0,
+      "TupleLength": 3,
+      "NumberLength": 5,
+      "StartSpan": 0,
+      "SpanLength": 10
+    },
+
+    {
+      "Title": "五星二码(30)",
+      "Number": 2,
+      "TakeNumber": 30,
+      "BetCycle": 8,
+      "GameInterval": 20,
+      "GameName": "history",
+      "GameArgs": "all",
       "LotteryName": "xjssc",
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,

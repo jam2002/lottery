@@ -125,7 +125,6 @@ namespace Lottery.Core.Algorithm
                 {
                     try
                     {
-                        //lotteries = GetTsNumbers("https://www.150106.com/api/lastOpenedIssues.php?id=1&issueCount=200");
                         lotteries = GetTsNumbers("https://www.pp926.com/api/lastOpenedIssues.php?id=1&issueCount=200");
                     }
                     catch
@@ -135,7 +134,7 @@ namespace Lottery.Core.Algorithm
                 }
                 else if (lottery.Source == 4)
                 {
-                    lotteries = GetMdNumbers();
+                    lotteries = Get17500Numbers();
                 }
 
                 lotteryCache[mainKey] = lotteries;
@@ -173,12 +172,13 @@ namespace Lottery.Core.Algorithm
             return lotteries;
         }
 
-        private string[] GetMdNumbers()
+        private string[] Get17500Numbers()
         {
             string[] lotteries;
-            string param = "id=18&pnum=50";
+            string param = "page=1&code=1&pagesize=30";
             byte[] bs = Encoding.UTF8.GetBytes(param);
-            HttpWebRequest webRequest = WebRequest.CreateHttp("http://wdpay.9vcpp.cn/lotterytrend/getsscchart");
+            string url = lottery.Key.StartsWith("cqssc") ? "https://cqssc.17500.cn/tgj/php/wxzu.php?mobile=1&r=0.3677059921770287" : "https://xjssc.17500.cn/xjtgj/php/wxzu.php?mobile=1&r=0.4307241094153127";
+            HttpWebRequest webRequest = WebRequest.CreateHttp(url);
             webRequest.Method = "POST";
             webRequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
             webRequest.ContentLength = bs.Length;
@@ -193,10 +193,13 @@ namespace Lottery.Core.Algorithm
                 using (StreamReader sr = new StreamReader(response.GetResponseStream()))
                 {
                     string content = sr.ReadToEnd();
-                    lotteries = JObject.Parse(content)["data"].Select(c => ((JArray)c)[1].ToString()).ToArray();
+
+                    lotteries = new Regex(lottery.RegexPattern).Matches(content).OfType<Match>().Select(x =>
+                    {
+                        return new { no = x.Groups["key"].Value, value = x.Groups["value"].Value };
+                    }).OrderBy(c => c.no).Select(c => c.value).ToArray();
                 }
             }
-
             return lotteries;
         }
     }

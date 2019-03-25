@@ -7,7 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lottery.App"
         mc:Ignorable="d"
-        Title="计划软件" Loaded="Window_Loaded" Width="1120" Height="780" Closed="Window_Closed">
+        Title="计划软件" Loaded="Window_Loaded" Width="1120" Height="720" Closed="Window_Closed">
     <TabControl>
         <TabItem Name="anytwo" Header="任三二码">
             <ScrollViewer x:Name="scrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
@@ -139,19 +139,6 @@
                                         <TextBox Height="40" Width="500" Name="txtDesc10" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
                                         <TextBlock Margin="6,2,2,2">投注</TextBlock>
                                         <WindowsFormsHost Height="40" Width="500" Name="valueHost10">
-                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                        </WindowsFormsHost>
-                                    </StackPanel>
-                                </StackPanel>
-                            </ListViewItem>
-                            <ListViewItem>
-                                <StackPanel>
-                                    <TextBlock Margin="0,2" Name="txtTitle11" ></TextBlock>
-                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                        <TextBox Height="40" Width="500" Name="txtDesc11" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost11">
                                             <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
                                         </WindowsFormsHost>
                                     </StackPanel>
@@ -292,6 +279,29 @@
                                         <TextBox Height="40" Width="500" Name="sectxtDesc10" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
                                         <TextBlock Margin="6,2,2,2">投注</TextBlock>
                                         <WindowsFormsHost Height="40" Width="500" Name="secvalueHost10">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                        </ListView>
+                    </StackPanel>
+                </ScrollViewer.Content>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Name="others" Header="其它">
+            <ScrollViewer x:Name="othscrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer.Content>
+                    <StackPanel CanVerticallyScroll="True" CanHorizontallyScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView Name="othlistView">
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="othtxtTitle1" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="othtxtDesc1" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="othvalueHost1">
                                             <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
                                         </WindowsFormsHost>
                                     </StackPanel>
