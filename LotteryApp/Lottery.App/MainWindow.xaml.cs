@@ -44,13 +44,18 @@ namespace Lottery.App
 
         private void UpdateUI(int index, string desc, string value)
         {
-            if (index < 10)
+            if (index < 21)
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    TextBlock txtTitle = listView.FindName($"txtTitle{index + 1}") as TextBlock;
-                    TextBox descBox = listView.FindName($"txtDesc{index + 1}") as TextBox;
-                    WindowsFormsHost host = listView.FindName($"valueHost{index + 1}") as WindowsFormsHost;
+                    bool isSecView = index >= 11;
+                    string prefix = isSecView ? "sec" : string.Empty;
+                    int realIndex = isSecView ? index - 10 : index + 1;
+                    ListView view = isSecView ? seclistView : listView;
+
+                    TextBlock txtTitle = view.FindName($"{prefix}txtTitle{realIndex}") as TextBlock;
+                    TextBox descBox = view.FindName($"{prefix}txtDesc{realIndex}") as TextBox;
+                    WindowsFormsHost host = view.FindName($"{prefix}valueHost{realIndex}") as WindowsFormsHost;
                     System.Windows.Forms.TextBox valueBox = host.Child as System.Windows.Forms.TextBox;
 
                     var c = config.Common[index];

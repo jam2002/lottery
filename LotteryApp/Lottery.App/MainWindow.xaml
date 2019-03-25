@@ -7,143 +7,300 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lottery.App"
         mc:Ignorable="d"
-        Title="计划软件" Loaded="Window_Loaded" Width="1100" Height="680" Closed="Window_Closed">
-    <ScrollViewer x:Name="scrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <ScrollViewer.Content>
-            <StackPanel CanVerticallyScroll="True" CanHorizontallyScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <ListView Name="listView">
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Margin="0,2" Name="txtTitle1" ></TextBlock>
-                            <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                <TextBox Height="40" Width="500" Name="txtDesc1" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                <WindowsFormsHost Height="40" Width="500" Name="valueHost1">
-                                    <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                </WindowsFormsHost>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Margin="0,2" Name="txtTitle2" ></TextBlock>
-                            <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                <TextBox Height="40" Width="500" Name="txtDesc2" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                <WindowsFormsHost Height="40" Width="500" Name="valueHost2">
-                                    <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                </WindowsFormsHost>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Margin="0,2" Name="txtTitle3" ></TextBlock>
-                            <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                <TextBox Height="40" Width="500" Name="txtDesc3" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                <WindowsFormsHost Height="40" Width="500" Name="valueHost3">
-                                    <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                </WindowsFormsHost>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Margin="0,2" Name="txtTitle4" ></TextBlock>
-                            <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                <TextBox Height="40" Width="500" Name="txtDesc4" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                <WindowsFormsHost Height="40" Width="500" Name="valueHost4">
-                                    <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                </WindowsFormsHost>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Margin="0,2" Name="txtTitle5" ></TextBlock>
-                            <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                <TextBox Height="40" Width="500" Name="txtDesc5" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                <WindowsFormsHost Height="40" Width="500" Name="valueHost5">
-                                    <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                </WindowsFormsHost>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Margin="0,2" Name="txtTitle6" ></TextBlock>
-                            <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                <TextBox Height="40" Width="500" Name="txtDesc6" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                <WindowsFormsHost Height="40" Width="500" Name="valueHost6">
-                                    <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                </WindowsFormsHost>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Margin="0,2" Name="txtTitle7" ></TextBlock>
-                            <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                <TextBox Height="40" Width="500" Name="txtDesc7" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                <WindowsFormsHost Height="40" Width="500" Name="valueHost7">
-                                    <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                </WindowsFormsHost>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Margin="0,2" Name="txtTitle8" ></TextBlock>
-                            <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                <TextBox Height="40" Width="500" Name="txtDesc8" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                <WindowsFormsHost Height="40" Width="500" Name="valueHost8">
-                                    <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                </WindowsFormsHost>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Margin="0,2" Name="txtTitle9" ></TextBlock>
-                            <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                <TextBox Height="40" Width="500" Name="txtDesc9" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                <WindowsFormsHost Height="40" Width="500" Name="valueHost9">
-                                    <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                </WindowsFormsHost>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Margin="0,2" Name="txtTitle10" ></TextBlock>
-                            <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
-                                <TextBlock Margin="0,2,2,2">统计</TextBlock>
-                                <TextBox Height="40" Width="500" Name="txtDesc10" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
-                                <TextBlock Margin="6,2,2,2">投注</TextBlock>
-                                <WindowsFormsHost Height="40" Width="500" Name="valueHost10">
-                                    <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
-                                </WindowsFormsHost>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListViewItem>
-                </ListView>
-            </StackPanel>
-        </ScrollViewer.Content>
-    </ScrollViewer>
+        Title="计划软件" Loaded="Window_Loaded" Width="1120" Height="780" Closed="Window_Closed">
+    <TabControl>
+        <TabItem Name="anytwo" Header="任三二码">
+            <ScrollViewer x:Name="scrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer.Content>
+                    <StackPanel CanVerticallyScroll="True" CanHorizontallyScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView Name="listView">
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle1" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc1" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost1">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle2" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc2" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost2">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle3" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc3" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost3">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle4" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc4" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost4">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle5" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc5" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost5">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle6" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc6" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost6">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle7" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc7" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost7">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle8" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc8" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost8">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle9" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc9" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost9">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle10" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc10" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost10">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="txtTitle11" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="txtDesc11" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="valueHost11">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                        </ListView>
+                    </StackPanel>
+                </ScrollViewer.Content>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Name="anyone" Header="任二一码">
+            <ScrollViewer x:Name="secscrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer.Content>
+                    <StackPanel CanVerticallyScroll="True" CanHorizontallyScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView Name="seclistView">
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="sectxtTitle1" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="sectxtDesc1" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="secvalueHost1">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="sectxtTitle2" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="sectxtDesc2" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="secvalueHost2">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="sectxtTitle3" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="sectxtDesc3" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="secvalueHost3">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="sectxtTitle4" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="sectxtDesc4" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="secvalueHost4">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="sectxtTitle5" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="sectxtDesc5" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="secvalueHost5">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="sectxtTitle6" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="sectxtDesc6" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="secvalueHost6">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="sectxtTitle7" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="sectxtDesc7" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="secvalueHost7">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="sectxtTitle8" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="sectxtDesc8" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="secvalueHost8">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="sectxtTitle9" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="sectxtDesc9" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="secvalueHost9">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="sectxtTitle10" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="sectxtDesc10" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="secvalueHost10">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                        </ListView>
+                    </StackPanel>
+                </ScrollViewer.Content>
+            </ScrollViewer>
+        </TabItem>
+    </TabControl>
 </Window>
