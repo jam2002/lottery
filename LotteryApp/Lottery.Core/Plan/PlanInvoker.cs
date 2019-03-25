@@ -49,7 +49,7 @@ namespace Lottery.Core.Plan
                 int minute = start.Minute / 10;
                 int remainder = minute % 2;
                 int nextPoint = minute * 10 + (lotteryName == "xjssc" ? (remainder == 1 ? currentInterval - 10 : currentInterval) : (remainder == 0 ? currentInterval - 10 : currentInterval));
-                start = start.AddMinutes(nextPoint + 2 - start.Minute);
+                start = start.AddMinutes(nextPoint + 5 - start.Minute);
             }
 
             trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(currentInterval).RepeatForever()).Build();
