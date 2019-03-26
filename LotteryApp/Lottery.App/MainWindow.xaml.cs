@@ -45,7 +45,7 @@ namespace Lottery.App
 
         private void UpdateUI(int index, string desc, string value)
         {
-            if (index < 32)
+            if (index < 33)
             {
                 this.Dispatcher.Invoke(() =>
                 {

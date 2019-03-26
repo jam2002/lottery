@@ -674,6 +674,27 @@
       "NumberLength": 5,
       "StartSpan": 0,
       "SpanLength": 10
+    },
+    {
+      "Title": "五星单式(30)",
+      "Number": 2,
+      "TakeNumber": 30,
+      "BetCycle": 4,
+      "GameInterval": 20,
+      "GameName": "tuple",
+      "GameArgs": "all",
+      "LotteryName": "xjssc",
+      "ChangeBetPerTime": false,
+      "EnableSinglePattern": true,
+      "EnableContinuous": false,
+      "UseGeneralTrend": true,
+      "RespectRepeat": false,
+      "DisableRepeat": false,
+      "WaitInterval": 0,
+      "TupleLength": 3,
+      "NumberLength": 5,
+      "StartSpan": 0,
+      "SpanLength": 10
     }
   ]
 }
