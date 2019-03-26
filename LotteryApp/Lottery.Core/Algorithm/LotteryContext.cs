@@ -245,7 +245,7 @@ namespace Lottery.Core.Algorithm
             int awardOccurCount = InputOption.TakeNumber == 20 ? 9 : 7;
             int pairOccurCount = InputOption.TakeNumber == 20 ? 6 : 5;
 
-            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals, 6) && c.Value.OccurCount >= awardOccurCount)
+            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals) && c.Value.OccurCount >= awardOccurCount)
                                                                                             .OrderByDescending(c => c.Value.OccurCount)
                                                                                             .ThenBy(c => c.Value.MaxInterval)
                                                                                             .ThenBy(c => c.Value.LastInterval)
@@ -680,7 +680,7 @@ namespace Lottery.Core.Algorithm
 
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-                        where (InputOption.EnableContinuous ? continuous.Contains(p.Key) : true) && (InputOption.TakeNumber == 15 ? p.Value.OccurCount >= 7 : true)
+                        where InputOption.EnableContinuous ? continuous.Contains(p.Key) : true
                         orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                         select p.Key;
 
