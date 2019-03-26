@@ -681,7 +681,7 @@ namespace Lottery.Core.Algorithm
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
                         where (InputOption.EnableContinuous ? continuous.Contains(p.Key) : true) && (InputOption.TakeNumber == 15 ? p.Value.OccurCount >= 7 : true)
-                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
+                        orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                         select p.Key;
 
             if (InputOption.UseGeneralTrend && InputOption.GeneralTrendInterval > 0)

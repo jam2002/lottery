@@ -214,11 +214,15 @@ namespace Lottery.Core.Plan
         {
             int[][] bets = GameName == "twopairs" ? bet.Results.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.Select(s => s.Values))).Take(2).ToArray() : new int[][] { bet.BetAward };
 
-            return bets.SelectMany(c =>
+            if (Number == 2)
             {
-                Permutation combine = new Permutation(c.Length);
-                return combine.GetRowsForAllPicks().Where(t => t.Picks == Number).Select(t => (from s in t select c[s]).ToArray()).ToArray();
-            }).ToArray();
+                bets = bets.SelectMany(c =>
+                {
+                    Permutation combine = new Permutation(c.Length);
+                    return combine.GetRowsForAllPicks().Where(t => t.Picks == Number).Select(t => (from s in t select c[s]).ToArray()).ToArray();
+                }).ToArray();
+            }
+            return bets;
         }
 
         private bool IsValid(int[] input)
