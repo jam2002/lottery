@@ -150,7 +150,7 @@
             </ScrollViewer>
         </TabItem>
 
-        <TabItem Header="任二二码">
+        <TabItem Header="任三一码">
             <ScrollViewer x:Name="secscrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <ScrollViewer.Content>
                     <StackPanel CanVerticallyScroll="True" CanHorizontallyScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
