@@ -17,7 +17,7 @@ namespace Lottery.App
     public partial class MainWindow : Window
     {
         private PlanConfig config;
-        private int[] clearMinutes = new int[] { 35, 45 };
+        private int[] clearMinutes = new int[] { 15, 45 };
 
         public MainWindow()
         {
