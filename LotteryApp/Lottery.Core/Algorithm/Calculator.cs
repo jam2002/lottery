@@ -175,7 +175,7 @@ namespace Lottery.Core.Algorithm
         private string[] Get17500Numbers()
         {
             string[] lotteries;
-            string param = "page=1&code=1&pagesize=30";
+            string param = $"page=1&code=1&pagesize={option.TakeNumber}";
             byte[] bs = Encoding.UTF8.GetBytes(param);
             string url = lottery.Key.StartsWith("cqssc") ? "https://cqssc.17500.cn/tgj/php/wxzu.php?mobile=1&r=0.3677059921770287" : "https://xjssc.17500.cn/xjtgj/php/wxzu.php?mobile=1&r=0.4307241094153127";
             HttpWebRequest webRequest = WebRequest.CreateHttp(url);
