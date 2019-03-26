@@ -109,6 +109,9 @@
     <None Include="plans.ts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="plans.cq.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="plans.xj.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
