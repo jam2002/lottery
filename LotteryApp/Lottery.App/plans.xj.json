@@ -653,6 +653,27 @@
       "NumberLength": 5,
       "StartSpan": 0,
       "SpanLength": 10
+    },
+    {
+      "Title": "五星三码(30)",
+      "Number": 3,
+      "TakeNumber": 30,
+      "BetCycle": 7,
+      "GameInterval": 1,
+      "GameName": "tuple",
+      "GameArgs": "all",
+      "LotteryName": "xjssc",
+      "ChangeBetPerTime": false,
+      "EnableSinglePattern": false,
+      "EnableContinuous": false,
+      "UseGeneralTrend": true,
+      "RespectRepeat": false,
+      "DisableRepeat": false,
+      "WaitInterval": 0,
+      "TupleLength": 4,
+      "NumberLength": 5,
+      "StartSpan": 0,
+      "SpanLength": 10
     }
   ]
 }

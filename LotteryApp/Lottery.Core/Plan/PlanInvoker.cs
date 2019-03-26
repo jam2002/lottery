@@ -4,6 +4,7 @@ using Quartz;
 using Quartz.Impl;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
@@ -52,8 +53,10 @@ namespace Lottery.Core.Plan
                 start = start.AddMinutes(nextPoint + 5 - start.Minute);
             }
 
+            bool isDebug = bool.Parse(ConfigurationManager.AppSettings["debug"]);
+            start = isDebug ? DateTime.Now : start;
+
             trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(currentInterval).RepeatForever()).Build();
-            //trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(DateTime.Now).Build();
             scheduler.ScheduleJob(job, trigger);
         }
 

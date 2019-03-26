@@ -1,6 +1,5 @@
 ﻿using Kw.Combinatorics;
 using Lottery.Core.Data;
-using Lottery.Core.Plan;
 using System;
 using System.Collections.Generic;
 using System.Linq;

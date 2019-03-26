@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -25,7 +26,7 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plans.json");
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"plans.{ConfigurationManager.AppSettings["lottery"]}.json");
             using (StreamReader sr = new StreamReader(path))
             {
                 string content = sr.ReadToEnd();
@@ -44,7 +45,7 @@ namespace Lottery.App
 
         private void UpdateUI(int index, string desc, string value)
         {
-            if (index < 31)
+            if (index < 32)
             {
                 this.Dispatcher.Invoke(() =>
                 {

@@ -246,7 +246,7 @@ namespace Lottery.Core.Algorithm
             Combination combine = new Combination(sort.Length);
             int[] ret = new int[] { };
 
-            if (sort.Length >= 2 && Number > 0 && TupleLength > Number)
+            if (sort.Length >= 2 && Number > 0 && TupleLength > Number && sort.Length >= Number)
             {
                 int[][] awards = combine.GetRowsForAllPicks().Where(t => t.Picks == Number).Select(t => (from s in t select sort[s]).ToArray()).ToArray();
 

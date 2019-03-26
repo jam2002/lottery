@@ -432,7 +432,7 @@
             </ScrollViewer>
         </TabItem>
 
-        <TabItem Header="其它">
+        <TabItem Header="五星二码">
             <ScrollViewer x:Name="othscrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <ScrollViewer.Content>
                     <StackPanel CanVerticallyScroll="True" CanHorizontallyScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -445,6 +445,19 @@
                                         <TextBox Height="40" Width="500" Name="othtxtDesc1" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
                                         <TextBlock Margin="6,2,2,2">投注</TextBlock>
                                         <WindowsFormsHost Height="40" Width="500" Name="othvalueHost1">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="othtxtTitle2" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="othtxtDesc2" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="othvalueHost2">
                                             <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
                                         </WindowsFormsHost>
                                     </StackPanel>
