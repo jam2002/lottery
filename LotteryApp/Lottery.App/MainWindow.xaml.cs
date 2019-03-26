@@ -44,15 +44,15 @@ namespace Lottery.App
 
         private void UpdateUI(int index, string desc, string value)
         {
-            if (index < 21)
+            if (index < 31)
             {
                 this.Dispatcher.Invoke(() =>
                 {
                     int uiIndex = index / 10;
-                    string prefix = uiIndex == 0 ? string.Empty : (uiIndex == 1 ? "sec" : "oth");
+                    string prefix = uiIndex == 0 ? string.Empty : (uiIndex == 1 ? "sec" : (uiIndex == 2 ? "thr" : "oth"));
                     int realIndex = index - uiIndex * 10 + 1;
-                    ListView view = uiIndex == 0 ? listView : (uiIndex == 1 ? seclistView : othlistView);
 
+                    ListView view = this.FindName($"{prefix}listView") as ListView;
                     TextBlock txtTitle = view.FindName($"{prefix}txtTitle{realIndex}") as TextBlock;
                     TextBox descBox = view.FindName($"{prefix}txtDesc{realIndex}") as TextBox;
                     WindowsFormsHost host = view.FindName($"{prefix}valueHost{realIndex}") as WindowsFormsHost;
@@ -79,7 +79,6 @@ namespace Lottery.App
                 });
             }
         }
-
 
         private void Window_Closed(object sender, EventArgs e)
         {

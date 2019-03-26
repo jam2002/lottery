@@ -231,10 +231,7 @@ namespace Lottery.Core.Algorithm
             return number;
         }
 
-        private static int[][] Others = (from x in Enumerable.Range(0, 10)
-                                         from y in Enumerable.Range(0, 10)
-                                         where x != y
-                                         select new int[] { x, y }).ToArray();
+        private static readonly int[] AllKeys = Enumerable.Range(0, 10).ToArray();
 
         private static int[] GetPairs(int[] array)
         {
@@ -249,38 +246,23 @@ namespace Lottery.Core.Algorithm
             Combination combine = new Combination(sort.Length);
             int[] ret = new int[] { };
 
-            if (array.Length >= 2)
+            if (sort.Length >= 2 && Number > 0 && TupleLength > Number)
             {
-                int number = TupleLength == 4 && Number == 3 ? 3 : 2;
-                int[][] awards = combine.GetRowsForAllPicks().Where(t => t.Picks == number).Select(t => (from s in t select sort[s]).ToArray()).ToArray();
+                int[][] awards = combine.GetRowsForAllPicks().Where(t => t.Picks == Number).Select(t => (from s in t select sort[s]).ToArray()).ToArray();
 
-                if (number == 2)
+                int remainCount = TupleLength - Number;
+                ret = awards.SelectMany(c =>
                 {
-                    if (TupleLength == 3)
+                    int[] remains = AllKeys.Where(t => !c.Contains(t)).ToArray();
+                    Combination subCombine = new Combination(remains.Length);
+                    int[] selectedAwards = subCombine.GetRowsForAllPicks().Where(t => t.Picks == remainCount).Select(t =>
                     {
-                        ret = Enumerable.Range(0, 10).SelectMany(c => awards.Where(t => !t.Contains(c)).Select(t =>
-                        {
-                            int[] temp = t.Concat(new[] { c }).OrderBy(s => s).ToArray();
-                            return 1000 + temp[0] * 100 + temp[1] * 10 + temp[2];
-                        })).Distinct().ToArray();
-                    }
-                    else
-                    {
-                        ret = Others.SelectMany(c => awards.Where(t => !t.Intersect(c).Any()).Select(t =>
-                        {
-                            int[] temp = t.Concat(c).OrderBy(s => s).ToArray();
-                            return 10000 + temp[0] * 1000 + temp[1] * 100 + temp[2] * 10 + temp[3];
-                        })).Distinct().ToArray();
-                    }
-                }
-                else
-                {
-                    ret = Enumerable.Range(0, 10).SelectMany(c => awards.Where(t => !t.Contains(c)).Select(t =>
-                    {
-                        int[] temp = t.Concat(new[] { c }).OrderBy(s => s).ToArray();
-                        return 10000 + temp[0] * 1000 + temp[1] * 100 + temp[2] * 10 + temp[3];
-                    })).Distinct().ToArray();
-                }
+                        int[] temp = c.Concat(from s in t select remains[s]).OrderBy(s => s).ToArray();
+                        int k = (int)Math.Pow(10, TupleLength) + temp.Aggregate((x, y) => x * 10 + y);
+                        return k;
+                    }).ToArray();
+                    return selectedAwards;
+                }).Distinct().ToArray();
             }
             return ret;
         }
