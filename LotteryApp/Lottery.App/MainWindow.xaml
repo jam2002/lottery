@@ -476,6 +476,45 @@
                                     </StackPanel>
                                 </StackPanel>
                             </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="othtxtTitle4" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="othtxtDesc4" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="othvalueHost4">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="othtxtTitle5" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="othtxtDesc5" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="othvalueHost5">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem>
+                                <StackPanel>
+                                    <TextBlock Margin="0,2" Name="othtxtTitle6" ></TextBlock>
+                                    <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal" >
+                                        <TextBlock Margin="0,2,2,2">统计</TextBlock>
+                                        <TextBox Height="40" Width="500" Name="othtxtDesc6" VerticalScrollBarVisibility="Visible"  TextWrapping="Wrap"></TextBox>
+                                        <TextBlock Margin="6,2,2,2">投注</TextBlock>
+                                        <WindowsFormsHost Height="40" Width="500" Name="othvalueHost6">
+                                            <WinFormControls:TextBox WordWrap="True" Multiline="True" AcceptsReturn="True"></WinFormControls:TextBox>
+                                        </WindowsFormsHost>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ListViewItem>
                         </ListView>
                     </StackPanel>
                 </ScrollViewer.Content>

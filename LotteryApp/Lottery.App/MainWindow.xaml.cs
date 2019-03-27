@@ -45,7 +45,8 @@ namespace Lottery.App
 
         private void UpdateUI(int index, string desc, string value)
         {
-            if (index < 33)
+            int count = listView.Items.Count + seclistView.Items.Count + thrlistView.Items.Count + othlistView.Items.Count;
+            if (index < count)
             {
                 this.Dispatcher.Invoke(() =>
                 {
