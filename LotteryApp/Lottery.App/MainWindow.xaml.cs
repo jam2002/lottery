@@ -26,7 +26,15 @@ namespace Lottery.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"plans.{ConfigurationManager.AppSettings["lottery"]}.json");
+            Dictionary<string, string> titleDefine = new Dictionary<string, string>
+            {
+                { "ts", "腾讯计划"},
+                { "cq", "重庆计划"},
+                { "xj", "新疆计划"}
+            };
+            string lottery = ConfigurationManager.AppSettings["lottery"];
+            this.Title = titleDefine[lottery];
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"plans.{lottery}.json");
             using (StreamReader sr = new StreamReader(path))
             {
                 string content = sr.ReadToEnd();
