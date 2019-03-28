@@ -684,17 +684,6 @@ namespace Lottery.Core.Algorithm
                                      orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
                                      select p.Key;
 
-            if (InputOption.UseGeneralTrend && InputOption.LotteryName == "tsssc")
-            {
-                query = query.ToArray().Take(3);
-                query = FactorDic[tupleDic[gameArgs]].Where(c => query.Contains(c.Key))
-                                                                         .OrderByDescending(c => c.Value.OccurCount)
-                                                                         .ThenBy(c => c.Value.MaxInterval)
-                                                                         .ThenByDescending(c => c.Value.LastInterval)
-                                                                         .Select(c => c.Key)
-                                                                         .ToArray();
-            }
-
             if (InputOption.UseGeneralTrend && InputOption.GeneralTrendInterval > 0)
             {
                 query = query.ToArray().Take(1).Where(c => FactorDic[r][c].LastInterval >= InputOption.GeneralTrendInterval);
