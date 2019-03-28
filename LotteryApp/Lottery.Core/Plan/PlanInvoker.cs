@@ -16,13 +16,13 @@ namespace Lottery.Core.Plan
     {
         private IScheduler scheduler;
         private ITrigger trigger;
-        private Dictionary<string, IPlan> planDic;
+        private Dictionary<string, Dynamic> planDic;
         private List<string> currentBetKeys;
         private int currentInterval;
 
         public static readonly PlanInvoker Current = new PlanInvoker();
 
-        public void Init(Dictionary<string, IPlan> plans)
+        public void Init(Dictionary<string, Dynamic> plans)
         {
             string path = Path.Combine(Environment.CurrentDirectory, "lottery.db");
             if (!File.Exists(path))
@@ -68,6 +68,7 @@ namespace Lottery.Core.Plan
                 Number = c.Number,
                 TakeNumber = c.TakeNumber,
                 LotteryName = c.LotteryName,
+                GroupName = c.GroupName,
                 GameName = c.GameName,
                 GameArgs = c.GameArgs,
                 BetCycle = c.BetCycle,
@@ -98,7 +99,7 @@ namespace Lottery.Core.Plan
                 };
                 if (c?.Output.Any() == true)
                 {
-                    IPlan plan = planDic[GetKey(c.Input)];
+                    Dynamic plan = planDic[GetKey(c.Input)];
                     bet.BetAward = plan.GetBetAwards(c);
                 }
                 return bet;
@@ -115,41 +116,40 @@ namespace Lottery.Core.Plan
         public void StartBet()
         {
             SimpleBet[] currentBets = Invoke();
+            List<BetResult> list = new List<BetResult> { };
 
             foreach (SimpleBet bet in currentBets)
             {
                 if (bet.Results.Any())
                 {
                     string key = GetKey(bet.Results[0].Input);
-                    IPlan plan = planDic[key];
-                    plan.Invoke(bet);
+                    list.Add(planDic[key].Invoke(bet));
                 }
+            }
+
+            Dictionary<string, BetResult[]> groupDic = list.Where(c => !string.IsNullOrEmpty(c.GroupName)).GroupBy(c => c.GroupName).Where(c => c.Any(t => t.Status == 1)).ToDictionary(c => c.Key, c => c.ToArray());
+            foreach (var pair in groupDic)
+            {
+                BetResult success = pair.Value.Where(c => c.Status == 1).First();
+                foreach (BetResult br in pair.Value)
+                {
+                    if (br.Status != 1)
+                    {
+                        br.Value = success.Value;
+                        planDic[br.Key].LastBet = success.Bet;
+                    }
+                }
+            }
+
+            foreach (BetResult br in list)
+            {
+                planDic[br.Key].Dispatcher(br.Description, br.Value);
             }
         }
 
         private string GetKey(InputOptions input)
         {
             return string.Join(".", input.LotteryName, input.GameName, input.GameArgs ?? string.Empty, input.EnableSinglePattern ? "Single" : "Composite", input.RespectRepeat ? "R" : "WR", input.UseGeneralTrend ? "G" : "WG", input.ChangeBetPerTime ? "C" : "WC", input.TakeNumber, input.WaitInterval, input.BetCycle, input.TupleLength, input.SpanLength, input.Rank, input.GeneralTrendInterval, input.NumberLength, input.StartSpan);
-        }
-
-        public void AddBetKey(string key)
-        {
-            currentBetKeys.Add(key);
-        }
-
-        public void RemoveBetKey(string key)
-        {
-            currentBetKeys.RemoveAll(c => c == key);
-        }
-
-        public bool HasInBet(string key)
-        {
-            return !string.IsNullOrWhiteSpace(key) && currentBetKeys.Contains(key);
-        }
-
-        public int GetBetCountByType(FactorTypeEnum type)
-        {
-            return currentBetKeys.Where(c => c.StartsWith(type.ToString())).Count();
         }
     }
 }

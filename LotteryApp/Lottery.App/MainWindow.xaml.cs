@@ -47,7 +47,7 @@ namespace Lottery.App
                 config.Common[i].Dispatcher = (u, v) => UpdateUI(c, u, v);
             }
 
-            Dictionary<string, IPlan> dic = config.Common.OfType<IPlan>().ToDictionary(c => c.GetKey(), c => c);
+            Dictionary<string, Dynamic> dic = config.Common.OfType<Dynamic>().ToDictionary(c => c.GetKey(), c => c);
             PlanInvoker.Current.Init(dic);
         }
 

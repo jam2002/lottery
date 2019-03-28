@@ -12,6 +12,8 @@
 
         public string LotteryName { get; set; }
 
+        public string GroupName { get; set; }
+
         public string GameName { get; set; }
 
         public string GameArgs { get; set; }

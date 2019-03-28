@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Lottery.Core.Plan
 {
-    public abstract class Dynamic : IPlan
+    public abstract class Dynamic
     {
         public SimpleBet LastBet { get; set; }
 
@@ -22,6 +22,8 @@ namespace Lottery.Core.Plan
         public int SuccessCount = 0;
 
         public int TakeNumber { get; set; }
+
+        public string GroupName { get; set; }
 
         public string GameName { get; set; }
 
@@ -65,7 +67,49 @@ namespace Lottery.Core.Plan
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void Invoke(SimpleBet currentBet)
+        private BetResult Reset(int s, SimpleBet currentBet)
+        {
+            BetResult ret = new BetResult { Status = s, Key = GetKey(), GroupName = GroupName, Bet = currentBet };
+            bool hasBet = currentBet.BetAward.Any();
+            switch (s)
+            {
+                case 1:
+                case 3:
+                case 4:
+                    if (s == 1 || s == 3)
+                    {
+                        ret.Description = BuildInfo(LastBet.BetAward, BetIndex, s);
+                    }
+
+                    if (hasBet)
+                    {
+                        LastBet = currentBet;
+                        BetIndex = 1;
+                        ret.Description = BuildInfo(LastBet.BetAward, BetIndex, 2);
+                        ret.Value = GetBetString(LastBet);
+                    }
+                    else
+                    {
+                        int[] betAwards = LastBet?.BetAward ?? new int[] { };
+                        BetIndex = 0;
+                        ret.Description = BuildInfo(betAwards, BetIndex, 4);
+                        ret.Value = string.Empty;
+                    }
+                    break;
+                case 2:
+                    BetIndex++;
+                    if (ChangeBetPerTime)
+                    {
+                        LastBet = currentBet;
+                    }
+                    ret.Description = BuildInfo(LastBet.BetAward, BetIndex, 2);
+                    ret.Value = GetBetString(LastBet);
+                    break;
+            }
+            return ret;
+        }
+
+        public BetResult Invoke(SimpleBet currentBet)
         {
             if (betCounters == null)
             {
@@ -76,51 +120,9 @@ namespace Lottery.Core.Plan
                 Dispatcher(p.ToReadString(), null);
             }
 
-            Action<int> Reset = (s) =>
-            {
-                bool hasBet = currentBet.BetAward.Any();
-                switch (s)
-                {
-                    case 1:
-                    case 3:
-                    case 4:
-                        if (s == 1 || s == 3)
-                        {
-                            Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, s), null);
-                            PlanInvoker.Current.RemoveBetKey(LastBet.GetBetKey());
-                        }
-
-                        if (hasBet)
-                        {
-                            LastBet = currentBet;
-                            BetIndex = 1;
-                            Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, 2), GetBetString(LastBet));
-                            PlanInvoker.Current.AddBetKey(LastBet.GetBetKey());
-                        }
-                        else
-                        {
-                            int[] betAwards = LastBet?.BetAward ?? new int[] { };
-                            BetIndex = 0;
-                            Dispatcher(BuildInfo(betAwards, BetIndex, 4), string.Empty);
-                        }
-                        break;
-                    case 2:
-                        BetIndex++;
-                        if (ChangeBetPerTime && !isDistinct && currentBet.BetAward.Any() && currentBet.Results.SelectMany(c => c.Output).Any())
-                        {
-                            PlanInvoker.Current.RemoveBetKey(LastBet.GetBetKey());
-                            LastBet = currentBet;
-                            PlanInvoker.Current.AddBetKey(LastBet.GetBetKey());
-                        }
-                        Dispatcher(BuildInfo(LastBet.BetAward, BetIndex, 2), GetBetString(LastBet));
-                        break;
-                }
-            };
-
             if (BetIndex == 0)
             {
-                Reset(4);
-                return;
+                return Reset(4, currentBet);
             }
 
             bool isHit = IsHit(currentBet);
@@ -134,7 +136,7 @@ namespace Lottery.Core.Plan
             {
                 FailureCount++;
             }
-            Reset(status);
+            return Reset(status, currentBet);
         }
 
         public virtual bool IsHit(SimpleBet currentBet)
