@@ -127,10 +127,22 @@ namespace Lottery.Core.Plan
                 }
             }
 
-            Dictionary<string, BetResult[]> groupDic = list.Where(c => !string.IsNullOrEmpty(c.GroupName)).GroupBy(c => c.GroupName).Where(c => c.Any(t => t.Status == 1)).ToDictionary(c => c.Key, c => c.ToArray());
-            foreach (var pair in groupDic)
+            Update(list, 1);
+            Update(list, 3);
+
+            foreach (BetResult br in list)
             {
-                BetResult success = pair.Value.Where(c => c.Status == 1).First();
+                planDic[br.Key].Dispatcher(br.Description, br.Value);
+            }
+        }
+
+        private void Update(List<BetResult> list, int status)
+        {
+            Dictionary<string, BetResult[]> successGroupDic = list.Where(c => !string.IsNullOrEmpty(c.GroupName)).GroupBy(c => c.GroupName).Where(c => c.Any(t => t.Status == status)).ToDictionary(c => c.Key, c => c.ToArray());
+            status = status == 3 ? 2 : status;
+            foreach (var pair in successGroupDic)
+            {
+                BetResult success = pair.Value.Where(c => c.Status == status).First();
                 foreach (BetResult br in pair.Value)
                 {
                     if (br.Status != 1)
@@ -139,11 +151,6 @@ namespace Lottery.Core.Plan
                         planDic[br.Key].LastBet = success.Bet;
                     }
                 }
-            }
-
-            foreach (BetResult br in list)
-            {
-                planDic[br.Key].Dispatcher(br.Description, br.Value);
             }
         }
 
