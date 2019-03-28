@@ -679,7 +679,7 @@
       "Title": "五星复式(30)",
       "Number": 2,
       "TakeNumber": 30,
-      "BetCycle": 7,
+      "BetCycle": 4,
       "GameInterval": 1,
       "GameName": "tuple",
       "GameArgs": "all",
@@ -697,9 +697,9 @@
       "SpanLength": 10
     },
     {
-      "Title": "五星二码(15)",
+      "Title": "五星二码(60)",
       "Number": 2,
-      "TakeNumber": 15,
+      "TakeNumber": 60,
       "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
@@ -718,9 +718,9 @@
       "SpanLength": 10
     },
     {
-      "Title": "五星三码(15)",
+      "Title": "五星三码(60)",
       "Number": 3,
-      "TakeNumber": 15,
+      "TakeNumber": 60,
       "BetCycle": 5,
       "GameInterval": 1,
       "GameName": "tuple",
@@ -739,10 +739,10 @@
       "SpanLength": 10
     },
     {
-      "Title": "五星复式(15)",
+      "Title": "五星复式(60)",
       "Number": 2,
-      "TakeNumber": 15,
-      "BetCycle": 7,
+      "TakeNumber": 60,
+      "BetCycle": 4,
       "GameInterval": 1,
       "GameName": "tuple",
       "GameArgs": "all",
