@@ -223,6 +223,9 @@ namespace Lottery.Core.Algorithm
                     Dictionary<int, ReferenceFactor> factors = FactorDic[FactorTypeEnum.FiveStarForm];
                     ret = factors.Where(x => fiveStarForms.Contains(x.Key)).OrderBy(x => x.Key).Select(x => x.Value.ToResult()).ToArray();
                     break;
+                case "solidrepeat":
+                    ret = Build(new int[] { 2 }, FactorTypeEnum.Distinct);
+                    break;    
                 default:
                     break;
             }
