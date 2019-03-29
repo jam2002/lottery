@@ -224,7 +224,7 @@ namespace Lottery.Core.Algorithm
                     ret = factors.Where(x => fiveStarForms.Contains(x.Key)).OrderBy(x => x.Key).Select(x => x.Value.ToResult()).ToArray();
                     break;
                 case "solidrepeat":
-                    ret = Build(new int[] { 2 }, FactorTypeEnum.Distinct);
+                    ret = Build(new int[] { 2 }, FactorTypeEnum.LeftDistinct);
                     break;    
                 default:
                     break;
