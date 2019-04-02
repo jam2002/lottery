@@ -99,7 +99,7 @@ namespace Lottery.Core.Algorithm
         {
             Dictionary<FactorTypeEnum, int[]> typeDic = new Dictionary<FactorTypeEnum, int[]>
             {
-                { FactorTypeEnum.Award, number.RawNumbers},
+                { FactorTypeEnum.Award, InputOption.LotteryNumber == "tsssc"? number.DistinctNumbers: number.RawNumbers},
                 { FactorTypeEnum.LeftAward, number.LeftAwards},
                 { FactorTypeEnum.Left4Award, number.Left4Awards},
                 { FactorTypeEnum.MiddleAward, number.MiddleAwards},
