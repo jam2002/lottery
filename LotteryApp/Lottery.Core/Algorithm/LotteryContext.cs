@@ -503,7 +503,7 @@ namespace Lottery.Core.Algorithm
                             orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.LastInterval descending, p.Value.FailureCount
                             select p.Key;
 
-                query = query.Take(2).Where(c => FactorDic[r.Item1][c].LastInterval >= InputOption.StartSpan).ToArray();
+                //query = query.Take(2).Where(c => FactorDic[r.Item1][c].LastInterval >= InputOption.StartSpan).ToArray();
 
                 return Build(query, r.Item2);
             }
