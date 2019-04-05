@@ -127,8 +127,9 @@ namespace Lottery.Core.Plan
                 }
             }
 
-            Update(list, 1);
             Update(list, 3);
+            Update(list, 1);
+           
 
             foreach (BetResult br in list)
             {
@@ -138,7 +139,7 @@ namespace Lottery.Core.Plan
 
         private void Update(List<BetResult> list, int status)
         {
-            Dictionary<string, BetResult[]> successGroupDic = list.Where(c => !string.IsNullOrEmpty(c.GroupName)).GroupBy(c => c.GroupName).Where(c => c.Any(t => t.Status == status)).ToDictionary(c => c.Key, c => c.ToArray());
+            Dictionary<string, BetResult[]> successGroupDic = list.Where(c => !string.IsNullOrEmpty(c.GroupName)).GroupBy(c => c.GroupName).Where(c => c.Any(t => t.Status == status) && (status == 3 ? !c.Any(t => t.Status == 1) : true)).ToDictionary(c => c.Key, c => c.ToArray());
             status = status == 3 ? 2 : status;
             foreach (var pair in successGroupDic)
             {
