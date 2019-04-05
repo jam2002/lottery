@@ -140,10 +140,11 @@ namespace Lottery.Core.Plan
             Dictionary<string, BetResult[]> successGroupDic = list.Where(c => !string.IsNullOrEmpty(c.GroupName)).GroupBy(c => c.GroupName).Where(c => c.Any(t => t.Status == 3 || t.Status == 1)).ToDictionary(c => c.Key, c => c.ToArray());
             foreach (var pair in successGroupDic)
             {
-                BetResult success = pair.Value.Any(c => c.Status == 1) ? pair.Value.Where(c => c.Status == 1).First() : pair.Value.Where(c => c.Status == 2).First();
+                int status = pair.Value.Any(c => c.Status == 1) ? 1 : 2;
+                BetResult success = pair.Value.Where(c => c.Status == status).First();
                 foreach (BetResult br in pair.Value)
                 {
-                    if (br.Status != 1)
+                    if (br.Status != status)
                     {
                         br.Value = success.Value;
                         planDic[br.Key].LastBet = success.Bet;

@@ -704,6 +704,18 @@ namespace Lottery.Core.Algorithm
                 { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
                 { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
+
+                { "leftpair",  FactorTypeEnum.Award},
+                { "rightpair", FactorTypeEnum.Award},
+                { "paira",  FactorTypeEnum.Award},
+                { "pairb", FactorTypeEnum.Award},
+                { "pairc", FactorTypeEnum.Award},
+                { "paird", FactorTypeEnum.Award},
+                { "paire", FactorTypeEnum.Award},
+                { "pairf", FactorTypeEnum.Award},
+                { "pairg", FactorTypeEnum.Award},
+                { "pairh", FactorTypeEnum.Award},
+
                 { "all", FactorTypeEnum.Award}
             };
             FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
@@ -711,7 +723,7 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.ToArray();
                 int k= InputOption.StartSpan % 10;
@@ -724,6 +736,16 @@ namespace Lottery.Core.Algorithm
                     { "front",   FactorTypeEnum.LeftDouble},
                     { "middle", FactorTypeEnum.MiddleDouble},
                     { "after",  FactorTypeEnum.RightDouble},
+                    { "leftpair",  FactorTypeEnum.Double},
+                    { "rightpair", FactorTypeEnum.Double},
+                    { "paira",  FactorTypeEnum.Double},
+                    { "pairb", FactorTypeEnum.Double},
+                    { "pairc", FactorTypeEnum.Double},
+                    { "paird", FactorTypeEnum.Double},
+                    { "paire", FactorTypeEnum.Double},
+                    { "pairf", FactorTypeEnum.Double},
+                    { "pairg", FactorTypeEnum.Double},
+                    { "pairh", FactorTypeEnum.Double},
                     { "all",  FactorTypeEnum.Double}
                 };
 
