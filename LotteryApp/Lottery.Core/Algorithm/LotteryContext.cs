@@ -606,7 +606,7 @@ namespace Lottery.Core.Algorithm
                     { "pairg", FactorTypeEnum.GPairTuple},
                     { "pairh", FactorTypeEnum.HPairTuple}
                 };
-                return Build(keys, r.Value);
+                return Build(keys, FactorTypeEnum.AllTuples);
             }
             return new LotteryResult[] { };
         }
@@ -691,7 +691,7 @@ namespace Lottery.Core.Algorithm
             {
                 query = query.ToArray().Take(1).Where(c => FactorDic[r][c].LastInterval >= InputOption.GeneralTrendInterval);
             }
-            return Build(query, r);
+            return Build(query, FactorTypeEnum.AllTuples);
         }
 
         private LotteryResult[] BuildDoubles()
