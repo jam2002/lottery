@@ -69,7 +69,6 @@ namespace Lottery.Core.Plan
 
         private BetResult Reset(int s, SimpleBet currentBet)
         {
-            BetResult ret = new BetResult { Status = s, Key = GetKey(), GroupName = GroupName, Bet = currentBet };
             bool hasBet = currentBet.BetAward.Any();
             switch (s)
             {
@@ -106,6 +105,7 @@ namespace Lottery.Core.Plan
                     ret.Value = GetBetString(LastBet);
                     break;
             }
+			BetResult ret = new BetResult { Status = s, Key = GetKey(), GroupName = GroupName, Bet = LastBet };
             return ret;
         }
 
