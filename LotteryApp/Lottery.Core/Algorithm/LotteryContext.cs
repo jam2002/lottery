@@ -199,7 +199,6 @@ namespace Lottery.Core.Algorithm
                 case "adjacent":
                     ret = GetAdjacentResult();
                     break;
-                case "twopairs":
                 case "history":
                     ret = GetHistoryResult();
                     break;
@@ -245,20 +244,10 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetHistoryResult()
         {
-            int awardOccurCount = InputOption.TakeNumber == 20 ? 9 : 7;
-            int pairOccurCount = InputOption.TakeNumber == 20 ? 6 : 5;
-
-            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals) && c.Value.OccurCount >= awardOccurCount)
-                                                                                            .OrderByDescending(c => c.Value.OccurCount)
-                                                                                            .ThenBy(c => c.Value.MaxInterval)
-                                                                                            .ThenBy(c => c.Value.LastInterval)
-                                                                                            .Select(c => c.Key)
-                                                                                            .ToArray();
-
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-                        where validAwards.Intersect(values).Count() == values.Length && p.Value.OccurCount >= pairOccurCount && p.Value.LastInterval < 7
+                        where p.Value.LastInterval < 7
                         orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
@@ -427,7 +416,7 @@ namespace Lottery.Core.Algorithm
                     },
                     Filter = $"{(isSpan ? "跨度" : "不定位")} ：{string.Join(",", values)}"
                 };
-            }).Where(c => c != null).Take(3).ToArray();
+            }).Where(c => c != null).Take(5).ToArray();
         }
 
         private LotteryResult[] BuildRepeats(out bool isRepeat)

@@ -212,7 +212,7 @@ namespace Lottery.Core.Plan
 
         private int[][] GetBetArray(SimpleBet bet)
         {
-            int[][] bets = GameName == "twopairs" ? bet.Results.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.Select(s => s.Values))).Take(2).ToArray() : new int[][] { bet.BetAward };
+            int[][] bets = bet.Results.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.Select(s => s.Values))).Take(SpanLength).ToArray();
 
             if (Number == 2 && LotteryName != "cqssc")
             {
