@@ -416,7 +416,7 @@ namespace Lottery.Core.Algorithm
                     },
                     Filter = $"{(isSpan ? "跨度" : "不定位")} ：{string.Join(",", values)}"
                 };
-            }).Where(c => c != null).Take(5).ToArray();
+            }).Where(c => c != null).Take(InputOption.GameName == "history" ? 9 : 5).ToArray();
         }
 
         private LotteryResult[] BuildRepeats(out bool isRepeat)
