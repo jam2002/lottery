@@ -1,10 +1,10 @@
 ﻿{
   "Common": [
     {
-      "Title": "前三二码(20)",
+      "Title": "前三二码(30)",
       "Number": 2,
-      "TakeNumber": 20,
-      "BetCycle": 6,
+      "TakeNumber": 30,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
       "GameArgs": "front",
@@ -20,13 +20,13 @@
       "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 1,
-      "SpanLength": 4
+      "SpanLength": 3
     },
     {
-      "Title": "中三二码(20)",
+      "Title": "中三二码(30)",
       "Number": 2,
-      "TakeNumber": 20,
-      "BetCycle": 6,
+      "TakeNumber": 30,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
       "GameArgs": "middle",
@@ -42,13 +42,13 @@
       "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 1,
-      "SpanLength": 4
+      "SpanLength": 3
     },
     {
-      "Title": "后三二码(20)",
+      "Title": "后三二码(30)",
       "Number": 2,
-      "TakeNumber": 20,
-      "BetCycle": 6,
+      "TakeNumber": 30,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
       "GameArgs": "after",
@@ -64,13 +64,13 @@
       "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 1,
-      "SpanLength": 4
+      "SpanLength": 3
     },
     {
-      "Title": "万千十(20)",
+      "Title": "万千十(30)",
       "Number": 2,
-      "TakeNumber": 20,
-      "BetCycle": 6,
+      "TakeNumber": 30,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
       "GameArgs": "tuplea",
@@ -86,13 +86,13 @@
       "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 1,
-      "SpanLength": 4
+      "SpanLength": 3
     },
     {
-      "Title": "万千个(20)",
+      "Title": "万千个(30)",
       "Number": 2,
-      "TakeNumber": 20,
-      "BetCycle": 6,
+      "TakeNumber": 30,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
       "GameArgs": "tupleb",
@@ -108,13 +108,13 @@
       "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 1,
-      "SpanLength": 4
+      "SpanLength": 3
     },
     {
-      "Title": "万百十(20)",
+      "Title": "万百十(30)",
       "Number": 2,
-      "TakeNumber": 20,
-      "BetCycle": 6,
+      "TakeNumber": 30,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
       "GameArgs": "tuplec",
@@ -130,13 +130,13 @@
       "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 1,
-      "SpanLength": 4
+      "SpanLength": 3
     },
     {
-      "Title": "万百个(20)",
+      "Title": "万百个(30)",
       "Number": 2,
-      "TakeNumber": 20,
-      "BetCycle": 6,
+      "TakeNumber": 30,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
       "GameArgs": "tupled",
@@ -152,13 +152,13 @@
       "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 1,
-      "SpanLength": 4
+      "SpanLength": 3
     },
     {
-      "Title": "万十个(20)",
+      "Title": "万十个(30)",
       "Number": 2,
-      "TakeNumber": 20,
-      "BetCycle": 6,
+      "TakeNumber": 30,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
       "GameArgs": "tuplee",
@@ -174,13 +174,13 @@
       "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 1,
-      "SpanLength": 4
+      "SpanLength": 3
     },
     {
-      "Title": "千百个(20)",
+      "Title": "千百个(30)",
       "Number": 2,
-      "TakeNumber": 20,
-      "BetCycle": 6,
+      "TakeNumber": 30,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
       "GameArgs": "tuplef",
@@ -196,13 +196,13 @@
       "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 1,
-      "SpanLength": 4
+      "SpanLength": 3
     },
     {
-      "Title": "千十个(20)",
+      "Title": "千十个(30)",
       "Number": 2,
-      "TakeNumber": 20,
-      "BetCycle": 6,
+      "TakeNumber": 30,
+      "BetCycle": 7,
       "GameInterval": 1,
       "GameName": "history",
       "GameArgs": "tupleg",
@@ -218,7 +218,71 @@
       "TupleLength": 3,
       "NumberLength": 5,
       "StartSpan": 1,
-      "SpanLength": 4
+      "SpanLength": 3
+    },
+
+    {
+      "Title": "前三二码(15)",
+      "Number": 1,
+      "TakeNumber": 15,
+      "BetCycle": 6,
+      "GameInterval": 1,
+      "GameName": "repeats",
+      "GameArgs": "front",
+      "LotteryName": "tsssc",
+      "ChangeBetPerTime": false,
+      "EnableSinglePattern": false,
+      "EnableContinuous": false,
+      "UseGeneralTrend": false,
+      "RespectRepeat": true,
+      "DisableRepeat": false,
+      "WaitInterval": 0,
+      "TupleLength": 3,
+      "NumberLength": 5,
+      "StartSpan": 1,
+      "SpanLength": 3
+    },
+    {
+      "Title": "中三二码(15)",
+      "Number": 1,
+      "TakeNumber": 15,
+      "BetCycle": 6,
+      "GameInterval": 1,
+      "GameName": "repeats",
+      "GameArgs": "middle",
+      "LotteryName": "tsssc",
+      "ChangeBetPerTime": false,
+      "EnableSinglePattern": false,
+      "EnableContinuous": false,
+      "UseGeneralTrend": false,
+      "RespectRepeat": true,
+      "DisableRepeat": false,
+      "WaitInterval": 0,
+      "TupleLength": 3,
+      "NumberLength": 5,
+      "StartSpan": 1,
+      "SpanLength": 3
+    },
+    {
+      "Title": "后三二码(15)",
+      "Number": 1,
+      "TakeNumber": 15,
+      "BetCycle": 6,
+      "GameInterval": 1,
+      "GameName": "repeats",
+      "GameArgs": "after",
+      "LotteryName": "tsssc",
+      "ChangeBetPerTime": false,
+      "EnableSinglePattern": false,
+      "EnableContinuous": false,
+      "UseGeneralTrend": false,
+      "RespectRepeat": true,
+      "DisableRepeat": false,
+      "WaitInterval": 0,
+      "TupleLength": 3,
+      "NumberLength": 5,
+      "StartSpan": 1,
+      "SpanLength": 3
     }
   ]
 }
