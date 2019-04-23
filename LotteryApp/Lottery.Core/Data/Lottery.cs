@@ -37,6 +37,8 @@
         /// </summary>
         public string[] TradingHours { get; set; }
 
+        public int[] IndexKeys { get; set; }
+
         public Lottery()
         {
             Source = 1;

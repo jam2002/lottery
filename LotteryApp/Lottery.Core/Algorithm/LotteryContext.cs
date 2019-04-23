@@ -429,7 +429,7 @@ namespace Lottery.Core.Algorithm
                 { "after", FactorTypeEnum.RightDistinct}
             };
             string gameArgs = InputOption.GameArgs.Split('.')[0];
-            FactorTypeEnum? t = pairDic.ContainsKey(gameArgs) ? (FactorTypeEnum?)pairDic[gameArgs] : null;
+            FactorTypeEnum? t = pairDic.ContainsKey(gameArgs) ? (FactorTypeEnum?)pairDic[gameArgs] : FactorTypeEnum.RightDistinct;
             ReferenceFactor factor = t.HasValue && FactorDic[t.Value].ContainsKey(2) ? FactorDic[t.Value][2] : null;
             if (factor != null)
             {

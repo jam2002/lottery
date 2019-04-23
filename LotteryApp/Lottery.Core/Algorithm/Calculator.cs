@@ -95,7 +95,7 @@ namespace Lottery.Core.Algorithm
             }
             else if (lotteryCache.ContainsKey(mainKey))
             {
-                lotteries = lotteryCache[mainKey].Select(x => x.Substring(lottery.StartIndex, lottery.Length)).ToArray();
+                lotteries = lotteryCache[mainKey].Select(x => lottery.IndexKeys?.Any() == true ? string.Join(string.Empty, lottery.IndexKeys.Select(t => x[t])) : x.Substring(lottery.StartIndex, lottery.Length)).ToArray();
                 lotteryCache[lottery.Key] = lotteries;
             }
             else
