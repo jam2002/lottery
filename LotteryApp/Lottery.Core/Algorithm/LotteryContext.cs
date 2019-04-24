@@ -560,42 +560,47 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum? r = enumDic.ContainsKey(gameArgs) ? (FactorTypeEnum?)enumDic[gameArgs] : null;
             if (r.HasValue)
             {
+                int occurCount = InputOption.TakeNumber == 30 ? 14 : 24;
                 var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
+                            where CheckInterval(p.Value.HitIntervals) && p.Value.OccurCount >= occurCount
+                            orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                             select p.Key;
-                int[] keys = query.Take(InputOption.TupleLength).OrderBy(c => c).ToArray();
-                keys = new int[] { int.Parse("1" + string.Join(string.Empty, keys)) };
-                Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
+                if (query.Count() >= InputOption.TupleLength)
                 {
-                    { "tuple4a", FactorTypeEnum.Tuple4A},
-                    { "tuple4b", FactorTypeEnum.Tuple4B},
-                    { "tuple4c", FactorTypeEnum.Tuple4C},
-                    { "front4", FactorTypeEnum.Left4Tuple},
-                    { "after4", FactorTypeEnum.Right4Tuple},
-                    { "front",   FactorTypeEnum.LeftTuple},
-                    { "middle", FactorTypeEnum.MiddleTuple},
-                    { "after",  FactorTypeEnum.RightTuple},
-                    { "all", FactorTypeEnum.AllTuples},
-                    { "tuplea", FactorTypeEnum.TupleA},
-                    { "tupleb", FactorTypeEnum.TupleB},
-                    { "tuplec", FactorTypeEnum.TupleC},
-                    { "tupled", FactorTypeEnum.TupleD},
-                    { "tuplee", FactorTypeEnum.TupleE},
-                    { "tuplef", FactorTypeEnum.TupleF},
-                    { "tupleg", FactorTypeEnum.TupleG},
+                    int[] keys = query.Take(InputOption.TupleLength).OrderBy(c => c).ToArray();
+                    keys = new int[] { int.Parse("1" + string.Join(string.Empty, keys)) };
+                    Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
+                    {
+                        { "tuple4a", FactorTypeEnum.Tuple4A},
+                        { "tuple4b", FactorTypeEnum.Tuple4B},
+                        { "tuple4c", FactorTypeEnum.Tuple4C},
+                        { "front4", FactorTypeEnum.Left4Tuple},
+                        { "after4", FactorTypeEnum.Right4Tuple},
+                        { "front",   FactorTypeEnum.LeftTuple},
+                        { "middle", FactorTypeEnum.MiddleTuple},
+                        { "after",  FactorTypeEnum.RightTuple},
+                        { "all", FactorTypeEnum.AllTuples},
+                        { "tuplea", FactorTypeEnum.TupleA},
+                        { "tupleb", FactorTypeEnum.TupleB},
+                        { "tuplec", FactorTypeEnum.TupleC},
+                        { "tupled", FactorTypeEnum.TupleD},
+                        { "tuplee", FactorTypeEnum.TupleE},
+                        { "tuplef", FactorTypeEnum.TupleF},
+                        { "tupleg", FactorTypeEnum.TupleG},
 
-                    { "leftpair",  FactorTypeEnum.LeftPTuple},
-                    { "rightpair", FactorTypeEnum.RightPTuple},
-                    { "paira",  FactorTypeEnum.APairTuple},
-                    { "pairb", FactorTypeEnum.BPairTuple},
-                    { "pairc", FactorTypeEnum.CPairTuple},
-                    { "paird", FactorTypeEnum.DPairTuple},
-                    { "paire", FactorTypeEnum.EPairTuple},
-                    { "pairf", FactorTypeEnum.FPairTuple},
-                    { "pairg", FactorTypeEnum.GPairTuple},
-                    { "pairh", FactorTypeEnum.HPairTuple}
-                };
-                return Build(keys, FactorTypeEnum.AllTuples);
+                        { "leftpair",  FactorTypeEnum.LeftPTuple},
+                        { "rightpair", FactorTypeEnum.RightPTuple},
+                        { "paira",  FactorTypeEnum.APairTuple},
+                        { "pairb", FactorTypeEnum.BPairTuple},
+                        { "pairc", FactorTypeEnum.CPairTuple},
+                        { "paird", FactorTypeEnum.DPairTuple},
+                        { "paire", FactorTypeEnum.EPairTuple},
+                        { "pairf", FactorTypeEnum.FPairTuple},
+                        { "pairg", FactorTypeEnum.GPairTuple},
+                        { "pairh", FactorTypeEnum.HPairTuple}
+                    };
+                    return Build(keys, FactorTypeEnum.AllTuples);
+                }
             }
             return new LotteryResult[] { };
         }
