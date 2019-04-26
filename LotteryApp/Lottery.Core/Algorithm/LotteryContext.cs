@@ -564,12 +564,14 @@ namespace Lottery.Core.Algorithm
             {
                 int min = InputOption.TakeNumber / 2 - 2;
                 var query = from p in FactorDic[r.Value]
-                            where CheckInterval(p.Value.HitIntervals) && p.Value.OccurCount >= min
+                            where CheckInterval(p.Value.HitIntervals, 6) && p.Value.OccurCount >= min
                             orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                             select p.Key;
+                query = query.Take(InputOption.TupleLength).ToArray();
+
                 if (query.Count() >= InputOption.TupleLength && query.Where(c => FactorDic[r.Value][c].OccurCount < InputOption.TakeNumber / 2).Count() <= 1)
                 {
-                    int[] keys = query.Take(InputOption.TupleLength).OrderBy(c => c).ToArray();
+                    int[] keys = query.OrderBy(c => c).ToArray();
                     keys = new int[] { int.Parse("1" + string.Join(string.Empty, keys)) };
                     Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
                     {
