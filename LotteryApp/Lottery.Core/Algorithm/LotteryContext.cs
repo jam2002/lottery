@@ -488,8 +488,10 @@ namespace Lottery.Core.Algorithm
             Tuple<FactorTypeEnum, FactorTypeEnum> r = enumDic.ContainsKey(key) ? enumDic[key] : null;
             if (r != null)
             {
+                int occurCount = InputOption.TakeNumber / 2 - 1;
                 var query = from p in FactorDic[r.Item1]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.LastInterval descending, p.Value.FailureCount
+                            where CheckInterval(p.Value.HitIntervals) && p.Value.OccurCount >= occurCount
+                            orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.LastInterval descending
                             select p.Key;
 
                 //query = query.Take(2).Where(c => FactorDic[r.Item1][c].LastInterval >= InputOption.StartSpan).ToArray();
@@ -560,12 +562,12 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum? r = enumDic.ContainsKey(gameArgs) ? (FactorTypeEnum?)enumDic[gameArgs] : null;
             if (r.HasValue)
             {
-                int occurCount = InputOption.TakeNumber == 30 ? 14 : 24;
+                int min = InputOption.TakeNumber / 2 - 2;
                 var query = from p in FactorDic[r.Value]
-                            where CheckInterval(p.Value.HitIntervals) && p.Value.OccurCount >= occurCount
+                            where CheckInterval(p.Value.HitIntervals) && p.Value.OccurCount >= min
                             orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                             select p.Key;
-                if (query.Count() >= InputOption.TupleLength)
+                if (query.Count() >= InputOption.TupleLength && query.Where(c => FactorDic[r.Value][c].OccurCount < InputOption.TakeNumber / 2).Count() <= 1)
                 {
                     int[] keys = query.Take(InputOption.TupleLength).OrderBy(c => c).ToArray();
                     keys = new int[] { int.Parse("1" + string.Join(string.Empty, keys)) };
