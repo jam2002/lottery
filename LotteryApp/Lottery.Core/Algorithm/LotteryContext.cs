@@ -564,7 +564,7 @@ namespace Lottery.Core.Algorithm
             {
                 int min = InputOption.TakeNumber / 2 - 2;
                 var query = from p in FactorDic[r.Value]
-                            where CheckInterval(p.Value.HitIntervals, 6) && p.Value.OccurCount >= min
+                            where CheckInterval(p.Value.HitIntervals) && p.Value.OccurCount >= min
                             orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                             select p.Key;
                 query = query.Take(InputOption.TupleLength).ToArray();
