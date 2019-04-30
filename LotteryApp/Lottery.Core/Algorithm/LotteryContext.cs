@@ -344,7 +344,7 @@ namespace Lottery.Core.Algorithm
             }
             if (InputOption.WaitInterval > 0)
             {
-                awards = awards.ToArray().Take(1).Where(c => FactorDic[type][c].LastInterval >= InputOption.WaitInterval);
+                awards = awards.ToArray().Take(2).Where(c => FactorDic[type][c].LastInterval >= InputOption.WaitInterval);
             }
             bool isSpan = false;
             return awards.Select((c, i) =>
@@ -488,13 +488,10 @@ namespace Lottery.Core.Algorithm
             Tuple<FactorTypeEnum, FactorTypeEnum> r = enumDic.ContainsKey(key) ? enumDic[key] : null;
             if (r != null)
             {
-                int occurCount = InputOption.TakeNumber / 2 - 1;
                 var query = from p in FactorDic[r.Item1]
-                            where CheckInterval(p.Value.HitIntervals) && p.Value.OccurCount >= occurCount
-                            orderby p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.LastInterval descending
+                            where CheckInterval(p.Value.HitIntervals)
+                            orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                             select p.Key;
-
-                //query = query.Take(2).Where(c => FactorDic[r.Item1][c].LastInterval >= InputOption.StartSpan).ToArray();
 
                 return Build(query, r.Item2);
             }
@@ -564,12 +561,12 @@ namespace Lottery.Core.Algorithm
             {
                 int min = InputOption.TakeNumber / 2 - 2;
                 var query = from p in FactorDic[r.Value]
-                            where CheckInterval(p.Value.HitIntervals) && p.Value.OccurCount >= min
+                            where CheckInterval(p.Value.HitIntervals)
                             orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                             select p.Key;
                 query = query.Take(InputOption.TupleLength).ToArray();
 
-                if (query.Count() >= InputOption.TupleLength && query.Where(c => FactorDic[r.Value][c].OccurCount < InputOption.TakeNumber / 2).Count() <= 1)
+                if (query.Count() >= InputOption.TupleLength)
                 {
                     int[] keys = query.OrderBy(c => c).ToArray();
                     keys = new int[] { int.Parse("1" + string.Join(string.Empty, keys)) };
