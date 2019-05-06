@@ -700,16 +700,16 @@ namespace Lottery.Core.Algorithm
                 { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
 
-                { "leftpair",  FactorTypeEnum.Award},
-                { "rightpair", FactorTypeEnum.Award},
-                { "paira",  FactorTypeEnum.Award},
-                { "pairb", FactorTypeEnum.Award},
-                { "pairc", FactorTypeEnum.Award},
-                { "paird", FactorTypeEnum.Award},
-                { "paire", FactorTypeEnum.Award},
-                { "pairf", FactorTypeEnum.Award},
-                { "pairg", FactorTypeEnum.Award},
-                { "pairh", FactorTypeEnum.Award},
+                { "leftpair", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftPair},
+                { "rightpair", InputOption.UseGeneralTrend? FactorTypeEnum.Award: FactorTypeEnum.RightPair},
+                { "paira",  InputOption.UseGeneralTrend?FactorTypeEnum.Award:  FactorTypeEnum.APair},
+                { "pairb", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.BPair},
+                { "pairc", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.CPair},
+                { "paird", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.DPair},
+                { "paire", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.EPair},
+                { "pairf", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.FPair},
+                { "pairg", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.GPair},
+                { "pairh", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.HPair},
 
                 { "all", FactorTypeEnum.Award}
             };
