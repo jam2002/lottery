@@ -247,7 +247,7 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = FactorTypeEnum.AllPairs;
             var query = from p in FactorDic[r]
                         let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-                        where p.Value.LastInterval < 7 && p.Value.FailureCount >= 7
+                        where p.Value.LastInterval < 7 
                         orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
                         select p.Key;
             return Build(query, r);
@@ -416,7 +416,7 @@ namespace Lottery.Core.Algorithm
                     },
                     Filter = $"{(isSpan ? "跨度" : "不定位")} ：{string.Join(",", values)}"
                 };
-            }).Where(c => c != null).Take(InputOption.GameName == "history" ? 9 : 5).ToArray();
+            }).Where(c => c != null).Take(3).ToArray();
         }
 
         private LotteryResult[] BuildRepeats(out bool isRepeat)
