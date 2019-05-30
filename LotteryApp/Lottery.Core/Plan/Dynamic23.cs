@@ -214,7 +214,7 @@ namespace Lottery.Core.Plan
         {
             int[][] bets = bet.Results.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.Select(s => s.Values))).Take(1).ToArray();
 
-            if (Number == 2 && LotteryName != "cqssc")
+            if (Number == 2)
             {
                 bets = bets.SelectMany(c =>
                 {
