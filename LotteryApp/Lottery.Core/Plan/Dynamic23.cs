@@ -204,6 +204,22 @@ namespace Lottery.Core.Plan
                     case "pairh":
                         numbers = new int[] { numbers[2], numbers[4] };
                         break;
+                    
+                    case "wan":
+                        numbers = new int[] { numbers[0] };
+                        break;
+                    case "qian":
+                        numbers = new int[] { numbers[1] };
+                        break;
+                    case "bai":
+                        numbers = new int[] { numbers[2] };
+                        break;
+                    case "shi":
+                        numbers = new int[] { numbers[3] };
+                        break;
+                     case "ge":
+                        numbers = new int[] { numbers[4] };
+                        break;                                                                      
                 }
             }
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && IsValid(numbers);
@@ -250,8 +266,6 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                    int zeroCount = number.Select(c => c % 3).Distinct().Count();
-                    int sumRemain = input.Sum() % 10;
                     ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
                 }
             }
@@ -275,7 +289,15 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                ret = awards.SelectMany(c => Enumerable.Range(0, 10).Select(t => $"{c}{t}").Concat(Enumerable.Range(0, 10).Select(t => $"{t}{c}"))).Distinct().ToArray();
+                string[] doubleTypes = new string[]{"wan","qian","bai","shi","ge"};
+                if(doubleTypes.Contains(GameArgs))
+                {
+                    ret = new string[]{ string.Join("",awards) };
+                }
+                else
+                {
+                    ret = awards.SelectMany(c => Enumerable.Range(0, 10).Select(t => $"{c}{t}").Concat(Enumerable.Range(0, 10).Select(t => $"{t}{c}"))).Distinct().ToArray();
+                }
             }
             else if (betArray.Any())
             {

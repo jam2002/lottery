@@ -1,15 +1,15 @@
 ﻿{
   "Common": [
     {
-      "Title": "前三二码(60)",
+      "Title": "前三二码(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
       "GameArgs": "front",
       "LotteryName": "cqssc",
-      "GroupName": "anytwo",
+     
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -23,15 +23,15 @@
       "SpanLength": 0
     },
     {
-      "Title": "中三二码(60)",
+      "Title": "中三二码(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
       "GameArgs": "middle",
       "LotteryName": "cqssc",
-      "GroupName": "anytwo",
+
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -45,15 +45,15 @@
       "SpanLength": 0
     },
     {
-      "Title": "后三二码(60)",
+      "Title": "后三二码(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
        "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
       "GameArgs": "after",
       "LotteryName": "cqssc",
-      "GroupName": "anytwo",	  
+  
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -67,15 +67,15 @@
       "SpanLength": 0
     },
     {
-      "Title": "万千十(60)",
+      "Title": "万千十(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
        "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
       "GameArgs": "tuplea",
       "LotteryName": "cqssc",
-      "GroupName": "anytwo",
+
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -89,15 +89,15 @@
       "SpanLength": 0
     },
     {
-      "Title": "万千个(60)",
+      "Title": "万千个(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
        "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
       "GameArgs": "tupleb",
       "LotteryName": "cqssc",
-      "GroupName": "anytwo",
+
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -111,15 +111,15 @@
       "SpanLength": 0
     },
     {
-      "Title": "万百十(60)",
+      "Title": "万百十(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
        "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
       "GameArgs": "tuplec",
       "LotteryName": "cqssc",
-	  "GroupName": "anytwo",	  
+
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -133,15 +133,15 @@
       "SpanLength": 0
     },
     {
-      "Title": "万百个(60)",
+      "Title": "万百个(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
        "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
       "GameArgs": "tupled",
       "LotteryName": "cqssc",
-      "GroupName": "anytwo",
+
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -155,15 +155,15 @@
       "SpanLength": 0
     },
     {
-      "Title": "万十个(60)",
+      "Title": "万十个(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
       "GameArgs": "tuplee",
       "LotteryName": "cqssc",
-	  "GroupName": "anytwo",
+
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -177,15 +177,15 @@
       "SpanLength": 0
     },
     {
-      "Title": "千百个(60)",
+      "Title": "千百个(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
       "GameArgs": "tuplef",
       "LotteryName": "cqssc",
-      "GroupName": "anytwo",
+
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -199,15 +199,15 @@
       "SpanLength": 0
     },
     {
-      "Title": "千十个(60)",
+      "Title": "千十个(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
        "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
       "GameArgs": "tupleg",
       "LotteryName": "cqssc",
-      "GroupName": "anytwo",
+
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -221,9 +221,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "前三一码(60)",
+      "Title": "前三一码(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "single",
@@ -243,9 +243,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "中三一码(60)",
+      "Title": "中三一码(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "single",
@@ -265,9 +265,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "后三一码(60)",
+      "Title": "后三一码(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "single",
@@ -287,9 +287,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "万千十(60)",
+      "Title": "万千十(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "single",
@@ -309,9 +309,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "万千个(60)",
+      "Title": "万千个(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "single",
@@ -331,9 +331,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "万百十(60)",
+      "Title": "万百十(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "single",
@@ -353,9 +353,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "万百个(60)",
+      "Title": "万百个(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "single",
@@ -375,9 +375,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "万十个(60)",
+      "Title": "万十个(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "single",
@@ -397,9 +397,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "千百个(60)",
+      "Title": "千百个(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "single",
@@ -419,9 +419,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "千十个(60)",
+      "Title": "千十个(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "single",
@@ -440,14 +440,15 @@
       "StartSpan": 0,
       "SpanLength": 0
     },
+
     {
-      "Title": "前二(60)",
+      "Title": "万(20)",
       "Number": 1,
-      "TakeNumber": 60,
-      "BetCycle": 5,
+      "TakeNumber": 20,
+      "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "double",
-      "GameArgs": "leftpair",
+      "GameArgs": "wan",
       "LotteryName": "cqssc",
      
       "ChangeBetPerTime": false,
@@ -463,14 +464,59 @@
       "SpanLength": 0
     },
     {
-      "Title": "后二(60)",
+      "Title": "千(20)",
       "Number": 1,
-      "TakeNumber": 60,
-      "BetCycle": 5,
+      "TakeNumber": 20,
+      "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "double",
-      "GameArgs": "rightpair",
+      "GameArgs": "qian",
       "LotteryName": "cqssc",
+     
+      "ChangeBetPerTime": false,
+      "EnableSinglePattern": false,
+      "EnableContinuous": false,
+      "UseGeneralTrend": true,
+      "RespectRepeat": false,
+      "DisableRepeat": false,
+      "WaitInterval": 0,
+      "TupleLength": 3,
+      "NumberLength": 5,
+      "StartSpan": 2,
+      "SpanLength": 0
+    },	
+     {
+      "Title": "百(20)",
+      "Number": 1,
+      "TakeNumber": 20,
+      "BetCycle": 7,
+      "GameInterval": 20,
+      "GameName": "double",
+      "GameArgs": "bai",
+      "LotteryName": "cqssc",
+     
+      "ChangeBetPerTime": false,
+      "EnableSinglePattern": false,
+      "EnableContinuous": false,
+      "UseGeneralTrend": true,
+      "RespectRepeat": false,
+      "DisableRepeat": false,
+      "WaitInterval": 0,
+      "TupleLength": 3,
+      "NumberLength": 5,
+      "StartSpan": 2,
+      "SpanLength": 0
+    },   
+    {
+      "Title": "十(20)",
+      "Number": 1,
+      "TakeNumber": 20,
+      "BetCycle": 7,
+      "GameInterval": 20,
+      "GameName": "double",
+      "GameArgs": "shi",
+      "LotteryName": "cqssc",
+     
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -484,14 +530,15 @@
       "SpanLength": 0
     },
     {
-      "Title": "万百(60)",
+      "Title": "个(20)",
       "Number": 1,
-      "TakeNumber": 60,
-      "BetCycle": 5,
+      "TakeNumber": 20,
+      "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "double",
-      "GameArgs": "paira",
+      "GameArgs": "ge",
       "LotteryName": "cqssc",
+     
       "ChangeBetPerTime": false,
       "EnableSinglePattern": false,
       "EnableContinuous": false,
@@ -504,52 +551,11 @@
       "StartSpan": 2,
       "SpanLength": 0
     },
+
     {
-      "Title": "万十(60)",
+      "Title": "千百(20)",
       "Number": 1,
-      "TakeNumber": 60,
-      "BetCycle": 5,
-      "GameInterval": 20,
-      "GameName": "double",
-      "GameArgs": "pairb",
-      "LotteryName": "cqssc",
-      "ChangeBetPerTime": false,
-      "EnableSinglePattern": false,
-      "EnableContinuous": false,
-      "UseGeneralTrend": true,
-      "RespectRepeat": false,
-      "DisableRepeat": false,
-      "WaitInterval": 0,
-      "TupleLength": 3,
-      "NumberLength": 5,
-      "StartSpan": 2,
-      "SpanLength": 0
-    },
-    {
-      "Title": "万个(60)",
-      "Number": 1,
-      "TakeNumber": 60,
-      "BetCycle": 5,
-      "GameInterval": 20,
-      "GameName": "double",
-      "GameArgs": "pairc",
-      "LotteryName": "cqssc",
-      "ChangeBetPerTime": false,
-      "EnableSinglePattern": false,
-      "EnableContinuous": false,
-      "UseGeneralTrend": true,
-      "RespectRepeat": false,
-      "DisableRepeat": false,
-      "WaitInterval": 0,
-      "TupleLength": 3,
-      "NumberLength": 5,
-      "StartSpan": 2,
-      "SpanLength": 0
-    },
-    {
-      "Title": "千百(60)",
-      "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "double",
@@ -568,9 +574,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "千十(60)",
+      "Title": "千十(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "double",
@@ -589,9 +595,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "千个(60)",
+      "Title": "千个(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "double",
@@ -610,9 +616,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "百十(60)",
+      "Title": "百十(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "double",
@@ -631,9 +637,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "百个(60)",
+      "Title": "百个(20)",
       "Number": 1,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "double",
@@ -652,9 +658,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "五星二码(60)",
+      "Title": "五星二码(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "history",
@@ -673,9 +679,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "五星三码(60)",
+      "Title": "五星三码(20)",
       "Number": 3,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 7,
       "GameInterval": 20,
       "GameName": "tripple",
@@ -694,9 +700,9 @@
       "SpanLength": 0
     },
     {
-      "Title": "五星复式(60)",
+      "Title": "五星复式(20)",
       "Number": 2,
-      "TakeNumber": 60,
+      "TakeNumber": 20,
       "BetCycle": 5,
       "GameInterval": 20,
       "GameName": "tripple",

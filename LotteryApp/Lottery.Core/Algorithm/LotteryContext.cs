@@ -711,6 +711,12 @@ namespace Lottery.Core.Algorithm
                 { "pairg", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.GPair},
                 { "pairh", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.HPair},
 
+                { "wan", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Wan},
+                { "qian", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Thousand},
+                { "bai", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Hundred},
+                { "shi", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Decade},
+                { "ge", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Unit},
+
                 { "all", FactorTypeEnum.Award}
             };
             FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
@@ -741,6 +747,12 @@ namespace Lottery.Core.Algorithm
                     { "pairf", FactorTypeEnum.Double},
                     { "pairg", FactorTypeEnum.Double},
                     { "pairh", FactorTypeEnum.Double},
+
+                    { "wan", FactorTypeEnum.Double},
+                    { "qian", FactorTypeEnum.Double},
+                    { "bai", FactorTypeEnum.Double},
+                    { "shi", FactorTypeEnum.Double},
+                    { "ge", FactorTypeEnum.Double},
                     { "all",  FactorTypeEnum.Double}
                 };
 
