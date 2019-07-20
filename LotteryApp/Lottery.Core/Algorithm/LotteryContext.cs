@@ -692,13 +692,17 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] BuildDoubles()
         {
             Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
-            {
-                { "front2",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
-                { "middle2", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
-                { "after2",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
-                { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
+            {				
+				{ "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
                 { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
+                { "tuplea", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.AAward},
+                { "tupleb", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.BAward},
+                { "tuplec", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.CAward},
+                { "tupled", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.DAward},
+                { "tuplee", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.EAward},
+                { "tuplef", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.FAward},
+                { "tupleg", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.GAward},
 
                 { "leftpair", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftPair},
                 { "rightpair", InputOption.UseGeneralTrend? FactorTypeEnum.Award: FactorTypeEnum.RightPair},
@@ -731,12 +735,18 @@ namespace Lottery.Core.Algorithm
                 keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
-                    { "front2",   FactorTypeEnum.LeftDouble},
-                    { "middle2", FactorTypeEnum.RightDouble},
-                    { "after2",  FactorTypeEnum.RightDouble},
-                    { "front",   FactorTypeEnum.LeftDouble},
-                    { "middle", FactorTypeEnum.MiddleDouble},
-                    { "after",  FactorTypeEnum.RightDouble},
+					{ "front",   FactorTypeEnum.Double},
+					{ "middle", FactorTypeEnum.Double},
+					{ "after",  FactorTypeEnum.Double},
+					{ "all", FactorTypeEnum.Double},
+					{ "tuplea", FactorTypeEnum.Double},
+					{ "tupleb", FactorTypeEnum.Double},
+					{ "tuplec", FactorTypeEnum.Double},
+					{ "tupled", FactorTypeEnum.Double},
+					{ "tuplee", FactorTypeEnum.Double},
+					{ "tuplef", FactorTypeEnum.Double},
+					{ "tupleg", FactorTypeEnum.Double},
+					
                     { "leftpair",  FactorTypeEnum.Double},
                     { "rightpair", FactorTypeEnum.Double},
                     { "paira",  FactorTypeEnum.Double},
