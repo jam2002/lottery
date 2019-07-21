@@ -738,7 +738,6 @@ namespace Lottery.Core.Algorithm
 					{ "front",   FactorTypeEnum.Double},
 					{ "middle", FactorTypeEnum.Double},
 					{ "after",  FactorTypeEnum.Double},
-					{ "all", FactorTypeEnum.Double},
 					{ "tuplea", FactorTypeEnum.Double},
 					{ "tupleb", FactorTypeEnum.Double},
 					{ "tuplec", FactorTypeEnum.Double},
