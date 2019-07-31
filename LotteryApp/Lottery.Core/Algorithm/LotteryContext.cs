@@ -489,8 +489,7 @@ namespace Lottery.Core.Algorithm
             if (r != null)
             {
                 var query = from p in FactorDic[r.Item1]
-                            where CheckInterval(p.Value.HitIntervals)
-                            orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
                             select p.Key;
 
                 return Build(query, r.Item2);
@@ -561,8 +560,7 @@ namespace Lottery.Core.Algorithm
             {
                 int min = InputOption.TakeNumber / 2 - 2;
                 var query = from p in FactorDic[r.Value]
-                            where CheckInterval(p.Value.HitIntervals)
-                            orderby p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
                             select p.Key;
                 query = query.Take(InputOption.TupleLength).ToArray();
 

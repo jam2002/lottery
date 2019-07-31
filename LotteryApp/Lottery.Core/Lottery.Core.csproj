@@ -88,6 +88,7 @@
     <Compile Include="Algorithm\LotteryContext.cs" />
     <Compile Include="Algorithm\LotteryGenerator.cs" />
     <Compile Include="Algorithm\OutputResult.cs" />
+    <Compile Include="Algorithm\ResultItem.cs" />
     <Compile Include="Data\BetResult.cs" />
     <Compile Include="Plan\Dynamic135.cs" />
     <Compile Include="Plan\Dynamic17.cs" />

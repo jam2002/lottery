@@ -57,7 +57,7 @@ namespace Lottery.Core.Algorithm
         public OutputResult Start()
         {
             string[] lotteries = GetLotteries();
-            lotteries = lotteries.Skip((option.SkipCount.HasValue ? option.SkipCount.Value : lotteries.Length) - option.TakeNumber).Take(option.TakeNumber).ToArray();
+            lotteries = lotteries.Skip(lotteries.Length > option.TakeNumber? lotteries.Length - option.TakeNumber :0).Take(option.TakeNumber).ToArray();
 
             LotteryNumber[] selectedLottery = null;
             if (lottery.Length >= 5)
@@ -123,15 +123,7 @@ namespace Lottery.Core.Algorithm
                 }
                 else if (lottery.Source == 3)
                 {
-                    try
-                    {
-						lotteries = GetTsNumbers("http://tx-ssc.com/api/getData");
-                       
-                    }
-                    catch
-                    {
-                        lotteries = GetTsNumbers("https://www.pp926.com/api/lastOpenedIssues.php?id=1&issueCount=200");
-                    }
+                    lotteries = GetTsNumbers("http://qniupin.com/api/tencent/onlineim");
                 }
                 else if (lottery.Source == 4)
                 {
@@ -151,7 +143,6 @@ namespace Lottery.Core.Algorithm
         private string[] GetTsNumbers(string apiPath)
         {
             string[] lotteries;
-            bool isOffical = apiPath.StartsWith("http://tx-ssc.com/api");
 
             HttpWebRequest webRequest = WebRequest.CreateHttp(apiPath);
             webRequest.Timeout = 5000;
@@ -160,14 +151,13 @@ namespace Lottery.Core.Algorithm
                 using (StreamReader sr = new StreamReader(response.GetResponseStream()))
                 {
                     string content = sr.ReadToEnd();
-                    if (isOffical)
-                    {
-                        lotteries = JArray.Parse(content).Select(t => new { no = t.Value<string>("issue"), value = string.Join(string.Empty, t.Value<string>("code").Split(',')) }).OrderBy(t => t.no).Select(t => t.value).ToArray();
-                    }
-                    else
-                    {
-                        lotteries = JObject.Parse(content).Value<string>("result").Split(',').Select(t => new { no = t.Split('|')[0], value = t.Split('|')[1] }).OrderBy(t => t.no).Select(t => t.value).ToArray();
-                    }
+
+                    lotteries = Newtonsoft.Json.JsonConvert.DeserializeObject<ResultItem[]>(content).Select(t=>{
+                        string value = t.onlinenumber.ToString();
+                        string wan = (value.Select(c=>int.Parse(c.ToString())).Sum()%10).ToString();
+                        return string.Concat(wan, value.Substring(value.Length -4));
+                    }).Reverse().ToArray();
+                    
                 }
             }
             return lotteries;
