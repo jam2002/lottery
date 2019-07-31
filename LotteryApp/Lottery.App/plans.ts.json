@@ -3,7 +3,7 @@
 		{
 			"Title": "前二(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -24,7 +24,7 @@
 		{
 			"Title": "后二(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -45,7 +45,7 @@
 		{
 			"Title": "万百(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -66,7 +66,7 @@
 		{
 			"Title": "万十(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -87,7 +87,7 @@
 		{
 			"Title": "万个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -108,7 +108,7 @@
 		{
 			"Title": "千百(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -129,7 +129,7 @@
 		{
 			"Title": "千十(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -150,7 +150,7 @@
 		{
 			"Title": "千个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -171,7 +171,7 @@
 		{
 			"Title": "百十(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -192,7 +192,7 @@
 		{
 			"Title": "百个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -213,7 +213,7 @@
 		{
 			"Title": "前三一码(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -234,7 +234,7 @@
 		{
 			"Title": "中三一码(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -255,7 +255,7 @@
 		{
 			"Title": "后三一码(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -276,7 +276,7 @@
 		{
 			"Title": "万千十(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -297,7 +297,7 @@
 		{
 			"Title": "万千个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -318,7 +318,7 @@
 		{
 			"Title": "万百十(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -339,7 +339,7 @@
 		{
 			"Title": "万百个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -360,7 +360,7 @@
 		{
 			"Title": "万十个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -381,7 +381,7 @@
 		{
 			"Title": "千百个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -402,7 +402,7 @@
 		{
 			"Title": "千十个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "double",
@@ -424,8 +424,8 @@
     {
 			"Title": "前四一码(30)",
 			"Number": 1,
-			"TakeNumber": 30,
-			"BetCycle": 5,
+			"TakeNumber": 10,
+			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "single",
 			"GameArgs": "front4",
@@ -445,8 +445,8 @@
     {
 			"Title": "后四一码(30)",
 			"Number": 1,
-			"TakeNumber": 30,
-			"BetCycle": 5,
+			"TakeNumber": 10,
+			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "single",
 			"GameArgs": "after4",
@@ -466,8 +466,8 @@
     {
 			"Title": "万千百个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
-			"BetCycle": 5,
+			"TakeNumber": 10,
+			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "single",
 			"GameArgs": "tuple4a",
@@ -487,8 +487,8 @@
     {
 			"Title": "万千十个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
-			"BetCycle": 5,
+			"TakeNumber": 10,
+			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "single",
 			"GameArgs": "tuple4b",
@@ -508,8 +508,8 @@
     {
 			"Title": "万百十个(30)",
 			"Number": 1,
-			"TakeNumber": 30,
-			"BetCycle": 5,
+			"TakeNumber": 10,
+			"BetCycle": 3,
 			"GameInterval": 1,
 			"GameName": "single",
 			"GameArgs": "tuple4c",
@@ -530,7 +530,7 @@
 		{
 			"Title": "万百十(30)",
 			"Number": 2,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "tripple",
@@ -552,7 +552,7 @@
 		{
 			"Title": "万百个(30)",
 			"Number": 2,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "tripple",
@@ -574,7 +574,7 @@
 		{
 			"Title": "万十个(30)",
 			"Number": 2,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "tripple",
@@ -596,7 +596,7 @@
 		{
 			"Title": "千百个(30)",
 			"Number": 2,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "tripple",
@@ -618,7 +618,7 @@
 		{
 			"Title": "千十个(30)",
 			"Number": 2,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "tripple",
@@ -640,7 +640,7 @@
 		{
 			"Title": "五星二码(30)",
 			"Number": 2,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 7,
 			"GameInterval": 1,
 			"GameName": "history",
@@ -661,7 +661,7 @@
 		{
 			"Title": "五星三码(30)",
 			"Number": 3,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 7,
 			"GameInterval": 1,
 			"GameName": "tripple",
@@ -682,7 +682,7 @@
 		{
 			"Title": "五星复式(30)",
 			"Number": 2,
-			"TakeNumber": 30,
+			"TakeNumber": 10,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "tripple",
