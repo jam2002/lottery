@@ -28,6 +28,7 @@ namespace Lottery.App
         {
             Dictionary<string, string> titleDefine = new Dictionary<string, string>
             {
+                { "qq", "QQ计划"},
                 { "ts", "腾讯计划"},
                 { "cq", "重庆计划"},
                 { "xj", "新疆计划"}

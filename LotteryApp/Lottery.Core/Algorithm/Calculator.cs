@@ -127,7 +127,7 @@ namespace Lottery.Core.Algorithm
                 }
                 else if (lottery.Source == 4)
                 {
-                    lotteries = Get17500Numbers();
+                    lotteries = GetTsNumbers("http://qniupin.com/api/tencent/online");
                 }
 
                 lotteryCache[mainKey] = lotteries;

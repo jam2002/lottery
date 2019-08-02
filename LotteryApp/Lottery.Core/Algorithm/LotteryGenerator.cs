@@ -28,7 +28,7 @@ namespace Lottery.Core.Algorithm
             {
                 CD.Lottery[] lotteries = new CD.Lottery[]
                 {
-                    new CD.Lottery {  Key = "mdssc", DisplayName="美东两分彩",Source=2, StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true },
+                    new CD.Lottery {  Key = "qqssc", DisplayName="QQ分分彩",Source=4, StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true },
                     new CD.Lottery {  Key = "tsssc", DisplayName="腾讯分分彩",Source=3, StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                     new CD.Lottery {  Key = "tsssc|front", DisplayName="腾讯分分彩 前三",Source=3,  StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                     new CD.Lottery {  Key = "tsssc|middle", DisplayName="腾讯分分彩 中三",Source=3, StartIndex = 1, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
@@ -282,16 +282,9 @@ namespace Lottery.Core.Algorithm
 
         private static int GetRepeats(int[] array, int? pos)
         {
-            //int r = array[0] == array[2] || array[1] == array[2] || array[0] == array[1] ? array[1] : -1;
-
             int[] repeats = array.GroupBy(c => c).Where(c => c.Count() > 1).Select(c => c.Key).OrderBy(c => c).ToArray();
             int r = repeats.Any() ? repeats[0] : -1;
             return r;
-
-            //if (pos == null || pos == 1)
-            //    return r;
-            //else
-            //    return r != -1 && array[0] != array[1] ? r : -1;
         }
 
         private static LotteryNumber[] GetAllNumbers(int type)
