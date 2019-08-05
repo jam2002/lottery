@@ -285,7 +285,7 @@ namespace Lottery.Core.Plan
             }
             else if (isAward && award.HasValue)
             {
-                ret = (type == FactorTypeEnum.Award || type == FactorTypeEnum.RepeatNumber) && GameArgs == "all" ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
+                ret = GameArgs == "all" || LotteryName == "tsssc" ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
             }
             else if (isDouble)
             {
