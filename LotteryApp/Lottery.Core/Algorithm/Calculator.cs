@@ -123,11 +123,11 @@ namespace Lottery.Core.Algorithm
                 }
                 else if (lottery.Source == 3)
                 {
-                    lotteries = GetTsNumbers("http://qniupin.com/api/tencent/onlineim");
+                    lotteries = GetTsNumbers(16);
                 }
                 else if (lottery.Source == 4)
                 {
-                    lotteries = GetTsNumbers("http://qniupin.com/api/tencent/online");
+                    lotteries = GetTsNumbers(15);
                 }
 
                 lotteryCache[mainKey] = lotteries;
@@ -163,12 +163,12 @@ namespace Lottery.Core.Algorithm
             return lotteries;
         }
 
-        private string[] Get17500Numbers()
+        private string[] GetTsNumbers(int type)
         {
             string[] lotteries;
-            string param = $"page=1&code=1&pagesize={option.TakeNumber}";
+            string param = $"id={type}&pnum={option.TakeNumber}";
             byte[] bs = Encoding.UTF8.GetBytes(param);
-            string url = lottery.Key.StartsWith("cqssc") ? "https://cqssc.17500.cn/tgj/php/wxzu.php?mobile=1&r=0.3677059921770287" : "https://xjssc.17500.cn/xjtgj/php/wxzu.php?mobile=1&r=0.4307241094153127";
+            string url = "http://pay4.hbcchy.com/lotterytrend/getsscchart";
             HttpWebRequest webRequest = WebRequest.CreateHttp(url);
             webRequest.Method = "POST";
             webRequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
@@ -185,10 +185,12 @@ namespace Lottery.Core.Algorithm
                 {
                     string content = sr.ReadToEnd();
 
-                    lotteries = new Regex(lottery.RegexPattern).Matches(content).OfType<Match>().Select(x =>
+                    JArray array = JObject.Parse(content).SelectToken("data") as JArray;
+                    lotteries = array.Select(t =>
                     {
-                        return new { no = x.Groups["key"].Value, value = x.Groups["value"].Value };
-                    }).OrderBy(c => c.no).Select(c => c.value).ToArray();
+                        JArray c = t as JArray;
+                        return c.ElementAt(1).Value<string>();
+                    }).ToArray();
                 }
             }
             return lotteries;
