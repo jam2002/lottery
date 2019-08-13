@@ -730,7 +730,7 @@ namespace Lottery.Core.Algorithm
                             select p.Key;
                 int[] keys = query.ToArray();
                 int k= InputOption.StartSpan % 10;
-                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).ToArray();
+                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).Concat(keys.Skip(keys.Length-1)).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
 					{ "front",   FactorTypeEnum.Double},
