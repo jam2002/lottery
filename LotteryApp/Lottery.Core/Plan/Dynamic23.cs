@@ -1,4 +1,5 @@
 ﻿using Kw.Combinatorics;
+using Lottery.Core.Algorithm;
 using Lottery.Core.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,12 +101,13 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                    numbers = from x in count
-                              from y in count
-                              from z in count
-                              let number = new[] { x, y, z }
-                              where IsValid(number)
-                              select string.Join(string.Empty, number);
+                    numbers = LotteryGenerator.GetConfig().ThreeNumbers.Where(t=> IsValid( t.RawNumbers)).Select(t=>t.Key);
+                    // numbers = from x in count
+                    //           from y in count
+                    //           from z in count
+                    //           let number = new[] { x, y, z }
+                    //           where IsValid(number)
+                    //           select string.Join(string.Empty, number);
                 }
             }
             else
