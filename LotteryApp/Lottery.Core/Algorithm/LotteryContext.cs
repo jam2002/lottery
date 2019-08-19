@@ -489,7 +489,7 @@ namespace Lottery.Core.Algorithm
             if (r != null)
             {
                 var query = from p in FactorDic[r.Item1]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending,  p.Value.LastInterval
                             select p.Key;
 
                 return Build(query, r.Item2);
@@ -560,7 +560,7 @@ namespace Lottery.Core.Algorithm
             {
                 int min = InputOption.TakeNumber / 2 - 2;
                 var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending,  p.Value.LastInterval
                             select p.Key;
                 query = query.Take(InputOption.TupleLength).ToArray();
 
@@ -675,9 +675,7 @@ namespace Lottery.Core.Algorithm
             int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals)).Select(c => c.Key).ToArray();
 
             IEnumerable<int> query = from p in FactorDic[r]
-                                     let values = p.Key.ToString().Select(c => int.Parse(c.ToString())).Skip(1).ToArray()
-                                     where InputOption.EnableContinuous ? continuous.Contains(p.Key) : true
-                                     orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
+                                     orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending,  p.Value.LastInterval
                                      select p.Key;
 
             if (InputOption.UseGeneralTrend && InputOption.GeneralTrendInterval > 0)
@@ -726,7 +724,7 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending,  p.Value.LastInterval
                             select p.Key;
                 int[] keys = query.ToArray();
                 int k= InputOption.StartSpan % 10;
