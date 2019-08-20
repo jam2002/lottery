@@ -723,9 +723,20 @@ namespace Lottery.Core.Algorithm
 
             if (r.HasValue)
             {
-                var query = from p in FactorDic[r.Value]
+                IEnumerable<int> query;
+                if(InputOption.EnableContinuous)
+                {
+                    query = from p in FactorDic[r.Value]
                             orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending,  p.Value.LastInterval
                             select p.Key;
+                }
+                else
+                {
+                    query = from p in FactorDic[r.Value]
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                            select p.Key;
+                }
+
                 int[] keys = query.ToArray();
                 int k= InputOption.StartSpan % 10;
                 keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(2).OrderBy(c => c).Concat(keys.Skip(keys.Length-k+2)).ToArray();
