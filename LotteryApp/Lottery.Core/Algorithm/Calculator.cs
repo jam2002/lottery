@@ -166,7 +166,7 @@ namespace Lottery.Core.Algorithm
         private string[] GetTsNumbers(int type)
         {
             string[] lotteries;
-            string param = $"id={type}&pnum={option.TakeNumber}";
+            string param = $"id={type}&pnum=30";
             byte[] bs = Encoding.UTF8.GetBytes(param);
             string url = "http://pay4.hbcchy.com/lotterytrend/getsscchart";
             HttpWebRequest webRequest = WebRequest.CreateHttp(url);
