@@ -325,6 +325,7 @@
 			"GameInterval": 1,
 			"GameName": "double",
 			"GameArgs": "wan",
+			
 			"LotteryName": "qqssc",
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
@@ -346,6 +347,7 @@
 			"GameInterval": 1,
 			"GameName": "double",
 			"GameArgs": "qian",
+			
 			"LotteryName": "qqssc",
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
@@ -367,6 +369,7 @@
 			"GameInterval": 1,
 			"GameName": "double",
 			"GameArgs": "bai",
+			
 			"LotteryName": "qqssc",
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
@@ -388,6 +391,7 @@
 			"GameInterval": 1,
 			"GameName": "double",
 			"GameArgs": "shi",
+			
 			"LotteryName": "qqssc",
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
@@ -409,6 +413,7 @@
 			"GameInterval": 1,
 			"GameName": "double",
 			"GameArgs": "ge",
+			
 			"LotteryName": "qqssc",
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
