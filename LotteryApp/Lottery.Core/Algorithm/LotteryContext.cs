@@ -748,7 +748,7 @@ namespace Lottery.Core.Algorithm
 
                 int[] keys = query.ToArray();
                 int k= InputOption.StartSpan % 10;
-                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(2).OrderBy(c => c).Concat(keys.Skip(keys.Length-k+2)).ToArray();
+                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).ToArray();
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
 					{ "front",   FactorTypeEnum.Double},
