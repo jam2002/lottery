@@ -488,9 +488,19 @@ namespace Lottery.Core.Algorithm
             Tuple<FactorTypeEnum, FactorTypeEnum> r = enumDic.ContainsKey(key) ? enumDic[key] : null;
             if (r != null)
             {
-                var query = from p in FactorDic[r.Item1]
+                IEnumerable<int> query;
+                if(InputOption.EnableContinuous)
+                {
+                    query = from p in FactorDic[r.Item1]
                             orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending,  p.Value.LastInterval
                             select p.Key;
+                }
+                else
+                {
+                    query = from p in FactorDic[r.Item1]
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                            select p.Key;
+                }
 
                 return Build(query, r.Item2);
             }
