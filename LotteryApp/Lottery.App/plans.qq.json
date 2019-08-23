@@ -19,7 +19,7 @@
 			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 		{
 			"Title": "中三一码(30)",
@@ -40,7 +40,7 @@
 			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 		{
 			"Title": "后三一码(30)",
@@ -61,7 +61,7 @@
 			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 		{
 			"Title": "万千十(30)",
@@ -82,7 +82,7 @@
 			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 		{
 			"Title": "万千个(30)",
@@ -103,7 +103,7 @@
 			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 		{
 			"Title": "万百十(30)",
@@ -124,7 +124,7 @@
 			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 		{
 			"Title": "万百个(30)",
@@ -145,7 +145,7 @@
 			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 		{
 			"Title": "万十个(30)",
@@ -166,7 +166,7 @@
 			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 		{
 			"Title": "千百个(30)",
@@ -187,7 +187,7 @@
 			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 		{
 			"Title": "千十个(30)",
@@ -208,7 +208,7 @@
 			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 
 		{
@@ -230,7 +230,7 @@
 				"TupleLength": 3,
 				"NumberLength": 3,
 				"StartSpan": 2,
-				"SpanLength": 0
+				"SpanLength": 1
 		},
 		{
 				"Title": "后四一码(30)",
@@ -251,7 +251,7 @@
 				"TupleLength": 3,
 				"NumberLength": 3,
 				"StartSpan": 2,
-				"SpanLength": 0
+				"SpanLength": 1
 		},
 		{
 				"Title": "万千百个(30)",
@@ -272,7 +272,7 @@
 				"TupleLength": 3,
 				"NumberLength": 3,
 				"StartSpan": 2,
-				"SpanLength": 0
+				"SpanLength": 1
 		},
 		{
 				"Title": "万千十个(30)",
@@ -293,7 +293,7 @@
 				"TupleLength": 3,
 				"NumberLength": 3,
 				"StartSpan": 2,
-				"SpanLength": 0
+				"SpanLength": 1
 		},
 		{
 				"Title": "万百十个(30)",
@@ -314,14 +314,14 @@
 				"TupleLength": 3,
 				"NumberLength": 3,
 				"StartSpan": 2,
-				"SpanLength": 0
+				"SpanLength": 1
 		},
 
 		{
 			"Title": "万(30)",
 			"Number": 1,
 			"TakeNumber": 30,
-			"BetCycle": 4,
+			"BetCycle": 5,
 			"GameInterval": 1,
 			"GameName": "double",
 			"GameArgs": "wan",
@@ -330,20 +330,20 @@
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
 			"EnableContinuous": false,
-			"UseGeneralTrend": false,
+			"UseGeneralTrend": true,
 			"RespectRepeat": false,
 			"DisableRepeat": true,
 			"WaitInterval": 0,
 			"TupleLength": 3,
 			"NumberLength": 3,
 			"StartSpan": 3,
-			"SpanLength": 0
+			"SpanLength": 1
 	},
 	{
 			"Title": "千(30)",
 			"Number": 1,
 			"TakeNumber": 30,
-			"BetCycle": 4,
+			"BetCycle": 5,
 			"GameInterval": 1,
 			"GameName": "double",
 			"GameArgs": "qian",
@@ -352,20 +352,20 @@
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
 			"EnableContinuous": false,
-			"UseGeneralTrend": false,
+			"UseGeneralTrend": true,
 			"RespectRepeat": false,
 			"DisableRepeat": true,
 			"WaitInterval": 0,
 			"TupleLength": 3,
 			"NumberLength": 3,
 			"StartSpan": 3,
-			"SpanLength": 0
+			"SpanLength": 1
 	},
 	{
 			"Title": "百(30)",
 			"Number": 1,
 			"TakeNumber": 30,
-			"BetCycle": 4,
+			"BetCycle": 5,
 			"GameInterval": 1,
 			"GameName": "double",
 			"GameArgs": "bai",
@@ -374,20 +374,20 @@
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
 			"EnableContinuous": false,
-			"UseGeneralTrend": false,
+			"UseGeneralTrend": true,
 			"RespectRepeat": false,
 			"DisableRepeat": true,
 			"WaitInterval": 0,
 			"TupleLength": 3,
 			"NumberLength": 3,
 			"StartSpan": 3,
-			"SpanLength": 0
+			"SpanLength": 1
 	},
 	{
 			"Title": "十(30)",
 			"Number": 1,
 			"TakeNumber": 30,
-			"BetCycle": 4,
+			"BetCycle": 5,
 			"GameInterval": 1,
 			"GameName": "double",
 			"GameArgs": "shi",
@@ -396,20 +396,20 @@
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
 			"EnableContinuous": false,
-			"UseGeneralTrend": false,
+			"UseGeneralTrend": true,
 			"RespectRepeat": false,
 			"DisableRepeat": true,
 			"WaitInterval": 0,
 			"TupleLength": 3,
 			"NumberLength": 3,
 			"StartSpan": 3,
-			"SpanLength": 0
+			"SpanLength": 1
 	},
 	{
 			"Title": "个(30)",
 			"Number": 1,
 			"TakeNumber": 30,
-			"BetCycle": 4,
+			"BetCycle": 5,
 			"GameInterval": 1,
 			"GameName": "double",
 			"GameArgs": "ge",
@@ -418,14 +418,14 @@
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
 			"EnableContinuous": false,
-			"UseGeneralTrend": false,
+			"UseGeneralTrend": true,
 			"RespectRepeat": false,
 			"DisableRepeat": true,
 			"WaitInterval": 0,
 			"TupleLength": 3,
 			"NumberLength": 3,
 			"StartSpan": 3,
-			"SpanLength": 0
+			"SpanLength": 1
 	},
 
 		{
@@ -447,7 +447,7 @@
 			"TupleLength": 2,
 			"NumberLength": 5,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		},
 
 		{
@@ -469,7 +469,7 @@
 				"TupleLength": 2,
 				"NumberLength": 5,
 				"StartSpan": 2,
-				"SpanLength": 0
+				"SpanLength": 1
 		},
 
 		{
@@ -491,7 +491,7 @@
 			"TupleLength": 4,
 			"NumberLength": 5,
 			"StartSpan": 2,
-			"SpanLength": 0
+			"SpanLength": 1
 		}
 	]
 }
