@@ -263,7 +263,12 @@ namespace Lottery.Core.Plan
             }
             else if (isDouble)
             {
-                if (StartSpan > 10)
+                if(StartSpan >20)
+                {
+                    int isOdd = awards[0]%2;
+                    ret = !number.Intersect(awards).Any() && input.Sum()%2 == isOdd;
+                }
+                else if (StartSpan > 10)
                 {
                     ret = number.Length > 2 && !number.Intersect(awards).Any();
                 }
