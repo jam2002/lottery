@@ -249,6 +249,7 @@ namespace Lottery.Core.Plan
             bool ret = false;
             int[] number = input.Distinct().OrderBy(c => c).ToArray();
             int span = number[number.Length - 1] - number[0];
+            int zero = number.Select(t=>t%2).Distinct().Count();
             if (isDistinct)
             {
                 ret = number.Length <= 2;
@@ -265,8 +266,7 @@ namespace Lottery.Core.Plan
             {
                 if(StartSpan >20)
                 {
-                    int isOdd = awards[0]%2;
-                    ret = !number.Intersect(awards).Any() && input.Sum()%2 == isOdd;
+                    ret = number.Intersect(awards).Any() && zero >1;
                 }
                 else if (StartSpan > 10)
                 {

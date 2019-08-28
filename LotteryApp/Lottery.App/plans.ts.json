@@ -12,14 +12,14 @@
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": true,
 			"EnableContinuous": false,
-			"UseGeneralTrend": false,
+			"UseGeneralTrend": true,
 			"RespectRepeat": false,
 			"DisableRepeat": true,
 			"WaitInterval": 0,
 			"TupleLength": 2,
 			"NumberLength": 3,
-			"StartSpan": 21,
-			"SpanLength": 1
+			"StartSpan": 22,
+			"SpanLength": 0
 		},
 
 
@@ -35,14 +35,14 @@
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": true,
 			"EnableContinuous": false,
-			"UseGeneralTrend": false,
+			"UseGeneralTrend": true,
 			"RespectRepeat": false,
 			"DisableRepeat": true,
 			"WaitInterval": 0,
 			"TupleLength": 2,
 			"NumberLength": 3,
-			"StartSpan": 21,
-			"SpanLength": 1
+			"StartSpan": 22,
+			"SpanLength": 0
 		},
 
 		{
@@ -57,14 +57,14 @@
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": true,
 			"EnableContinuous": false,
-			"UseGeneralTrend": false,
+			"UseGeneralTrend": true,
 			"RespectRepeat": false,
 			"DisableRepeat": true,
 			"WaitInterval": 0,
 			"TupleLength": 2,
 			"NumberLength": 3,
-			"StartSpan": 21,
-			"SpanLength": 1
+			"StartSpan": 22,
+			"SpanLength": 0
 		}
 	]
 }
