@@ -274,7 +274,7 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                    ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
+                    ret = number.Intersect(awards).Any() && zero >1;
                 }
             }
             else

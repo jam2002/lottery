@@ -18,7 +18,7 @@
 			"WaitInterval": 0,
 			"TupleLength": 2,
 			"NumberLength": 3,
-			"StartSpan": 22,
+			"StartSpan": 2,
 			"SpanLength": 0
 		},
 
@@ -41,7 +41,7 @@
 			"WaitInterval": 0,
 			"TupleLength": 2,
 			"NumberLength": 3,
-			"StartSpan": 22,
+			"StartSpan": 2,
 			"SpanLength": 0
 		},
 
@@ -63,7 +63,7 @@
 			"WaitInterval": 0,
 			"TupleLength": 2,
 			"NumberLength": 3,
-			"StartSpan": 22,
+			"StartSpan": 2,
 			"SpanLength": 0
 		}
 	]
