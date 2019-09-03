@@ -29,7 +29,9 @@ namespace Lottery.Core.Algorithm
                 CD.Lottery[] lotteries = new CD.Lottery[]
                 {
                     new CD.Lottery {  Key = "qqssc", DisplayName="QQ分分彩",Source=4, StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true },
-                    new CD.Lottery {  Key = "tsssc", DisplayName="腾讯分分彩",Source=3, StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
+                    new CD.Lottery {  Key = "tsssc", DisplayName="腾讯分分彩",Source=4, StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true },
+                    new CD.Lottery {  Key = "mdssc", DisplayName="美东分分彩", Source=4, StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true }, 
+                    new CD.Lottery {  Key = "djssc", DisplayName="东京1.5分彩",Source=4, StartIndex = 0, Length =5, MaxBetCount =200,  HasPair = false, HasDynamic = true }, 
                     new CD.Lottery {  Key = "tsssc|front", DisplayName="腾讯分分彩 前三",Source=3,  StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                     new CD.Lottery {  Key = "tsssc|middle", DisplayName="腾讯分分彩 中三",Source=3, StartIndex = 1, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
                     new CD.Lottery {  Key = "tsssc|after", DisplayName="腾讯分分彩 后三",Source=3, StartIndex = 2, Length =3, MaxBetCount =200,  HasPair = true, HasDynamic = true, TradingHours = new string[] { "00:00:00-02:00:00", "09:50:00-23:59:59" } },
@@ -110,6 +112,8 @@ namespace Lottery.Core.Algorithm
                 Size = (SizeEnum)Enum.Parse(sizeType, string.Concat(large.Contains(x) ? "Large" : "Small", large.Contains(y) ? "Large" : "Small", large.Contains(z) ? "Large" : "Small")),
                 Prime = (PrimeEnum)Enum.Parse(primeType, string.Concat(prime.Contains(x) ? "Prime" : "Composite", prime.Contains(y) ? "Prime" : "Composite", prime.Contains(z) ? "Prime" : "Composite"))
             };
+
+            //number.OddType = number.Odd
             number.Span = number.Max - number.Min;
             number.ZeroCount = remainders.Where(t => t == 0).Count();
             number.OneCount = remainders.Where(t => t == 1).Count();

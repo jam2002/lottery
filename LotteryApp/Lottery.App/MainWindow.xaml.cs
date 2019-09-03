@@ -31,7 +31,9 @@ namespace Lottery.App
                 { "qq", "QQ计划"},
                 { "ts", "腾讯计划"},
                 { "cq", "重庆计划"},
-                { "xj", "新疆计划"}
+                { "xj", "新疆计划"},
+                { "md", "美东计划"},
+                { "dj", "东京计划"}
             };
             string lottery = ConfigurationManager.AppSettings["lottery"];
             this.Title = titleDefine[lottery];

@@ -45,7 +45,7 @@ namespace Lottery.Core.Plan
 
             string lotteryName = planDic.First().Value.LotteryName;
             currentInterval = planDic.First().Value.GameInterval;
-            if (currentInterval > 1)
+            if (currentInterval >=20 && currentInterval <=30)
             {
                 int minute = start.Minute / 10;
                 int remainder = minute % 2;
@@ -56,7 +56,7 @@ namespace Lottery.Core.Plan
             bool isDebug = bool.Parse(ConfigurationManager.AppSettings["debug"]);
             start = isDebug || (start - DateTime.Now).Minutes >= 10 ? DateTime.Now : start;
 
-            trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => x.WithIntervalInMinutes(currentInterval).RepeatForever()).Build();
+            trigger = TriggerBuilder.Create().WithIdentity("trigger1", "group1").StartAt(start).WithSimpleSchedule(x => (currentInterval>=30 ? x.WithIntervalInSeconds(currentInterval) : x.WithIntervalInMinutes(currentInterval)).RepeatForever()).Build();
             scheduler.ScheduleJob(job, trigger);
         }
 

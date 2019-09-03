@@ -70,9 +70,8 @@ namespace Lottery.Core.Plan
             spans = isSpan && currentBet.BetAward.Any() ? currentBet.BetAward : new int[] { };
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
             int k = StartSpan % 10;
-            awards = isDouble ? currentBet.BetAward.Take(k).ToArray() : new int[] { };
-            //excludeAwards = isDouble ? currentBet.BetAward.Skip(2).ToArray() : new int[] { };
-            excludeAwards = new int[] { };
+            awards = isDouble ? currentBet.BetAward.Take(1).ToArray() : new int[] { };
+            excludeAwards = isDouble ? currentBet.BetAward.Skip(1).ToArray() : new int[] { };
             doubleSpans = Enumerable.Range(StartSpan, SpanLength).ToArray();
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet) : new int[][] { };
 
@@ -249,7 +248,8 @@ namespace Lottery.Core.Plan
             bool ret = false;
             int[] number = input.Distinct().OrderBy(c => c).ToArray();
             int span = number[number.Length - 1] - number[0];
-            int zero = number.Select(t=>t%2).Distinct().Count();
+            int oddType = input.Select(t=>t%2).Distinct().Count();
+
             if (isDistinct)
             {
                 ret = number.Length <= 2;
@@ -266,15 +266,15 @@ namespace Lottery.Core.Plan
             {
                 if(StartSpan >20)
                 {
-                    ret = number.Intersect(awards).Any() && zero >1;
+                    ret = number.Intersect(awards).Any();
                 }
                 else if (StartSpan > 10)
                 {
-                    ret = number.Length > 2 && !number.Intersect(awards).Any();
+                    ret = !number.Intersect(excludeAwards).Any();
                 }
                 else
                 {
-                    ret = number.Intersect(awards).Any() && zero >1;
+                    ret = number.Intersect(awards).Any();
                 }
             }
             else

@@ -273,6 +273,11 @@
         /// <summary>
         /// 百个
         /// </summary>
-        HPairTuple
+        HPairTuple,
+
+        /// <summary>
+        /// 奇偶性
+        /// </summary>
+        OddType
     }
 }

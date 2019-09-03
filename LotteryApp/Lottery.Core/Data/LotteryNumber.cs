@@ -176,6 +176,8 @@
 
         public int Unit { get; set; }
 
+        public int OddType {get;set;}
+
         public OddEnum Odd { get; set; }
 
         public PrimeEnum Prime { get; set; }

@@ -121,13 +121,9 @@ namespace Lottery.Core.Algorithm
                         return ret;
                     }).ToArray();
                 }
-                else if (lottery.Source == 3)
-                {
-                    lotteries = GetTsNumbers(16);
-                }
                 else if (lottery.Source == 4)
                 {
-                    lotteries = GetTsNumbers(15);
+                    lotteries = GetTsNumbers(lottery.Key);
                 }
 
                 lotteryCache[mainKey] = lotteries;
@@ -140,31 +136,24 @@ namespace Lottery.Core.Algorithm
             return lotteries;
         }
 
-        private string[] GetTsNumbers(string apiPath)
+        private string[] GetTsNumbers(string key)
         {
-            string[] lotteries;
-
-            HttpWebRequest webRequest = WebRequest.CreateHttp(apiPath);
-            webRequest.Timeout = 5000;
-            using (HttpWebResponse response = webRequest.GetResponse() as HttpWebResponse)
+            int type = 16;
+            switch(key)
             {
-                using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-                {
-                    string content = sr.ReadToEnd();
-
-                    lotteries = Newtonsoft.Json.JsonConvert.DeserializeObject<ResultItem[]>(content).Select(t=>{
-                        string value = t.onlinenumber.ToString();
-                        string wan = (value.Select(c=>int.Parse(c.ToString())).Sum()%10).ToString();
-                        return string.Concat(wan, value.Substring(value.Length -4));
-                    }).Reverse().ToArray();
-                    
-                }
+                case "qqssc":
+                type = 15;
+                break;
+                case "tsssc":
+                type = 16;
+                break;
+                case "mdssc":
+                type = 18;
+                break;
+                case "djssc":
+                type = 12;
+                break;
             }
-            return lotteries;
-        }
-
-        private string[] GetTsNumbers(int type)
-        {
             string[] lotteries;
             string param = $"id={type}&pnum=50";
             byte[] bs = Encoding.UTF8.GetBytes(param);

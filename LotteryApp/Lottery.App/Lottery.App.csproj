@@ -118,6 +118,12 @@
     <None Include="plans.qq.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+     <None Include="plans.md.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+     <None Include="plans.dj.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>      
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

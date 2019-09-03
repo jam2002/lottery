@@ -51,6 +51,7 @@ namespace Lottery.Core.Algorithm
                 n = LotteryNumbers[i];
                 BuildFactor(FactorTypeEnum.Span, n.Span, i);
                 BuildFactor(FactorTypeEnum.Odd, (int)n.Odd, i);
+                BuildFactor(FactorTypeEnum.OddType, n.OddType, i);
                 BuildFactor(FactorTypeEnum.Size, (int)n.Size, i);
                 BuildFactor(FactorTypeEnum.Prime, (int)n.Prime, i);
                 BuildFactor(FactorTypeEnum.Sum, n.Sum, i);
@@ -746,9 +747,15 @@ namespace Lottery.Core.Algorithm
                             select p.Key;
                 }
 
+                IEnumerable<int> oddTypeQuery =  from p in FactorDic[FactorTypeEnum.OddType]
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                            select p.Key;
+
                 int[] keys = query.ToArray();
                 int k= InputOption.StartSpan % 10;
                 keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).ToArray();
+                keys = oddTypeQuery.Take(1).Concat(keys).ToArray();
+                
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
 					{ "front",   FactorTypeEnum.Double},
