@@ -2,7 +2,7 @@
 	"Common": [
 		{
 			"Title": "前三一码(50)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 50,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -16,7 +16,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 0
@@ -25,7 +25,7 @@
 
 		{
 			"Title": "中三一码(50)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 50,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -39,7 +39,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 0
@@ -47,7 +47,7 @@
 
 		{
 			"Title": "后三一码(50)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 50,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -61,7 +61,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 0
@@ -69,7 +69,7 @@
 
 		{
 			"Title": "前三一码S(50)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 50,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -83,7 +83,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 1
@@ -92,7 +92,7 @@
 
 		{
 			"Title": "中三一码S(50)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 50,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -106,7 +106,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 1
@@ -114,7 +114,7 @@
 
 		{
 			"Title": "后三一码S(50)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 50,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -128,7 +128,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 1
@@ -136,7 +136,7 @@
 
 		{
 			"Title": "前三一码(30)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 30,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -150,7 +150,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 0
@@ -159,7 +159,7 @@
 
 		{
 			"Title": "中三一码(30)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 30,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -173,7 +173,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 0
@@ -181,7 +181,7 @@
 
 		{
 			"Title": "后三一码(30)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 30,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -195,7 +195,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 0
@@ -203,7 +203,7 @@
 
 		{
 			"Title": "前三一码S(30)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 30,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -217,7 +217,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 1
@@ -226,7 +226,7 @@
 
 		{
 			"Title": "中三一码S(30)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 30,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -240,7 +240,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 1
@@ -248,7 +248,7 @@
 
 		{
 			"Title": "后三一码S(30)",
-			"Number": 1,
+			"Number": 2,
 			"TakeNumber": 30,
 			"BetCycle": 6,
 			"GameInterval": 1,
@@ -262,7 +262,7 @@
 			"RespectRepeat": true,
 			"DisableRepeat": false,
 			"WaitInterval": 0,
-			"TupleLength": 2,
+			"TupleLength": 4,
 			"NumberLength": 3,
 			"StartSpan": 2,
 			"SpanLength": 1
