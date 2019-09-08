@@ -153,6 +153,7 @@ namespace Lottery.Core.Algorithm
 
                 number.LeftRepeats = new int[] { GetRepeats(left, 1) }.Distinct().Where(c => c >= 0).ToArray();
                 number.LeftAwards = left.Distinct().OrderBy(c => c).ToArray();
+                number.LeftRawAwards = left;
                 number.LeftDistinct = number.LeftAwards.Length <= 2 ? 2 : 3;
                 number.LeftTuples = GetTuples(left);
                 number.Left4Tuples = GetTuples(array.Take(4).ToArray());
@@ -161,12 +162,14 @@ namespace Lottery.Core.Algorithm
 
                 number.MiddleRepeats = new int[] { GetRepeats(middle, 2) }.Distinct().Where(c => c >= 0).ToArray();
                 number.MiddleAwards = middle.Distinct().OrderBy(c => c).ToArray();
+                number.MiddleRawAwards = middle;
                 number.MiddleDistinct = number.MiddleAwards.Length <= 2 ? 2 : 3;
                 number.MiddleTuples = GetTuples(middle);
                 number.MiddleSpan = number.MiddleAwards[number.MiddleAwards.Length - 1] - number.MiddleAwards[0];
 
                 number.RightRepeats = new int[] { GetRepeats(right, 3) }.Distinct().Where(c => c >= 0).ToArray();
                 number.RightAwards = right.Distinct().OrderBy(c => c).ToArray();
+                number.RightRawAwards = right;
                 number.RightDistinct = number.RightAwards.Length <= 2 ? 2 : 3;
                 number.RightTuples = GetTuples(right);
                 number.Right4Tuples = GetTuples(array.Skip(1).ToArray());

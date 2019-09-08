@@ -32,6 +32,13 @@
         /// </summary>
         public int Distinct { get; set; }
 
+
+        public int[] LeftRawAwards {get;set;}
+
+        public int[] MiddleRawAwards {get;set;}
+
+        public int[] RightRawAwards {get;set;}
+
         /// <summary>
         /// 前三对子胆码
         /// </summary>

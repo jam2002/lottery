@@ -101,10 +101,10 @@ namespace Lottery.Core.Algorithm
             Dictionary<FactorTypeEnum, int[]> typeDic = new Dictionary<FactorTypeEnum, int[]>
             {
                 { FactorTypeEnum.Award, InputOption.SpanLength == 0? number.RawNumbers : number.DistinctNumbers},
-                { FactorTypeEnum.LeftAward, number.LeftAwards},
+                { FactorTypeEnum.LeftAward, InputOption.SpanLength == 0? number.LeftRawAwards :number.LeftAwards},
                 { FactorTypeEnum.Left4Award, number.Left4Awards},
-                { FactorTypeEnum.MiddleAward, number.MiddleAwards},
-                { FactorTypeEnum.RightAward, number.RightAwards},
+                { FactorTypeEnum.MiddleAward, InputOption.SpanLength == 0? number.MiddleRawAwards: number.MiddleAwards},
+                { FactorTypeEnum.RightAward, InputOption.SpanLength == 0? number.RightRawAwards: number.RightAwards},
                 { FactorTypeEnum.Right4Award, number.Right4Awards},
                 { FactorTypeEnum.Tuple4AAward, number.Tuple4AAwards},
                 { FactorTypeEnum.Tuple4BAward, number.Tuple4BAwards},
