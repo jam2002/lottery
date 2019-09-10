@@ -102,10 +102,11 @@ namespace Lottery.Core.Algorithm
             {
                 { FactorTypeEnum.Award, InputOption.SpanLength == 0? number.RawNumbers : number.DistinctNumbers},
                 { FactorTypeEnum.LeftAward, InputOption.SpanLength == 0? number.LeftRawAwards :number.LeftAwards},
-                { FactorTypeEnum.Left4Award, number.Left4Awards},
+                { FactorTypeEnum.Left4Award, InputOption.SpanLength == 0? number.Left4RawAwards:number.Left4Awards},
                 { FactorTypeEnum.MiddleAward, InputOption.SpanLength == 0? number.MiddleRawAwards: number.MiddleAwards},
                 { FactorTypeEnum.RightAward, InputOption.SpanLength == 0? number.RightRawAwards: number.RightAwards},
-                { FactorTypeEnum.Right4Award, number.Right4Awards},
+                { FactorTypeEnum.Right4Award, InputOption.SpanLength == 0? number.Right4RawAwards: number.Right4Awards},
+
                 { FactorTypeEnum.Tuple4AAward, number.Tuple4AAwards},
                 { FactorTypeEnum.Tuple4BAward, number.Tuple4BAwards},
                 { FactorTypeEnum.Tuple4CAward, number.Tuple4CAwards},
@@ -727,6 +728,9 @@ namespace Lottery.Core.Algorithm
                 { "shi", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Decade},
                 { "ge", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Unit},
 
+				{ "front4",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Left4Award},
+                { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Right4Award},
+
                 { "all", FactorTypeEnum.Award}
             };
             FactorTypeEnum? r = enumDic.ContainsKey(InputOption.GameArgs) ? (FactorTypeEnum?)enumDic[InputOption.GameArgs] : null;
@@ -747,14 +751,10 @@ namespace Lottery.Core.Algorithm
                             select p.Key;
                 }
 
-                IEnumerable<int> oddTypeQuery =  from p in FactorDic[FactorTypeEnum.OddType]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
-                            select p.Key;
 
                 int[] keys = query.ToArray();
                 int k= InputOption.StartSpan % 10;
-                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).ToArray();
-                keys = oddTypeQuery.Take(1).Concat(keys).ToArray();
+                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).Concat(keys.Skip(keys.Length-1)).ToArray();
                 
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
@@ -785,6 +785,9 @@ namespace Lottery.Core.Algorithm
                     { "bai", FactorTypeEnum.Double},
                     { "shi", FactorTypeEnum.Double},
                     { "ge", FactorTypeEnum.Double},
+                    
+                    { "front4", FactorTypeEnum.Double},
+                    { "after4", FactorTypeEnum.Double},
                     { "all",  FactorTypeEnum.Double}
                 };
 

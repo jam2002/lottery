@@ -39,6 +39,10 @@
 
         public int[] RightRawAwards {get;set;}
 
+        public int[] Left4RawAwards {get;set;}
+
+        public int[] Right4RawAwards {get;set;}
+
         /// <summary>
         /// 前三对子胆码
         /// </summary>
