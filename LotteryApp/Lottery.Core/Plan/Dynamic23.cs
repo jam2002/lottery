@@ -288,7 +288,7 @@ namespace Lottery.Core.Plan
             }
             else if (isAward && award.HasValue)
             {
-                ret = GameArgs == "all" || LotteryName == "tsssc" ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
+                ret = GameArgs == "all" || LotteryName == "tsssc" || NumberLength == 4 ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
             }
             else if (isDouble)
             {
