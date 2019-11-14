@@ -571,7 +571,7 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 var query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending,  p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
                             select p.Key;
                 query = query.Take(InputOption.TupleLength).ToArray();
 
@@ -686,7 +686,7 @@ namespace Lottery.Core.Algorithm
             int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals)).Select(c => c.Key).ToArray();
 
             IEnumerable<int> query = from p in FactorDic[r]
-                                     orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending,  p.Value.LastInterval
+                                     orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
                                      select p.Key;
 
             if (InputOption.UseGeneralTrend && InputOption.GeneralTrendInterval > 0)
@@ -754,7 +754,7 @@ namespace Lottery.Core.Algorithm
 
                 int[] keys = query.ToArray();
                 int k= InputOption.StartSpan % 10;
-                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).Concat(keys.Skip(keys.Length-1)).ToArray();
+                keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).ToArray();
                 
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {

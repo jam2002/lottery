@@ -269,7 +269,7 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                    ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
+                    ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && input.Select(t=>t%2).Distinct().Count() == 2;
                 }
             }
             else
