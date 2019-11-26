@@ -259,7 +259,7 @@ namespace Lottery.Core.Algorithm
         {
             FactorTypeEnum r = FactorTypeEnum.AllTuples;
             var query = from p in FactorDic[r]
-                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.FailureCount, p.Value.LastInterval
+                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
                         select p.Key;
             int key = query.ToArray()[0];
 
@@ -274,15 +274,17 @@ namespace Lottery.Core.Algorithm
                 { "tupleg", FactorTypeEnum.TupleG},
                 { "front",   FactorTypeEnum.LeftTuple},
                 { "middle", FactorTypeEnum.MiddleTuple},
-                { "after",  FactorTypeEnum.RightTuple}
-            };
-            var q = from c in tupleDic
-                    let p = FactorDic[c.Value].ContainsKey(key) ? FactorDic[c.Value][key] : null
-                    where p != null
-                    orderby p.OccurCount descending, p.MaxInterval, p.FailureCount, p.LastInterval
-                    select Build(new int[] { key }, c.Value);
+                { "after",  FactorTypeEnum.RightTuple},
 
-            return q.Take(2).SelectMany(c => c).Where(c => tupleDic[InputOption.GameArgs] == c.Type).ToArray();
+                { "front4",  FactorTypeEnum.Left4Tuple},
+                { "after4",  FactorTypeEnum.Right4Tuple},
+                { "tuple4a",  FactorTypeEnum.Tuple4A},
+                { "tuple4b",  FactorTypeEnum.Tuple4B},
+                { "tuple4c",  FactorTypeEnum.Tuple4C}
+            };
+
+
+            return query.Take(2).SelectMany(t=> Build(new int[] { t }, FactorTypeEnum.AllTuples)).ToArray();
         }
 
         private LotteryResult[] GetDynamicResult()
@@ -811,7 +813,7 @@ namespace Lottery.Core.Algorithm
 
         private bool CheckInterval(int[] intervals, int maxInterval = 5)
         {
-            return intervals.Skip(intervals.Length - 2).All(c => c < maxInterval);
+            return intervals.Skip(intervals.Length - 2).All(c => c <= maxInterval);
         }
 
         private int[] GetIntervals(int[] occurPostions, int? number = null)
