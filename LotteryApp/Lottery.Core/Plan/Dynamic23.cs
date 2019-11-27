@@ -242,6 +242,7 @@ namespace Lottery.Core.Plan
             bool ret = false;
             int[] number = input.Distinct().OrderBy(c => c).ToArray();
             int span = number[number.Length - 1] - number[0];
+            bool inDefaultSpan = new int[]{2,3,5,7}.Contains(span);
 
             if (isDistinct)
             {
@@ -263,7 +264,7 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                    ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && input.Any(t=>t>=5) && input.Any(t=>t <5) && input.Select(t=> t%3).Distinct().Count() >1;
+                    ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && inDefaultSpan;
                 }
             }
             else
