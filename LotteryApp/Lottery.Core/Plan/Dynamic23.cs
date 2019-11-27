@@ -102,12 +102,6 @@ namespace Lottery.Core.Plan
                 else
                 {
                     numbers = LotteryGenerator.GetConfig().ThreeNumbers.Where(t=> IsValid( t.RawNumbers)).Select(t=>t.Key);
-                    // numbers = from x in count
-                    //           from y in count
-                    //           from z in count
-                    //           let number = new[] { x, y, z }
-                    //           where IsValid(number)
-                    //           select string.Join(string.Empty, number);
                 }
             }
             else
