@@ -257,31 +257,31 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] GetAnyTupleResult()
         {
-            FactorTypeEnum r = FactorTypeEnum.AllTuples;
-            var query = from p in FactorDic[r]
-                        orderby p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
-                        select p.Key;
-            int key = query.ToArray()[0];
-
             Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
             {
-                { "tuplea", FactorTypeEnum.TupleA},
-                { "tupleb", FactorTypeEnum.TupleB},
-                { "tuplec", FactorTypeEnum.TupleC},
-                { "tupled", FactorTypeEnum.TupleD},
-                { "tuplee", FactorTypeEnum.TupleE},
-                { "tuplef", FactorTypeEnum.TupleF},
-                { "tupleg", FactorTypeEnum.TupleG},
-                { "front",   FactorTypeEnum.LeftTuple},
-                { "middle", FactorTypeEnum.MiddleTuple},
-                { "after",  FactorTypeEnum.RightTuple},
+                { "tuplea", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples:FactorTypeEnum.TupleA},
+                { "tupleb", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples:FactorTypeEnum.TupleB},
+                { "tuplec", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples:FactorTypeEnum.TupleC},
+                { "tupled", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples:FactorTypeEnum.TupleD},
+                { "tuplee", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples:FactorTypeEnum.TupleE},
+                { "tuplef", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples:FactorTypeEnum.TupleF},
+                { "tupleg", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples:FactorTypeEnum.TupleG},
+                { "front",  InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples:FactorTypeEnum.LeftTuple},
+                { "middle", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples:FactorTypeEnum.MiddleTuple},
+                { "after",  InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples:FactorTypeEnum.RightTuple},
 
-                { "front4",  FactorTypeEnum.Left4Tuple},
-                { "after4",  FactorTypeEnum.Right4Tuple},
-                { "tuple4a",  FactorTypeEnum.Tuple4A},
-                { "tuple4b",  FactorTypeEnum.Tuple4B},
-                { "tuple4c",  FactorTypeEnum.Tuple4C}
+                { "front4",  InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples: FactorTypeEnum.Left4Tuple},
+                { "after4",  InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples: FactorTypeEnum.Right4Tuple},
+                { "tuple4a", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples: FactorTypeEnum.Tuple4A},
+                { "tuple4b", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples: FactorTypeEnum.Tuple4B},
+                { "tuple4c", InputOption.UseGeneralTrend? FactorTypeEnum.AllTuples: FactorTypeEnum.Tuple4C}
             };
+
+            FactorTypeEnum r = tupleDic[InputOption.GameArgs];
+            var query = from p in FactorDic[r]
+                        orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                        select p.Key;
+            int key = query.ToArray()[0];
 
 
             return query.Take(2).SelectMany(t=> Build(new int[] { t }, FactorTypeEnum.AllTuples)).ToArray();
