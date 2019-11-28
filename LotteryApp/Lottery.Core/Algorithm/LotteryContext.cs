@@ -730,6 +730,9 @@ namespace Lottery.Core.Algorithm
 
 				{ "front4",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Left4Award},
                 { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Right4Award},
+                { "tuple4a", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Tuple4AAward},
+                { "tuple4b", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Tuple4AAward},
+                { "tuple4c", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Tuple4CAward},
 
                 { "all", FactorTypeEnum.Award}
             };
@@ -788,6 +791,9 @@ namespace Lottery.Core.Algorithm
                     
                     { "front4", FactorTypeEnum.Double},
                     { "after4", FactorTypeEnum.Double},
+                    { "tuple4a", FactorTypeEnum.Double},
+                    { "tuple4b", FactorTypeEnum.Double},
+                    { "tuple4c", FactorTypeEnum.Double},
                     { "all",  FactorTypeEnum.Double}
                 };
 
