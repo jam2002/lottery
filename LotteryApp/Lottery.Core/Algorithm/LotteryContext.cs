@@ -652,10 +652,12 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
             int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals)).Select(c => c.Key).OrderBy(c=>c).ToArray();
+            String validStr = String.Join(String.Empty, validAwards);
 
             IEnumerable<int> query = from p in FactorDic[r]
                                      let v = p.Key.ToString().Skip(1).Select(c=>int.Parse(c.ToString())).ToArray()
-                                     orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1,  v.Intersect(validAwards).Count() == v.Length  ? 0: 1,  p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
+                                     let s = InputOption.EnableContinuous && validStr.Contains(p.Key.ToString().Substring(1)) ? 0 :1
+                                     orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1,  v.Intersect(validAwards).Count() == v.Length  ? 0: 1, s,  p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
                                      select p.Key;
 
             return Build(query, r);
