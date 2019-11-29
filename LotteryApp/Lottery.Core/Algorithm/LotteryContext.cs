@@ -648,52 +648,17 @@ namespace Lottery.Core.Algorithm
 
                 { "all", FactorTypeEnum.AllTuples}
             };
-            Dictionary<string, FactorTypeEnum> tupleDic = new Dictionary<string, FactorTypeEnum>
-            {
-                { "tuple4a", FactorTypeEnum.Tuple4A},
-                { "tuple4b", FactorTypeEnum.Tuple4B},
-                { "tuple4c", FactorTypeEnum.Tuple4C},
-                { "front4", FactorTypeEnum.Left4Tuple},
-                { "after4", FactorTypeEnum.Right4Tuple},
-                { "front",   FactorTypeEnum.LeftTuple},
-                { "middle", FactorTypeEnum.MiddleTuple},
-                { "after",  FactorTypeEnum.RightTuple},
-                { "all", FactorTypeEnum.AllTuples},
-                { "tuplea", FactorTypeEnum.TupleA},
-                { "tupleb", FactorTypeEnum.TupleB},
-                { "tuplec", FactorTypeEnum.TupleC},
-                { "tupled", FactorTypeEnum.TupleD},
-                { "tuplee", FactorTypeEnum.TupleE},
-                { "tuplef", FactorTypeEnum.TupleF},
-                { "tupleg", FactorTypeEnum.TupleG},
 
-                { "leftpair",  FactorTypeEnum.LeftPTuple},
-                { "rightpair", FactorTypeEnum.RightPTuple},
-                { "paira",  FactorTypeEnum.APairTuple},
-                { "pairb", FactorTypeEnum.BPairTuple},
-                { "pairc", FactorTypeEnum.CPairTuple},
-                { "paird", FactorTypeEnum.DPairTuple},
-                { "paire", FactorTypeEnum.EPairTuple},
-                { "pairf", FactorTypeEnum.FPairTuple},
-                { "pairg", FactorTypeEnum.GPairTuple},
-                { "pairh", FactorTypeEnum.HPairTuple}
-            };
+            FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
-            string gameArgs = InputOption.GameArgs.Split('.').ToArray()[0];
-            FactorTypeEnum r = enumDic[gameArgs];
-
-            int[] continuous = InputOption.TupleLength == 4 ? new int[] { 10123, 11234, 12345, 13456, 14567, 15678, 16789, 10789, 10189, 10129 } : new int[] { 1012, 1123, 1234, 1345, 1456, 1567, 1678, 1789, 1089, 1019 };
-            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals)).Select(c => c.Key).ToArray();
+            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals)).Select(c => c.Key).OrderBy(c=>c).ToArray();
 
             IEnumerable<int> query = from p in FactorDic[r]
-                                     orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                                     let v = p.Key.ToString().Skip(1).Select(c=>int.Parse(c.ToString())).ToArray()
+                                     orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1,  v.Intersect(validAwards).Count() == v.Length  ? 0: 1,  p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
                                      select p.Key;
 
-            if (InputOption.UseGeneralTrend && InputOption.GeneralTrendInterval > 0)
-            {
-                query = query.ToArray().Take(1).Where(c => FactorDic[r][c].LastInterval >= InputOption.GeneralTrendInterval);
-            }
-            return Build(query, FactorTypeEnum.AllTuples);
+            return Build(query, r);
         }
 
         private LotteryResult[] BuildDoubles()
