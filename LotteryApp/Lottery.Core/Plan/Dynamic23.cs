@@ -22,7 +22,6 @@ namespace Lottery.Core.Plan
         private bool isDouble;
         private int[] awards;
         private int[] excludeAwards;
-        private int[] doubleSpans;
 
         private int[][] betArray;
         private FactorTypeEnum[] awardTypes = new FactorTypeEnum[]
@@ -72,7 +71,6 @@ namespace Lottery.Core.Plan
             int k = StartSpan % 10;
             awards = isDouble ? currentBet.BetAward.Take(k).ToArray() : new int[] { };
             excludeAwards = isDouble ? currentBet.BetAward.Skip(k).ToArray() : new int[] { };
-            doubleSpans = Enumerable.Range(StartSpan, SpanLength).ToArray();
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet) : new int[][] { };
 
             if (EnableSinglePattern)
@@ -263,7 +261,7 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                    bool isqualified = number.Any(t=>t>4) && number.Any(t=>t%2 == 0) && new int[]{2,3,4,5,6,7,8}.Contains(span);
+                    bool isqualified = input.Sum() % 10 % 2 == SpanLength % 2;
                     ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && isqualified;
                 }
             }
