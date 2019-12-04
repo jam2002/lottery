@@ -261,7 +261,7 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                    bool isqualified = input.Sum() % 10 % 2 == SpanLength % 2;
+                    bool isqualified = SpanLength == 1? number.Length == 4 : number.Length<4;
                     ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any() && isqualified;
                 }
             }
