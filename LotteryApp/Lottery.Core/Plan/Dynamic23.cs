@@ -224,7 +224,7 @@ namespace Lottery.Core.Plan
         {
             int[][] bets = bet.Results.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.Select(s => s.Values))).Take(1).ToArray();
 
-            if (Number == 2 && bets.Any(t=>t.Length>2))
+            if (Number == 2 && bets.Any(t=>t.Length>=2))
             {
                 bets = bets.SelectMany(c =>
                 {
@@ -281,7 +281,7 @@ namespace Lottery.Core.Plan
             }
             else if (isAward && award.HasValue)
             {
-                ret = GameArgs == "all" || LotteryName == "tsssc" || NumberLength == 4 ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
+                ret = GameArgs == "all" || NumberLength == 4 ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
             }
             else if (isDouble)
             {
