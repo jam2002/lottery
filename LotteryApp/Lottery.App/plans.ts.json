@@ -279,7 +279,7 @@
 			"TakeNumber": 20,
 			"BetCycle": 5,
 			"GameInterval": 1,
-			"GameName": "history",
+			"GameName": "tuple",
 			"GameArgs": "all",
 			"LotteryName": "tsssc",
 			"ChangeBetPerTime": false,
