@@ -261,7 +261,14 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                    ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
+                    if (NumberLength == 3)
+                    {
+                        ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards.Take(1).ToArray()).Any() && input[input.Length - 1] != excludeAwards[excludeAwards.Length-1];
+                    }
+                    else
+                    {
+                        ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
+                    }
                 }
             }
             else
