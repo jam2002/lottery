@@ -193,9 +193,9 @@
 		},
 
 		{
-			"Title": "五星二码(30)",
+			"Title": "五星二码(20)",
 			"Number": 2,
-			"TakeNumber": 30,
+			"TakeNumber": 20,
 			"BetCycle": 7,
 			"GameInterval": 1,
 			"GameName": "history",
@@ -214,9 +214,9 @@
 			"SpanLength": 1
 		},
 		{
-			"Title": "五星三码(30)",
+			"Title": "五星三码(20)",
 			"Number": 3,
-			"TakeNumber": 30,
+			"TakeNumber": 20,
 			"BetCycle": 6,
 			"GameInterval": 1,
 			"GameName": "tuple",
