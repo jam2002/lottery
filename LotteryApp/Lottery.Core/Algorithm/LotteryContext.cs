@@ -76,8 +76,28 @@ namespace Lottery.Core.Algorithm
                     BuildFactor(FactorTypeEnum.Thousand, n.Thousand, i);
                     BuildFactor(FactorTypeEnum.Wan, n.Wan, i);
                 }
+                FillFactor();
             }
             BuildInterval();
+        }
+
+        private void FillFactor()
+        {
+            int[] number = Enumerable.Range(0, 10).ToArray();
+            FactorTypeEnum[] enums = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
+            ReferenceFactor factor;
+
+            foreach (FactorTypeEnum type in enums)
+            {
+                foreach (int key in number)
+                {
+                    if (!FactorDic[type].ContainsKey(key))
+                    {
+                        factor = new ReferenceFactor { Key = key, Type = type, OccurCount = 0, OccurPositions = new int[] { } };
+                        FactorDic[type].Add(key, factor);
+                    }
+                }
+            }
         }
 
         private void BuildFactor(FactorTypeEnum type, int key, int pos)
@@ -226,7 +246,7 @@ namespace Lottery.Core.Algorithm
                     break;
                 case "solidrepeat":
                     ret = Build(new int[] { 2 }, FactorTypeEnum.LeftDistinct);
-                    break;    
+                    break;
                 default:
                     break;
             }
@@ -282,7 +302,7 @@ namespace Lottery.Core.Algorithm
             int key = query.ToArray()[0];
 
 
-            return query.Take(2).SelectMany(t=> Build(new int[] { t }, FactorTypeEnum.AllTuples)).ToArray();
+            return query.Take(2).SelectMany(t => Build(new int[] { t }, FactorTypeEnum.AllTuples)).ToArray();
         }
 
         private LotteryResult[] GetDynamicResult()
@@ -491,10 +511,10 @@ namespace Lottery.Core.Algorithm
             if (r != null)
             {
                 IEnumerable<int> query;
-                if(InputOption.EnableContinuous)
+                if (InputOption.EnableContinuous)
                 {
                     query = from p in FactorDic[r.Item1]
-                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending,  p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.LastInterval
                             select p.Key;
                 }
                 else
@@ -651,13 +671,13 @@ namespace Lottery.Core.Algorithm
 
             FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
-            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals)).Select(c => c.Key).OrderBy(c=>c).ToArray();
+            int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals)).Select(c => c.Key).OrderBy(c => c).ToArray();
             String validStr = String.Join(String.Empty, validAwards);
 
             IEnumerable<int> query = from p in FactorDic[r]
-                                     let v = p.Key.ToString().Skip(1).Select(c=>int.Parse(c.ToString())).ToArray()
-                                     let s = InputOption.EnableContinuous && validStr.Contains(p.Key.ToString().Substring(1)) ? 0 :1
-                                     orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1,  v.Intersect(validAwards).Count() == v.Length  ? 0: 1, s,  p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
+                                     let v = p.Key.ToString().Skip(1).Select(c => int.Parse(c.ToString())).ToArray()
+                                     let s = InputOption.EnableContinuous && validStr.Contains(p.Key.ToString().Substring(1)) ? 0 : 1
+                                     orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, v.Intersect(validAwards).Count() == v.Length ? 0 : 1, s, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
                                      select p.Key;
 
             return Build(query, r);
@@ -666,8 +686,8 @@ namespace Lottery.Core.Algorithm
         private LotteryResult[] BuildDoubles()
         {
             Dictionary<string, FactorTypeEnum> enumDic = new Dictionary<string, FactorTypeEnum>
-            {				
-				{ "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
+            {
+                { "front",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.LeftAward},
                 { "middle", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.MiddleAward},
                 { "after",  InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.RightAward},
                 { "tuplea", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.AAward},
@@ -695,7 +715,7 @@ namespace Lottery.Core.Algorithm
                 { "shi", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Decade},
                 { "ge", InputOption.UseGeneralTrend?FactorTypeEnum.Award:FactorTypeEnum.Unit},
 
-				{ "front4",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Left4Award},
+                { "front4",   InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Left4Award},
                 { "after4", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Right4Award},
                 { "tuple4a", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Tuple4AAward},
                 { "tuple4b", InputOption.UseGeneralTrend?FactorTypeEnum.Award: FactorTypeEnum.Tuple4AAward},
@@ -708,10 +728,10 @@ namespace Lottery.Core.Algorithm
             if (r.HasValue)
             {
                 IEnumerable<int> query;
-                if(InputOption.EnableContinuous)
+                if (InputOption.EnableContinuous)
                 {
                     query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending,  p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.LastInterval
                             select p.Key;
                 }
                 else
@@ -723,34 +743,38 @@ namespace Lottery.Core.Algorithm
 
 
                 int[] keys = query.ToArray();
-                int k= InputOption.StartSpan % 10;
+                int k = InputOption.StartSpan % 10;
                 keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).ToArray();
                 if (InputOption.StartSpan <= 10 && InputOption.NumberLength == 3)
                 {
-                    keys = keys.Concat(new int[] { query.ToArray().Last() }).ToArray();
+                    FactorTypeEnum[] enums = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
+                    int startIndex = InputOption.GameArgs == "front" ? 0 : (InputOption.GameArgs == "middle" ? 1 : 2);
 
-                    FactorTypeEnum e = InputOption.GameArgs == "front" ? FactorTypeEnum.Hundred : (InputOption.GameArgs == "middle" ? FactorTypeEnum.Decade : FactorTypeEnum.Unit);
-                    IEnumerable<int> ey = from p in FactorDic[e]
-                                          where !keys.Contains(p.Key)
-                                          orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
-                                          select p.Key;
+                    var q = enums.Skip(startIndex).Take(InputOption.NumberLength).SelectMany((e, i) =>
+                    {
+                        int[] ey = (from p in FactorDic[e]
+                                    where !keys.Contains(p.Key)
+                                    orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                                    select p.Key).ToArray();
+                        return ey.Skip(ey.Length - (i == 0 ? 2 : 1)).ToArray();
+                    });
 
-                    keys = keys.Concat(new int[] { ey.ToArray().Last() }).ToArray();
+                    keys = keys.Concat(q).ToArray();
                 }
-                
+
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
-					{ "front",   FactorTypeEnum.Double},
-					{ "middle", FactorTypeEnum.Double},
-					{ "after",  FactorTypeEnum.Double},
-					{ "tuplea", FactorTypeEnum.Double},
-					{ "tupleb", FactorTypeEnum.Double},
-					{ "tuplec", FactorTypeEnum.Double},
-					{ "tupled", FactorTypeEnum.Double},
-					{ "tuplee", FactorTypeEnum.Double},
-					{ "tuplef", FactorTypeEnum.Double},
-					{ "tupleg", FactorTypeEnum.Double},
-					
+                    { "front",   FactorTypeEnum.Double},
+                    { "middle", FactorTypeEnum.Double},
+                    { "after",  FactorTypeEnum.Double},
+                    { "tuplea", FactorTypeEnum.Double},
+                    { "tupleb", FactorTypeEnum.Double},
+                    { "tuplec", FactorTypeEnum.Double},
+                    { "tupled", FactorTypeEnum.Double},
+                    { "tuplee", FactorTypeEnum.Double},
+                    { "tuplef", FactorTypeEnum.Double},
+                    { "tupleg", FactorTypeEnum.Double},
+
                     { "leftpair",  FactorTypeEnum.Double},
                     { "rightpair", FactorTypeEnum.Double},
                     { "paira",  FactorTypeEnum.Double},
@@ -767,7 +791,7 @@ namespace Lottery.Core.Algorithm
                     { "bai", FactorTypeEnum.Double},
                     { "shi", FactorTypeEnum.Double},
                     { "ge", FactorTypeEnum.Double},
-                    
+
                     { "front4", FactorTypeEnum.Double},
                     { "after4", FactorTypeEnum.Double},
                     { "tuple4a", FactorTypeEnum.Double},
@@ -803,7 +827,7 @@ namespace Lottery.Core.Algorithm
         {
             number = number ?? InputOption.TakeNumber;
             int[] intervals = occurPostions.Select((x, i) => i == 0 || i - 1 >= occurPostions.Length ? x : x - occurPostions[i - 1] - 1).ToArray();
-            intervals = intervals.Concat(new[] { number.Value - 1 - occurPostions[occurPostions.Length - 1] }).ToArray();
+            intervals = intervals.Concat(new[] { number.Value - 1 - (occurPostions.Length > 0 ? occurPostions[occurPostions.Length - 1] : -1) }).ToArray();
             return intervals;
         }
     }
