@@ -154,7 +154,7 @@ namespace Lottery.Core.Plan
 
         public virtual int[] GetBetAwards(OutputResult output)
         {
-            return output.Output[0].AnyFilters.SelectMany(t => t.Values).Distinct().ToArray();
+            return output.Output[0].AnyFilters.SelectMany(t => t.Values).ToArray();
         }
 
         /// <summary>

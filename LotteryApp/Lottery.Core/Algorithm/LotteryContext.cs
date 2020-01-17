@@ -84,7 +84,9 @@ namespace Lottery.Core.Algorithm
         private void FillFactor()
         {
             int[] number = Enumerable.Range(0, 10).ToArray();
-            FactorTypeEnum[] enums = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
+            FactorTypeEnum[] enums = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit,
+                FactorTypeEnum.Award, FactorTypeEnum.LeftAward, FactorTypeEnum.MiddleAward, FactorTypeEnum.RightAward
+            };
             ReferenceFactor factor;
 
             foreach (FactorTypeEnum type in enums)
