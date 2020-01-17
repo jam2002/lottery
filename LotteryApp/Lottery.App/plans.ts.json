@@ -107,13 +107,13 @@
 		},
 
 		{
-			"Title": "后三一码U(12)",
+			"Title": "后四一码(12)",
 			"Number": 1,
 			"TakeNumber": 12,
 			"BetCycle": 5,
 			"GameInterval": 1,
 			"GameName": "single",
-			"GameArgs": "all",
+			"GameArgs": "after4",
 			"LotteryName": "tsssc",
 			"ChangeBetPerTime": false,
 			"EnableSinglePattern": false,
