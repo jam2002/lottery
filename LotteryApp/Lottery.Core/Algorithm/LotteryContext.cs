@@ -745,6 +745,7 @@ namespace Lottery.Core.Algorithm
                 int[] keys = query.ToArray();
                 int k = InputOption.StartSpan % 10;
                 keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).ToArray();
+                /*
                 if (InputOption.StartSpan <= 10 && InputOption.NumberLength == 3)
                 {
                     FactorTypeEnum[] enums = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
@@ -761,6 +762,7 @@ namespace Lottery.Core.Algorithm
 
                     keys = keys.Concat(q).ToArray();
                 }
+                */
 
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {

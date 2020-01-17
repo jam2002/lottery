@@ -263,10 +263,14 @@ namespace Lottery.Core.Plan
                 {
                     if (NumberLength == 3)
                     {
+                        /*
                         int[] c1 = excludeAwards.Take(2).ToArray();
                         int[] c2 = excludeAwards.Skip(2).Take(1).ToArray();
                         int[] c3 = excludeAwards.Skip(3).ToArray();
                         ret = number.Intersect(awards).Any() && !c1.Contains(input[0]) && !c2.Contains(input[1]) && !c3.Contains(input[2]);
+                        */
+                        bool isQuafilied = input.Any(t=>t>=5) && input.Any(t=>t<5) && input.Any(t=>t%2==0) && input.Any(t=>t%2==1);
+                        ret = number.Intersect(awards).Any() && isQuafilied;
                     }
                     else
                     {
