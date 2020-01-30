@@ -257,7 +257,7 @@ namespace Lottery.Core.Plan
             {
                 if (StartSpan > 10)
                 {
-                    ret = !number.Intersect(awards).Any();
+                    ret = !number.Intersect(awards).Any() && number.Length ==3;
                 }
                 else
                 {
