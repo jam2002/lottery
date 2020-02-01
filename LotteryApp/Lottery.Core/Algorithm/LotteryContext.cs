@@ -733,13 +733,13 @@ namespace Lottery.Core.Algorithm
                 if (InputOption.EnableContinuous)
                 {
                     query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.MaxInterval, p.Value.OccurCount descending, p.Value.LastInterval
                             select p.Key;
                 }
                 else
                 {
                     query = from p in FactorDic[r.Value]
-                            orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                            orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
                             select p.Key;
                 }
 
