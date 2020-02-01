@@ -270,7 +270,7 @@ namespace Lottery.Core.Plan
                         int[] c3 = excludeAwards.Skip(3).ToArray();
                         ret = number.Intersect(awards).Any() && !c1.Contains(input[0]) && !c2.Contains(input[1]) && !c3.Contains(input[2]);
                         */
-                        bool isQuafilied = sumremain > 1 && sumremain < 8;
+                        bool isQuafilied = sumremain >= 0 && sumremain <= 5;
                         ret = number.Intersect(awards).Any() && isQuafilied;
                     }
                     else
