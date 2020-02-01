@@ -254,26 +254,33 @@ namespace Lottery.Core.Algorithm
         private static int[] GetTuples(int[] array)
         {
             int[] sort = array.Distinct().OrderBy(c => c).ToArray();
-            Combination combine = new Combination(sort.Length);
             int[] ret = new int[] { };
 
-            if (sort.Length >= 2 && Number > 0 && TupleLength > Number && sort.Length >= Number)
+            if (sort.Length >= 2 && Number > 0 && TupleLength >= Number && sort.Length >= Number)
             {
+                Combination combine = new Combination(sort.Length);
                 int[][] awards = combine.GetRowsForAllPicks().Where(t => t.Picks == Number).Select(t => (from s in t select sort[s]).ToArray()).ToArray();
 
                 int remainCount = TupleLength - Number;
-                ret = awards.SelectMany(c =>
+                if (remainCount > 0)
                 {
-                    int[] remains = AllKeys.Where(t => !c.Contains(t)).ToArray();
-                    Combination subCombine = new Combination(remains.Length);
-                    int[] selectedAwards = subCombine.GetRowsForAllPicks().Where(t => t.Picks == remainCount).Select(t =>
+                    ret = awards.SelectMany(c =>
                     {
-                        int[] temp = c.Concat(from s in t select remains[s]).OrderBy(s => s).ToArray();
-                        int k = (int)Math.Pow(10, TupleLength) + temp.Aggregate((x, y) => x * 10 + y);
-                        return k;
+                        int[] remains = AllKeys.Where(t => !c.Contains(t)).ToArray();
+                        Combination subCombine = new Combination(remains.Length);
+                        int[] selectedAwards = subCombine.GetRowsForAllPicks().Where(t => t.Picks == remainCount).Select(t =>
+                        {
+                            int[] temp = c.Concat(from s in t select remains[s]).OrderBy(s => s).ToArray();
+                            int k = (int)Math.Pow(10, TupleLength) + temp.Aggregate((x, y) => x * 10 + y);
+                            return k;
+                        }).ToArray();
+                        return selectedAwards;
                     }).ToArray();
-                    return selectedAwards;
-                }).Distinct().ToArray();
+                }
+                else
+                {
+                    ret = awards.Select(c => (int)Math.Pow(10, TupleLength) + c.Aggregate((x, y) => x * 10 + y)).ToArray();
+                }
             }
             return ret;
         }
