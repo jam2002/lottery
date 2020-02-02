@@ -240,7 +240,6 @@ namespace Lottery.Core.Plan
             bool ret = false;
             int[] number = input.Distinct().OrderBy(c => c).ToArray();
             int span = number[number.Length - 1] - number[0];
-            int sumremain = input.Sum()%10;
 
             if (isDistinct)
             {
@@ -270,7 +269,7 @@ namespace Lottery.Core.Plan
                         int[] c3 = excludeAwards.Skip(3).ToArray();
                         ret = number.Intersect(awards).Any() && !c1.Contains(input[0]) && !c2.Contains(input[1]) && !c3.Contains(input[2]);
                         */
-                        bool isQuafilied = sumremain >= 2 && sumremain <= 7;
+                        bool isQuafilied = number[0] < 5 && number[number.Length - 1] >= 5 && number.Select(c => c % 2).Distinct().Count() > 1;
                         ret = number.Intersect(awards).Any() && isQuafilied;
                     }
                     else
