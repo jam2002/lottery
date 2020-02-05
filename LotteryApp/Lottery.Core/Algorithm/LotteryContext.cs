@@ -467,7 +467,7 @@ namespace Lottery.Core.Algorithm
                     occurPositions = factor.OccurPositions.SkipWhile(c => c == stopPoint || c + 1 <= stopPoint).Select(c => Math.Abs(c - stopPoint)).ToArray();
                     intervals = GetIntervals(occurPositions, considerCount);
                 }
-                isRepeat = intervals.Any() && occurPositions.Any() && CheckInterval(intervals, 6) && intervals.Last() <= 5 && occurPositions.Count() >= 4;
+                isRepeat = intervals.Any() && occurPositions.Any() && CheckInterval(intervals, 8) && intervals.Last() <= 7 && occurPositions.Count() >= 4;
                 return isRepeat && factor.LastInterval >= InputOption.WaitInterval ? Build(new int[] { 2 }, t.Value) : new LotteryResult[] { };
             }
             return new LotteryResult[] { };
