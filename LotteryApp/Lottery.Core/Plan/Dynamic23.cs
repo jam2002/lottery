@@ -70,7 +70,8 @@ namespace Lottery.Core.Plan
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
             int k = StartSpan % 10;
             awards = isDouble ? currentBet.BetAward.Take(k).ToArray() : new int[] { };
-            excludeAwards = isDouble ? currentBet.BetAward.Skip(k).ToArray() : new int[] { };
+            //excludeAwards = isDouble ? currentBet.BetAward.Skip(k).ToArray() : new int[] { };
+            excludeAwards = isDouble ? currentBet.BetAward.ToArray() : new int[] { };
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet) : new int[][] { };
 
             if (EnableSinglePattern)
@@ -257,18 +258,17 @@ namespace Lottery.Core.Plan
             {
                 if (StartSpan > 10)
                 {
-                    ret = !number.Intersect(awards).Any() && number.Length == 3;
+                    int[] c1 = excludeAwards.Take(3).ToArray();
+                    int[] c2 = excludeAwards.Skip(3).Take(4).ToArray();
+                    int[] c3 = excludeAwards.Skip(7).ToArray();
+                    ret = !c1.Contains(input[0]) && !c2.Contains(input[1]) && !c3.Contains(input[2]);
+                    //ret = !number.Intersect(awards).Any() && number.Length == 3;
                 }
                 else
                 {
                     if (NumberLength == 3)
                     {
-                        /*
-                        int[] c1 = excludeAwards.Take(2).ToArray();
-                        int[] c2 = excludeAwards.Skip(2).Take(1).ToArray();
-                        int[] c3 = excludeAwards.Skip(3).ToArray();
-                        ret = number.Intersect(awards).Any() && !c1.Contains(input[0]) && !c2.Contains(input[1]) && !c3.Contains(input[2]);
-                        */
+
                         bool isQuafilied = number[0] < 5 && number[number.Length - 1] >= 5 && number.Select(c => c % 2).Distinct().Count() > 1;
                         ret = number.Intersect(awards).Any() && isQuafilied;
                     }

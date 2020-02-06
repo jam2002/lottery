@@ -747,8 +747,8 @@ namespace Lottery.Core.Algorithm
                 int[] keys = query.ToArray();
                 int k = InputOption.StartSpan % 10;
                 keys = InputOption.StartSpan > 10 ? keys.Skip(keys.Length - k).OrderBy(c => c).ToArray() : keys.Take(k).OrderBy(c => c).ToArray();
-                /*
-                if (InputOption.StartSpan <= 10 && InputOption.NumberLength == 3)
+
+                if (InputOption.StartSpan == 30 && InputOption.NumberLength == 3)
                 {
                     FactorTypeEnum[] enums = new FactorTypeEnum[] { FactorTypeEnum.Wan, FactorTypeEnum.Thousand, FactorTypeEnum.Hundred, FactorTypeEnum.Decade, FactorTypeEnum.Unit };
                     int startIndex = InputOption.GameArgs == "front" ? 0 : (InputOption.GameArgs == "middle" ? 1 : 2);
@@ -756,15 +756,13 @@ namespace Lottery.Core.Algorithm
                     var q = enums.Skip(startIndex).Take(InputOption.NumberLength).SelectMany((e, i) =>
                     {
                         int[] ey = (from p in FactorDic[e]
-                                    where !keys.Contains(p.Key)
-                                    orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                                    orderby CheckInterval(p.Value.HitIntervals, 6) ? 0 : 1, p.Value.OccurCount descending, p.Value.LastInterval, p.Value.MaxInterval
                                     select p.Key).ToArray();
-                        return ey.Skip(ey.Length - (i == 0 ? 2 : 1)).ToArray();
+                        return ey.Skip(ey.Length - (i == 0 ? 3 : 4)).ToArray();
                     });
 
-                    keys = keys.Concat(q).ToArray();
+                    keys = q.ToArray();
                 }
-                */
 
                 Dictionary<string, FactorTypeEnum> awardDic = new Dictionary<string, FactorTypeEnum>
                 {
