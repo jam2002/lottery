@@ -70,8 +70,7 @@ namespace Lottery.Core.Plan
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
             int k = StartSpan % 10;
             awards = isDouble ? currentBet.BetAward.Take(k).ToArray() : new int[] { };
-            //excludeAwards = isDouble ? currentBet.BetAward.Skip(k).ToArray() : new int[] { };
-            excludeAwards = isDouble ? currentBet.BetAward.ToArray() : new int[] { };
+            excludeAwards = isDouble ? currentBet.BetAward.Skip(k).ToArray() : new int[] { };
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet) : new int[][] { };
 
             if (EnableSinglePattern)
@@ -299,7 +298,7 @@ namespace Lottery.Core.Plan
             else if (isDouble)
             {
                 string[] doubleTypes = new string[]{"wan","qian","bai","shi","ge"};
-                if(doubleTypes.Contains(GameArgs))
+                if(doubleTypes.Contains(GameArgs) || NumberLength == 5)
                 {
                     ret = new string[]{ string.Join("",awards) };
                 }
