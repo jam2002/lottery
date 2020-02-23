@@ -594,6 +594,7 @@ namespace Lottery.Core.Algorithm
             {
                 var query = from p in FactorDic[r.Value]
                             orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval
+                            where InputOption.TupleLength == 2 ? p.Value.OccurCount >= InputOption.TakeNumber / 2 : true
                             select p.Key;
                 query = query.Take(InputOption.TupleLength).ToArray();
 
