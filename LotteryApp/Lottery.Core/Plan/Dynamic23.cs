@@ -293,14 +293,14 @@ namespace Lottery.Core.Plan
             }
             else if (isAward && award.HasValue)
             {
-                ret = GameArgs == "all" || NumberLength == 4 ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
+                ret = (GameArgs == "all" && NumberLength != 3) || NumberLength == 4 ? new string[] { award.Value.ToString() } : Enumerable.Range(0, 10).Select(c => c != award.Value ? $"{c}{award.Value} {award.Value}{c}" : $"{c}{c}").Distinct();
             }
             else if (isDouble)
             {
-                string[] doubleTypes = new string[]{"wan","qian","bai","shi","ge"};
-                if(doubleTypes.Contains(GameArgs) || NumberLength == 5)
+                string[] doubleTypes = new string[] { "wan", "qian", "bai", "shi", "ge" };
+                if (doubleTypes.Contains(GameArgs) || NumberLength == 5)
                 {
-                    ret = new string[]{ string.Join("",awards) };
+                    ret = new string[] { string.Join("", awards) };
                 }
                 else
                 {
