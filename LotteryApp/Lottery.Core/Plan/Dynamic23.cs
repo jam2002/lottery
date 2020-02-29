@@ -271,6 +271,11 @@ namespace Lottery.Core.Plan
                         bool isQuafilied = number[0] < 5 && number[number.Length - 1] >= 5 && number.Select(c => c % 2).Distinct().Count() > 1;
                         ret = number.Intersect(awards).Any();
                     }
+                    else if (NumberLength == 4)
+                    {
+                        bool isQuafilied = number.Select(c => c % 2).Distinct().Count() > 1 && number.Distinct().Count() > 2;
+                        ret = number.Intersect(awards).Any() && isQuafilied;
+                    }
                     else
                     {
                         ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
