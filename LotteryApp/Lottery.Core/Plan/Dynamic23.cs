@@ -257,11 +257,7 @@ namespace Lottery.Core.Plan
             {
                 if (StartSpan > 10)
                 {
-                    int[] c1 = excludeAwards.Take(3).ToArray();
-                    int[] c2 = excludeAwards.Skip(3).Take(4).ToArray();
-                    int[] c3 = excludeAwards.Skip(7).ToArray();
-                    ret = !c1.Contains(input[0]) && !c2.Contains(input[1]) && !c3.Contains(input[2]);
-                    //ret = !number.Intersect(awards).Any() && number.Length == 3;
+                    ret = !number.Intersect(awards).Any() && number.Length == 3;
                 }
                 else
                 {
