@@ -23,6 +23,9 @@ namespace Lottery.Core.Plan
         private int[] awards;
         private int[] excludeAwards;
 
+        private bool isTripple;
+        private int[] trippleAwards;
+
         private int[][] betArray;
         private FactorTypeEnum[] awardTypes = new FactorTypeEnum[]
         {
@@ -66,12 +69,15 @@ namespace Lottery.Core.Plan
             isAward = awardTypes.Any(t => t == type);
             isDouble = type == FactorTypeEnum.LeftDouble || type == FactorTypeEnum.MiddleDouble || type == FactorTypeEnum.RightDouble || type == FactorTypeEnum.Double;
             isSpan = type == FactorTypeEnum.LeftSpan || type == FactorTypeEnum.MiddleSpan || type == FactorTypeEnum.RightSpan || type == FactorTypeEnum.Span;
+            isTripple = GameName == "tripple";
             spans = isSpan && currentBet.BetAward.Any() ? currentBet.BetAward : new int[] { };
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
             int k = StartSpan % 10;
             awards = isDouble ? currentBet.BetAward.Take(k).ToArray() : new int[] { };
             excludeAwards = isDouble ? currentBet.BetAward.Skip(k).ToArray() : new int[] { };
-            betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet) : new int[][] { };
+
+            trippleAwards = isTripple ? currentBet.BetAward : new int[] { };
+            betArray = !isDistinct && !isAward && !isDouble && !award.HasValue && !isTripple ? GetBetArray(currentBet) : new int[][] { };
 
             if (EnableSinglePattern)
             {
@@ -239,6 +245,7 @@ namespace Lottery.Core.Plan
         {
             bool ret = false;
             int[] number = input.Distinct().OrderBy(c => c).ToArray();
+            int[] repeats = input.GroupBy(c => c).Where(c => c.Count() > 1).Select(c => c.Key).ToArray();
             int span = number[number.Length - 1] - number[0];
 
             if (isDistinct)
@@ -277,6 +284,10 @@ namespace Lottery.Core.Plan
                         ret = number.Intersect(awards).Any() && !number.Intersect(excludeAwards).Any();
                     }
                 }
+            }
+            else if (isTripple)
+            {
+                ret = trippleAwards.Intersect(repeats).Count() > 0 || trippleAwards.Intersect(number).Count() >= Number;
             }
             else
             {
