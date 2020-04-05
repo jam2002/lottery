@@ -1,7 +1,7 @@
 ﻿{
     "Common": [
         {
-            "Title": "五码(30)",
+            "Title": "五星三码(30)",
             "Number": 2,
             "TakeNumber": 30,
             "BetCycle": 7,
@@ -20,6 +20,48 @@
             "NumberLength": 3,
             "StartSpan": 5,
             "SpanLength": 0
+        },
+        {
+            "Title": "五星双胆S(30)",
+            "Number": 1,
+            "TakeNumber": 30,
+            "BetCycle": 5,
+            "GameInterval": 1,
+            "GameName": "double",
+            "GameArgs": "all",
+            "LotteryName": "tsssc",
+            "ChangeBetPerTime": false,
+            "EnableSinglePattern": false,
+            "EnableContinuous": false,
+            "UseGeneralTrend": true,
+            "RespectRepeat": false,
+            "DisableRepeat": false,
+            "WaitInterval": 0,
+            "TupleLength": 3,
+            "NumberLength": 2,
+            "StartSpan": 1,
+            "SpanLength": 0
+        },
+        {
+            "Title": "五星双胆(20)",
+            "Number": 1,
+            "TakeNumber": 20,
+            "BetCycle": 5,
+            "GameInterval": 1,
+            "GameName": "double",
+            "GameArgs": "all",
+            "LotteryName": "tsssc",
+            "ChangeBetPerTime": false,
+            "EnableSinglePattern": false,
+            "EnableContinuous": false,
+            "UseGeneralTrend": true,
+            "RespectRepeat": false,
+            "DisableRepeat": false,
+            "WaitInterval": 0,
+            "TupleLength": 3,
+            "NumberLength": 2,
+            "StartSpan": 1,
+            "SpanLength": 1
         }
     ]
 }
