@@ -4,7 +4,7 @@
             "Title": "五星三码(30)",
             "Number": 2,
             "TakeNumber": 30,
-            "BetCycle": 7,
+            "BetCycle": 5,
             "GameInterval": 1,
             "GameName": "tripple",
             "GameArgs": "all",
