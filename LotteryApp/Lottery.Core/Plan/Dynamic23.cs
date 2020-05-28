@@ -287,7 +287,7 @@ namespace Lottery.Core.Plan
             }
             else if (isTripple)
             {
-                ret = trippleAwards.Intersect(repeats).Any() || trippleAwards.Intersect(number).Count() >= Number;
+                ret = (StartSpan == 1 && trippleAwards.Intersect(repeats).Any()) || trippleAwards.Intersect(number).Count() >= Number;
             }
             else
             {
@@ -323,6 +323,7 @@ namespace Lottery.Core.Plan
             {
                 ret = (from x in trippleAwards
                        from y in trippleAwards
+                       where StartSpan == 1 ? true : x != y
                        select x.ToString() + y.ToString()).ToArray();
             }
             else if (betArray.Any())
