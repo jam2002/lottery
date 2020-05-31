@@ -362,9 +362,9 @@ namespace Lottery.Core.Algorithm
 
         private LotteryResult[] Build(IEnumerable<int> awards, FactorTypeEnum type)
         {
-            if (InputOption.Rank > 0)
+            if (InputOption.Rank > 0 && InputOption.RunCounter == 1)
             {
-                awards = awards.Skip(InputOption.Rank);
+                awards = awards.Select((t, i) => new { value = t, index = i }).OrderBy(t => t.index == InputOption.Rank - 1 ? -1 : t.index).Select(t => t.value).ToArray();
             }
             if (InputOption.WaitInterval > 0)
             {
@@ -674,12 +674,10 @@ namespace Lottery.Core.Algorithm
             FactorTypeEnum r = enumDic[InputOption.GameArgs];
 
             int[] validAwards = FactorDic[FactorTypeEnum.Award].Where(c => CheckInterval(c.Value.HitIntervals)).Select(c => c.Key).OrderBy(c => c).ToArray();
-            String validStr = String.Join(String.Empty, validAwards);
 
             IEnumerable<int> query = from p in FactorDic[r]
                                      let v = p.Key.ToString().Skip(1).Select(c => int.Parse(c.ToString())).ToArray()
-                                     let s = InputOption.EnableContinuous && validStr.Contains(p.Key.ToString().Substring(1)) ? 0 : 1
-                                     orderby CheckInterval(p.Value.HitIntervals) ? 0 : 1, v.Intersect(validAwards).Count() == v.Length ? 0 : 1, s, p.Value.OccurCount descending, p.Value.MaxInterval, p.Value.LastInterval descending
+                                     orderby p.Value.OccurCount descending, CheckInterval(p.Value.HitIntervals) ? 0 : 1, v.Intersect(validAwards).Count() == v.Length ? 0 : 1, p.Value.MaxInterval, p.Value.LastInterval descending
                                      select p.Key;
 
             return Build(query, r);

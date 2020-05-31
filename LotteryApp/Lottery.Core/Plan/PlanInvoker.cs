@@ -17,8 +17,10 @@ namespace Lottery.Core.Plan
         private IScheduler scheduler;
         private ITrigger trigger;
         private Dictionary<string, Dynamic> planDic;
+        private Dictionary<string, string> valueDic;
         private List<string> currentBetKeys;
         private int currentInterval;
+        public int RunCounter { get; set; }
 
         public static readonly PlanInvoker Current = new PlanInvoker();
 
@@ -34,6 +36,7 @@ namespace Lottery.Core.Plan
             sp.ConnectionLimit = 10;
 
             planDic = plans;
+            valueDic = plans.ToDictionary(x => x.Key, x => string.Empty);
             currentBetKeys = new List<string> { };
 
             scheduler = StdSchedulerFactory.GetDefaultScheduler();
@@ -62,6 +65,7 @@ namespace Lottery.Core.Plan
 
         private SimpleBet[] Invoke()
         {
+            RunCounter++;
             Calculator.ClearCache();
             InputOptions[] options = planDic.Values.Select(c => new InputOptions
             {
@@ -85,7 +89,8 @@ namespace Lottery.Core.Plan
                 StartSpan = c.StartSpan,
                 SpanLength = c.SpanLength,
                 Rank = c.Rank,
-                NumberLength = c.NumberLength
+                NumberLength = c.NumberLength,
+                RunCounter = RunCounter
             }).ToArray();
             OutputResult[] outputs = Calculator.GetResults(options, false);
 
@@ -127,31 +132,49 @@ namespace Lottery.Core.Plan
                 }
             }
 
-            Update(list);
+            //Update(list);
 
             foreach (BetResult br in list)
             {
+                valueDic[br.Key] = br.Value;
                 planDic[br.Key].Dispatcher(br.Description, br.Value);
             }
         }
 
         private void Update(List<BetResult> list)
         {
-            Dictionary<string, BetResult[]> successGroupDic = list.Where(c => !string.IsNullOrEmpty(c.GroupName)).GroupBy(c => c.GroupName).Where(c => c.Any(t => t.Status == 3 || t.Status == 1)).ToDictionary(c => c.Key, c => c.ToArray());
+            Dictionary<string, BetResult[]> successGroupDic = list.Where(c => c.Bet.Results[0].Input.Rank > 0).GroupBy(c => c.Bet.Results[0].Input.GameName).Where(c => c.Any(t => t.Status == 3 || t.Status == 1)).ToDictionary(c => c.Key, c => c.ToArray());
             foreach (var pair in successGroupDic)
             {
-                bool hasSuccess = pair.Value.Any(c => c.Status == 1);
-				string value = pair.Value.GroupBy(t=>t.Value).OrderByDescending(t=>t.Count()).Select(t=>t.Key).First();
-                BetResult success = pair.Value.Where(c => hasSuccess? c.Status == 1 : c.Value == value).First();
-                foreach (BetResult br in pair.Value)
+                BetResult[] requireChanged = pair.Value.Where(c => c.Status == 3 || c.Status == 1).OrderBy(c => c.Bet.Results[0].Input.Rank).ToArray();
+
+                string[] newBets = requireChanged[0].Bet.Results[0].Output.Select(c => GetValue(c.AnyFilters[0].Values)).ToArray();
+                string[] unChanged = pair.Value.Where(c => c.Status == 2 || c.Status == 4).Select(c => valueDic[c.Key]).ToArray();
+                string[] bets = newBets.Except(unChanged).ToArray();
+
+                for (int i = 0; i < requireChanged.Length; i++)
                 {
-                    if (br.Value != success.Value)
-                    {
-                        br.Value = success.Value;
-                        planDic[br.Key].LastBet = success.Bet;
-                    }
+                    BetResult br = requireChanged[i];
+                    br.Bet.BetAward = GetAward(bets[i]);
+                    br.Value = bets[i];
+
+                    planDic[br.Key].LastBet = br.Bet;
                 }
             }
+        }
+
+        private string GetValue(int[] betAward)
+        {
+            string[] ret = (from x in betAward
+                            from y in betAward
+                            where x != y
+                            select x.ToString() + y.ToString()).ToArray();
+            return $"【{string.Join(" ", ret)}】";
+        }
+
+        private int[] GetAward(string value)
+        {
+            return new int[] { Convert.ToInt32(value[1].ToString()), Convert.ToInt32(value[2].ToString()) };
         }
 
         private string GetKey(InputOptions input)
