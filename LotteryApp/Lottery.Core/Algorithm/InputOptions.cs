@@ -48,6 +48,8 @@
 
         public int NumberLength { get; set; }
 
+        public int RunCounter { get; set; }
+
         public InputOptions()
         {
             RetrieveNumber = 200;

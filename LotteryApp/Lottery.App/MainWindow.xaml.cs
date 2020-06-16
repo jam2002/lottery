@@ -35,7 +35,7 @@ namespace Lottery.App
                 { "md", "美东计划"},
                 { "dj", "东京计划"}
             };
-            string lottery = ConfigurationManager.AppSettings["lottery"];
+            string lottery = ConfigurationManager.AppSettings.Get("lottery");
             this.Title = titleDefine[lottery];
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"plans.{lottery}.json");
             using (StreamReader sr = new StreamReader(path))

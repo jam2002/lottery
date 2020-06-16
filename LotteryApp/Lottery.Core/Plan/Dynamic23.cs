@@ -23,6 +23,9 @@ namespace Lottery.Core.Plan
         private int[] awards;
         private int[] excludeAwards;
 
+        private bool isTripple;
+        private int[] trippleAwards;
+
         private int[][] betArray;
         private FactorTypeEnum[] awardTypes = new FactorTypeEnum[]
         {
@@ -66,12 +69,15 @@ namespace Lottery.Core.Plan
             isAward = awardTypes.Any(t => t == type);
             isDouble = type == FactorTypeEnum.LeftDouble || type == FactorTypeEnum.MiddleDouble || type == FactorTypeEnum.RightDouble || type == FactorTypeEnum.Double;
             isSpan = type == FactorTypeEnum.LeftSpan || type == FactorTypeEnum.MiddleSpan || type == FactorTypeEnum.RightSpan || type == FactorTypeEnum.Span;
+            isTripple = GameName == "tripple";
             spans = isSpan && currentBet.BetAward.Any() ? currentBet.BetAward : new int[] { };
             award = isAward && currentBet.BetAward.Any() ? (int?)currentBet.BetAward[0] : null;
             int k = StartSpan % 10;
             awards = isDouble ? currentBet.BetAward.Take(k).ToArray() : new int[] { };
             excludeAwards = isDouble ? currentBet.BetAward.Skip(k).ToArray() : new int[] { };
-            betArray = !isDistinct && !isAward && !isDouble && !award.HasValue ? GetBetArray(currentBet) : new int[][] { };
+
+            trippleAwards = isTripple ? currentBet.BetAward : new int[] { };
+            betArray = !isDistinct && !isAward && !isDouble && !award.HasValue && !isTripple ? GetBetArray(currentBet) : new int[][] { };
 
             if (EnableSinglePattern)
             {
@@ -99,7 +105,7 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                    numbers = LotteryGenerator.GetConfig().ThreeNumbers.Where(t=> IsValid( t.RawNumbers)).Select(t=>t.Key);
+                    numbers = LotteryGenerator.GetConfig().ThreeNumbers.Where(t => IsValid(t.RawNumbers)).Select(t => t.Key);
                 }
             }
             else
@@ -198,7 +204,7 @@ namespace Lottery.Core.Plan
                     case "pairh":
                         numbers = new int[] { numbers[2], numbers[4] };
                         break;
-                    
+
                     case "wan":
                         numbers = new int[] { numbers[0] };
                         break;
@@ -211,9 +217,9 @@ namespace Lottery.Core.Plan
                     case "shi":
                         numbers = new int[] { numbers[3] };
                         break;
-                     case "ge":
+                    case "ge":
                         numbers = new int[] { numbers[4] };
-                        break;                                                                      
+                        break;
                 }
             }
             bool isHit = BetIndex > 0 && BetIndex <= BetCycle && IsValid(numbers);
@@ -224,7 +230,7 @@ namespace Lottery.Core.Plan
         {
             int[][] bets = bet.Results.SelectMany(t => t.Output.SelectMany(c => c.AnyFilters.Select(s => s.Values))).Take(1).ToArray();
 
-            if (Number == 2 && bets.Any(t=>t.Length>=2))
+            if (Number == 2 && bets.Any(t => t.Length >= 2))
             {
                 bets = bets.SelectMany(c =>
                 {
@@ -239,6 +245,7 @@ namespace Lottery.Core.Plan
         {
             bool ret = false;
             int[] number = input.Distinct().OrderBy(c => c).ToArray();
+            int[] repeats = input.GroupBy(c => c).Where(c => c.Count() > 1).Select(c => c.Key).ToArray();
             int span = number[number.Length - 1] - number[0];
 
             if (isDistinct)
@@ -278,6 +285,10 @@ namespace Lottery.Core.Plan
                     }
                 }
             }
+            else if (isTripple)
+            {
+                ret = (StartSpan == 1 && trippleAwards.Intersect(repeats).Any()) || trippleAwards.Intersect(number).Count() >= Number;
+            }
             else
             {
                 ret = betArray.Any(t => number.Intersect(t).Count() >= Number);
@@ -307,6 +318,13 @@ namespace Lottery.Core.Plan
                 {
                     ret = awards.SelectMany(c => Enumerable.Range(0, 10).Select(t => $"{c}{t}").Concat(Enumerable.Range(0, 10).Select(t => $"{t}{c}"))).Distinct().ToArray();
                 }
+            }
+            else if (isTripple)
+            {
+                ret = (from x in trippleAwards
+                       from y in trippleAwards
+                       where StartSpan == 1 ? true : x != y
+                       select x.ToString() + y.ToString()).ToArray();
             }
             else if (betArray.Any())
             {
