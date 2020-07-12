@@ -68,7 +68,10 @@ namespace Lottery.Core.Algorithm
                     new CD.Lottery {  Key = "jx115",  DisplayName="江西11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
                     new CD.Lottery {  Key = "sd115",  DisplayName="山东11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
                     new CD.Lottery {  Key = "gd115",  DisplayName="广东11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
-                    new CD.Lottery {  Key = "gs115",  DisplayName="甘肃11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}}
+                    new CD.Lottery {  Key = "gs115",  DisplayName="甘肃11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
+
+                    new CD.Lottery {  Key = "jx115|front",  DisplayName="江西11选5 前三",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
+                    new CD.Lottery {  Key = "gd115|front",  DisplayName="广东11选5 前三",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}}
                 };
                 config = new LotteryMetaConfig { Lotteries = lotteries, ThreeNumbers = GetAllNumbers(3), TwoNumbers = GetAllNumbers(2) };
                 string str = JsonConvert.SerializeObject(config);
