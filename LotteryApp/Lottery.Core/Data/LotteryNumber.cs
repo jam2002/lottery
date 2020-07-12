@@ -165,7 +165,7 @@
         /// <summary>
         /// 按升序排列的胆码，比如 125，15
         /// </summary>
-        public int SequenceKey { get; set; }
+        public string SequenceKey { get; set; }
 
         /// <summary>
         /// 不定胆，胆码组；比如重庆时时彩，就可以前三与后三；11选5即是所有五码

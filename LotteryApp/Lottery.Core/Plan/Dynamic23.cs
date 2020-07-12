@@ -112,7 +112,7 @@ namespace Lottery.Core.Plan
             {
                 numbers = GetComposites();
             }
-            return $"【{string.Join(" ", numbers)}】";
+            return $"【{string.Join(LotteryName.EndsWith("115") ? "," : " ", numbers)}】";
         }
 
         public override string GetChangedBetString(SimpleBet currentBet, int status)
@@ -328,7 +328,7 @@ namespace Lottery.Core.Plan
             }
             else if (betArray.Any())
             {
-                ret = betArray.Select(t => string.Join(string.Empty, t));
+                ret = betArray.Select(t => LotteryName.EndsWith("115") ? string.Join(" ", t.Select(x => x.ToString("D2"))) : string.Join(string.Empty, t)).ToArray();
             }
             return ret;
         }

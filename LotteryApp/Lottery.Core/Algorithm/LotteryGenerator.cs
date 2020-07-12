@@ -99,7 +99,6 @@ namespace Lottery.Core.Algorithm
             int[] remainders = type == 2 ? new int[] { x % 3, y % 3 } : (type == 3 ? new int[] { x % 3, y % 3, z % 3 } : new int[] { x % 3, y % 3, z % 3, p % 3, q % 3 });
             LotteryNumber number = new LotteryNumber
             {
-                Key = string.Join(string.Empty, array),
                 Max = array.Max(),
                 Min = array.Min(),
                 Sum = array.Sum(),
@@ -121,10 +120,11 @@ namespace Lottery.Core.Algorithm
             number.RawNumbers = array;
             number.DistinctNumbers = array.Distinct().OrderBy(t => t).ToArray();
             number.Distinct = number.DistinctNumbers.Length;
-            number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));
+            number.Key = string.Join(string.Empty, number.DistinctNumbers.Select(t => type > 5 ? t.ToString("D2") : t.ToString()).ToArray());
+            number.SequenceKey = "1" + number.Key;
             number.BetKeyPairs = new int[][] { array };
 
-            if (type == 5)
+            if (type >= 5)
             {
                 int[] repeats = array.GroupBy(t => t).Where(t => t.Count() > 1).Select(t => t.Key).OrderBy(t => t).ToArray();
                 switch (number.Distinct)
@@ -237,18 +237,18 @@ namespace Lottery.Core.Algorithm
                 number.AdjacentNumbers = new int[] { };
             }
 
-            number.AllPairs = GetPairs(number.DistinctNumbers);
+            number.AllPairs = GetPairs(number.DistinctNumbers, type);
 
             return number;
         }
 
         private static readonly int[] AllKeys = Enumerable.Range(0, 10).ToArray();
 
-        private static int[] GetPairs(int[] array)
+        private static int[] GetPairs(int[] array, int type)
         {
             int[] sort = array.Distinct().OrderBy(c => c).ToArray();
             Combination combine = new Combination(sort.Length);
-            return combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select sort[s]).ToArray()).Select(t => 100 + t[0] * 10 + t[1]).ToArray();
+            return combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select sort[s]).ToArray()).Select(t => type > 5 ? int.Parse("1" + t[0].ToString("D2") + t[1].ToString("D2")) : int.Parse("1" + t[0].ToString() + t[1].ToString())).ToArray();
         }
 
         private static int[] GetTuples(int[] array)
