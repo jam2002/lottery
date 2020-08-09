@@ -123,7 +123,7 @@ namespace Lottery.Core.Algorithm
             number.RawNumbers = array;
             number.DistinctNumbers = array.Distinct().OrderBy(t => t).ToArray();
             number.Distinct = number.DistinctNumbers.Length;
-            number.Key = string.Join(string.Empty, number.DistinctNumbers.Select(t => type > 5 || isEleven ? t.ToString("D2") : t.ToString()).ToArray());
+            number.Key = string.Join(string.Empty, number.RawNumbers.Select(t => type > 5 || isEleven ? t.ToString("D2") : t.ToString()).ToArray());
             number.SequenceKey = "1" + number.Key;
             number.BetKeyPairs = new int[][] { array };
 
