@@ -26,6 +26,8 @@ namespace Lottery.Core.Plan
         private bool isTripple;
         private int[] trippleAwards;
 
+        private bool isElevenFive;
+
         private int[][] betArray;
         private FactorTypeEnum[] awardTypes = new FactorTypeEnum[]
         {
@@ -79,6 +81,8 @@ namespace Lottery.Core.Plan
             trippleAwards = isTripple ? currentBet.BetAward : new int[] { };
             betArray = !isDistinct && !isAward && !isDouble && !award.HasValue && !isTripple ? GetBetArray(currentBet) : new int[][] { };
 
+            isElevenFive = LotteryName.EndsWith("115");
+
             if (EnableSinglePattern)
             {
                 int[] count = Enumerable.Range(0, 10).ToArray();
@@ -105,14 +109,22 @@ namespace Lottery.Core.Plan
                 }
                 else
                 {
-                    numbers = LotteryGenerator.GetConfig().ThreeNumbers.Where(t => IsValid(t.RawNumbers)).Select(t => t.Key);
+                    LotteryMetaConfig config = LotteryGenerator.GetConfig();
+                    if (isElevenFive)
+                    {
+                        numbers = config.ElevenFiveNumbers.Where(t => IsValid(t.RawNumbers)).Select(t => string.Join(" ", t.RawNumbers.Select(x => x.ToString("D2")))).ToArray();
+                    }
+                    else
+                    {
+                        numbers = config.ThreeNumbers.Where(t => IsValid(t.RawNumbers)).Select(t => t.Key).ToArray();
+                    }
                 }
             }
             else
             {
                 numbers = GetComposites();
             }
-            return $"【{string.Join(" ", numbers)}】";
+            return $"【{string.Join(isElevenFive ? "," : " ", numbers)}】";
         }
 
         public override string GetChangedBetString(SimpleBet currentBet, int status)
@@ -328,7 +340,7 @@ namespace Lottery.Core.Plan
             }
             else if (betArray.Any())
             {
-                ret = betArray.Select(t => string.Join(string.Empty, t));
+                ret = betArray.Select(t => isElevenFive ? string.Join(" ", t.Select(x => x.ToString("D2"))) : string.Join(string.Empty, t)).ToArray();
             }
             return ret;
         }

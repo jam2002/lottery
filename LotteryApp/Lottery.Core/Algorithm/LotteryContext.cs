@@ -61,7 +61,6 @@ namespace Lottery.Core.Algorithm
                 BuildFactor(FactorTypeEnum.Decade, n.Decade, i);
                 BuildFactor(FactorTypeEnum.Unit, n.Unit, i);
                 BuildFactor(FactorTypeEnum.Distinct, n.Distinct, i);
-                BuildFactor(FactorTypeEnum.SequenceKey, n.SequenceKey, i);
                 BuildFactor(FactorTypeEnum.LeftDistinct, n.LeftDistinct, i);
                 BuildFactor(FactorTypeEnum.LeftSpan, n.LeftSpan, i);
                 BuildFactor(FactorTypeEnum.RightDistinct, n.RightDistinct, i);
@@ -409,7 +408,16 @@ namespace Lottery.Core.Algorithm
                     case FactorTypeEnum.AllTuples:
                     case FactorTypeEnum.AllPairs:
                     case FactorTypeEnum.AdjacentNumber:
-                        values = c.ToString().Select(t => int.Parse(t.ToString())).Skip(1).ToArray();
+                        int pageIndex = 0;
+                        int pageSize = InputOption.LotteryName.EndsWith("115") ? 2 : 1;
+                        string[] bets = c.ToString().Skip(1).Select(t=>t.ToString()).ToArray();
+                        List<int> ret = new List<int>();
+                        while (pageIndex * pageSize < bets.Length)
+                        {
+                            ret.Add(int.Parse(string.Join("", bets.Skip(pageIndex * pageSize).Take(pageSize).ToArray())));
+                            pageIndex++;
+                        }
+                        values = ret.ToArray();
                         break;
                     case FactorTypeEnum.LeftSpan:
                     case FactorTypeEnum.MiddleSpan:

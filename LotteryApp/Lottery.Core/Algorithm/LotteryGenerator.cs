@@ -68,9 +68,12 @@ namespace Lottery.Core.Algorithm
                     new CD.Lottery {  Key = "jx115",  DisplayName="江西11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
                     new CD.Lottery {  Key = "sd115",  DisplayName="山东11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
                     new CD.Lottery {  Key = "gd115",  DisplayName="广东11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
-                    new CD.Lottery {  Key = "gs115",  DisplayName="甘肃11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}}
+                    new CD.Lottery {  Key = "gs115",  DisplayName="甘肃11选5",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =10, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
+
+                    new CD.Lottery {  Key = "jx115|front",  DisplayName="江西11选5 前三",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}},
+                    new CD.Lottery {  Key = "gd115|front",  DisplayName="广东11选5 前三",  RegexPattern = @"(?<=\d{10}\s)(\d\d\s){4}\d\d", StartIndex = 0, Length =3, MaxBetCount =200,  HasPair = false,HasDynamic = true, TradingHours = new string[] { "09:00:00-23:00:00"}}
                 };
-                config = new LotteryMetaConfig { Lotteries = lotteries, ThreeNumbers = GetAllNumbers(3), TwoNumbers = GetAllNumbers(2) };
+                config = new LotteryMetaConfig { Lotteries = lotteries, ThreeNumbers = GetAllNumbers(3, 9), TwoNumbers = GetAllNumbers(2, 9), ElevenFiveNumbers = GetAllNumbers(3, 11) };
                 string str = JsonConvert.SerializeObject(config);
                 using (StreamWriter sw = File.CreateText(path))
                 {
@@ -82,7 +85,7 @@ namespace Lottery.Core.Algorithm
             return config;
         }
 
-        private static LotteryNumber Build(int x, int y, int z, int p, int q, int type)
+        private static LotteryNumber Build(int x, int y, int z, int p, int q, int type, bool isEleven = false)
         {
             int[] large = new[] { 5, 6, 7, 8, 9 };
             int[] small = new[] { 0, 1, 2, 3, 4 };
@@ -99,7 +102,6 @@ namespace Lottery.Core.Algorithm
             int[] remainders = type == 2 ? new int[] { x % 3, y % 3 } : (type == 3 ? new int[] { x % 3, y % 3, z % 3 } : new int[] { x % 3, y % 3, z % 3, p % 3, q % 3 });
             LotteryNumber number = new LotteryNumber
             {
-                Key = string.Join(string.Empty, array),
                 Max = array.Max(),
                 Min = array.Min(),
                 Sum = array.Sum(),
@@ -121,10 +123,11 @@ namespace Lottery.Core.Algorithm
             number.RawNumbers = array;
             number.DistinctNumbers = array.Distinct().OrderBy(t => t).ToArray();
             number.Distinct = number.DistinctNumbers.Length;
-            number.SequenceKey = int.Parse("1" + string.Join(string.Empty, number.DistinctNumbers));
+            number.Key = string.Join(string.Empty, number.RawNumbers.Select(t => type > 5 || isEleven ? t.ToString("D2") : t.ToString()).ToArray());
+            number.SequenceKey = "1" + number.Key;
             number.BetKeyPairs = new int[][] { array };
 
-            if (type == 5)
+            if (type >= 5)
             {
                 int[] repeats = array.GroupBy(t => t).Where(t => t.Count() > 1).Select(t => t.Key).OrderBy(t => t).ToArray();
                 switch (number.Distinct)
@@ -237,18 +240,18 @@ namespace Lottery.Core.Algorithm
                 number.AdjacentNumbers = new int[] { };
             }
 
-            number.AllPairs = GetPairs(number.DistinctNumbers);
+            number.AllPairs = GetPairs(number.DistinctNumbers, type);
 
             return number;
         }
 
         private static readonly int[] AllKeys = Enumerable.Range(0, 10).ToArray();
 
-        private static int[] GetPairs(int[] array)
+        private static int[] GetPairs(int[] array, int type)
         {
             int[] sort = array.Distinct().OrderBy(c => c).ToArray();
             Combination combine = new Combination(sort.Length);
-            return combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select sort[s]).ToArray()).Select(t => 100 + t[0] * 10 + t[1]).ToArray();
+            return combine.GetRowsForAllPicks().Where(t => t.Picks == 2).Select(t => (from s in t select sort[s]).ToArray()).Select(t => type > 5 ? int.Parse("1" + t[0].ToString("D2") + t[1].ToString("D2")) : int.Parse("1" + t[0].ToString() + t[1].ToString())).ToArray();
         }
 
         private static int[] GetTuples(int[] array)
@@ -303,10 +306,10 @@ namespace Lottery.Core.Algorithm
             return r;
         }
 
-        private static LotteryNumber[] GetAllNumbers(int type)
+        private static LotteryNumber[] GetAllNumbers(int type, int max)
         {
             IEnumerable<LotteryNumber> query = null;
-            int[] count = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            int[] count = max == 11 ? Enumerable.Range(1, 11).ToArray() : Enumerable.Range(0, 10).ToArray();
             if (type == 2)
             {
                 query = from x in count
@@ -318,7 +321,8 @@ namespace Lottery.Core.Algorithm
                 query = from x in count
                         from y in count
                         from z in count
-                        select Build(x, y, z, 0, 0, 3);
+                        where max == 11 ? x != y && x != z && y != z : true
+                        select Build(x, y, z, 0, 0, 3, max == 11);
             }
             else
             {

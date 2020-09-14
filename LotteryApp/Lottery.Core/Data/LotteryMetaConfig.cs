@@ -14,5 +14,8 @@ namespace Lottery.Core.Data
 
         [JsonProperty("twoNumbers")]
         public IEnumerable<LotteryNumber> TwoNumbers { get; set; }
+
+        [JsonProperty("elevenFiveNumbers")]
+        public IEnumerable<LotteryNumber> ElevenFiveNumbers { get; set; }
     }
 }
