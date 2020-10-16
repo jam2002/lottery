@@ -44,7 +44,7 @@ namespace Lottery.Core.Plan
 
             IJobDetail job = JobBuilder.Create<SimpleJob>().WithIdentity("job1", "group1").Build();
             DateTime start = DateTime.Now;
-            start = start.AddSeconds(start.Second < 15 ? (15 - start.Second) : (75 - start.Second));
+            start = start.AddSeconds(start.Second < 10 ? (10 - start.Second) : (70 - start.Second));
 
             string lotteryName = planDic.First().Value.LotteryName;
             currentInterval = planDic.First().Value.GameInterval;

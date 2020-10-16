@@ -202,12 +202,12 @@ namespace Lottery.Core.Algorithm
                 {
                     string content = sr.ReadToEnd();
 
-                    JArray array = JObject.Parse(content).SelectToken("result").SelectToken("data") as JArray;
+                    JArray array = JObject.Parse(content).SelectToken("result.data") as JArray;
                     lotteries = array.Select(t =>
                     {
                         JObject c = t as JObject;
                         return c.SelectToken("preDrawCode").ToString().Replace(",", string.Empty);
-                    }).ToArray();
+                    }).Reverse().ToArray();
                 }
             }
             return lotteries;
