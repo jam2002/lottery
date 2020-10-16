@@ -123,7 +123,7 @@ namespace Lottery.Core.Algorithm
                 }
                 else if (lottery.Source == 4)
                 {
-                    lotteries = GetTsNumbers(lottery.Key);
+                    lotteries = GetTsNumbersV2(lottery.Key);
                 }
 
                 lotteryCache[mainKey] = lotteries;
@@ -179,6 +179,34 @@ namespace Lottery.Core.Algorithm
                     {
                         JArray c = t as JArray;
                         return c.ElementAt(1).Value<string>();
+                    }).ToArray();
+                }
+            }
+            return lotteries;
+        }
+
+        private string[] GetTsNumbersV2(string key)
+        {
+            string[] lotteries;
+
+            string url = "http://www.sygyy.com/plans/kj.php?type=kj";
+            HttpWebRequest webRequest = WebRequest.CreateHttp(url);
+            webRequest.Method = "GET";
+            webRequest.ContentType = "text/html; charset=UTF-8";
+            webRequest.Timeout = 50000;
+            
+
+            using (HttpWebResponse response = webRequest.GetResponse() as HttpWebResponse)
+            {
+                using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+                {
+                    string content = sr.ReadToEnd();
+
+                    JArray array = JObject.Parse(content).SelectToken("result").SelectToken("data") as JArray;
+                    lotteries = array.Select(t =>
+                    {
+                        JObject c = t as JObject;
+                        return c.SelectToken("preDrawCode").ToString().Replace(",", string.Empty);
                     }).ToArray();
                 }
             }
