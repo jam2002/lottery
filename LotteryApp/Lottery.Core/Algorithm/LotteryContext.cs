@@ -828,7 +828,7 @@ namespace Lottery.Core.Algorithm
 
         private bool CheckInterval(int[] intervals, int maxInterval = 5)
         {
-            return intervals.Skip(intervals.Length - 2).All(c => c < maxInterval);
+            return intervals.Skip(intervals.Length - 3).All(c => c < maxInterval);
         }
 
         private int[] GetIntervals(int[] occurPostions, int? number = null)
