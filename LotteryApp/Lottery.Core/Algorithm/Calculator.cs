@@ -123,7 +123,7 @@ namespace Lottery.Core.Algorithm
                 }
                 else if (lottery.Source == 4)
                 {
-                    lotteries = GetTsNumbersV2(lottery.Key);
+                    lotteries = GetTsNumbers(lottery.Key);
                 }
 
                 lotteryCache[mainKey] = lotteries;
@@ -157,7 +157,7 @@ namespace Lottery.Core.Algorithm
             string[] lotteries;
             string param = $"id={type}&pnum=50";
             byte[] bs = Encoding.UTF8.GetBytes(param);
-            string url = "http://pay4.hbcchy.com/lotterytrend/getsscchart";
+            string url = "http://pay5.hbcchy.com/lotterytrend/getsscchart";
             HttpWebRequest webRequest = WebRequest.CreateHttp(url);
             webRequest.Method = "POST";
             webRequest.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
