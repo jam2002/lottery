@@ -1,13 +1,13 @@
 ﻿{
     "Common": [
         {
-            "Title": "前三一码SR(500)",
+            "Title": "五星一码S(30)",
             "Number": 1,
-            "TakeNumber": 500,
+            "TakeNumber": 30,
             "BetCycle": 8,
             "GameInterval": 1,
             "GameName": "single",
-            "GameArgs": "front",
+            "GameArgs": "all",
             "LotteryName": "tsssc",
             "ChangeBetPerTime": false,
             "EnableSinglePattern": false,
@@ -20,48 +20,6 @@
             "NumberLength": 3,
             "StartSpan": 2,
             "SpanLength": 1
-        },
-        {
-            "Title": "中三一码SR(500)",
-            "Number": 1,
-            "TakeNumber": 500,
-            "BetCycle": 8,
-            "GameInterval": 1,
-            "GameName": "single",
-            "GameArgs": "middle",
-            "LotteryName": "tsssc",
-            "ChangeBetPerTime": false,
-            "EnableSinglePattern": false,
-            "EnableContinuous": false,
-            "UseGeneralTrend": false,
-            "RespectRepeat": false,
-            "DisableRepeat": false,
-            "WaitInterval": 0,
-            "TupleLength": 4,
-            "NumberLength": 3,
-            "StartSpan": 2,
-            "SpanLength": 1
-        },
-        {
-            "Title": "后三一码SR(500)",
-            "Number": 1,
-            "TakeNumber": 500,
-            "BetCycle": 8,
-            "GameInterval": 1,
-            "GameName": "single",
-            "GameArgs": "after",
-            "LotteryName": "tsssc",
-            "ChangeBetPerTime": false,
-            "EnableSinglePattern": false,
-            "EnableContinuous": false,
-            "UseGeneralTrend": false,
-            "RespectRepeat": false,
-            "DisableRepeat": false,
-            "WaitInterval": 0,
-            "TupleLength": 4,
-            "NumberLength": 3,
-            "StartSpan": 2,
-            "SpanLength": 1
-        }        
+        }     
     ]
 }
