@@ -123,7 +123,7 @@ namespace Lottery.Core.Algorithm
                 }
                 else if (lottery.Source == 4)
                 {
-                    lotteries = GetTsNumbers(lottery.Key);
+                    lotteries = GetTsNumbersV2(lottery.Key);
                 }
 
                 lotteryCache[mainKey] = lotteries;

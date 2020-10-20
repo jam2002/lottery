@@ -1,9 +1,9 @@
 ﻿{
     "Common": [
         {
-            "Title": "前三一码SR(50)",
+            "Title": "前三一码SR(500)",
             "Number": 1,
-            "TakeNumber": 50,
+            "TakeNumber": 500,
             "BetCycle": 8,
             "GameInterval": 1,
             "GameName": "single",
@@ -19,12 +19,12 @@
             "TupleLength": 4,
             "NumberLength": 3,
             "StartSpan": 2,
-            "SpanLength": 0
+            "SpanLength": 1
         },
         {
-            "Title": "中三一码SR(50)",
+            "Title": "中三一码SR(500)",
             "Number": 1,
-            "TakeNumber": 50,
+            "TakeNumber": 500,
             "BetCycle": 8,
             "GameInterval": 1,
             "GameName": "single",
@@ -40,12 +40,12 @@
             "TupleLength": 4,
             "NumberLength": 3,
             "StartSpan": 2,
-            "SpanLength": 0
+            "SpanLength": 1
         },
         {
-            "Title": "后三一码SR(50)",
+            "Title": "后三一码SR(500)",
             "Number": 1,
-            "TakeNumber": 50,
+            "TakeNumber": 500,
             "BetCycle": 8,
             "GameInterval": 1,
             "GameName": "single",
@@ -61,7 +61,7 @@
             "TupleLength": 4,
             "NumberLength": 3,
             "StartSpan": 2,
-            "SpanLength": 0
+            "SpanLength": 1
         }        
     ]
 }
